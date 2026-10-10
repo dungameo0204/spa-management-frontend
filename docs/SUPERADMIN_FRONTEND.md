@@ -457,17 +457,4 @@ export const tenantApi = {
 - [ ] Tenant `DISABLED` hiển thị trong `all` và `disabled`, xem detail được.
 - [ ] Tạo Spa gửi đúng 5 fields, password không bị log/hiển thị sau submit.
 - [ ] Update gửi `expireAt: null` được cho gói không thời hạn.
-- [ ] Hết hạn hiển thị `EXPIRED`; UI dẫn user đến gia hạn.
-- [ ] Disable có confirm và không gọi lại nếu đã DISABLED.
-- [ ] Restore có confirm; sau restore kiểm tra status mới. Nếu vẫn EXPIRED, hướng dẫn gia hạn.
-- [ ] 400 hiện message server cạnh form/toast; 401/403 logout và redirect; 404 đóng detail và báo tenant không còn tồn tại; 500 có retry.
-- [ ] Không tự gọi endpoint chưa tồn tại nêu ở mục 1.
-
----
-
-## 9. Ghi chú backend cho đội frontend
-
-- Backend đã chặn login của user thuộc tenant `DISABLED` hoặc `EXPIRED`.
-- API nghiệp vụ của tenant hiện không mount `attachTenantDB` globally; app Superadmin không cần dựa vào chi tiết này, nhưng không được coi UI status là lớp bảo mật.
-- `DELETE` và `PATCH restore` xử lý tenant cùng toàn bộ users của tenant. Khôi phục sẽ khôi phục cả user từng bị khóa riêng lẻ; đây là hạn chế nghiệp vụ cần xác nhận nếu thay đổi sau này.
-- Tạo tenant clone schema template trong transaction. Nếu thất bại, frontend chỉ hiển thị lỗi; không retry tự động vì cần tránh tạo duplicate do mạng chập chờn. Người vận hành kiểm tra danh sách theo `spaName`/Manager username trước khi thử lại.
+- [ ] Hết hạn hiển thị `EXPIRED`; UI dẫn user
