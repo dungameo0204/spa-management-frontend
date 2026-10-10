@@ -1,0 +1,3 @@
+export default function DateRangeFilter({ startDate, endDate, onChange }) {
+  return <div className="report-filters date-range-filter"><label className="field">Từ ngày<input type="date" value={startDate} onChange={e => onChange(e.target.value, endDate)} /></label><label className="field">Đến ngày<input type="date" value={endDate} onChange={e => onChange(startDate, e.target.value)} /></label></div>
+}

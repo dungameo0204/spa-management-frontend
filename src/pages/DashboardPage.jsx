@@ -1,0 +1,40 @@
+import { Link } from 'react-router-dom'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { ArrowUpRight, CalendarDays, UsersRound, ShoppingBag, Sparkles, TrendingUp, Banknote, ReceiptText, Wallet } from 'lucide-react'
+import { useAuth } from '../auth/AuthProvider'
+import { useBranch } from '../components/AppShell'
+import { getRevenue, getAppointmentQueue, getResource, deleteResource } from '../api/resources'
+import FormDrawer from '../components/FormDrawer'
+import ConfirmDialog from '../components/ConfirmDialog'
+import { useState } from 'react'
+import TodayTreatments from '../components/TodayTreatments'
+import { today, formatCurrency, formatSpaDate } from '../utils/format'
+export default function DashboardPage() {
+  const { user } = useAuth(), { branchId } = useBranch(), manager = user.system_role === 'MANAGER'
+  const qc = useQueryClient()
+  const [appointment, setAppointment] = useState(null), [remove, setRemove] = useState(null), [error, setError] = useState('')
+  const [tomorrowPage, setTomorrowPage] = useState(1), [pendingPage, setPendingPage] = useState(1)
+  const range = { startDate: `${today().slice(0, 7)}-01`, endDate: today(), ...(branchId ? { branchId } : {}) }
+  const report = useQuery({ queryKey: ['overview', range], queryFn: () => getRevenue(range), enabled: manager })
+  const appointments = useQuery({ queryKey: ['dashboard-appointments', branchId, tomorrowPage], queryFn: () => getAppointmentQueue('tomorrow', branchId ? { branchId } : {}, tomorrowPage) })
+  const pending = useQuery({ queryKey: ['dashboard-pending', branchId, pendingPage], queryFn: () => getAppointmentQueue('not-arrived', branchId ? { branchId } : {}, pendingPage) })
+  const removal = useMutation({ mutationFn: id => deleteResource('appointments', id), onSuccess: () => { qc.invalidateQueries({ queryKey: ['dashboard-appointments'] }); qc.invalidateQueries({ queryKey: ['dashboard-pending'] }); qc.invalidateQueries({ queryKey: ['appointments'] }); setAppointment(null); setRemove(null); setError('') }, onError: err => { setError(err.message); setRemove(null) } })
+  async function openAppointment(id) { setError(''); try { setAppointment(await getResource('appointments', id)) } catch (err) { setError(err.message) } }
+  function queue(query, page, setPage, label) { return <div><h3>{label}</h3>{query.isError ? <p className="form-alert">{query.error.message}</p> : query.isLoading ? <p className="muted">Đang tải...</p> : query.data?.data?.length ? <div className="appointment-list">{query.data.data.map(a => <div className="appointment-row" key={a.id}><span className="time-chip">{formatSpaDate(a.appointment_date)}</span><button type="button" className="text-action" onClick={() => openAppointment(a.id)}><strong>{a.customer_name}</strong><small>{a.phone_number || a.branch_name || 'Chưa có số điện thoại'}</small></button><button type="button" className="btn danger" aria-label={`Xóa lịch hẹn ${a.customer_name} #${a.id}`} onClick={() => setRemove(a.id)}>Xóa</button></div>)}</div> : <p className="muted">Không có lịch hẹn.</p>}{query.data?.totalPages > 1 && <div className="picker-pages"><button disabled={page === 1} onClick={() => setPage(page - 1)}>Trước</button><span>{page} / {query.data.totalPages}</span><button disabled={page >= query.data.totalPages} onClick={() => setPage(page + 1)}>Sau</button></div>}</div> }
+  const summary = [
+    { icon: TrendingUp, label: 'Doanh thu tháng', value: formatCurrency(report.data?.totalRevenue), tone: 'sage' },
+    { icon: Banknote, label: 'Tổng tiền thực thu', value: formatCurrency(report.data?.receipts?.total), tone: 'sand' },
+    { icon: ReceiptText, label: 'Tổng chi', value: formatCurrency(report.data?.expenses?.total), tone: 'rose' },
+    { icon: Wallet, label: 'Dòng tiền thuần', value: formatCurrency(report.data?.netCashFlow), tone: 'cream' },
+  ]
+  return <div className="page dashboard"><div className="page-heading"><div><span className="eyebrow">THỨC DẬY CÙNG XULY ✦</span><h1>Chào {user.fullname?.split(' ').at(-1)}, một ngày thật đẹp!</h1><p>Mọi điều quan trọng trong spa, gọn gàng ở đây.</p></div><span className="date-pill"><CalendarDays size={17} /> {formatSpaDate(today())}</span></div>
+    <div className="hero-banner"><div><span>HÔM NAY LÀ MỘT NGÀY TUYỆT VỜI</span><h2>Một chút chăm chút,<br /><em>vạn điều nở hoa.</em></h2><p>Chào đón khách hàng bằng trải nghiệm tuyệt vời nhất.</p><Link className="hero-action" to="/appointments">Xem lịch hẹn <ArrowUpRight size={18} /></Link></div><div className="hero-art" aria-hidden="true"><div className="hero-circle"><Sparkles size={92} strokeWidth={0.75} /></div><span className="hero-bloom">✺</span></div></div>
+    {manager && <><div className="section-heading"><div><span className="eyebrow">BỨC TRANH TỔNG QUAN</span><h2>Hiệu quả trong tháng</h2></div><Link to="/reports">Xem báo cáo <ArrowUpRight size={16} /></Link></div>{report.isError && <p className="form-alert">Không tải được báo cáo: {report.error.message}</p>}<div className="stat-grid">{summary.map(({ icon: Icon, label, value, tone }) => <div className={`stat-card ${tone}`} key={label}><span className="stat-icon"><Icon size={21} /></span><span className="stat-label">{label}</span><strong>{report.isLoading ? 'Đang tải...' : value}</strong></div>)}</div><p className="helper-text">Doanh thu ≠ tiền thực thu; dòng tiền thuần = thực thu − tổng chi, không phải lợi nhuận.</p></>}
+     <div className="section-heading"><div><span className="eyebrow">BÁN HÀNG</span><h2>Hóa đơn & khách hàng</h2></div><Link to="/invoices">Đến bán hàng <ArrowUpRight size={16} /></Link></div><div className="quick-grid"><Link className="quick-card" to="/invoices"><ShoppingBag size={24} /><strong>Tạo hóa đơn</strong><ArrowUpRight size={16} /></Link><Link className="quick-card" to="/customers"><UsersRound size={24} /><strong>Tìm khách hàng</strong><ArrowUpRight size={16} /></Link></div>
+      <TodayTreatments />
+      <section className="surface"><div className="surface-heading"><div><span className="eyebrow">CẦN QUAN TÂM</span><h2>Khách cần quan tâm</h2></div><Link to="/appointments">Xem tất cả <ArrowUpRight size={16} /></Link></div>{error && <p className="form-alert">{error}</p>}{queue(appointments, tomorrowPage, setTomorrowPage, 'Lịch hẹn ngày mai')}{queue(pending, pendingPage, setPendingPage, 'Khách chưa đến')}</section>
+      {appointment && <FormDrawer title={`Lịch hẹn #${appointment.id}`} onClose={() => setAppointment(null)}><div className="detail-list">{[['Khách hàng', appointment.customer_name], ['Số điện thoại', appointment.phone_number], ['Cơ sở', appointment.branch_name], ['Ngày hẹn', formatSpaDate(appointment.appointment_date)], ['Trạng thái', appointment.status], ['Ghi chú', appointment.note]].filter(([, value]) => value != null && value !== '').map(([key, value]) => <div key={key}><span>{key}</span><strong>{value}</strong></div>)}</div><div className="drawer-actions"><button className="btn danger" onClick={() => setRemove(appointment.id)}>Xóa lịch hẹn</button></div></FormDrawer>}
+      {remove && <ConfirmDialog title="Xóa lịch hẹn?" message="Lịch hẹn này sẽ bị xóa khỏi danh sách cần quan tâm." pending={removal.isPending} onCancel={() => setRemove(null)} onConfirm={() => removal.mutate(remove)} />}
+    <div className="section-heading"><div><span className="eyebrow">LỐI TẮT</span><h2>Thao tác nhanh</h2></div></div><div className="quick-grid">{[{ to: '/appointments', icon: CalendarDays, label: 'Đặt lịch hẹn', color: 'sage' }, { to: '/customers', icon: UsersRound, label: 'Khách hàng', color: 'rose' }, { to: '/invoices', icon: ShoppingBag, label: 'Bán hàng', color: 'sand' }, { to: '/treatments', icon: Sparkles, label: 'Liệu trình', color: 'cream' }].map(({ to, icon: Icon, label, color }) => <Link key={to} to={to} className="quick-card"><span className={`quick-icon ${color}`}><Icon size={23} /></span><strong>{label}</strong><ArrowUpRight size={18} /></Link>)}</div>
+  </div>
+}

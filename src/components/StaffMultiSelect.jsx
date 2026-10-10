@@ -1,0 +1,4 @@
+export default function StaffMultiSelect({ staffs = [], selected = [], onChange, label = 'Nhân viên thực hiện' }) {
+  const ids = selected.map(s => Number(s.staff_id))
+  return <div className="staff-picker"><strong>{label}</strong>{staffs.length ? staffs.map(s => <label key={s.id}><input type="checkbox" checked={ids.includes(Number(s.id))} onChange={event => onChange(event.target.checked ? [...selected, { staff_id: Number(s.id) }] : selected.filter(item => Number(item.staff_id) !== Number(s.id)))} />{s.fullname}</label>) : <p className="small-muted">Chưa có nhân viên tại cơ sở này.</p>}</div>
+}

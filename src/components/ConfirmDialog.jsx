@@ -1,0 +1,3 @@
+export default function ConfirmDialog({ title = 'Xác nhận thao tác', message, onConfirm, onCancel, pending = false }) {
+  return <div className="confirm-layer" role="presentation"><div className="confirm-backdrop" onClick={onCancel} /><section className="confirm-card" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-message"><span className="eyebrow">XÁC NHẬN</span><h2 id="confirm-title">{title}</h2><p id="confirm-message">{message}</p><div className="drawer-actions"><button className="btn secondary" type="button" onClick={onCancel} disabled={pending}>Giữ lại</button><button className="btn danger" type="button" onClick={onConfirm} disabled={pending}>{pending ? 'Đang xử lý...' : 'Xác nhận'}</button></div></section></div>
+}

@@ -1,0 +1,17 @@
+import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { getReportDetails, getStaffTotals } from '../api/resources'
+import { formatCurrency, formatSpaDate } from '../utils/format'
+import { labelFor } from '../utils/fieldLabels'
+
+function StaffRows({ kind, range, person }) {
+  const [page, setPage] = useState(1)
+  const lines = useQuery({ queryKey: ['staff-earnings', kind, range, person.staff_id, person.branch_id, page], queryFn: () => getReportDetails(kind, { ...range, ...(person.branch_id ? { branchId: person.branch_id } : {}) }, page, 20, person.staff_id) })
+  return <div>{lines.isLoading ? <p>Đang tải chi tiết...</p> : lines.isError ? <p className="form-alert">{lines.error.message}</p> : <><p className="helper-text">Tổng nhân viên trong kỳ: <strong>{formatCurrency(lines.data?.totalAmount)}</strong> · {lines.data?.total} lượt</p><div className="table-scroll"><table><thead><tr><th>Ngày</th><th>Khách hàng</th><th>Dịch vụ</th><th>{kind === 'commissions' ? 'Tiền công' : 'Doanh số tư vấn'}</th></tr></thead><tbody>{lines.data?.data?.map((line, index) => <tr key={line.id || index}><td data-label="Ngày">{formatSpaDate(line.execution_date || line.invoice_date || line.created_at)}</td><td data-label="Khách hàng">{line.customer_name || '—'}</td><td data-label="Dịch vụ">{line.product_name || '—'}</td><td data-label={labelFor(kind === 'commissions' ? 'commission_amount_snapshot' : 'revenue_amount')}>{formatCurrency(kind === 'commissions' ? line.commission_amount_snapshot : line.revenue_amount)}</td></tr>)}</tbody></table></div></>}{lines.data?.totalPages > 1 && <div className="picker-pages"><button disabled={page === 1} onClick={() => setPage(page - 1)}>Trước</button><span>{page} / {lines.data.totalPages}</span><button disabled={page >= lines.data.totalPages} onClick={() => setPage(page + 1)}>Sau</button></div>}</div>
+}
+
+export default function StaffEarnings({ kind, range }) {
+  const [page, setPage] = useState(1), [expanded, setExpanded] = useState({})
+  const query = useQuery({ queryKey: ['staff-totals', kind, range, page], queryFn: () => getStaffTotals(kind, range, page) })
+  return <><div className="report-total"><span>{kind === 'commissions' ? 'Tổng công ca' : 'Tổng doanh số tư vấn'} toàn kỳ · {query.data?.total || 0} nhóm nhân viên</span><strong>{formatCurrency(query.data?.totalAmount)}</strong></div>{query.isError && <p className="form-alert">{query.error.message}</p>}{query.isLoading && <p>Đang tải công ca...</p>}{query.data?.staffTotals?.map(person => { const key = `${person.staff_id}-${person.branch_id}`; return <section className="staff-group" key={key}><header><div className="staff-group-identity"><h3>{person.staff_name}</h3><small>{person.branch_name || 'Cơ sở'} · {person.record_count} lượt</small></div><strong className="staff-group-amount">{formatCurrency(person.total_amount)}</strong><button className="btn secondary" onClick={() => setExpanded(old => ({ ...old, [key]: !old[key] }))}>{expanded[key] ? 'Thu gọn' : 'Xem ngày làm'}</button></header>{expanded[key] && <StaffRows kind={kind} range={range} person={person} />}</section> })}{query.data?.totalPages > 1 && <div className="picker-pages"><button disabled={page === 1} onClick={() => setPage(page - 1)}>Trước</button><span>{page} / {query.data.totalPages}</span><button disabled={page >= query.data.totalPages} onClick={() => setPage(page + 1)}>Sau</button></div>}{kind === 'consultants' && <p className="helper-text">Doanh số phân bổ tư vấn không phải tiền lương hoặc hoa hồng thực trả.</p>}</>
+}

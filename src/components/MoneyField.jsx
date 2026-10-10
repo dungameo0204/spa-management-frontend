@@ -1,0 +1,2 @@
+import { parseMoneyInput } from '../utils/format'
+export default function MoneyField({ label, value, onChange, required = false }) { return <label className="field">{label}<div className="money-input"><input inputMode="numeric" required={required} value={value ?? ''} onChange={e => onChange(e.target.value)} placeholder="0" /><span>đ</span></div>{value !== '' && value != null && parseMoneyInput(value) == null && <small className="field-error">Nhập số tiền hợp lệ</small>}</label> }
