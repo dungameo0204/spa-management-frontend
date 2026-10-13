@@ -1,0 +1,7 @@
+
+> spa-management-backend@1.0.0 start
+> node src/server.js
+
+◇ injected env (6) from .env
+🚀 Server đang chạy tại http://localhost:5000
+✅ Đã kết nối thành công vào MySQL (db_system_master)!

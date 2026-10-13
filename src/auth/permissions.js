@@ -2,11 +2,11 @@ const managers = ['MANAGER']
 const everyone = ['MANAGER', 'STAFF']
 export const permissions = {
   'branches.manage': managers, 'roles.manage': managers, 'products.view': everyone,
-  'products.manage': managers, 'reports.view': managers, 'users.manage': managers,
+  'products.manage': everyone, 'reports.view': managers, 'users.manage': managers,
   'treatments.create': managers, 'staffs.manage': everyone, 'customers.manage': everyone,
   'appointments.manage': everyone, 'invoices.manage': everyone, 'inventory.manage': everyone,
   'expenses.manage': everyone, 'wallet.manage': everyone, 'debts.manage': everyone,
-  'treatments.execute': everyone, 'bookings.view': everyone, 'commissions.view': everyone,
+  'treatments.execute': everyone, 'bookings.view': everyone, 'commissions.view': managers, 'consultants.view': managers,
 }
 export function canAccess(user, permission) { return Boolean(user && permissions[permission]?.includes(user.system_role)) }
 export function resolveBranch(user, selected) {

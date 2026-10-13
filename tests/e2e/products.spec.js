@@ -19,14 +19,15 @@ async function setup(page, role) {
   await page.goto('/products')
   return writes
 }
-test('STAFF xem sản phẩm nhưng không thêm/sửa/xóa', async ({ page }) => {
+test('STAFF được quản lý sản phẩm nhưng không thấy cấu hình tiền công', async ({ page }) => {
   const writes = await setup(page, 'STAFF')
   await expect(page.getByRole('heading', { name: 'Sản phẩm & dịch vụ' })).toBeVisible()
   await page.getByText('Serum phục hồi').first().click()
   await expect(page.getByText('Cơ sở 1:')).toBeVisible()
-  await expect(page.getByRole('button', { name: 'Thêm mới' })).toHaveCount(0)
-  await expect(page.getByRole('button', { name: 'Sửa' })).toHaveCount(0)
-  await expect(page.getByRole('button', { name: 'Xóa' })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Thêm mới' })).toBeVisible()
+  await page.getByRole('button', { name: 'Sửa' }).click()
+  await expect(page.getByText('Tiền công theo chức vụ')).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Lưu thay đổi' })).toBeVisible()
   expect(writes).toEqual([])
 })
 test('MANAGER có thể mở form tạo sản phẩm', async ({ page }) => {

@@ -24,6 +24,9 @@ export default defineConfig({
       cleanupOutdatedCaches: true,
     },
   })],
-  server: { proxy: { '/api': 'http://localhost:5000' } },
+  server: {
+    allowedHosts: ['.trycloudflare.com'],
+    proxy: { '/api': 'http://localhost:5000' },
+  },
   test: { include: ['src/**/*.test.{js,jsx}'], environment: 'jsdom', setupFiles: './src/test/setup.js', globals: true },
 })

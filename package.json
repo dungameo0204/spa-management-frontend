@@ -3,13 +3,19 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "main": "desktop/main.cjs",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "vite build",
+    "build": "npm run icons && vite build",
+    "icons": "node desktop/icons.cjs",
     "preview": "vite preview --host 0.0.0.0",
     "lint": "eslint src",
+    "check:vietnamese": "node scripts/check-vietnamese.mjs",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:desktop": "node --test desktop/*.test.cjs",
+    "desktop": "npm run build && electron .",
+    "build:exe": "node desktop/build.cjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.0.0",
@@ -25,6 +31,8 @@
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.6.0",
     "@vitejs/plugin-react": "^4.4.0",
+    "electron": "44.7.0",
+    "electron-builder": "26.15.3",
     "eslint": "^9.0.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "jsdom": "^26.0.0",
@@ -32,5 +40,13 @@
     "vite": "^6.0.0",
     "vite-plugin-pwa": "^0.21.0",
     "vitest": "^3.0.0"
+  },
+  "build": {
+    "appId": "vn.xuly.spa.desktop",
+    "productName": "Xuly Spa",
+    "directories": { "output": "release" },
+    "files": ["dist/**/*", "desktop/*.cjs", "package.json"],
+    "win": { "target": "portable", "icon": "public/icons/icon.ico", "signExecutable": false },
+    "portable": { "artifactName": "Xuly-Spa-${version}-portable.exe" }
   }
 }

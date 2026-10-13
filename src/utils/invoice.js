@@ -60,3 +60,6 @@ export function synchronizeInvoiceDiscount(invoice) {
   const mode = invoice.discount_mode === 'amount' ? 'amount' : 'percent'
   return { ...invoice, ...pairedDiscount(base, mode === 'amount' ? invoice.discount_amount : invoice.discount_percent, mode) }
 }
+export function syncInvoicePayment(form, next) {
+  return invoiceTotal(form) !== invoiceTotal(next) && !form.paidAmountEdited ? { ...next, paid_amount: undefined } : next
+}

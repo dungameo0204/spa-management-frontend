@@ -1,1 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="115" fill="#315e50"/><circle cx="256" cy="256" r="162" fill="none" stroke="#c7a870" stroke-width="3"/><path fill="#f7f5f1" d="M256 116c-25 60-86 94-86 154 0 51 38 84 86 90 48-6 86-39 86-90 0-60-61-94-86-154zm0 111c16 28 36 47 36 76 0 23-16 40-36 43-20-3-36-20-36-43 0-29 20-48 36-76z"/><path d="M118 379c72-29 204-29 276 0" fill="none" stroke="#c7a870" stroke-width="7" stroke-linecap="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="jade" x2="1" y2="1"><stop stop-color="#397568"/><stop offset="1" stop-color="#123d35"/></linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0.7" y2="1"><stop stop-color="#fff1cf"/><stop offset="1" stop-color="#cda86b"/></linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#jade)"/>
+  <rect x="24" y="24" width="464" height="464" rx="92" fill="none" stroke="#e8ce98" stroke-opacity=".3" stroke-width="2"/>
+  <circle cx="256" cy="240" r="169" fill="none" stroke="#e8ce98" stroke-opacity=".18" stroke-width="2"/>
+  <g fill="url(#gold)">
+    <path d="M256 119c-30 34-49 64-49 96 0 30 19 57 49 77 30-20 49-47 49-77 0-32-19-62-49-96Z"/>
+    <path d="M166 173c-9 46-4 85 20 113 14 17 33 28 53 34-34-43-48-78-44-112-9-13-19-25-29-35Z"/>
+    <path d="M346 173c9 46 4 85-20 113-14 17-33 28-53 34 34-43 48-78 44-112 9-13 19-25 29-35Z"/>
+    <path d="M113 244c12 66 55 104 125 100-26-15-47-32-62-54-23-19-43-34-63-46Z"/>
+    <path d="M399 244c-12 66-55 104-125 100 26-15 47-32 62-54 23-19 43-34 63-46Z"/>
+  </g>
+  <path d="M179 375c43 15 111 15 154 0" fill="none" stroke="#e8ce98" stroke-width="7" stroke-linecap="round"/>
+  <path d="m256 80 5 10-5 10-5-10Z" fill="#fff1cf"/>
+</svg>

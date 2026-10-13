@@ -1,5 +1,99 @@
 import { test, expect } from '@playwright/test'
 
+test('chi tiết phiếu chi trong báo cáo hiển thị từng khoản chi, không hiển thị thông tin giảm giá', async ({ page }) => {
+  const requested = []
+  await page.route('**/api/**', route => {
+    const path = new URL(route.request().url()).pathname
+    if (!path.startsWith('/api/')) return route.continue()
+    if (path === '/api/auth/login') return route.fulfill({ json: { data: { token: 'manager-test', user: { id: 1, tenant_id: 1, branch_id: 1, fullname: 'Quản lý', system_role: 'MANAGER' } } } })
+    if (path === '/api/reports/details/expenses') return route.fulfill({ json: { data: [{ id: 7, branch_name: 'CS1', amount: 1010000, expense_date: '2026-10-12' }], total: 1, totalAmount: 1010000 } })
+    if (path === '/api/expenses/7') {
+      requested.push(path)
+      return route.fulfill({ json: { data: { id: 7, branch_name: 'CS1', amount: 1010000, expense_type: 'Nhiều mục chi', items: [{ id: 10, expense_type: 'Mua đồ dùng spa', amount: 10000 }, { id: 11, expense_type: 'Tiền điện', amount: 1000000 }] } } })
+    }
+    return route.fulfill({ json: { data: [], total: 0 } })
+  })
+  await page.goto('/login')
+  await page.getByPlaceholder('Nhập tên đăng nhập').fill('demo')
+  await page.getByPlaceholder('Nhập mật khẩu').fill('demo')
+  await page.getByRole('button', { name: 'Đăng nhập' }).click()
+  await page.goto('/reports')
+  await page.getByRole('tab', { name: 'Phiếu chi' }).click()
+  await page.getByRole('row').filter({ hasText: 'CS1' }).click()
+  const drawer = page.getByRole('dialog', { name: 'Chi tiết chứng từ' })
+  await expect(drawer.getByRole('region', { name: 'Các khoản chi' })).toBeVisible()
+  await expect(drawer.getByText('Mua đồ dùng spa')).toBeVisible()
+  await expect(drawer.getByText('Tiền điện')).toBeVisible()
+  await expect(drawer.getByText('Số tiền: 10.000 ₫')).toBeVisible()
+  await expect(drawer.getByText('Số tiền: 1.000.000 ₫')).toBeVisible()
+  await expect(drawer).not.toContainText('Sau giảm')
+  await expect(drawer).not.toContainText('× —')
+  expect(requested).toEqual(['/api/expenses/7'])
+})
+
+test('chi tiết phiếu thu nợ chỉ hiển thị tiền thu, không nhầm tổng hóa đơn với khoản đã trả', async ({ page }) => {
+  await page.route('**/api/**', route => {
+    const path = new URL(route.request().url()).pathname
+    if (!path.startsWith('/api/')) return route.continue()
+    if (path === '/api/auth/login') return route.fulfill({ json: { data: { token: 'manager-test', user: { id: 1, tenant_id: 1, branch_id: 1, fullname: 'Quản lý', system_role: 'MANAGER' } } } })
+    if (path === '/api/reports/details/debt_payments') return route.fulfill({ json: { data: [{ id: 5, customer_name: 'Khách trả nợ', amount: 200000 }], total: 1, totalAmount: 200000 } })
+    if (path === '/api/debt-payments/5') return route.fulfill({ json: { data: { id: 5, invoice_id: 12, customer_name: 'Khách trả nợ', amount: 200000, invoice_total_amount: 1000000 } } })
+    if (path === '/api/reports/details/invoices') return route.fulfill({ json: { data: [{ id: 12, customer_name: 'Khách trả nợ', total_amount: 1000000 }], total: 1, totalAmount: 1000000 } })
+    if (path === '/api/invoices/12') return route.fulfill({ json: { data: { id: 12, customer_name: 'Khách trả nợ', invoice_total_amount: 1000000 } } })
+    return route.fulfill({ json: { data: [], total: 0 } })
+  })
+  await page.goto('/login')
+  await page.getByPlaceholder('Nhập tên đăng nhập').fill('demo')
+  await page.getByPlaceholder('Nhập mật khẩu').fill('demo')
+  await page.getByRole('button', { name: 'Đăng nhập' }).click()
+  await page.goto('/reports')
+  await page.getByRole('tab', { name: 'Thu nợ' }).click()
+  await page.getByRole('row').filter({ hasText: 'Khách trả nợ' }).click()
+  const drawer = page.getByRole('dialog', { name: 'Chi tiết chứng từ' })
+  await expect(drawer.getByText('Số tiền')).toBeVisible()
+  await expect(drawer.getByText('200.000 ₫')).toBeVisible()
+  await expect(drawer.getByText('Mã hóa đơn')).toBeVisible()
+  await expect(drawer.getByText('Tổng hóa đơn')).toHaveCount(0)
+  await expect(drawer.getByText('1.000.000 ₫')).toHaveCount(0)
+  await drawer.getByRole('button', { name: 'Đóng' }).click()
+  await page.getByRole('tab', { name: 'Hóa đơn' }).click()
+  await page.getByRole('row').filter({ hasText: 'Khách trả nợ' }).click()
+  await expect(drawer.getByText('Tổng hóa đơn')).toBeVisible()
+  await expect(drawer.getByText('1.000.000 ₫')).toBeVisible()
+})
+
+test('chi tiết chứng từ chỉ hiển thị ngày cập nhật khi có người cập nhật', async ({ page }) => {
+  await page.route('**/api/**', route => {
+    const path = new URL(route.request().url()).pathname
+    if (!path.startsWith('/api/')) return route.continue()
+    if (path === '/api/auth/login') return route.fulfill({ json: { data: { token: 'manager-test', user: { id: 1, tenant_id: 1, branch_id: 1, fullname: 'Quản lý', system_role: 'MANAGER' } } } })
+    if (path === '/api/reports/details/invoices') return route.fulfill({ json: { data: [{ id: 1, customer_name: 'Chưa cập nhật', total_amount: 100000 }, { id: 2, customer_name: 'Đã cập nhật', total_amount: 200000 }], total: 2, totalAmount: 300000 } })
+    if (path === '/api/invoices/1') return route.fulfill({ json: { data: { id: 1, customer_name: 'Chưa cập nhật', created_at: '2026-10-12', updated_at: '2026-10-13', updated_by: null } } })
+    if (path === '/api/invoices/2') return route.fulfill({ json: { data: { id: 2, customer_name: 'Đã cập nhật', created_at: '2026-10-12', updated_at: '2026-10-13', updated_by: 'Lê Thị Xuân' } } })
+    if (path === '/api/reports/details/expenses') return route.fulfill({ json: { data: [{ id: 3, branch_name: 'CS1', amount: 10000 }], total: 1, totalAmount: 10000 } })
+    if (path === '/api/expenses/3') return route.fulfill({ json: { data: { id: 3, branch_name: 'CS1', created_at: '2026-10-12', updated_at: '2026-10-13', updated_by: '  ', items: [] } } })
+    return route.fulfill({ json: { data: [], total: 0 } })
+  })
+  await page.goto('/login')
+  await page.getByPlaceholder('Nhập tên đăng nhập').fill('demo')
+  await page.getByPlaceholder('Nhập mật khẩu').fill('demo')
+  await page.getByRole('button', { name: 'Đăng nhập' }).click()
+  await page.goto('/reports')
+  const drawer = page.getByRole('dialog', { name: 'Chi tiết chứng từ' })
+  await page.getByRole('row').filter({ hasText: 'Chưa cập nhật' }).click()
+  await expect(drawer.getByText('Ngày tạo')).toBeVisible()
+  await expect(drawer.getByText('Ngày cập nhật')).toHaveCount(0)
+  await drawer.getByRole('button', { name: 'Đóng' }).click()
+  await page.getByRole('row').filter({ hasText: 'Đã cập nhật' }).click()
+  await expect(drawer.getByText('Ngày cập nhật')).toBeVisible()
+  await expect(drawer.getByText('Người cập nhật')).toBeVisible()
+  await drawer.getByRole('button', { name: 'Đóng' }).click()
+  await page.getByRole('tab', { name: 'Phiếu chi' }).click()
+  await page.getByRole('row').filter({ hasText: 'CS1' }).click()
+  await expect(drawer.getByText('Ngày tạo')).toBeVisible()
+  await expect(drawer.getByText('Ngày cập nhật')).toHaveCount(0)
+})
+
 test('tổng chứng từ toàn kỳ và công ca theo nhân viên không phụ thuộc trang dữ liệu', async ({ page }) => {
   await page.route('**/api/**', route => {
     const url = new URL(route.request().url()), path = url.pathname

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { discountPayload, invoiceConsultants, invoiceTotal, lineTotal, pairedDiscount, paymentAmounts, paymentFromInput, priceLineForProduct, synchronizeInvoiceDiscount, validateConsultants } from './invoice'
+import { discountPayload, invoiceConsultants, invoiceTotal, lineTotal, pairedDiscount, paymentAmounts, paymentFromInput, priceLineForProduct, synchronizeInvoiceDiscount, syncInvoicePayment, validateConsultants } from './invoice'
 import { appointmentDate, toSqlDateTime } from './format'
 
 describe('Ngày giờ gửi MySQL', () => {
@@ -13,6 +13,14 @@ describe('Ngày giờ gửi MySQL', () => {
 })
 
 describe('Chiết khấu và thanh toán', () => {
+  it('đồng bộ khách trả khi tổng tiền thay đổi, trừ khi đã nhập tiền trả thủ công', () => {
+    const old = { items: [{ quantity: 1, unit_price: 100000 }], paid_amount: 100000 }
+    const next = { ...old, items: [{ quantity: 1, unit_price: 150000 }] }
+    expect(syncInvoicePayment(old, next).paid_amount).toBeUndefined()
+    expect(paymentFromInput(150000, 0, false, syncInvoicePayment(old, next).paid_amount).paid_amount).toBe(150000)
+    expect(syncInvoicePayment({ ...old, paidAmountEdited: true, paid_amount: '50000' }, { ...next, paid_amount: '50000' }).paid_amount).toBe('50000')
+    expect(syncInvoicePayment(old, { ...old, note: 'không đổi giá' }).paid_amount).toBe(100000)
+  })
   it('một tư vấn viên nhận toàn bộ tiền dòng sau giảm, nhiều người chia riêng và không vượt giá dòng', () => {
     const item = { product_name: 'Chăm sóc da', quantity: 1, unit_price: 200000, discount_percent: 10, consultants: [{ staff_id: 2, revenue_amount: 0 }] }
     expect(invoiceConsultants(item)).toEqual([{ staff_id: 2, revenue_amount: 180000 }])

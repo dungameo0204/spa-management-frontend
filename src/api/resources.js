@@ -17,6 +17,7 @@ export function getResource(resource, id) {
   if (resource === 'commissions') throw new Error('API chi tiết không khả dụng cho tài nguyên này')
   return request(`${endpoint(resource)}/${encodeURIComponent(id)}`).then(result => result.data)
 }
+export const getCustomerOverview = id => request(`/api/customers/${encodeURIComponent(id)}/overview`).then(result => result.data)
 export function createResource(resource, body) {
   if (readonly.has(resource)) throw new Error('Tài nguyên chỉ đọc')
   return request(resource === 'users' ? '/api/users/create' : endpoint(resource), { method: 'POST', body })
