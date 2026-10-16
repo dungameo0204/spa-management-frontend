@@ -1,3 +1,10 @@
 export function validateDateRange({ startDate, endDate }) { return /^\d{4}-\d{2}-\d{2}$/.test(startDate) && /^\d{4}-\d{2}-\d{2}$/.test(endDate) && startDate <= endDate ? '' : 'Vui lòng chọn khoảng ngày hợp lệ.' }
 export function validateProductDraft(data) { if (!data.name?.trim()) return 'Vui lòng nhập tên sản phẩm.'; if (!Number.isFinite(Number(data.price)) || Number(data.price) < 0) return 'Giá bán phải từ 0 trở lên.'; return '' }
+export function validateTreatmentDraft(data) {
+  if (!data.customer_id || !data.product_id) return 'Vui lòng chọn khách hàng và dịch vụ.'
+  if (!Number.isInteger(Number(data.total_sessions)) || Number(data.total_sessions) <= 0) return 'Số buổi phải là số nguyên lớn hơn 0.'
+  if (data.commission_base_price === '' || data.commission_base_price == null || !Number.isFinite(Number(data.commission_base_price)) || Number(data.commission_base_price) < 0) return 'Giá dịch vụ tính công ca phải từ 0 trở lên.'
+  if (!Number.isInteger(Number(data.commission_quantity)) || Number(data.commission_quantity) <= 0) return 'Số đơn vị mỗi buổi phải là số nguyên lớn hơn 0.'
+  return ''
+}
 export function validateInvoiceDraft(data) { if (!data.customer_id) return 'Vui lòng chọn khách hàng.'; if (!data.items?.length) return 'Hóa đơn cần ít nhất một sản phẩm hoặc dịch vụ.'; if (data.items.some(item => !item.product_id || !Number.isInteger(Number(item.quantity)) || Number(item.quantity) <= 0)) return 'Sản phẩm và số lượng không hợp lệ.'; if (data.wallet_used != null && (!Number.isFinite(Number(data.wallet_used)) || Number(data.wallet_used) < 0 || (data.wallet_balance != null && Number(data.wallet_used) > Number(data.wallet_balance)) || (data.total_amount != null && Number(data.wallet_used) > Number(data.total_amount)))) return 'Tiền dùng ví phải từ 0 đến số dư ví và không vượt tổng hóa đơn.'; if (data.total_amount !== undefined && (!Number.isFinite(Number(data.paid_amount)) || Number(data.paid_amount) < 0 || Number(data.paid_amount) + Number(data.wallet_used) > Number(data.total_amount))) return 'Tiền khách trả phải từ 0 đến số tiền còn lại sau khi dùng ví.'; return '' }

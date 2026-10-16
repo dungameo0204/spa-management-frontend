@@ -65,7 +65,7 @@ for (const width of [1920, 1440, 1100, 768, 390, 320]) {
     await page.getByRole('button', { name: 'Lưu hóa đơn' }).click()
     await expect(page.getByRole('status')).toContainText('thành công')
     await expect(page.getByRole('status')).toHaveClass(/invoice-save-success/)
-    await expect(page.getByRole('dialog', { name: 'Sửa hóa đơn' })).toBeVisible()
+    await page.getByRole('button', { name: 'Chỉnh sửa', exact: true }).click(); await expect(page.getByRole('dialog', { name: 'Sửa hóa đơn' })).toBeVisible()
     expect(writes[0]).toMatchObject({ method: 'POST', body: { wallet_used: 400000, paid_amount: 600000 } })
     await wallet.fill('200000')
     await paid.fill('100000')

@@ -1,4 +1,7 @@
 const number = value => Number(value || 0)
+export function invoiceLineFromApi(line) {
+  return { invoice_item_id: line.id, product_id: line.product_id, product_name: line.snapshot_name, quantity: line.quantity, unit_price: line.snapshot_price, discount_percent: line.discount_percent ?? 0, discount_amount: line.discount_amount ?? 0, consultants: (line.consultants || []).map(c => ({ staff_id: c.staff_id, revenue_amount: c.revenue_amount, role_type: c.role_type })) }
+}
 export const roundMoney = amount => Math.round((amount + Number.EPSILON) * 100) / 100
 export function pairedDiscount(base, value, changed) {
   const total = Math.max(0, number(base))

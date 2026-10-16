@@ -10,9 +10,12 @@ app.whenReady().then(async () => {
     const window = new BrowserWindow({
       icon: path.join(__dirname, '..', 'dist', 'icons', 'icon.ico'),
       width: 1280, height: 850, minWidth: 800, minHeight: 600,
-      title: 'Xuly · Quản lý Spa', autoHideMenuBar: true,
+      title: 'Xuly Spa · Phần mềm quản lý Spa', autoHideMenuBar: true,
+      show: false, backgroundColor: '#f7f5f1',
       webPreferences: { nodeIntegration: false, contextIsolation: true, sandbox: true },
     })
+    window.removeMenu()
+    window.once('ready-to-show', () => { window.maximize(); window.show() })
     window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }))
     window.webContents.on('will-navigate', (event, url) => {
       if (new URL(url).origin !== result.origin) event.preventDefault()

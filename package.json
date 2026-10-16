@@ -1,6 +1,8 @@
 {
   "name": "spa-management-frontend",
   "private": true,
+  "description": "Xuly Spa - Phần mềm quản lý bán hàng, khách hàng và vận hành spa",
+  "author": "Xuly Spa",
   "version": "0.1.0",
   "type": "module",
   "main": "desktop/main.cjs",

@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test'
+import { createRequire } from 'node:module'
+const ExcelJS = createRequire(import.meta.url)('exceljs')
 
 for (const width of [1440, 768, 390, 320]) {
   test(`báo cáo theo ngày hiển thị đúng tiền và cuộn trong bảng (${width}px)`, async ({ page }) => {
@@ -38,8 +40,17 @@ for (const width of [1440, 768, 390, 320]) {
     const positions = await page.evaluate(() => ({ stats: document.querySelector('.report-stats').getBoundingClientRect().bottom, daily: document.querySelector('.daily-revenue').getBoundingClientRect().top, products: document.querySelector('.daily-revenue + .section-card').getBoundingClientRect().top, dailyBottom: document.querySelector('.daily-revenue').getBoundingClientRect().bottom }))
     expect(positions.daily).toBeGreaterThanOrEqual(positions.stats)
     expect(positions.products).toBeGreaterThanOrEqual(positions.dailyBottom)
+    const downloaded = page.waitForEvent('download')
+    await page.getByRole('button', { name: 'Xuất Excel theo ngày', exact: true }).click()
+    const download = await downloaded
+    expect(download.suggestedFilename()).toMatch(/^Xuly-doanh-thu-theo-ngay-.*\.xlsx$/)
+    const book = new ExcelJS.Workbook()
+    await book.xlsx.readFile(await download.path())
+    expect(book.worksheets[0].getRow(5).values.slice(1)).toEqual(['01/10/2026', 1200000, 1000000, 200000, 500000, 100000, 300000, 900000, 400000, 600000, 800000, 1400000, -500000])
+    expect(book.worksheets[0].getRow(6).values.slice(1)).toEqual(['02/10/2026', ...Array(12).fill(0)])
     await page.getByLabel('Từ ngày', { exact: true }).fill('2026-09-01')
     await expect(page.getByText('Chưa có dữ liệu theo ngày trong khoảng thời gian đã chọn.')).toBeVisible()
     await expect(table).toHaveCount(0)
+    await expect(page.getByRole('button', { name: 'Xuất Excel theo ngày', exact: true })).toBeDisabled()
   })
 }
