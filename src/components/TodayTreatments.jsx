@@ -6,6 +6,7 @@ import { assignTreatmentStaffs, executeTreatment, getResource, listResource, und
 import { today } from '../utils/format'
 import RoleStaffPicker from './RoleStaffPicker'
 import ConfirmDialog from './ConfirmDialog'
+import MobileSelect from './MobileSelect'
 
 export default function TodayTreatments() {
   const { branchId } = useBranch(), { user } = useAuth(), qc = useQueryClient()
@@ -70,7 +71,7 @@ export default function TodayTreatments() {
         return <Fragment key={card.id}><tr><td data-label="Khách hàng">{card.customer_name}</td><td data-label="Dịch vụ">{card.product_name}</td><td data-label="Đã làm hôm nay"><input type="checkbox" aria-label={`Đã làm ${card.customer_name} - ${card.product_name}`} checked={Boolean(history) || (active && !selected.historyId)} disabled={cardQuery?.isLoading || cardQuery?.isError || (!history && Number(card.remaining_sessions) < 1) || mutation.isPending || undoMutation.isPending} onChange={e => e.target.checked ? pick(card, detail) : history && setUndo(history.id)} /></td><td data-label="Nhân viên thực hiện">
           {cardQuery?.isError ? 'Không tải được lịch sử' : active ? 'Đang chọn nhân viên bên dưới' : history ? <button type="button" className="text-action" onClick={() => pick(card, detail)} aria-label={`Sửa nhân viên ${card.customer_name} - ${card.product_name}`}>{(history.staffs || []).map(s => s.staff_name || s.fullname).join(', ') || 'Chưa gán nhân viên · Bấm để sửa'}</button> : 'Chưa thực hiện'}
         </td></tr>{active && <tr className="today-staff-row"><td colSpan={4}><div className="treatment-actions today-staff-actions">
-          {manager && !selected.historyId && <label className="field">Cơ sở thực hiện<select aria-label="Cơ sở thực hiện" value={executionBranch} onChange={e => { setExecutionBranch(e.target.value); setStaffs([]); setMessage('') }}><option value="">Chọn cơ sở</option>{branches.data?.data?.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}</select></label>}
+          {manager && !selected.historyId && <label className="field">Cơ sở thực hiện<MobileSelect aria-label="Cơ sở thực hiện" value={executionBranch} onChange={e => { setExecutionBranch(e.target.value); setStaffs([]); setMessage('') }}><option value="">Chọn cơ sở</option>{branches.data?.data?.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}</MobileSelect></label>}
           <RoleStaffPicker selected={staffs} onChange={setStaffs} branchId={staffBranch || 'required'} /><button type="button" className="btn primary" disabled={mutation.isPending || !navigator.onLine} onClick={save}>{mutation.isPending ? 'Đang lưu...' : 'Xác nhận'}</button><button type="button" className="btn secondary" onClick={() => { setSelected(null); setMessage('') }}>Hủy</button>
         </div>{branches.isError && manager && !selected.historyId && <p className="form-alert">Không tải được cơ sở: {branches.error.message}</p>}{message && <p role="alert" className="form-alert">{message}</p>}</td></tr>}</Fragment>
       })}

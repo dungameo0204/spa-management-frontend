@@ -1,3 +1,5 @@
+import MobileSelect from './MobileSelect'
+
 export const receiptSizes = ['K57', 'K80', 'A5', 'A4']
 const storageKey = 'xuly.receipt-size'
 
@@ -14,11 +16,11 @@ export function saveReceiptSize(size) {
 
 export default function ReceiptSizePicker({ value, onChange }) {
   return <label className="field receipt-size-picker">Khổ giấy in
-    <select value={value} onChange={e => { saveReceiptSize(e.target.value); onChange(e.target.value) }}>
+    <MobileSelect value={value} onChange={e => { saveReceiptSize(e.target.value); onChange(e.target.value) }}>
       <option value="K57">K57 · máy in hóa đơn 57 mm</option>
       <option value="K80">K80 · máy in hóa đơn 80 mm</option>
       <option value="A5">A5 · giấy thường</option>
       <option value="A4">A4 · giấy thường</option>
-    </select>
+    </MobileSelect>
   </label>
 }

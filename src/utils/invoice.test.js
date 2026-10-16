@@ -13,6 +13,15 @@ describe('Ngày giờ gửi MySQL', () => {
 })
 
 describe('Chiết khấu và thanh toán', () => {
+  it('mặc định dùng tối đa ví nhưng giữ đúng số tiền ví nhập thủ công, kể cả 0', () => {
+    expect(paymentFromInput(1000000, 800000, true, undefined)).toEqual({ wallet_used: 800000, paid_amount: 200000, debt_amount: 0 })
+    expect(paymentFromInput(1000000, 800000, true, undefined, '400000')).toEqual({ wallet_used: 400000, paid_amount: 600000, debt_amount: 0 })
+    expect(paymentFromInput(1000000, 800000, true, 100000, '400000')).toEqual({ wallet_used: 400000, paid_amount: 100000, debt_amount: 500000 })
+    expect(paymentFromInput(1000000, 800000, true, undefined, 0).wallet_used).toBe(0)
+    expect(paymentFromInput(1000000, 800000, false, undefined, 400000).wallet_used).toBe(0)
+    expect(paymentFromInput(300000, 800000, true, undefined).wallet_used).toBe(300000)
+    expect(paymentFromInput(300000, 800000, true, undefined, 900000).wallet_used).toBe(900000)
+  })
   it('đồng bộ khách trả khi tổng tiền thay đổi, trừ khi đã nhập tiền trả thủ công', () => {
     const old = { items: [{ quantity: 1, unit_price: 100000 }], paid_amount: 100000 }
     const next = { ...old, items: [{ quantity: 1, unit_price: 150000 }] }

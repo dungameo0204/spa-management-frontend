@@ -25,6 +25,11 @@ test('hóa đơn giấy thường nhiều sản phẩm có tiêu đề lặp và
     await expect(page.locator('#receipt-print .receipt-summary')).toContainText('Chiết khấu hóa đơn')
     await expect(page.locator('#receipt-print .receipt-summary')).toContainText(/-450\.000\s*₫/)
     await page.emulateMedia({ media: 'print' })
+    const pageMargins = await page.locator('#receipt-print > style').evaluate(style => [...style.sheet.cssRules].map(rule => ({ selector: rule.selectorText, top: rule.style.marginTop, right: rule.style.marginRight })))
+    expect(pageMargins).toEqual([
+      { selector: '', top: '32mm', right: '12mm' },
+      { selector: ':first', top: '12mm', right: '' },
+    ])
     const layout = await page.locator('#receipt-print').evaluate(el => ({ heading: getComputedStyle(el.querySelector('thead')).display, summary: getComputedStyle(el.querySelector('.receipt-summary')).breakInside, priceColor: getComputedStyle(el.querySelector('.receipt-line strong')).color, totalColor: getComputedStyle(el.querySelector('.receipt-row strong')).color }))
     expect(layout).toEqual({ heading: 'table-header-group', summary: 'avoid', priceColor: 'rgb(24, 44, 39)', totalColor: 'rgb(24, 44, 39)' })
     const pdf = await page.pdf({ preferCSSPageSize: true, printBackground: true })

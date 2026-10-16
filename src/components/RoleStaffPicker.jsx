@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { listResource } from '../api/resources'
 import { useAuth } from '../auth/AuthProvider'
+import MobileSelect from './MobileSelect'
 
 export default function RoleStaffPicker({ selected = [], onChange, branchId, label = 'Nhân viên thực hiện' }) {
   const { user } = useAuth()
@@ -22,9 +23,9 @@ export default function RoleStaffPicker({ selected = [], onChange, branchId, lab
     {activeRoles.map(role => {
       const staff = available.filter(person => Number(person.role_id) === Number(role.id))
       const current = selected.find(person => staff.some(s => Number(s.id) === Number(person.staff_id)))
-      return <label className="field" key={role.id}>{role.name}<select aria-label={`${label} - ${role.name}`} value={current?.staff_id || ''} onChange={event => onChange([...selected.filter(person => !staff.some(s => Number(s.id) === Number(person.staff_id))), ...(event.target.value ? [{ staff_id: Number(event.target.value) }] : [])])}><option value="">Chưa chọn</option>{staff.map(person => <option key={person.id} value={person.id}>{person.fullname}</option>)}</select></label>
+       return <label className="field" key={role.id}>{role.name}<MobileSelect aria-label={`${label} - ${role.name}`} value={current?.staff_id || ''} onChange={event => onChange([...selected.filter(person => !staff.some(s => Number(s.id) === Number(person.staff_id))), ...(event.target.value ? [{ staff_id: Number(event.target.value) }] : [])])}><option value="">Chưa chọn</option>{staff.map(person => <option key={person.id} value={person.id}>{person.fullname}</option>)}</MobileSelect></label>
     })}
-    {ungrouped.length > 0 && <label className="field">Chức vụ khác<select aria-label={`${label} - Chức vụ khác`} value={selected.find(person => ungrouped.some(staff => Number(staff.id) === Number(person.staff_id)))?.staff_id || ''} onChange={event => onChange([...selected.filter(person => !ungrouped.some(staff => Number(staff.id) === Number(person.staff_id))), ...(event.target.value ? [{ staff_id: Number(event.target.value) }] : [])])}><option value="">Chưa chọn</option>{ungrouped.map(person => <option key={person.id} value={person.id}>{person.fullname}</option>)}</select></label>}
+     {ungrouped.length > 0 && <label className="field">Chức vụ khác<MobileSelect aria-label={`${label} - Chức vụ khác`} value={selected.find(person => ungrouped.some(staff => Number(staff.id) === Number(person.staff_id)))?.staff_id || ''} onChange={event => onChange([...selected.filter(person => !ungrouped.some(staff => Number(staff.id) === Number(person.staff_id))), ...(event.target.value ? [{ staff_id: Number(event.target.value) }] : [])])}><option value="">Chưa chọn</option>{ungrouped.map(person => <option key={person.id} value={person.id}>{person.fullname}</option>)}</MobileSelect></label>}
     {effectiveBranch && effectiveBranch !== 'required' && !people.isLoading && !activeRoles.length && !ungrouped.length && <p className="small-muted">Chưa có nhân viên tại cơ sở này.</p>}
   </div>
 }

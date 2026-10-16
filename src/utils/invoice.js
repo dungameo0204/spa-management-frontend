@@ -44,8 +44,8 @@ export function paymentAmounts(total, walletBalance, useWallet, allowDebt, paid)
   const cash = allowDebt ? Math.min(Math.max(0, number(paid)), remaining) : remaining
   return { wallet_used: wallet, paid_amount: cash, debt_amount: roundMoney(remaining - cash) }
 }
-export function paymentFromInput(total, walletBalance, useWallet, paid) {
-  const wallet = useWallet ? Math.min(Math.max(0, number(walletBalance)), total) : 0
+export function paymentFromInput(total, walletBalance, useWallet, paid, walletAmount) {
+  const wallet = useWallet ? (walletAmount == null ? Math.min(Math.max(0, number(walletBalance)), total) : number(walletAmount)) : 0
   const due = roundMoney(total - wallet)
   const cash = paid === '' || paid == null ? due : number(paid)
   return { wallet_used: wallet, paid_amount: cash, debt_amount: roundMoney(Math.max(0, due - cash)) }

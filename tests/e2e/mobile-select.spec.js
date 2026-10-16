@@ -1,0 +1,55 @@
+import { test, expect } from '@playwright/test'
+
+test.use({ viewport: { width: 390, height: 844 }, hasTouch: true })
+
+test('hóa đơn: nhân viên gọn và menu điện thoại của ứng dụng', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('xuly.session', JSON.stringify({ token: 'test', user: { id: 1, branch_id: 1, fullname: 'Nhân viên', system_role: 'STAFF' } })))
+  await page.route('**/api/**', route => {
+    const path = new URL(route.request().url()).pathname
+    if (!path.startsWith('/api/')) return route.continue()
+    if (path === '/api/auth/login') return route.fulfill({ json: { data: { token: 'test', user: { id: 1, branch_id: 1, fullname: 'Nhân viên', system_role: 'STAFF' } } } })
+    if (path === '/api/products') return route.fulfill({ json: { data: [{ id: 3, name: 'Dịch vụ A', price: 500000, is_product: 0 }], total: 1 } })
+    if (path === '/api/roles') return route.fulfill({ json: { data: [{ id: 1, name: 'KTV mặt' }], total: 1 } })
+    if (path === '/api/staffs') return route.fulfill({ json: { data: [{ id: 2, fullname: 'Nhân viên B', role_id: 1, branch_id: 1 }], total: 1 } })
+    return route.fulfill({ json: { data: [], total: 0 } })
+  })
+  await page.goto('/invoices')
+  await page.getByRole('button', { name: 'Tạo hóa đơn' }).click()
+  await page.getByRole('button', { name: /Thêm sản phẩm\s*\/\s*dịch vụ/ }).click()
+  await page.getByRole('combobox', { name: 'Tìm sản phẩm / dịch vụ' }).click()
+  await page.getByRole('option', { name: 'Dịch vụ A' }).click()
+  const picker = page.locator('.invoice-item-actions .role-staff-picker')
+  const trigger = picker.getByRole('button', { name: 'Nhân viên thực hiện - KTV mặt' })
+  await expect(trigger).toBeVisible()
+  const size = await picker.evaluate(element => ({ width: element.querySelector('.field').getBoundingClientRect().width, height: element.querySelector('.mobile-select-trigger').getBoundingClientRect().height, fits: document.documentElement.scrollWidth <= innerWidth }))
+  expect(size.width).toBeLessThanOrEqual(121)
+  expect(size.height).toBeLessThanOrEqual(34)
+  expect(size.fits).toBe(true)
+  await trigger.click()
+  const dialog = page.getByRole('dialog', { name: 'Nhân viên thực hiện - KTV mặt' })
+  await expect(dialog).toBeVisible()
+  await dialog.getByRole('option', { name: 'Nhân viên B' }).click()
+  await expect(trigger).toContainText('Nhân viên B')
+  await expect(page.getByRole('combobox', { name: 'Nhân viên thực hiện - KTV mặt' })).toHaveValue('2')
+  await trigger.click()
+  await page.keyboard.press('Escape')
+  await expect(dialog).toBeHidden()
+})
+
+test('các ô phân loại trong biểu mẫu dùng menu riêng trên điện thoại', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('xuly.session', JSON.stringify({ token: 'manager', user: { id: 1, fullname: 'Quản lý', system_role: 'MANAGER' } })))
+  await page.route('**/api/**', route => {
+    const path = new URL(route.request().url()).pathname
+    if (!path.startsWith('/api/')) return route.continue()
+    if (path === '/api/auth/login') return route.fulfill({ json: { data: { token: 'manager', user: { id: 1, fullname: 'Quản lý', system_role: 'MANAGER' } } } })
+    return route.fulfill({ json: { data: [], total: 0 } })
+  })
+  await page.goto('/products')
+  await page.getByRole('button', { name: /Thêm mới/ }).click()
+  const trigger = page.locator('.field', { hasText: 'Phân loại' }).locator('.mobile-select-trigger')
+  await trigger.click()
+  const dialog = page.getByRole('dialog', { name: 'Phân loại' })
+  await dialog.getByRole('option', { name: 'Dịch vụ' }).click()
+  await expect(trigger).toContainText('Dịch vụ')
+  await expect(page.getByRole('combobox', { name: 'Phân loại' })).toHaveValue('0')
+})

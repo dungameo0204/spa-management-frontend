@@ -110,4 +110,13 @@ test('chi tiết khách xếp cơ sở, bốn vai trò và xác nhận cùng m�
     return { sameLine: selects.every(select => Math.abs(select.top - selects[0].top) < 3) && Math.abs(button.bottom - selects[0].bottom) < 3, fits: button.right <= element.getBoundingClientRect().right && selects.every(select => select.right <= element.getBoundingClientRect().right) }
   })
   expect(layout).toEqual({ sameLine: true, fits: true })
+  await page.setViewportSize({ width: 390, height: 844 })
+  const mobile = await row.locator('.role-staff-picker').evaluate(element => {
+    const fields = [...element.querySelectorAll('.field')].map(field => field.getBoundingClientRect())
+    const controls = [...element.querySelectorAll('.mobile-select-trigger')].map(trigger => trigger.getBoundingClientRect())
+    return { twoColumns: Math.abs(fields[0].top - fields[1].top) < 2 && fields[2].top >= fields[0].bottom,
+      fullWidth: controls.every((box, index) => Math.abs(box.width - fields[index].width) < 2 && box.height === 40),
+      fits: fields.every(box => box.right <= innerWidth) && document.documentElement.scrollWidth <= innerWidth }
+  })
+  expect(mobile).toEqual({ twoColumns: true, fullWidth: true, fits: true })
 })

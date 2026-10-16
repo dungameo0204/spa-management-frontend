@@ -5,6 +5,7 @@ import { canAccess } from '../auth/permissions'
 import { useAuth } from '../auth/AuthProvider'
 import { useBranch } from '../components/AppShell'
 import DataList from '../components/DataList'
+import DebtAmount from '../components/DebtAmount'
 import FormDrawer from '../components/FormDrawer'
 import ConfirmDialog from '../components/ConfirmDialog'
 import { createResource, deleteResource, getCustomerOverview, getReportDetails, getResource, listResource, restoreResource, updateResource } from '../api/resources'
@@ -17,6 +18,7 @@ import { labelFor } from '../utils/fieldLabels'
 import DateRangeFilter from '../components/DateRangeFilter'
 import MoneyInput from '../components/MoneyInput'
 import CustomerOverview from '../components/CustomerOverview'
+import MobileSelect from '../components/MobileSelect'
 
 const text = (key, label, required = false) => ({ key, label, required })
 const specs = {
@@ -43,8 +45,8 @@ function Field({ field, value, onChange, lookups, manager, editing }) {
   const val = value[field.key] ?? ''
   const handle = e => onChange(field.key, field.type === 'checkbox' ? e.target.checked : e.target.value)
   if (field.lookup === 'customers') return <SearchPicker resource="customers" label={field.label} value={val} initialLabel={value.customer_name} required={field.required} onChange={item => onChange('customer', item)} />
-  if (field.lookup) return <label className="field" key={field.key}>{field.label}<select required={field.required || (field.lookup === 'branches' && manager && field.key === 'branch_id')} value={val} onChange={handle}><option value="">Chọn {field.label.toLowerCase()}</option>{lookups[field.lookup]?.map(item => <option key={item.id} value={item.id}>{item.fullname || item.name}</option>)}</select></label>
-  if (field.options) return <label className="field" key={field.key}>{field.label}<select value={val} onChange={handle} required><option value="">Chọn {field.label.toLowerCase()}</option>{field.options.map(item => <option key={typeof item === 'string' ? item : item.value} value={typeof item === 'string' ? item : item.value}>{typeof item === 'string' ? item : item.label}</option>)}</select></label>
+  if (field.lookup) return <label className="field" key={field.key}>{field.label}<MobileSelect required={field.required || (field.lookup === 'branches' && manager && field.key === 'branch_id')} value={val} onChange={handle}><option value="">Chọn {field.label.toLowerCase()}</option>{lookups[field.lookup]?.map(item => <option key={item.id} value={item.id}>{item.fullname || item.name}</option>)}</MobileSelect></label>
+  if (field.options) return <label className="field" key={field.key}>{field.label}<MobileSelect value={val} onChange={handle} required><option value="">Chọn {field.label.toLowerCase()}</option>{field.options.map(item => <option key={typeof item === 'string' ? item : item.value} value={typeof item === 'string' ? item : item.value}>{typeof item === 'string' ? item : item.label}</option>)}</MobileSelect></label>
   if (field.type === 'checkbox') return <label className="check-field"><input type="checkbox" checked={Boolean(val)} onChange={handle} /> {field.label}</label>
   if (field.key === 'price') return <label className="field">{field.label}<MoneyInput required value={val} onChange={next => onChange(field.key, next)} /></label>
   return <label className="field" key={field.key}>{field.label}<input type={field.type || 'text'} min={field.type === 'number' ? '0' : undefined} required={field.required || (!editing && field.key === 'password')} value={val} onChange={handle} placeholder={`Nhập ${field.label.toLowerCase()}`} /></label>
@@ -70,7 +72,7 @@ export default function ResourcePage({ resource }) {
   const branches = useQuery({ queryKey: ['branches', 'lookup'], queryFn: () => listResource('branches', {}, 1, 100), enabled: manager && (Boolean(lookups.branches) || resource === 'products') })
   const choices = { roles: roles.data?.data || [], branches: branches.data?.data || [] }
   const mutate = useMutation({ mutationFn: async ({ action, body, id }) => action === 'create' ? createResource(resource, body) : action === 'update' ? updateResource(resource, id, body) : action === 'restore' ? restoreResource(resource, id) : deleteResource(resource, id), onSuccess: () => { queryClient.invalidateQueries({ queryKey: [resource] }); setSelected(null); setMessageType('success'); setMessage('Đã lưu thay đổi thành công.') }, onError: error => { setMessageType('error'); setMessage(error.message) } })
-  const cols = spec.cols.map(key => ({ key, label: labels[key] || labelFor(key), render: item => resource === 'appointments' && key === 'status' ? <span className={`appointment-status ${item.status === 'Khách đã đến' ? 'arrived' : 'pending'}`}>{item.status || '—'}</span> : key === 'is_product' ? (item.is_product ? 'Sản phẩm' : 'Dịch vụ') : moneyKeys.has(key) ? <strong>{formatCurrency(item[key])}</strong> : dateKeys.has(key) ? formatSpaDate(item[key]) : item[key] || '—' }))
+  const cols = spec.cols.map(key => ({ key, label: labels[key] || labelFor(key), render: item => resource === 'appointments' && key === 'status' ? <span className={`appointment-status ${item.status === 'Khách đã đến' ? 'arrived' : 'pending'}`}>{item.status || '—'}</span> : key === 'is_product' ? (item.is_product ? 'Sản phẩm' : 'Dịch vụ') : key === 'total_debt' ? <DebtAmount value={item[key]} /> : moneyKeys.has(key) ? <strong>{formatCurrency(item[key])}</strong> : dateKeys.has(key) ? formatSpaDate(item[key]) : item[key] || '—' }))
   if (writable) cols.push({ key: '_actions', label: '', render: item => <button className="row-icon" aria-label={`Xem ${item.name || item.fullname || item.id}`} onClick={event => { event.stopPropagation(); openItem(item) }}><ArrowUpRight size={18} /></button> })
   function openItem(item) { setSelected(item); setEditing(false); setMessage(''); setOverview(null); setForm({ ...item, systemRole: item.system_role, branchId: item.branch_id, appointment_date: item.appointment_date?.slice(0, 10), expense_date: dateOnly(item.expense_date), items: item.items || [], password: '' }); if (resource === 'customers') { setOverviewLoading(true); getCustomerOverview(item.id).then(data => { setOverview(data); setSelected(current => current?.id === item.id ? data.customer : current) }).catch(err => setMessage(err.message)).finally(() => setOverviewLoading(false)) } else if (resource !== 'commissions') getResource(resource, item.id).then(full => { setSelected(current => current?.id === item.id ? { ...item, ...full } : current); if (resource === 'expenses') setForm(current => current.id === item.id ? { ...current, ...full, items: full.items || [], expense_date: dateOnly(full.expense_date) } : current) }).catch(err => setMessage(err.message)) }
   function beginCreate() { setSelected({}); setEditing(true); setMessage(''); setForm(resource === 'products' ? { is_product: '1', price: 0, is_treatment_combo: true, default_sessions: 1, commissions: [], inventory: [] } : resource === 'users' ? { systemRole: 'STAFF' } : resource === 'expenses' ? { expense_date: today(), items: [{ expense_type: '', amount: '' }] } : {}) }

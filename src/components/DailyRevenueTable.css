@@ -1,0 +1,12 @@
+.daily-revenue { min-width: 0; }
+.daily-revenue .section-heading p { color: var(--ink); opacity: .75; font-size: 13px; }
+.daily-revenue-scroll { width: 100%; max-width: 100%; overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; }
+.daily-revenue-scroll table { display: table; width: 100%; min-width: 1800px; border-collapse: separate; border-spacing: 0; }
+.daily-revenue-scroll thead { display: table-header-group; }
+.daily-revenue-scroll tbody { display: table-row-group; }
+.daily-revenue-scroll tr { display: table-row; padding: 0; }
+.daily-revenue-scroll th, .daily-revenue-scroll td { display: table-cell; width: auto; padding: 14px 16px; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; border-bottom: 1px solid var(--line); }
+.daily-revenue-scroll thead th { white-space: normal; min-width: 130px; }
+.daily-revenue-scroll tr > :first-child { position: sticky; left: 0; z-index: 1; background: var(--white); text-align: left; min-width: 115px; border-right: 1px solid var(--line); }
+.daily-revenue-scroll td::before { display: none; }
+.daily-revenue-scroll tbody tr:last-child > * { border-bottom: 0; }

@@ -52,6 +52,12 @@
 .staff-group header{display:grid;grid-template-columns:minmax(0,1fr) minmax(145px,max-content) auto;align-items:center}.staff-group-identity{min-width:0;overflow-wrap:anywhere}.staff-group-amount{text-align:right;white-space:nowrap}.treatment-actions{display:grid;gap:8px}.treatment-actions>.field{max-width:250px}.treatment-actions .form-alert{margin:0}@media(max-width:600px){.staff-group header{grid-template-columns:minmax(0,1fr) auto}.staff-group-amount{grid-column:2}.staff-group header .btn{grid-column:1/-1;justify-self:start}}
 .debt-highlight{color:#b4232d;font-weight:700}.text-action{border:0;background:#eef4ee;color:var(--sage);padding:7px 10px;border-radius:8px;text-align:left;font-weight:700}.text-action:hover{background:#e0ecdf}.text-action small{display:block;text-decoration:none;color:var(--muted)}.appointment-row .btn{margin-left:auto}[data-theme=dark] .debt-highlight{color:#ff929b}
 .detail-list .debt-highlight span,.detail-list .debt-highlight strong{color:#b4232d}[data-theme=dark] .detail-list .debt-highlight span,[data-theme=dark] .detail-list .debt-highlight strong{color:#ff929b}.date-range-filter{margin-bottom:16px}
+.debt-badge.debt-badge{display:inline-flex;align-items:center;min-height:28px;padding:5px 10px;border-radius:8px;background:#fee4e6;color:#b4232d;font-size:13px;font-weight:800;line-height:1.4;white-space:nowrap;vertical-align:middle;font-variant-numeric:tabular-nums}
+.invoice-customer-links{display:flex;flex-wrap:wrap;gap:10px;padding-top:16px;border-top:1px solid var(--border)}
+.invoice-save-success{scroll-margin:24px;animation:invoice-save-pulse .8s ease-in-out 3}
+@keyframes invoice-save-pulse{50%{box-shadow:0 0 0 4px #63ae7938;filter:brightness(1.08)}}
+@media(prefers-reduced-motion:reduce){.invoice-save-success{animation:none}}
+[data-theme=dark] .debt-badge.debt-badge{background:#542b30;color:#ffabb3}
 .invoice-date-field{max-width:230px}.invoice-date-field .helper-text{font-weight:400;margin:0}
 .form-alert.alert-attention{scroll-margin:90px;animation:alert-attention .7s ease-in-out 3}
 @keyframes alert-attention{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 0 4px #d52e3970;background:#ffd5d8}}
@@ -89,8 +95,19 @@
 .treatment-actions{grid-template-columns:minmax(0,1fr) auto;align-items:end}.treatment-actions .role-staff-picker{display:flex;flex-wrap:wrap;gap:8px}.treatment-actions .role-staff-picker>.field{flex:1 1 145px;min-width:145px}.treatment-actions .btn{grid-column:2;grid-row:1;align-self:end}.treatment-actions>.field{grid-column:1/-1;max-width:260px}
 .treatment-customers .treatment-expanded-row>td{padding:0;background:var(--surface, #fff)}.treatment-card-list{padding:10px 22px 18px;display:grid;gap:10px}.treatment-card-item{border:1px solid var(--border, #e6e9e3);border-radius:12px;padding:12px 16px}.treatment-card-heading{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.treatment-card-heading>.small-muted{margin-left:auto}.treatment-card-item .treatment-actions{margin-top:12px}.treatment-customers .text-action{display:inline-flex;align-items:center;gap:6px}
 .treatment-customers .treatment-inline-actions{display:flex;align-items:end;gap:8px;flex-wrap:nowrap;padding:10px 12px}.treatment-customers .treatment-inline-actions>.field{flex:0 1 150px;min-width:110px;max-width:none}.treatment-customers .treatment-inline-actions .role-staff-picker{display:flex;flex:1 1 auto;min-width:0;flex-wrap:nowrap;gap:8px}.treatment-customers .treatment-inline-actions .role-staff-picker>.field{flex:1 1 0;min-width:90px;max-width:none}.treatment-customers .treatment-inline-actions .field{gap:3px;font-size:11px;line-height:1.2}.treatment-customers .treatment-inline-actions .field select{width:100%;height:36px;min-height:36px;padding:5px 8px;font-size:12px}.treatment-customers .treatment-inline-actions>.btn{grid-column:auto;grid-row:auto;flex:0 0 auto;min-height:36px;padding:7px 11px;font-size:12px;white-space:nowrap}
-@media(min-width:1251px){.treatment-customers .treatment-card-heading{display:grid;grid-template-columns:minmax(0,450px) max-content minmax(0,1fr) max-content}.treatment-customers .treatment-card-heading>.text-action{justify-self:start;max-width:100%}.treatment-customers .treatment-card-heading>.today-execution-badge{grid-column:2}.treatment-customers .treatment-card-heading>.small-muted{grid-column:3;justify-self:end;margin-left:0}.treatment-customers .treatment-card-heading>.btn,.treatment-customers .treatment-card-heading>.treatment-completed-label{grid-column:4}}
+.treatment-customers .treatment-card-list{container-type:inline-size}
+.treatment-customers .treatment-card-heading{display:grid;grid-template-columns:minmax(0,1fr) 110px 220px 155px 190px;align-items:center;gap:12px}
+.treatment-customers .treatment-card-heading>.text-action{grid-column:1;min-width:0;max-width:100%;justify-self:start;white-space:normal;overflow-wrap:anywhere;text-align:left}
+.treatment-sessions{grid-column:2;white-space:nowrap;color:var(--muted);font-size:13px}.treatment-sessions strong{color:var(--ink);font-size:15px}
+.treatment-today{grid-column:3;min-width:0}.treatment-today .today-execution-badge{display:inline-flex;white-space:nowrap;word-break:normal;border-radius:8px;line-height:1.4}
+.treatment-customers .treatment-card-heading>.small-muted{grid-column:4;margin:0;white-space:nowrap}
+.treatment-customers .treatment-card-heading>.btn,.treatment-customers .treatment-card-heading>.treatment-completed-label{grid-column:5;justify-self:end}
+@container(max-width:1000px){.treatment-customers .treatment-card-heading{grid-template-columns:minmax(0,1fr) 110px 220px}.treatment-today{grid-column:3}.treatment-customers .treatment-card-heading>.small-muted{grid-column:1;grid-row:2}.treatment-customers .treatment-card-heading>.btn,.treatment-customers .treatment-card-heading>.treatment-completed-label{grid-column:3;grid-row:2}}
+@media(max-width:700px){.treatment-customers .treatment-card-heading{grid-template-columns:minmax(0,1fr) 110px;gap:9px}.treatment-today{grid-column:1/-1;grid-row:2}.treatment-customers .treatment-card-heading>.small-muted{grid-column:1;grid-row:3;white-space:normal}.treatment-customers .treatment-card-heading>.btn,.treatment-customers .treatment-card-heading>.treatment-completed-label{grid-column:2;grid-row:3;white-space:normal;text-align:right}.treatment-sessions{font-size:12px}}
 .treatment-completed-label{font-weight:700;color:var(--sage);white-space:nowrap}
+.treatment-customers .treatment-finished-action{background:var(--sage-light);color:var(--sage)}
+.treatment-customers .treatment-finished-action:hover{filter:brightness(.95)}
+[data-theme=dark] .treatment-customers .treatment-finished-action{background:#405a48;color:#f4efe5}
 @media(max-width:1100px){.treatment-customers .treatment-inline-actions{flex-wrap:wrap}.treatment-customers .treatment-inline-actions .role-staff-picker{flex:1 1 100%;order:2;flex-wrap:wrap}.treatment-customers .treatment-inline-actions>.btn{margin-left:auto}.treatment-customers .treatment-inline-actions .role-staff-picker>.field{flex:1 1 125px}}
 @media(max-width:600px){.treatment-customers .treatment-inline-actions>.field{flex:1 1 150px}.treatment-customers .treatment-inline-actions>.btn{width:auto}.treatment-customers .treatment-card-list{padding:10px}.treatment-customers .treatment-inline-actions .role-staff-picker>.field{flex:1 1 130px}}
 [data-theme=dark] .text-action{background:#eef5ef;color:#184d3b}[data-theme=dark] .text-action small{color:#415649}
@@ -126,27 +143,28 @@
 @media(max-width:600px){.drawer.customer-drawer{width:100vw}.customer-overview .timeline-row{display:block}.customer-overview .timeline-row time{display:block;margin-bottom:5px}}
 
 /* One compact payment panel: read totals, then enter payment from left to right. */
-.invoice-drawer .invoice-summary{grid-template-columns:minmax(180px,1.05fr) minmax(160px,.8fr) minmax(180px,1fr) minmax(220px,1.2fr);gap:12px 14px;padding:14px 18px;border:1px solid var(--line);background:var(--sage-light);align-items:end}
+.invoice-drawer .invoice-summary{grid-template-columns:minmax(175px,1fr) repeat(2,minmax(140px,1fr)) repeat(2,minmax(150px,1.1fr));gap:12px 14px;padding:14px 18px;border:1px solid var(--line);background:var(--sage-light);align-items:end}
 .invoice-drawer .invoice-summary>div{min-width:0}
 .invoice-drawer .invoice-summary-total,.invoice-drawer .invoice-summary-debt{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;align-self:stretch}
 .invoice-drawer .invoice-summary-total{grid-column:1 / 3;grid-row:1}
-.invoice-drawer .invoice-summary-debt{grid-column:3 / 5;grid-row:1;align-items:flex-end;text-align:right}
+.invoice-drawer .invoice-summary-debt{grid-column:3 / -1;grid-row:1;align-items:flex-end;text-align:right}
 .invoice-drawer .invoice-summary-total strong{color:var(--sage);font-size:23px;line-height:1.2}
 .invoice-drawer .invoice-summary-debt strong{font-size:18px;line-height:1.2}
 .invoice-drawer .invoice-summary-debt span,.invoice-drawer .invoice-summary-total span{color:var(--muted);font-size:12px}
-.invoice-drawer .invoice-summary-wallet-control{grid-column:1;grid-row:2;align-self:center}
+.invoice-drawer .invoice-summary-wallet-control{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;grid-column:1;grid-row:2;align-self:stretch}
 .invoice-drawer .invoice-summary-wallet-toggle{min-height:40px;gap:8px;line-height:1.25;font-weight:700}
 .invoice-drawer .invoice-summary-wallet-toggle input{flex:none;accent-color:var(--sage)}
 .invoice-drawer .invoice-summary-wallet-toggle small,.invoice-drawer .invoice-wallet-used{display:block;color:var(--muted);font-size:11px;font-weight:500;margin-top:3px}
-.invoice-drawer .invoice-wallet-used{margin-left:26px;color:var(--sage);font-weight:700}
+.invoice-drawer .invoice-summary .invoice-wallet-used{grid-column:2;grid-row:2;margin:0;color:var(--ink);font-size:13px;font-weight:700}
+.invoice-drawer .invoice-wallet-limit{padding-left:26px;font-size:11px;color:var(--muted)}
 .invoice-drawer .invoice-summary>.field{min-width:0;gap:5px}
-.invoice-drawer .money-payment-field{grid-column:2;grid-row:2}
-.invoice-drawer .invoice-payment-method{grid-column:3;grid-row:2}
-.invoice-drawer .invoice-payment-note{grid-column:4;grid-row:2}
+.invoice-drawer .money-payment-field{grid-column:3;grid-row:2}
+.invoice-drawer .invoice-payment-method{grid-column:4;grid-row:2}
+.invoice-drawer .invoice-payment-note{grid-column:5;grid-row:2}
 .invoice-drawer .invoice-summary .field input{min-height:42px;padding:8px 11px}
 .invoice-drawer .money-payment-field input{font-size:16px}
-@media(max-width:950px){.invoice-drawer .invoice-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.invoice-drawer .invoice-summary-total{grid-column:1;grid-row:1}.invoice-drawer .invoice-summary-debt{grid-column:2;grid-row:1}.invoice-drawer .invoice-summary-wallet-control{grid-column:1;grid-row:2}.invoice-drawer .money-payment-field{grid-column:2;grid-row:2}.invoice-drawer .invoice-payment-method{grid-column:1;grid-row:3}.invoice-drawer .invoice-payment-note{grid-column:2;grid-row:3}}
-@media(max-width:480px){.invoice-drawer .invoice-summary{padding:12px;gap:12px 9px;grid-template-columns:repeat(2,minmax(0,1fr))}.invoice-drawer .invoice-summary-total strong{font-size:19px}.invoice-drawer .invoice-summary-debt strong{font-size:16px}.invoice-drawer .invoice-summary-wallet-control{grid-column:1 / -1;grid-row:2}.invoice-drawer .money-payment-field{grid-column:1 / -1;grid-row:3}.invoice-drawer .invoice-payment-method{grid-column:1 / -1;grid-row:4}.invoice-drawer .invoice-payment-note{grid-column:1 / -1;grid-row:5}}
+@media(max-width:1100px){.invoice-drawer .invoice-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.invoice-drawer .invoice-summary-total{grid-column:1;grid-row:1}.invoice-drawer .invoice-summary-debt{grid-column:2;grid-row:1}.invoice-drawer .invoice-summary-wallet-control{grid-column:1 / -1;grid-row:2}.invoice-drawer .invoice-summary .invoice-wallet-used{grid-column:1;grid-row:3}.invoice-drawer .money-payment-field{grid-column:2;grid-row:3}.invoice-drawer .invoice-payment-method{grid-column:1;grid-row:4}.invoice-drawer .invoice-payment-note{grid-column:2;grid-row:4}}
+@media(max-width:480px){.invoice-drawer .invoice-summary{padding:12px;gap:12px 9px}.invoice-drawer .invoice-summary-total strong{font-size:19px}.invoice-drawer .invoice-summary-debt strong{font-size:16px}.invoice-drawer .invoice-summary .invoice-wallet-used{grid-column:1 / -1;grid-row:3}.invoice-drawer .money-payment-field{grid-column:1 / -1;grid-row:4}.invoice-drawer .invoice-payment-method{grid-column:1 / -1;grid-row:5}.invoice-drawer .invoice-payment-note{grid-column:1 / -1;grid-row:6}}
 
 /* Invoice items: a slim consultant/action header and one readable entry row. */
 .invoice-drawer .drawer-body{padding:14px 20px}
@@ -445,7 +463,116 @@ select option{color:var(--ink);background:var(--white)}
   .invoice-drawer .invoice-item-actions .execution-controls{flex:1 1 100%;min-width:0;width:100%}
   .invoice-drawer .invoice-item-actions>.consultant-picker{position:static;order:2;margin:0;min-height:40px}
   .invoice-drawer .invoice-item-actions>.line-delete,.import-drawer .line-delete{position:absolute;top:12px;right:12px;transform:none;width:36px;height:36px}
-  .invoice-drawer .invoice-item-actions .role-staff-picker>.field{flex:0 0 125px;min-width:125px}
-  .invoice-drawer .invoice-item-actions .role-staff-picker select{height:40px;min-height:40px;font-size:13px}
+  .invoice-drawer .invoice-item-actions .role-staff-picker{display:flex;flex-wrap:nowrap;gap:6px;width:100%;min-width:0;flex:1 1 100%;overflow:visible}
+  .invoice-drawer .invoice-item-actions .role-staff-picker>.field{width:auto;min-width:0;max-width:none;flex:1 1 0}
+  .invoice-drawer .invoice-item-actions .role-staff-picker select{width:100%;height:32px;min-height:32px;padding:4px 6px;font-size:12px;text-overflow:ellipsis}
   .invoice-drawer .picker-options,.import-drawer .picker-options{z-index:30;max-height:min(280px,45dvh)}
+}
+
+.mobile-select-overlay{position:fixed;inset:0;z-index:10000;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.55)}
+.mobile-select-sheet{width:100%;max-width:520px;max-height:min(65dvh,540px);display:flex;flex-direction:column;background:var(--white);color:var(--ink);border:1px solid var(--line);border-radius:18px 18px 0 0;padding-bottom:env(safe-area-inset-bottom)}
+.mobile-select-sheet header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-bottom:1px solid var(--line)}
+.mobile-select-sheet header button{border:0;background:transparent;color:inherit;display:grid;place-items:center;min-width:40px;min-height:40px}
+.mobile-select-options{overflow-y:auto;overscroll-behavior:contain;padding:8px 12px}
+.mobile-select-options button{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:48px;text-align:left;padding:10px 12px;border:0;border-radius:9px;background:transparent;color:inherit;font:inherit}
+.mobile-select-options button[aria-selected=true]{background:var(--sage-light);font-weight:700}
+.mobile-select-options button:disabled{opacity:.5}
+.mobile-select-check{color:var(--sage)}
+.desktop-select-options{position:fixed;z-index:10001;overflow-y:auto;overscroll-behavior:contain;padding:6px;border:1px solid var(--line);border-radius:12px;background:var(--white);color:var(--ink);box-shadow:0 16px 40px #172b2040}
+.desktop-select-options button{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:40px;padding:8px 10px;border:0;border-radius:8px;background:transparent;color:inherit;text-align:left;font:inherit;font-size:13px;cursor:pointer}
+.desktop-select-options button>span{min-width:0;overflow-wrap:anywhere}
+.desktop-select-options button:hover,.desktop-select-options button[data-active=true]{background:var(--sage-light)}
+.desktop-select-options button[aria-selected=true]{font-weight:700;color:var(--sage)}
+.desktop-select-options button:disabled{opacity:.5;cursor:not-allowed}
+.desktop-select-options button svg{flex:none}
+/* Searchable pickers (customers, products, etc.) share the softer menu style
+   of the branch select, while keeping their search field and pagination. */
+.picker .picker-options{top:calc(100% + 6px);max-height:min(320px,45dvh);padding:6px;border:1px solid var(--line);border-radius:12px;background:var(--white);color:var(--ink);box-shadow:0 16px 40px #172b2040;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.picker .picker-options>button[role=option]{display:block;width:100%;min-height:42px;padding:10px 12px;border:0;border-radius:8px;background:transparent;color:var(--ink);text-align:left;font:inherit;font-size:13px;font-weight:500;line-height:1.4;overflow-wrap:anywhere}
+.picker .picker-options>button[role=option]:hover,.picker .picker-options>button[role=option]:focus-visible,.picker .picker-options>button[role=option][aria-selected=true]{background:var(--sage-light);color:var(--sage)}
+.picker .picker-options>button[role=option][aria-selected=true]{font-weight:700}
+.picker .picker-options .picker-pages{margin:6px 4px 0;padding-top:6px}
+.picker .picker-options .picker-pages button{width:auto;border-radius:8px}
+.picker .picker-options>.picker-close{margin:6px 4px 2px;padding:8px 12px}
+@media(max-width:767px){.invoice-drawer .picker .picker-options,.import-drawer .picker .picker-options{max-height:min(280px,45dvh)}}
+.field>select:has(+.mobile-select-trigger){opacity:0;pointer-events:none}
+.mobile-select-trigger{display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%;height:42px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:var(--white);color:var(--ink);text-align:left;font:inherit;font-size:inherit;cursor:pointer}
+.mobile-select-trigger[aria-disabled=true]{opacity:.5;cursor:not-allowed}
+.mobile-select-trigger:focus-visible{outline:2px solid var(--sage);outline-offset:2px}
+.mobile-select-trigger[aria-expanded=true]{border-color:var(--sage);box-shadow:0 0 0 3px #82ad8a33}
+.mobile-select-trigger>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mobile-select-trigger>svg{flex:none;color:var(--sage);transition:transform .2s}
+.mobile-select-trigger[aria-expanded=true]>svg{transform:rotate(180deg)}
+[data-theme=dark] .mobile-select-trigger{background:#35423b;color:#f4efe5;border-color:#617267}
+@media(max-width:600px) and (pointer:coarse){.invoice-drawer .invoice-item-actions .role-staff-picker{display:grid;grid-template-columns:repeat(2,minmax(0,120px));gap:8px}.invoice-drawer .invoice-item-actions .role-staff-picker>.field{width:100%;max-width:120px}}
+/* The trigger is a sibling of the select: do not let it create an extra grid
+   track in the existing field layouts (including desktop/tablet). */
+.field:has(>select+.mobile-select-trigger){position:relative}
+.field>select+.mobile-select-trigger{position:absolute;bottom:0;left:0}
+.role-staff-picker .field>.mobile-select-trigger{height:32px;padding:4px 6px;font-size:12px}
+.today-staff-actions>.field>.mobile-select-trigger,.customer-inline-actions>.field>.mobile-select-trigger,.treatment-inline-actions>.field>.mobile-select-trigger{height:36px}
+/* Use the customer-detail staff controls everywhere on narrow screens. Keep
+   the existing desktop rows and the native select as the form value. */
+@media(max-width:767px){
+  .treatment-customers .treatment-inline-actions,.treatment-execution-form{min-width:0}
+  .customer-overview .customer-inline-actions .role-staff-picker,
+  .today-staff-actions .role-staff-picker,
+  .treatment-customers .treatment-inline-actions .role-staff-picker,
+  .treatment-execution-form .role-staff-picker,
+  .drawer-form>.role-staff-picker{
+    display:grid;grid-template-columns:repeat(2,minmax(0,120px));justify-content:start;gap:8px;
+    width:100%;max-width:100%;min-width:0;overflow:visible;
+  }
+  .customer-overview .customer-inline-actions .role-staff-picker,
+  .today-staff-actions .role-staff-picker,
+  .treatment-customers .treatment-inline-actions .role-staff-picker,
+  .treatment-execution-form .role-staff-picker{flex:1 1 100%}
+  .customer-overview .customer-inline-actions .role-staff-picker>.field,
+  .today-staff-actions .role-staff-picker>.field,
+  .treatment-customers .treatment-inline-actions .role-staff-picker>.field,
+  .treatment-execution-form .role-staff-picker>.field,
+  .drawer-form>.role-staff-picker>.field{
+    width:100%;min-width:0;max-width:none;flex:none;white-space:normal;
+  }
+  .customer-overview .customer-inline-actions .role-staff-picker .field,
+  .today-staff-actions .role-staff-picker .field,
+  .treatment-customers .treatment-inline-actions .role-staff-picker .field,
+  .treatment-execution-form .role-staff-picker .field,
+  .drawer-form>.role-staff-picker .field,
+  .invoice-drawer .invoice-item-actions .role-staff-picker .field{gap:3px;font-size:11px;line-height:1.2}
+  .customer-overview .customer-inline-actions .role-staff-picker select,
+  .today-staff-actions .role-staff-picker select,
+  .treatment-customers .treatment-inline-actions .role-staff-picker select,
+  .treatment-execution-form .role-staff-picker select,
+  .drawer-form>.role-staff-picker select,
+  .invoice-drawer .invoice-item-actions .role-staff-picker select{width:100%;min-width:0;height:32px;min-height:32px;padding:4px 6px;font-size:12px;text-overflow:ellipsis}
+}
+
+/* Customer detail has room for full-width staff controls, unlike the compact
+   invoice line. Keep the two-column layout but let each control fill its cell. */
+@media(max-width:767px){
+  .customer-overview .customer-inline-actions .role-staff-picker{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    overflow:visible;
+  }
+  .customer-overview .customer-inline-actions .role-staff-picker>.field{
+    min-width:0;
+    font-size:12px;
+    gap:5px;
+  }
+  .customer-overview .customer-inline-actions .role-staff-picker select{
+    height:40px;
+    min-height:40px;
+  }
+  .customer-overview .customer-inline-actions .role-staff-picker .mobile-select-trigger{
+    height:40px;
+    padding:8px 10px;
+    border-radius:10px;
+    background:var(--white);
+    color:var(--ink);
+    border-color:var(--line);
+    font-size:13px;
+    font-weight:600;
+  }
+  .customer-overview .customer-inline-actions .role-staff-picker .mobile-select-trigger[aria-expanded=true]{border-color:var(--sage)}
 }

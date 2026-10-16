@@ -1,0 +1,100 @@
+import { test, expect } from '@playwright/test'
+
+for (const width of [1920, 1440, 1100, 768, 390, 320]) {
+  test(`ví nhập một phần, giữ bảng sau POST/PUT và liên kết đúng khách (${width}px)`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 })
+    await page.addInitScript(() => localStorage.setItem('xuly.session', JSON.stringify({ token: 'test', user: { id: 1, branch_id: 1, fullname: 'Nhân viên', system_role: 'STAFF' } })))
+    const writes = []
+    let invoice = null
+    const customer = { id: 1, fullname: 'Khách ví', phone_number: '0900000001', wallet_balance: 800000, total_debt: 0 }
+    await page.route('**/api/**', route => {
+      const path = new URL(route.request().url()).pathname
+      const method = route.request().method()
+      if (!path.startsWith('/api/')) return route.continue()
+      if ((path === '/api/invoices' && method === 'POST') || (path === '/api/invoices/12' && method === 'PUT')) {
+        const body = route.request().postDataJSON()
+        writes.push({ method, body })
+        invoice = { ...body, id: 12, created_at: new Date().toISOString(), customer_name: customer.fullname, total_amount: 1000000, debt_amount: 1000000 - body.wallet_used - body.paid_amount, items: body.items.map(item => ({ ...item, snapshot_name: 'Sản phẩm', snapshot_price: item.unit_price })) }
+        customer.wallet_balance = 800000 - body.wallet_used
+        return route.fulfill({ json: { invoiceId: 12 } })
+      }
+      if (path === '/api/customers') return route.fulfill({ json: { data: [customer], total: 1 } })
+      if (path === '/api/customers/1') return route.fulfill({ json: { data: customer } })
+      if (path === '/api/products') return route.fulfill({ json: { data: [{ id: 3, name: 'Sản phẩm', price: 1000000, is_product: 1 }], total: 1 } })
+      if (path === '/api/invoices') return route.fulfill({ json: { data: invoice ? [invoice] : [], total: invoice ? 1 : 0 } })
+      if (path === '/api/invoices/12') return route.fulfill({ json: { data: invoice } })
+      if (path === '/api/treatments') return route.fulfill({ json: { data: [1, 2].map(id => ({ id, customer_id: id, customer_name: id === 1 ? 'Khách ví' : 'Khách khác', product_name: 'Dịch vụ', remaining_sessions: 2, total_sessions: 5 })), total: 2 } })
+      return route.fulfill({ json: { data: [], total: 0 } })
+    })
+    await page.goto('/invoices')
+    await page.getByRole('button', { name: 'Tạo hóa đơn' }).click()
+    await page.getByRole('combobox', { name: 'Tìm khách hàng' }).click()
+    await page.getByRole('option', { name: /Khách ví/ }).click()
+    await page.getByRole('button', { name: /Thêm sản phẩm\s*\/\s*dịch vụ/ }).click()
+    await page.getByRole('combobox', { name: 'Tìm sản phẩm / dịch vụ' }).click()
+    await page.getByRole('option', { name: /Sản phẩm/ }).click()
+    const toggle = page.getByRole('checkbox', { name: /Dùng ví khách hàng/ })
+    const wallet = page.getByRole('textbox', { name: 'Số tiền dùng ví (đ)' })
+    const paid = page.getByRole('textbox', { name: 'Khách trả (đ)' })
+    await toggle.check()
+    await expect(wallet).toHaveValue('800.000')
+    await expect(paid).toHaveValue('200.000')
+    const layout = await page.locator('.invoice-summary').evaluate(element => {
+      const rect = selector => element.querySelector(selector).getBoundingClientRect()
+      const inputs = ['.invoice-wallet-used input', '.money-payment-field input', '.invoice-payment-method input', '.invoice-payment-note input'].map(rect)
+      const toggle = element.querySelector('.invoice-summary-wallet-toggle span')
+      const range = document.createRange()
+      range.selectNodeContents(toggle.firstChild)
+      return { tops: inputs.map(box => box.top), heights: inputs.map(box => box.height), toggleLines: new Set([...range.getClientRects()].map(box => Math.round(box.top))).size }
+    })
+    expect(layout.toggleLines).toBe(1)
+    if (width > 1100) {
+      expect(Math.max(...layout.tops) - Math.min(...layout.tops)).toBeLessThanOrEqual(1)
+      expect(Math.max(...layout.heights) - Math.min(...layout.heights)).toBeLessThanOrEqual(1)
+    } else if (width > 480) {
+      expect(Math.abs(layout.tops[0] - layout.tops[1])).toBeLessThanOrEqual(1)
+      expect(Math.abs(layout.tops[2] - layout.tops[3])).toBeLessThanOrEqual(1)
+    }
+    expect(await page.locator('.drawer-body').evaluate(element => element.scrollWidth <= element.clientWidth + 1)).toBe(true)
+    await wallet.fill('900000')
+    await page.getByRole('button', { name: 'Lưu hóa đơn' }).click()
+    await expect(page.getByRole('alert')).toContainText('Tiền dùng ví')
+    expect(writes).toHaveLength(0)
+    await wallet.fill('400000')
+    await expect(paid).toHaveValue('600.000')
+    await page.getByRole('button', { name: 'Lưu hóa đơn' }).click()
+    await expect(page.getByRole('status')).toContainText('thành công')
+    await expect(page.getByRole('status')).toHaveClass(/invoice-save-success/)
+    await expect(page.getByRole('dialog', { name: 'Sửa hóa đơn' })).toBeVisible()
+    expect(writes[0]).toMatchObject({ method: 'POST', body: { wallet_used: 400000, paid_amount: 600000 } })
+    await wallet.fill('200000')
+    await paid.fill('100000')
+    await page.getByRole('button', { name: 'Lưu hóa đơn' }).click()
+    await expect.poll(() => writes.length).toBe(2)
+    await expect(page.getByRole('status')).toContainText('thành công')
+    expect(writes[1]).toMatchObject({ method: 'PUT', body: { wallet_used: 200000, paid_amount: 100000 } })
+    await page.getByRole('button', { name: 'Hủy', exact: true }).click()
+    await page.locator('tbody tr', { hasText: 'Khách ví' }).click()
+    await page.getByRole('button', { name: 'Chỉnh sửa' }).click()
+    await expect(wallet).toHaveValue('200.000')
+    await toggle.uncheck()
+    await toggle.check()
+    await expect(wallet).toHaveValue('800.000')
+    await wallet.fill('0')
+    await page.getByRole('button', { name: 'Lưu hóa đơn' }).click()
+    await expect.poll(() => writes.length).toBe(3)
+    expect(writes[2]).toMatchObject({ method: 'PUT', body: { wallet_used: 0 } })
+    await page.getByRole('link', { name: 'Thu nợ khách hàng', exact: true }).click()
+    await expect(page).toHaveURL(/\/debts\?customerId=1/)
+    await expect(page.getByRole('dialog')).toBeVisible()
+    await expect(page.getByRole('combobox', { name: 'Tìm khách hàng' })).toHaveValue('Khách ví')
+    await page.goto('/invoices')
+    await page.locator('tbody tr', { hasText: 'Khách ví' }).click()
+    await page.getByRole('button', { name: 'Chỉnh sửa' }).click()
+    await page.getByRole('link', { name: 'Xem liệu trình khách hàng' }).click()
+    await expect(page).toHaveURL(/\/treatments\?customerId=1/)
+    await expect(page.locator('tbody tr.clickable')).toHaveCount(1)
+    await expect(page.locator('tbody tr.clickable')).toContainText('Khách ví')
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+  })
+}

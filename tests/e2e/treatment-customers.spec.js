@@ -1,5 +1,53 @@
 import { test, expect } from '@playwright/test'
 
+test('trang liệu trình: ô nhân viên gọn hai cột và chọn bằng menu riêng trên điện thoại', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true })
+  const page = await context.newPage()
+    await page.addInitScript(() => localStorage.setItem('xuly.session', JSON.stringify({ token: 'manager-test', user: { id: 1, fullname: 'Quản lý', system_role: 'MANAGER' } })))
+    await page.route('**/api/**', route => {
+      const path = new URL(route.request().url()).pathname
+      if (!path.startsWith('/api/')) return route.continue()
+      if (path === '/api/treatments') return route.fulfill({ json: { data: [{ id: 10, customer_id: 1, customer_name: 'Khách A', product_name: 'Chăm sóc da', remaining_sessions: 3, total_sessions: 5 }], total: 1 } })
+      if (path === '/api/treatments/10') return route.fulfill({ json: { data: { id: 10, customer_id: 1, customer_name: 'Khách A', product_name: 'Chăm sóc da', remaining_sessions: 3, total_sessions: 5, histories: [] } } })
+      if (path === '/api/customers/1') return route.fulfill({ json: { data: { id: 1, fullname: 'Khách A' } } })
+      if (path === '/api/branches') return route.fulfill({ json: { data: [{ id: 1, name: 'CS1' }], total: 1 } })
+      if (path === '/api/roles') return route.fulfill({ json: { data: [1, 2, 3, 4].map(id => ({ id, name: ['KTV mặt', 'KTV body', 'KTV', 'BS'][id - 1] })), total: 4 } })
+      if (path === '/api/staffs') return route.fulfill({ json: { data: [1, 2, 3, 4].map(id => ({ id, fullname: `Nhân viên ${id}`, role_id: id, branch_id: 1 })), total: 4 } })
+      return route.fulfill({ json: { data: [], total: 0 } })
+    })
+    await page.goto('/treatments')
+    await page.getByRole('button', { name: 'Khách A: 1 dịch vụ' }).click()
+    const card = page.locator('.treatment-card-item')
+    await card.getByRole('button', { name: 'Thực hiện hôm nay' }).click()
+    const inline = card.locator('.treatment-inline-actions')
+    await inline.locator(':scope > .field .mobile-select-trigger').click()
+    await page.getByRole('dialog', { name: 'Cơ sở thực hiện' }).getByRole('option', { name: 'CS1' }).click()
+    const checkLayout = async picker => {
+      await expect(picker.locator('.field')).toHaveCount(4)
+      const layout = await picker.evaluate(element => {
+        const fields = [...element.querySelectorAll('.field')].map(field => field.getBoundingClientRect())
+        const controls = [...element.querySelectorAll('.mobile-select-trigger')].map(control => control.getBoundingClientRect())
+        return { twoColumns: Math.abs(fields[0].top - fields[1].top) < 2 && fields[2].top >= fields[0].bottom, compact: controls.every(box => box.height <= 33 && box.width <= 121), fits: fields.every(box => box.left >= 0 && box.right <= innerWidth) && document.documentElement.scrollWidth <= innerWidth }
+      })
+      expect(layout).toEqual({ twoColumns: true, compact: true, fits: true })
+    }
+    await checkLayout(inline.locator('.role-staff-picker'))
+    await inline.getByRole('button', { name: 'Nhân viên thực hiện - KTV mặt' }).click()
+    await page.getByRole('dialog', { name: 'Nhân viên thực hiện - KTV mặt' }).getByRole('option', { name: 'Nhân viên 1' }).click()
+    await expect(inline.getByRole('combobox', { name: 'Nhân viên thực hiện - KTV mặt' })).toHaveValue('1')
+
+    await card.getByRole('button', { name: /Chăm sóc da.*Xem lịch sử/ }).click()
+    await page.getByRole('dialog', { name: 'Chăm sóc da' }).getByRole('button', { name: 'Thực hiện hôm nay' }).click()
+    const drawer = page.locator('.treatment-execution-drawer')
+    await drawer.locator('.treatment-execution-form>.field .mobile-select-trigger').click()
+    await page.getByRole('dialog', { name: 'Cơ sở thực hiện' }).getByRole('option', { name: 'CS1' }).click()
+    await checkLayout(drawer.locator('.role-staff-picker'))
+    await drawer.getByRole('button', { name: 'Nhân viên thực hiện - KTV body' }).click()
+    await page.getByRole('dialog', { name: 'Nhân viên thực hiện - KTV body' }).getByRole('option', { name: 'Nhân viên 2' }).click()
+    await expect(drawer.getByRole('combobox', { name: 'Nhân viên thực hiện - KTV body' })).toHaveValue('2')
+    await context.close()
+})
+
 test('form thực hiện trong chi tiết thẻ gọn trên desktop và không tràn trên điện thoại', async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('xuly.session', JSON.stringify({ token: 'test', user: { id: 1, fullname: 'Quản lý', system_role: 'MANAGER' } })))
   await page.route('**/api/**', route => {
@@ -163,12 +211,15 @@ test('gộp liệu trình theo khách qua nhiều trang API, thực hiện/gán 
   await page.goto('/treatments')
   await page.getByRole('textbox', { name: 'Tìm kiếm' }).fill('hùng')
   await expect(page.locator('.treatment-customers tbody tr:not(.treatment-expanded-row)')).toHaveCount(2)
-  await expect(page.locator('.treatment-customers thead th')).toHaveText(['Khách hàng', 'Số điện thoại', 'Tiền nợ', 'Dịch vụ'])
+  await expect(page.locator('.treatment-customers thead th')).toHaveText(['Khách hàng', 'Số điện thoại', 'Tiền nợ', 'Dịch vụ', 'Đã hoàn thành'])
   await expect(page.locator('.treatment-customers tbody tr').first()).toContainText('0901234567')
   await expect(page.locator('.treatment-customers tbody tr').first()).toContainText('250.000')
   await expect(page.locator('.treatment-customers tbody tr').nth(1)).toContainText('0912345678')
   await page.getByRole('button', { name: 'Hoàng Mạnh Hùng: 2 dịch vụ' }).click()
   await expect(page.locator('.treatment-card-item')).toHaveCount(2)
+  const sessionColumns = await page.locator('.treatment-card-item .treatment-sessions').evaluateAll(elements => elements.map(element => Math.round(element.getBoundingClientRect().left)))
+  expect(new Set(sessionColumns).size).toBe(1)
+  await expect(page.locator('.treatment-card-item .text-action').first()).not.toContainText('còn')
   await expect(page.getByText('Hết buổi')).toHaveCount(0)
   await expect(page.locator('.treatment-card-item').first().locator('.today-execution-badge')).toHaveCount(0)
   await expect(page.locator('.treatment-card-item').nth(1).locator('.today-execution-badge')).toHaveText('Đã thực hiện 1 buổi hôm nay')
@@ -191,6 +242,8 @@ test('gộp liệu trình theo khách qua nhiều trang API, thực hiện/gán 
     return { cardsInsideTable: cards.every(card => card.left >= table.left && card.right <= table.right + 1), pageFits: document.documentElement.scrollWidth <= innerWidth }
   })
   expect(expandedLayout).toEqual({ cardsInsideTable: true, pageFits: true })
+  const mobileSessions = await page.locator('.treatment-card-item .treatment-sessions').evaluateAll(elements => elements.map(element => ({ left: element.getBoundingClientRect().left, right: element.getBoundingClientRect().right, cardRight: element.closest('.treatment-card-item').getBoundingClientRect().right })))
+  expect(mobileSessions.every(box => box.left >= 0 && box.right <= box.cardRight)).toBe(true)
   const mobile = await page.locator('.treatment-inline-actions').evaluate(element => {
     const card = element.closest('.treatment-card-item').getBoundingClientRect()
     const box = element.getBoundingClientRect()
@@ -248,16 +301,18 @@ test('buổi cuối vẫn hiện đến hết ngày, xếp sau thẻ còn buổi
   await page.locator('.treatment-card-item').getByRole('button', { name: 'Thực hiện hôm nay' }).click()
   await page.getByRole('combobox', { name: 'Cơ sở thực hiện' }).selectOption('1')
   await page.getByRole('button', { name: 'Xác nhận hôm nay' }).click()
-  await expect(page.locator('.treatment-customers tbody tr:not(.treatment-expanded-row)')).toHaveCount(2)
+  await expect(page.locator('.treatment-customers tbody tr:not(.treatment-expanded-row)')).toHaveCount(3)
   await expect(page.locator('.treatment-customers tbody tr:not(.treatment-expanded-row)').first()).toContainText('Khách B')
+  await expect(page.getByRole('button', { name: 'Khách C: 1 đã hoàn thành' })).toBeVisible()
   const customerButton = page.getByRole('button', { name: 'Khách A: 1 dịch vụ' })
   if (await customerButton.getAttribute('aria-expanded') !== 'true') await customerButton.click()
-  await expect(page.locator('.treatment-card-item')).toContainText('Buổi cuối · còn 0/1 buổi')
+  await expect(page.locator('.treatment-card-item')).toContainText('Buổi cuối · Xem lịch sử')
+  await expect(page.locator('.treatment-card-item .treatment-sessions')).toHaveText('Còn 0/1 buổi')
   await expect(page.locator('.treatment-card-item')).toContainText('Đã hoàn tất hôm nay')
   await expect(page.locator('.treatment-card-item .today-execution-badge')).toHaveText('Đã thực hiện 1 buổi hôm nay')
   await expect(page.locator('.treatment-card-item').getByRole('button', { name: 'Thực hiện hôm nay' })).toHaveCount(0)
   await page.reload()
-  await expect(page.locator('.treatment-customers tbody tr:not(.treatment-expanded-row)').last()).toContainText('Khách A')
+  await expect(page.getByRole('button', { name: 'Khách A: 1 đã hoàn thành' })).toBeVisible()
 })
 
 test('STAFF chỉ chọn được nhân viên ở cơ sở tài khoản khi gán lịch sử liệu trình', async ({ page }) => {
