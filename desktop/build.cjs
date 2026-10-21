@@ -5,7 +5,8 @@ const path = require('node:path')
 const projectDir = path.join(__dirname, '..')
 const output = path.join(projectDir, 'release')
 const builder = path.join(projectDir, 'node_modules', 'electron-builder', 'out', 'cli', 'cli.js')
-const args = ['--win', 'portable', '--x64']
+const target = process.argv.includes('--installer') ? 'nsis' : 'portable'
+const args = ['--win', target, '--x64', '--publish', 'never']
 const icons = spawnSync(process.execPath, [path.join(__dirname, 'icons.cjs')], { cwd: projectDir, stdio: 'inherit' })
 if (icons.status !== 0) process.exit(icons.status ?? 1)
 // Desktop must use its local /api proxy, even when a web deployment .env is present.

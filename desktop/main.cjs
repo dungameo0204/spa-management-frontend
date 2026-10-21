@@ -1,7 +1,10 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('node:path')
 const { startServer } = require('./server.cjs')
+const { startUpdates } = require('./updates.cjs')
 
+app.setName('Xuly Spa')
+app.setAppUserModelId('vn.xuly.spa.desktop')
 let server
 app.whenReady().then(async () => {
   try {
@@ -21,6 +24,7 @@ app.whenReady().then(async () => {
       if (new URL(url).origin !== result.origin) event.preventDefault()
     })
     await window.loadURL(result.origin)
+    startUpdates(app, window)
   } catch (error) {
     console.error('Không thể mở ứng dụng:', error)
     app.quit()

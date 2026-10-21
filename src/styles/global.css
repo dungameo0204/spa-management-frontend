@@ -211,6 +211,7 @@
 @media(max-width:1150px){.invoice-drawer .compact-invoice-line{grid-template-columns:minmax(0,1fr)}.invoice-drawer .invoice-item-actions{grid-column:1;flex-wrap:wrap}.invoice-drawer .invoice-item-main .product-entry-scroll{overflow-x:auto}.invoice-drawer .invoice-item-main .product-entry-row{min-width:550px}}
 
 /* Invoice consultant editor lives above the scrolling drawer, not inside a line item. */
+.app-version{display:block;padding:2px 9px 0;color:var(--muted);font-size:11px;letter-spacing:.02em}
 .invoice-drawer .invoice-item-actions>.consultant-picker{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;border:1px solid #d9e6db;border-radius:8px;background:var(--sage-light);color:var(--sage);padding:7px 9px;font-size:11px;font-weight:700;line-height:16px}
 .invoice-drawer .invoice-item-actions>.consultant-picker:hover{background:#e1ede1}
 .consultant-count{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 4px;border-radius:20px;background:var(--sage);color:#fff;font-size:10px}

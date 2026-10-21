@@ -17,10 +17,12 @@
     "test:e2e": "playwright test",
     "test:desktop": "node --test desktop/*.test.cjs",
     "desktop": "npm run build && electron .",
-    "build:exe": "node desktop/build.cjs"
+    "build:exe": "node desktop/build.cjs",
+    "build:installer": "node desktop/build.cjs --installer"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.0.0",
+    "electron-updater": "^6.8.9",
     "exceljs": "^4.4.0",
     "lucide-react": "^0.468.0",
     "react": "^19.0.0",
@@ -46,9 +48,24 @@
   "build": {
     "appId": "vn.xuly.spa.desktop",
     "productName": "Xuly Spa",
-    "directories": { "output": "release" },
-    "files": ["dist/**/*", "desktop/*.cjs", "package.json"],
-    "win": { "target": "portable", "icon": "public/icons/icon.ico", "signExecutable": false },
-    "portable": { "artifactName": "Xuly-Spa-${version}-portable.exe" }
+    "compression": "normal",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "desktop/*.cjs",
+      "package.json"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "public/icons/icon.ico",
+      "signExecutable": false
+    },
+    "publish": { "provider": "github", "owner": "dungameo0204", "repo": "spa-management-frontend" },
+    "nsis": { "artifactName": "Xuly-Spa-Setup-${version}.exe", "oneClick": false, "perMachine": false },
+    "portable": {
+      "artifactName": "Xuly-Spa-${version}-portable.exe"
+    }
   }
 }

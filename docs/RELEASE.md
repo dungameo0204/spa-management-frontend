@@ -1,0 +1,14 @@
+# Phát hành Xuly Spa
+
+## Web/PWA (điện thoại)
+
+- Cloudflare Pages: kết nối repository `dungameo0204/spa-management-frontend`, build command `npm ci && npm run build`, output directory `dist`, Node.js 22. `.env.production` đặt public API origin `https://api-spa-xuly.infinityhavocx.men` (không có `/api` ở cuối); Pages có thể ghi đè bằng build variable `VITE_API_BASE_URL`. Gắn custom domain `app-spa-xuly.infinityhavocx.men` trong Pages và tạo DNS theo hướng dẫn của Cloudflare. `public/_redirects` cung cấp SPA fallback.
+- Triển khai backend **riêng**, dùng HTTPS hợp lệ tại `api-spa-xuly.infinityhavocx.men`, mở CORS chỉ cho `https://app-spa-xuly.infinityhavocx.men` với `Authorization`, `Content-Type` và các method thực dùng; kiểm tra OPTIONS preflight, `/api/auth/login`, phân quyền và database trước khi bàn giao. Không đưa database hay thông tin bí mật vào frontend hoặc Pages. DNS/API hiện cần được chủ hạ tầng thiết lập.
+- Kiểm tra đăng nhập, API, điều hướng trực tiếp tới một route, cài PWA trên Android/iOS và tải lại sau một lần deploy mới. Sidebar hiển thị phiên bản frontend build từ `package.json`; PWA có thể tạm hiển thị bản cũ khi chưa reload/đóng mở ứng dụng.
+
+## Windows (bản cài NSIS x64)
+
+- `npm ci`, `npm run lint`, `npm test`, `npm run test:desktop`, `npm run build:installer` trên Windows Node 22. Installer, `.blockmap` và `latest.yml` ở `release/`; build local **không tự upload**. Mặc định bản desktop chuyển tiếp `/api` từ máy cục bộ sang `https://api-spa-xuly.infinityhavocx.men`; có thể ghi đè bằng `XULY_API_BASE_URL` (origin HTTPS, không thêm `/api`) trước khi chạy.
+- Workflow `.github/workflows/windows-release.yml` chạy khi push tag `vX.Y.Z` đúng bằng `package.json` version, tạo **draft** GitHub Release kèm ba tệp trên. Người có quyền kiểm tra rồi Publish release để khách tải installer và ứng dụng đã cài nhận bản mới. GitHub repository và Releases phải **public** để khách không cần GitHub token; repository private cần cơ chế phân phối có xác thực riêng, không nhúng token vào app.
+- Bắt đầu từ **installer**, không dùng portable demo để tự cập nhật. Sau này tăng version theo semver, commit, push tag; không thay đổi tệp của release đã phát hành. App kiểm tra khi mở, tải cập nhật, hỏi trước khi khởi động lại để cài; dữ liệu kinh doanh nằm trên backend, cần lưu thao tác đang dở trước khi cập nhật. Không có ký số hiện tại nên Windows có thể cảnh báo; trước khi đưa cho khách nên ký code, thử trên máy Windows sạch và thử nâng cấp thực từ một phiên bản đã Publish sang phiên bản mới.
+- Bản `npm run build:exe` vẫn là portable dành cho demo, không phải kênh auto-update. Không phát hành tag `v0.1.0` nếu đó chỉ là demo: tăng version khi chuẩn bị release đầu tiên và xác nhận GitHub repository public, domain/API hoạt động.

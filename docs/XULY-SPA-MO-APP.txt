@@ -1,0 +1,42 @@
+XULY SPA — BỘ DEMO WINDOWS
+Phiên bản 0.1.0
+
+1. MỞ APP
+- Mở Xuly-Spa-0.1.0-portable.exe trên máy Windows x64.
+- App dùng tên Xuly Spa, logo hoa sen và cửa sổ riêng mặc định phóng lớn.
+- Backend và cơ sở dữ liệu phải được triển khai riêng; bản này không phải gói offline.
+- Mặc định app kết nối backend tại http://127.0.0.1:5000.
+- Đăng nhập bằng tài khoản đã được cấp. Không kèm tài khoản/mật khẩu trong bộ này.
+
+2. DÙNG BACKEND Ở MÁY KHÁC
+Đóng app cũ trước. Mở PowerShell tại thư mục chứa exe và chạy:
+
+$env:XULY_API_BASE_URL='https://api.example.com'
+& '.\Xuly-Spa-0.1.0-portable.exe'
+
+Thay địa chỉ minh họa bằng origin backend thật, không thêm /api hoặc đường dẫn.
+Với backend LAN, cần địa chỉ IP/host phù hợp và firewall cho phép kết nối.
+Không lưu mật khẩu/token trong biến XULY_API_BASE_URL.
+
+3. TÀI LIỆU CHO ĐỘI VIDEO
+- PDF: đọc và gửi cho đội video.
+- HTML: mở trong trình duyệt, có thể in hoặc lưu PDF lại.
+- Markdown: nội dung nguồn để đưa cho công cụ soạn kịch bản/AI.
+- Logo SVG: vector cho dựng video.
+- Logo PNG 512: ảnh có nền khối xanh theo logo gốc để chèn khi dựng.
+- Tài liệu gồm hướng dẫn toàn bộ màn hình, lưu ý nghiệp vụ, dữ liệu minh họa,
+  kịch bản video 90 giây và demo thao tác 5–7 phút.
+
+4. TRƯỚC KHI QUAY
+- Dùng môi trường demo riêng, không dùng dữ liệu khách thật.
+- Backend cần bản mới có itemMappings trong response POST /api/invoices.
+- Chạy thử hóa đơn trùng dịch vụ, thực hiện buổi, ví, thu nợ và báo cáo thật.
+- Không tạo lại hóa đơn khi hóa đơn đã lưu nhưng bước ghi nhận buổi lỗi.
+- Tắt thông báo desktop và giấu mật khẩu/thông tin nhạy cảm.
+
+5. GIỚI HẠN BÀN GIAO
+- Bản portable chưa ký số, Windows có thể cảnh báo; kiểm tra nguồn file.
+- Không tự tạo dữ liệu demo hoặc thay đổi database trong quy trình đóng gói.
+- Kiểm thử tự động không thay thế nghiệm thu backend/MySQL và thiết bị in thật.
+- Không quảng cáo là hóa đơn điện tử thuế, phần mềm kế toán đầy đủ,
+  trả lương tự động, SMS/Zalo tự gửi hoặc ứng dụng offline hoàn toàn.

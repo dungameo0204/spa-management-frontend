@@ -18,7 +18,7 @@ function backendUrl(value) {
   return url
 }
 
-function startServer({ distDir, apiBaseUrl = process.env.XULY_API_BASE_URL } = {}) {
+function startServer({ distDir, apiBaseUrl = process.env.XULY_API_BASE_URL || 'https://api-spa-xuly.infinityhavocx.men' } = {}) {
   const backend = backendUrl(apiBaseUrl)
   const root = path.resolve(distDir)
   const server = http.createServer((req, res) => {
