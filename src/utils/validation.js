@@ -1,5 +1,5 @@
 export function validateDateRange({ startDate, endDate }) { return /^\d{4}-\d{2}-\d{2}$/.test(startDate) && /^\d{4}-\d{2}-\d{2}$/.test(endDate) && startDate <= endDate ? '' : 'Vui lòng chọn khoảng ngày hợp lệ.' }
-export function validateProductDraft(data) { if (!data.name?.trim()) return 'Vui lòng nhập tên sản phẩm.'; if (!Number.isFinite(Number(data.price)) || Number(data.price) < 0) return 'Giá bán phải từ 0 trở lên.'; return '' }
+export function validateProductDraft(data) { if (!data.name?.trim()) return 'Vui lòng nhập tên sản phẩm.'; if (data.price === '' || !Number.isFinite(Number(data.price)) || Number(data.price) < 0) return 'Giá niêm yết phải từ 0 trở lên.'; if (data.sale_price === '' || data.sale_price == null || !Number.isFinite(Number(data.sale_price)) || Number(data.sale_price) < 0 || Number(data.sale_price) > Number(data.price)) return 'Giá bán phải từ 0 đến giá niêm yết.'; return '' }
 export function validateTreatmentDraft(data) {
   if (!data.customer_id || !data.product_id) return 'Vui lòng chọn khách hàng và dịch vụ.'
   if (!Number.isInteger(Number(data.total_sessions)) || Number(data.total_sessions) <= 0) return 'Số buổi phải là số nguyên lớn hơn 0.'

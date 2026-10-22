@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { discountPayload, invoiceConsultants, invoiceTotal, lineTotal, pairedDiscount, paymentAmounts, paymentFromInput, priceLineForProduct, synchronizeInvoiceDiscount, syncInvoicePayment, validateConsultants } from './invoice'
+import { discountPayload, invoiceConsultants, invoiceLineFromApi, invoiceTotal, lineTotal, pairedDiscount, paymentAmounts, paymentFromInput, priceLineForProduct, refreshLineDiscount, synchronizeInvoiceDiscount, syncInvoicePayment, validateConsultants } from './invoice'
 import { appointmentDate, toSqlDateTime } from './format'
 
 describe('Ngày giờ gửi MySQL', () => {
@@ -49,7 +49,7 @@ describe('Chiết khấu và thanh toán', () => {
     expect(lineTotal({ quantity: 2, unit_price: 250000, ...byAmount })).toBe(375000)
   })
   it('tính lại giảm giá khi thay sản phẩm và tự tính số nợ còn lại', () => {
-    const line = priceLineForProduct({ quantity: 2, discount_percent: 10 }, { id: 2, name: 'Dịch vụ', price: 200000 })
+    const line = priceLineForProduct({ quantity: 2, discount_percent: 10 }, { id: 2, name: 'Dịch vụ', price: 200000, sale_price: 180000 })
     expect(line.discount_amount).toBe(40000)
     const form = synchronizeInvoiceDiscount({ items: [line], discount_percent: 10 })
     expect(invoiceTotal(form)).toBe(324000)
@@ -57,5 +57,31 @@ describe('Chiết khấu và thanh toán', () => {
     expect(paymentAmounts(324000, 100000, true, true, 50000).debt_amount).toBe(174000)
     expect(paymentFromInput(324000, 100000, true, '50000')).toEqual({ wallet_used: 100000, paid_amount: 50000, debt_amount: 174000 })
     expect(paymentFromInput(324000, 100000, true, undefined).debt_amount).toBe(0)
+  })
+  it('giữ snapshot là giá niêm yết, giảm tự động theo từng sản phẩm khi tăng số lượng', () => {
+    const line = priceLineForProduct({ quantity: 1 }, { id: 3, name: 'Laser', price: 2000000, sale_price: 1800000 })
+    expect(line).toMatchObject({ unit_price: 2000000, discount_percent: 10, discount_amount: 200000, discount_mode: 'unit_amount' })
+    const four = refreshLineDiscount({ ...line, quantity: 4 })
+    expect(four).toMatchObject({ discount_percent: 10, discount_amount: 800000 })
+    expect(lineTotal(four)).toBe(7200000)
+    expect(discountPayload(four)).toEqual({ discount_percent: 0, discount_amount: 800000 })
+    const manual = { ...four, ...pairedDiscount(8000000, 300000, 'amount') }
+    expect(refreshLineDiscount({ ...manual, quantity: 2 }).discount_amount).toBe(300000)
+    const percent = { ...four, ...pairedDiscount(8000000, 15, 'percent') }
+    expect(refreshLineDiscount({ ...percent, quantity: 2 }).discount_amount).toBe(600000)
+  })
+  it('giá bán lẻ vẫn chính xác khi phần trăm hiển thị bị làm tròn và hóa đơn cũ không bị tính lại', () => {
+    const line = priceLineForProduct({ quantity: 3 }, { id: 4, name: 'Lẻ', price: 1000000, sale_price: 833333 })
+    expect(line.discount_amount).toBe(500001)
+    expect(lineTotal(line)).toBe(2499999)
+    expect(discountPayload(line)).toEqual({ discount_percent: 0, discount_amount: 500001 })
+    expect(priceLineForProduct({ quantity: 2 }, { id: 5, name: 'Cũ', price: 100 }).discount_amount).toBe(0)
+    const existing = invoiceLineFromApi({ id: 1, product_id: 4, snapshot_name: 'Lẻ', snapshot_price: 1000000, quantity: 3, discount_percent: 0, discount_amount: 500001 })
+    expect(lineTotal(existing)).toBe(2499999)
+    expect(discountPayload(existing)).toEqual({ discount_percent: 0, discount_amount: 500001 })
+    expect(refreshLineDiscount({ ...existing, quantity: 4 }).discount_amount).toBe(500001)
+    const legacy = invoiceLineFromApi({ id: 2, product_id: 4, snapshot_price: 1000000, quantity: 1, discount_percent: 10, discount_amount: 10000 })
+    expect(refreshLineDiscount({ ...legacy, quantity: 2 }).discount_amount).toBe(10000)
+    expect(discountPayload(legacy)).toEqual({ discount_percent: 10, discount_amount: 10000 })
   })
 })

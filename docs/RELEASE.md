@@ -1,5 +1,9 @@
 # Phát hành Xuly Spa
 
+> Trạng thái 21/10/2026: Pages project `xuly-spa` đã được tạo bằng **Direct Upload** và đã deploy từ máy local lên `https://xuly-spa.pages.dev` (HTTP 200, route `/login` cũng HTTP 200). Custom domain `app-spa-xuly.infinityhavocx.men` đã được thêm nhưng còn pending vì thiếu DNS CNAME. Wrangler OAuth đã được cấp quyền Pages, nhưng **không có quyền DNS record** (Cloudflare API trả 403). Trong Cloudflare DNS zone `infinityhavocx.men`, cần tạo CNAME `app-spa-xuly` → `xuly-spa.pages.dev` (theo chỉ dẫn tại Pages > Custom domains), rồi kiểm tra trạng thái Active. Backend công khai tại `https://api-spa-xuly.infinityhavocx.men` đã trả `/health` = `{"status":"ok"}`, POST `/api/auth/login` bằng thông tin thử không tồn tại trả 401 và OPTIONS CORS cho origin frontend trả 204; chưa kiểm tra đăng nhập bằng tài khoản thật hoặc nghiệp vụ có ghi dữ liệu.
+
+> **Quan trọng:** Pages project Direct Upload hiện tại không thể chuyển trực tiếp sang Git integration. Để deploy tự động từ GitHub về sau, tạo Pages project **mới** dạng Connect to Git, chuyển custom domain sang project mới sau khi kiểm tra xong; hoặc giữ project Direct Upload và cấu hình GitHub Actions deploy bằng Wrangler. Không bật hai project cùng dùng một custom domain cùng lúc.
+
 ## Web/PWA (điện thoại)
 
 - Cloudflare Pages: kết nối repository `dungameo0204/spa-management-frontend`, build command `npm ci && npm run build`, output directory `dist`, Node.js 22. `.env.production` đặt public API origin `https://api-spa-xuly.infinityhavocx.men` (không có `/api` ở cuối); Pages có thể ghi đè bằng build variable `VITE_API_BASE_URL`. Gắn custom domain `app-spa-xuly.infinityhavocx.men` trong Pages và tạo DNS theo hướng dẫn của Cloudflare. `public/_redirects` cung cấp SPA fallback.

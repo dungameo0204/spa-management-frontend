@@ -15,7 +15,7 @@ Ví dụ: `GET /api/customers?search=An&page=2&pageSize=10` trả `{ "message": 
 
 - Stack: Node.js, Express 5, MySQL (`mysql2`), JWT, bcrypt.
 - Nội dung JSON: gửi header `Content-Type: application/json`.
-- CORS đang mở cho mọi origin (`cors()`).
+- Khi `NODE_ENV=production`, backend chỉ cho các origin HTTPS liệt kê trong `CORS_ORIGINS` (phân tách dấu phẩy) và chỉ lắng nghe `127.0.0.1` để sử dụng cùng Cloudflare Tunnel; ngoài production, CORS mở theo cấu hình dev. Xem `docs/DEPLOY_WINDOWS_CLOUDFLARE.md` trước khi công bố API.
 - URL gốc cục bộ: `http://localhost:<PORT>`, trong đó `PORT` lấy từ biến môi trường, mặc định là `5000`.
 - Ví dụ dưới đây dùng: `http://localhost:5000`.
 - Các API GET trả danh sách có phân trang bằng `page`/`pageSize`; xem phần **Phân trang cho API danh sách** ở đầu tài liệu. API tổng quan `/api/reports/revenue` không phân trang.
@@ -84,7 +84,7 @@ Tại thời điểm hiện tại, `src/server.js` mount các endpoint hoạt đ
 | Role | `POST/GET /api/roles`, `GET/PUT/DELETE /api/roles/:id`, `PATCH /api/roles/:id/restore` |
 | Staff | `POST/GET /api/staffs`, `GET/PUT/DELETE /api/staffs/:id`, `PATCH /api/staffs/:id/restore` |
 | Branch | `POST/GET /api/branches`, `GET/PUT/DELETE /api/branches/:id`, `PATCH /api/branches/:id/restore` |
-| Customer | `POST /api/customers/reset-password`, `POST/GET /api/customers`, `GET/PUT/DELETE /api/customers/:id`, `PATCH /api/customers/:id/restore` |
+| Customer | `POST /api/customers/reset-password` (MANAGER), `POST/GET /api/customers`, `GET/PUT/DELETE /api/customers/:id`, `PATCH /api/customers/:id/restore` |
 | Product | `GET /api/products`, `GET /api/products/:id`, `POST /api/products`, `PUT/DELETE /api/products/:id`, `PATCH /api/products/:id/restore` (MANAGER và STAFF); chỉ MANAGER được ghi `commissions`/`commission_tiers` |
 | Inventory import | `POST/GET /api/inventory-imports`, `GET/PUT/DELETE /api/inventory-imports/:id` |
 | Expense | `POST/GET /api/expenses`, `GET /api/expenses/:id`, `PUT/DELETE /api/expenses/:id` |
@@ -422,22 +422,22 @@ Body có thể gửi một phần: `fullname`, `phone_number`, `address`, `role_
 
 ## 11. Khách hàng `/api/customers`
 
-### `POST /api/customers/reset-password` — Public
+### `POST /api/customers/reset-password` — Chỉ MANAGER
 
-Không cần token.
+Cần JWT của MANAGER. Tenant được lấy từ token; backend bỏ hoàn toàn `tenantId` do client gửi để không thể đổi mật khẩu khách của Spa khác. Đây là thao tác quản trị, **không phải** luồng “quên mật khẩu” public của MiniApp.
 
 ```json
 {
-  "tenantId": 3,
   "phone_number": "0900000000",
   "new_password": "new-secret"
 }
 ```
 
-- Cả ba field đều bắt buộc.
-- Backend tìm customer chưa xóa theo `tenantId + phone_number`, băm `new_password` bằng bcrypt.
+- Cả hai field đều bắt buộc; mật khẩu mới dài 6–255 ký tự.
+- Backend tìm customer chưa xóa theo tenant trong JWT + `phone_number`, băm `new_password` bằng bcrypt và ghi người thực hiện.
 - Thành công `200`: `{ "message": "Đổi mật khẩu thành công" }`.
-- **Cảnh báo bảo mật:** API hiện không có OTP/xác minh số điện thoại; bất kỳ client nào biết `tenantId` và số điện thoại đều có thể gọi đổi mật khẩu. Frontend không nên coi đây là luồng quên mật khẩu an toàn nếu chưa bổ sung xác minh ở backend.
+- Không token trả `401`, token không phải MANAGER trả `403`. Endpoint có giới hạn số lần gọi theo IP.
+- MiniApp chưa có luồng quên mật khẩu public; muốn mở lại phải bổ sung OTP/xác minh quyền sở hữu số điện thoại ở backend.
 
 ### `POST /api/customers` — Cần token
 
@@ -453,7 +453,7 @@ Không cần token.
 ```
 
 - Bắt buộc: `fullname`, `phone_number`.
-- `password` không bắt buộc; nếu có thì được bcrypt hash. Nếu không, customer phải gọi reset-password để thiết lập mật khẩu cho MiniApp.
+- `password` không bắt buộc; nếu có thì được bcrypt hash. Nếu không, MANAGER có thể thiết lập sau bằng endpoint reset-password ở trên. Khách không thể tự đặt lại mật khẩu public khi chưa có OTP/xác minh.
 - `phone_number` là duy nhất **theo SĐT trong từng tenant**, không ghép với `fullname`: cùng tên nhưng khác SĐT được phép; khác tên nhưng trùng SĐT bị từ chối (`400`). Khách đã xóa mềm vẫn giữ SĐT để có thể khôi phục, vì vậy **không thể dùng lại SĐT đó để tạo khách mới**. Frontend nên tìm khách theo SĐT trước khi tạo, không thêm bản ghi thứ hai.
 - Thành công `201`: `{ "message": "Thêm mới khách hàng thành công", "customerId": 10 }`.
 
@@ -499,6 +499,8 @@ Body hỗ trợ: `fullname`, `phone_number`, `password`, `avatar`, `address`, `n
 ---
 
 ## 12. Sản phẩm/Dịch vụ `/api/products` (MANAGER và STAFF quản lý)
+
+> Bản triển khai giá bán riêng (chỉ tenant đã migration): `price` là **giá niêm yết**, `sale_price` là **giá bán**. POST product nhận `sale_price` tùy chọn (không gửi thì bằng `price`); PUT product có thể sửa `sale_price` riêng. Nếu PUT chỉ gửi `price`, backend đồng bộ `sale_price` theo `price` để tương thích client cũ; muốn giữ giá bán khác giá niêm yết, gửi cả hai trường. GET danh sách/chi tiết trả về cả `price` và `sale_price`. `sale_price` phải là số không âm, không nhận `null`/chuỗi rỗng. Frontend tính phần trăm hiển thị; khi POST/PUT invoice phải gửi `items[].unit_price` bằng giá bán mong muốn. Nếu bỏ `unit_price` và alias `items[].price`, invoice vẫn dùng `products.price` (giá niêm yết), **không tự lấy `sale_price` và không tự tính chiết khấu**. Xem `docs/migrations/README_product_sale_price.md` trước khi deploy.
 
 Mọi endpoint trong mục này yêu cầu Bearer token. MANAGER và STAFF đều có quyền tạo/sửa/xóa mềm/khôi phục sản phẩm. Chỉ MANAGER được gửi `commissions` **hoặc** `commission_tiers` khi tạo hoặc sửa (`STAFF` gửi một trong hai field, kể cả `[]` hay `null`, sẽ nhận `403`, không ghi dữ liệu). Product được tạo trong **một transaction** cùng cấu hình hoa hồng/tồn kho ban đầu (nếu có); nếu một bước lỗi thì toàn bộ thao tác bị rollback.
 
@@ -764,6 +766,8 @@ Thành công `201`:
 }
 ```
 
+`itemMappings` có đúng một phần tử cho **mỗi** phần tử `items` gửi lên, kể cả hàng hóa/dịch vụ không sinh thẻ (`treatment_id: null`). `request_index` là chỉ số **0-based** của dòng trong mảng `items` của chính request POST (không phải thứ tự GET, không phải `product_id`); `invoice_item_id` là ID dòng bán vừa tạo, `treatment_id` là ID thẻ vừa tạo. Ví dụ hai dòng trùng dịch vụ vẫn có hai `request_index`, hai `invoice_item_id` và hai `treatment_id` riêng biệt. Frontend dùng `itemMappings` ngay từ response 201 để ghi nhận “làm ngay” cho đúng thẻ; không suy đoán theo `product_id`, giá hay thứ tự dữ liệu GET. Response này chỉ trả về sau khi transaction commit thành công; nếu bước ghi nhận buổi sau đó lỗi, không POST lại hóa đơn.
+
 ### `GET /api/invoices`
 
 Query tùy chọn: `search`, `branchId`, `startDate`, `endDate`, `productName`, `minAmount`, `maxAmount`, `hasDebt`.
@@ -777,10 +781,6 @@ Query tùy chọn: `search`, `branchId`, `startDate`, `endDate`, `productName`, 
 - Thành công `200`: `{ "message": "Lấy danh sách thành công", "total": 1, "page": 1, "pageSize": 20, "totalPages": 1, "data": [ ... ] }`. Mỗi invoice trả `wallet_used` riêng; `payment_method` không chứa số tiền ví.
 
 ### `GET /api/invoices/:id`
-
-Mỗi `items[].id` là ID dòng bán, không phải product ID. Frontend giữ ID này trong form dưới tên `invoice_item_id` và gửi lại cho dòng cũ khi PUT; dòng mới không gửi. Cho phép nhiều dòng cùng dịch vụ với giá/số lượng độc lập.
-
-Thẻ tự sinh từ hóa đơn có `treatments.invoice_item_id` liên kết chính xác với `items[].id`. POST trả `itemMappings` với một phần tử cho mỗi dòng request: `request_index` là chỉ số 0-based trong `items` đã gửi, `invoice_item_id` là ID dòng bán, `treatment_id` là ID thẻ hoặc `null` nếu không sinh thẻ. Frontend dùng đúng `request_index` của dòng chọn “làm ngay” rồi execute bằng `treatment_id` tương ứng, không POST tạo lại thẻ, không ghép theo product/giá/tên hoặc thứ tự kết quả GET. Dòng `treatment_id: null` không execute. Mapping thiếu/không hợp lệ thì không đoán thẻ. Lỗi ghi nhận/gán nhân viên sau lưu không được dẫn đến POST hóa đơn lần nữa; giữ nguyên form đã lưu để kiểm tra và xử lý tại Thẻ liệu trình.
 
 Lấy header hóa đơn, gồm `paid_amount`, `wallet_used`, `debt_amount`, `branch_name`, `customer_name`, `phone_number`, danh sách `items`, và mỗi item có `consultants`. STAFF không thể lấy hóa đơn cơ sở khác. Thành công `200`: `{ "message": "Lấy chi tiết hóa đơn thành công", "data": { ... } }`; không có quyền/không tồn tại trả `404`.
 
@@ -1514,7 +1514,7 @@ Mục này là bảng tra cứu **response thực tế**, bổ sung cho phần m
 | `DELETE /customers/:id` | 200 | `{ message: "Xóa khách hàng thành công" }`. |
 | `PATCH /customers/:id/restore` | 200 | `{ message: "Khôi phục khách hàng thành công" }`. |
 
-Các GET danh sách trong bảng này sử dụng message theo controller: `/tenants`: `Lấy danh sách Spa thành công`; `/users`: `Lấy danh sách tài khoản thành công`; các danh mục còn lại: `Lấy danh sách thành công`. `POST /customers/reset-password` là public; không nhầm nó với API cần JWT.
+Các GET danh sách trong bảng này sử dụng message theo controller: `/tenants`: `Lấy danh sách Spa thành công`; `/users`: `Lấy danh sách tài khoản thành công`; các danh mục còn lại: `Lấy danh sách thành công`. `POST /customers/reset-password` cần JWT của MANAGER và lấy tenant từ token.
 
 ### Sản phẩm, nhập kho, phiếu chi
 
@@ -1543,7 +1543,7 @@ Các GET danh sách trong bảng này sử dụng message theo controller: `/ten
 
 | Endpoint | HTTP | Response thành công |
 |---|---:|---|
-| `POST /invoices` | 201 | `{ message: "Tạo hóa đơn thành công", invoiceId: number, totalAmount: number, debtAmount: number, walletUsed: number }`. |
+| `POST /invoices` | 201 | `{ message: "Tạo hóa đơn thành công", invoiceId: number, totalAmount: number, debtAmount: number, walletUsed: number, itemMappings: { request_index: number, invoice_item_id: number, treatment_id: number \| null }[] }`. `request_index` là vị trí 0-based trong `items` của POST. |
 | `GET /invoices` | 200 | Danh sách phân trang, `message: "Lấy danh sách thành công"`; `data[]`: toàn bộ `invoices` (`id`, `customer_id`, `branch_id`, `total_amount`, `discount_percent`, `discount_amount`, `paid_amount`, `wallet_used`, `debt_amount`, `payment_method`, `note`, `invoice_date`, audit) cộng `branch_name`, `customer_name`, `phone_number`. **Không có `items` trong list**. |
 | `GET /invoices/:id` | 200 | `{ message: "Lấy chi tiết hóa đơn thành công", data: InvoiceDetail }`; header cùng field list, thêm `items[]` là bản ghi `invoice_items` (gồm `id`, `invoice_id`, `product_id`, `snapshot_name`, `snapshot_price`, `quantity`, `discount_percent`, `discount_amount`, `final_price`, audit). Mỗi item có `consultants[]`: toàn bộ cột `invoice_item_consultants` (gồm `id`, `invoice_item_id`, `staff_id`, `revenue_amount`, `role_type`, audit) cộng `staff_name` (có thể `null`). Nếu không có item: `items: []`. |
 | `PUT /invoices/:id` | 200 | `{ message: "Cập nhật hóa đơn thành công", totalAmount: number, debtAmount: number }`; không trả `invoiceId` hoặc `walletUsed`. |
