@@ -1,8 +1,8 @@
 {
   "name": "spa-management-frontend",
   "private": true,
-  "description": "Xuly Spa - Phần mềm quản lý bán hàng, khách hàng và vận hành spa",
-  "author": "Xuly Spa",
+  "description": "O'HINA - Phần mềm quản lý bán hàng, khách hàng và vận hành spa",
+  "author": "O'HINA",
   "version": "0.1.0",
   "type": "module",
   "main": "desktop/main.cjs",
@@ -18,7 +18,8 @@
     "test:desktop": "node --test desktop/*.test.cjs",
     "desktop": "npm run build && electron .",
     "build:exe": "node desktop/build.cjs",
-    "build:installer": "node desktop/build.cjs --installer"
+    "build:installer": "node desktop/build.cjs --installer",
+    "desktop:dist": "npm run build:installer"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.0.0",
@@ -47,7 +48,7 @@
   },
   "build": {
     "appId": "vn.xuly.spa.desktop",
-    "productName": "Xuly Spa",
+    "productName": "O'HINA",
     "compression": "normal",
     "directories": {
       "output": "release"
@@ -63,9 +64,9 @@
       "signExecutable": false
     },
     "publish": { "provider": "github", "owner": "dungameo0204", "repo": "spa-management-frontend" },
-    "nsis": { "artifactName": "Xuly-Spa-Setup-${version}.exe", "oneClick": false, "perMachine": false },
+    "nsis": { "artifactName": "OHINA-Setup-${version}.exe", "oneClick": false, "perMachine": false },
     "portable": {
-      "artifactName": "Xuly-Spa-${version}-portable.exe"
+      "artifactName": "OHINA-${version}-portable.exe"
     }
   }
 }

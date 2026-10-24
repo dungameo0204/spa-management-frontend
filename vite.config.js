@@ -11,9 +11,9 @@ export default defineConfig({
     registerType: 'autoUpdate',
     includeAssets: ['icons/icon.svg', 'icons/apple-touch-icon.png'],
     manifest: {
-      name: 'Xuly · Quản lý Spa', short_name: 'Xuly', lang: 'vi',
-      description: 'Không gian quản lý spa của bạn', start_url: '/', scope: '/', display: 'standalone',
-      background_color: '#f7f5f1', theme_color: '#315e50',
+      name: "O'HINA · Quản lý Spa", short_name: "O'HINA", lang: 'vi',
+      description: 'Chăm chút từng khoảnh khắc, nâng niu mỗi trải nghiệm.', start_url: '/', scope: '/', display: 'standalone',
+      background_color: '#faf8f3', theme_color: '#aa843f',
       icons: [
         { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
         { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },

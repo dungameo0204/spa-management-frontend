@@ -29,6 +29,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           $version = node -p "require('./package.json').version"
-          $installer = "release/Xuly-Spa-Setup-$version.exe"
+          $installer = "release/OHINA-Setup-$version.exe"
           if (!(Test-Path $installer) -or !(Test-Path 'release/latest.yml') -or !(Test-Path "$installer.blockmap")) { throw 'Installer or update metadata missing' }
-          gh release create $env:GITHUB_REF_NAME $installer "$installer.blockmap" 'release/latest.yml' --title "Xuly Spa $version" --generate-notes --draft
+          gh release create $env:GITHUB_REF_NAME $installer "$installer.blockmap" 'release/latest.yml' --title "O'HINA $version" --generate-notes --draft

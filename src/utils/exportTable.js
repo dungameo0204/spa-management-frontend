@@ -3,7 +3,7 @@ const safeCell = value => typeof value === 'string' && /^[=+\-@\t\r]/.test(value
 export async function createTableWorkbook({ title, context, columns, rows, totals }) {
   const ExcelJS = (await import('exceljs')).default
   const book = new ExcelJS.Workbook()
-  book.creator = 'Xuly Spa'
+  book.creator = "O'HINA"
   addTableSheet(book, { title, context, columns, rows, totals })
   return book
 }

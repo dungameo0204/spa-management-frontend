@@ -12,6 +12,10 @@ test('từ chối URL backend không hợp lệ', () => {
   assert.throws(() => backendUrl('http://localhost:5000/api'))
 })
 
+test('mặc định kết nối backend demo qua cổng local 5000', () => {
+  assert.equal(backendUrl().origin, 'http://127.0.0.1:5000')
+})
+
 test('phục vụ SPA và chuyển tiếp API sang backend với Authorization', async t => {
   const distDir = fs.mkdtempSync(path.join(os.tmpdir(), 'xuly-desktop-'))
   t.after(() => fs.rmSync(distDir, { recursive: true, force: true }))

@@ -28,13 +28,13 @@ async function allPages(loader) {
 export async function createReportWorkbook(range, commissionsOnly = false) {
   const ExcelJS = (await import('exceljs')).default
   const book = new ExcelJS.Workbook()
-  book.creator = 'Xuly Spa'
+  book.creator = "O'HINA"
   const context = ['Từ ngày', range.startDate, 'Đến ngày', range.endDate, 'Mã chi nhánh', range.branchId || 'Tất cả']
   for (const [kind, name] of Object.entries(commissionsOnly ? { commissions: kinds.commissions } : kinds)) {
     const people = ['commissions', 'consultants'].includes(kind)
     const { rows, totalAmount } = await allPages(page => people ? getStaffTotals(kind, range, page, 100) : getReportDetails(kind, range, page, 100))
     const sheet = book.addWorksheet(name)
-    sheet.addRow([`XULY · ${name.toUpperCase()}`])
+    sheet.addRow([`O'HINA · ${name.toUpperCase()}`])
     sheet.addRow(['Từ ngày', range.startDate, 'Đến ngày', range.endDate, 'Mã chi nhánh', range.branchId || 'Tất cả'])
     sheet.addRow(['Tổng tiền toàn kỳ', numeric(totalAmount), 'Số dòng/nhóm', rows.length])
     sheet.getCell('B3').numFmt = '#,##0" đ"'
@@ -67,9 +67,9 @@ export async function createReportWorkbook(range, commissionsOnly = false) {
       }
     }
     sheet.columns = Array.from({ length: Math.max(6, keys.length) }, (_, index) => ({ width: index < keys.length ? Math.max(18, Math.min(38, labelFor(keys[index]).length + 14)) : 22 }))
-    sheet.getRow(1).font = { bold: true, size: 16, color: { argb: 'FF315E50' } }
+    sheet.getRow(1).font = { bold: true, size: 16, color: { argb: 'FF70512C' } }
     sheet.getRow(5).font = { bold: true, color: { argb: 'FFFFFFFF' } }
-    sheet.getRow(5).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF315E50' } }
+    sheet.getRow(5).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF70512C' } }
     sheet.views = [{ state: 'frozen', ySplit: 5 }]
     sheet.autoFilter = { from: { row: 5, column: 1 }, to: { row: 5, column: Math.max(1, keys.length) } }
     keys.forEach((key, index) => { if (isMoneyField(key) || key === 'total_amount') sheet.getColumn(index + 1).numFmt = '#,##0" đ"' })
@@ -83,5 +83,5 @@ export async function createReportWorkbook(range, commissionsOnly = false) {
 
 export async function exportReport(range, commissionsOnly = false) {
   const book = await createReportWorkbook(range, commissionsOnly)
-  await downloadWorkbook(book, `Xuly-${commissionsOnly ? 'cong-ca-tat-ca-nhan-vien' : 'bao-cao'}-${range.startDate}-${range.endDate}.xlsx`)
+  await downloadWorkbook(book, `OHINA-${commissionsOnly ? 'cong-ca-tat-ca-nhan-vien' : 'bao-cao'}-${range.startDate}-${range.endDate}.xlsx`)
 }

@@ -1,18 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="jade" x2="1" y2="1"><stop stop-color="#397568"/><stop offset="1" stop-color="#123d35"/></linearGradient>
-    <linearGradient id="gold" x1="0" y1="0" x2="0.7" y2="1"><stop stop-color="#fff1cf"/><stop offset="1" stop-color="#cda86b"/></linearGradient>
+    <linearGradient id="bronze" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#896322"/>
+      <stop offset=".23" stop-color="#e7cb86"/>
+      <stop offset=".48" stop-color="#b2863c"/>
+      <stop offset=".72" stop-color="#f1dba1"/>
+      <stop offset="1" stop-color="#906a2d"/>
+    </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="112" fill="url(#jade)"/>
-  <rect x="24" y="24" width="464" height="464" rx="92" fill="none" stroke="#e8ce98" stroke-opacity=".3" stroke-width="2"/>
-  <circle cx="256" cy="240" r="169" fill="none" stroke="#e8ce98" stroke-opacity=".18" stroke-width="2"/>
-  <g fill="url(#gold)">
-    <path d="M256 119c-30 34-49 64-49 96 0 30 19 57 49 77 30-20 49-47 49-77 0-32-19-62-49-96Z"/>
-    <path d="M166 173c-9 46-4 85 20 113 14 17 33 28 53 34-34-43-48-78-44-112-9-13-19-25-29-35Z"/>
-    <path d="M346 173c9 46 4 85-20 113-14 17-33 28-53 34 34-43 48-78 44-112 9-13 19-25 29-35Z"/>
-    <path d="M113 244c12 66 55 104 125 100-26-15-47-32-62-54-23-19-43-34-63-46Z"/>
-    <path d="M399 244c-12 66-55 104-125 100 26-15 47-32 62-54 23-19 43-34 63-46Z"/>
+  <rect width="512" height="512" rx="108" fill="#faf6ec"/>
+  <circle cx="256" cy="256" r="200" fill="#fffefa" stroke="url(#bronze)" stroke-width="12"/>
+  <g fill="url(#bronze)">
+    <!-- Serifs and uprights of the monogram. -->
+    <path d="M129 134h134c-25 5-32 14-32 36v82c-21 11-40 27-57 49V170c0-22-10-31-45-36Z"/>
+    <path d="M289 134h94c-25 5-33 14-33 36v170c0 22 8 31 33 36H268c25-5 33-14 33-36v-53c17-18 34-40 49-66v-51c0-22-8-31-61-36Z"/>
+    <path d="M128 376c36-5 46-14 46-36v-18c16-28 35-44 57-53v71c0 22 7 31 32 36H128Z"/>
+    <!-- Flowing crossbar, inspired by the ribbon inside the supplied H emblem. -->
+    <path d="M173 315c17-48 48-70 94-76 51-6 72-31 84-77-3 63-21 115-74 138-37 16-75 12-104 50 4-16 5-27 0-35Z"/>
   </g>
-  <path d="M179 375c43 15 111 15 154 0" fill="none" stroke="#e8ce98" stroke-width="7" stroke-linecap="round"/>
-  <path d="m256 80 5 10-5 10-5-10Z" fill="#fff1cf"/>
 </svg>
