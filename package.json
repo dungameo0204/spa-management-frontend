@@ -62,7 +62,7 @@
       "icon": "public/icons/icon.ico",
       "signExecutable": false
     },
-    "publish": { "provider": "github", "owner": "dungameo0204", "repo": "spa-management-frontend" },
+    "publish": { "provider": "github", "owner": "dungameo0204", "repo": "ohina-release" },
     "nsis": { "artifactName": "Xuly-Spa-Setup-${version}.exe", "oneClick": false, "perMachine": false },
     "portable": {
       "artifactName": "Xuly-Spa-${version}-portable.exe"
