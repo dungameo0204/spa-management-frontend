@@ -63,7 +63,7 @@
       "icon": "public/icons/icon.ico",
       "signExecutable": false
     },
-    "publish": { "provider": "github", "owner": "dungameo0204", "repo": "spa-management-frontend" },
+    "publish": { "provider": "github", "owner": "dungameo0204", "repo": "ohina-release" },
     "nsis": { "artifactName": "OHINA-Setup-${version}.exe", "oneClick": false, "perMachine": false },
     "portable": {
       "artifactName": "OHINA-${version}-portable.exe"
