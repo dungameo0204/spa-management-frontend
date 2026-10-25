@@ -34,6 +34,8 @@ test('MANAGER có thể mở form tạo sản phẩm', async ({ page }) => {
   await setup(page, 'MANAGER')
   await page.getByRole('button', { name: 'Thêm mới' }).click()
   await expect(page.getByRole('dialog', { name: 'Thêm sản phẩm & dịch vụ' })).toBeVisible()
+  await expect(page.getByLabel('Mô tả', { exact: true })).toHaveCount(0)
+  await expect(page.getByLabel('Công dụng', { exact: true })).toHaveCount(0)
 })
 test('menu trên màn hình điện thoại vẫn cho STAFF xem sản phẩm', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
@@ -41,4 +43,14 @@ test('menu trên màn hình điện thoại vẫn cho STAFF xem sản phẩm', a
   await page.getByRole('button', { name: 'Thêm', exact: true }).click()
   await expect(page.getByRole('link', { name: 'Sản phẩm & dịch vụ' })).toBeVisible()
   await expect(page.getByRole('link', { name: 'Báo cáo' })).toHaveCount(0)
+  await expect(page.getByRole('link', { name: 'Booking từ khách' })).toHaveCount(0)
+})
+
+test('gỡ booking từ khách nhưng giữ trang lịch hẹn', async ({ page }) => {
+  await setup(page, 'MANAGER')
+  await expect(page.getByRole('link', { name: 'Booking từ khách' })).toHaveCount(0)
+  await page.goto('/bookings')
+  await expect(page.getByRole('heading', { name: 'Không tìm thấy trang' })).toBeVisible()
+  await page.goto('/appointments')
+  await expect(page.getByRole('heading', { name: 'Lịch hẹn' })).toBeVisible()
 })

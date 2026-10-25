@@ -3,11 +3,11 @@ import { request, normalizePagedResponse } from './client'
 export const paths = {
   users: '/api/users', roles: '/api/roles', branches: '/api/branches', staffs: '/api/staffs',
   customers: '/api/customers', products: '/api/products', invoices: '/api/invoices',
-  appointments: '/api/appointments', bookings: '/api/customer-bookings',
+  appointments: '/api/appointments',
   imports: '/api/inventory-imports', expenses: '/api/expenses', wallet: '/api/customer-wallet-logs',
   debts: '/api/debt-payments', treatments: '/api/treatments', commissions: '/api/treatments/commissions',
 }
-const readonly = new Set(['bookings', 'commissions'])
+const readonly = new Set(['commissions'])
 const restores = new Set(['users', 'roles', 'branches', 'staffs', 'customers', 'products'])
 function endpoint(resource) { const path = paths[resource]; if (!path) throw new Error('Tài nguyên không hợp lệ'); return path }
 export function listResource(resource, filters = {}, page = 1, pageSize = 20, signal) {

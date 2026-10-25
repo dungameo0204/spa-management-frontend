@@ -9,7 +9,7 @@ vi.mock('../auth/AuthProvider', () => ({ useAuth: () => ({ user: { id: 1, system
 vi.mock('../components/AppShell', () => ({ useBranch: () => ({ branchId: null }) }))
 vi.mock('../api/resources', () => ({
   listResource: vi.fn(async resource => ({ total: 1, page: 1, pageSize: 20, totalPages: 1, data: resource === 'users' ? [{ id: 15, username: 'bs.ly', fullname: 'BS Lý', system_role: 'MANAGER', branch_id: null, branch_name: 'Tổng công ty' }] : resource === 'products' ? [{ id: 3, name: 'Laser', price: 1000000, sale_price: 800000, is_product: 1 }] : [] })),
-  getResource: vi.fn(async resource => resource === 'products' ? { id: 3, name: 'Laser', price: 1000000, sale_price: 800000, is_product: 1 } : { id: 15, username: 'bs.ly', fullname: 'BS Lý', system_role: 'MANAGER', branch_id: null }),
+  getResource: vi.fn(async resource => resource === 'products' ? { id: 3, name: 'Laser', price: 1000000, sale_price: 800000, is_product: 1, description: 'Mô tả cũ', benefits: 'Công dụng cũ' } : { id: 15, username: 'bs.ly', fullname: 'BS Lý', system_role: 'MANAGER', branch_id: null }),
   updateResource: vi.fn(async () => ({})),
   createResource: vi.fn(), deleteResource: vi.fn(), restoreResource: vi.fn(), getReportDetails: vi.fn(),
 }))
@@ -59,6 +59,8 @@ it('thêm sản phẩm tự điền giá bán rồi cho sửa riêng và hiển 
   await actor.click(screen.getByRole('button', { name: 'Thêm mới' }))
   const form = screen.getByRole('button', { name: 'Lưu thay đổi' }).closest('form')
   await actor.type(within(form).getByLabelText('Tên sản phẩm / dịch vụ'), 'Laser mới')
+  expect(within(form).queryByLabelText('Mô tả')).not.toBeInTheDocument()
+  expect(within(form).queryByLabelText('Công dụng')).not.toBeInTheDocument()
   const price = within(form).getByLabelText('Giá niêm yết')
   const sale = within(form).getByLabelText('Giá bán')
   await actor.clear(price)
@@ -68,6 +70,8 @@ it('thêm sản phẩm tự điền giá bán rồi cho sửa riêng và hiển 
   await actor.type(sale, '800000')
   await actor.click(within(form).getByRole('button', { name: 'Lưu thay đổi' }))
   await waitFor(() => expect(createResource).toHaveBeenCalledWith('products', expect.objectContaining({ name: 'Laser mới', price: 1000000, sale_price: 800000 })))
+  expect(createResource.mock.calls[0][1]).not.toHaveProperty('description')
+  expect(createResource.mock.calls[0][1]).not.toHaveProperty('benefits')
 })
 
 it('sửa giá niêm yết của sản phẩm đang có chiết khấu không tự ghi đè giá bán', async () => {
@@ -78,6 +82,10 @@ it('sửa giá niêm yết của sản phẩm đang có chiết khấu không t�
   const form = screen.getByRole('button', { name: 'Lưu thay đổi' }).closest('form')
   await actor.clear(within(form).getByLabelText('Giá niêm yết'))
   await actor.type(within(form).getByLabelText('Giá niêm yết'), '1200000')
+  expect(within(form).queryByLabelText('Mô tả')).not.toBeInTheDocument()
+  expect(within(form).queryByLabelText('Công dụng')).not.toBeInTheDocument()
   await actor.click(within(form).getByRole('button', { name: 'Lưu thay đổi' }))
   await waitFor(() => expect(updateResource).toHaveBeenCalledWith('products', 3, expect.objectContaining({ price: 1200000, sale_price: 800000 })))
+  expect(updateResource.mock.calls[0][2]).not.toHaveProperty('description')
+  expect(updateResource.mock.calls[0][2]).not.toHaveProperty('benefits')
 })
