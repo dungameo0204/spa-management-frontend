@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 async function setup(page, role = 'MANAGER', tiers = [], inventory = []) {
   const writes = []
@@ -70,6 +70,31 @@ test('tạo thẻ lấy giá catalog, cho sửa giá và gửi đúng ID, số �
   await expect.poll(() => writes.length).toBe(1)
   expect(writes[0]).toEqual({ path: '/api/treatments', body: { customer_id: 3, product_id: 5, total_sessions: 1, remaining_sessions: 1, commission_base_price: 5000000, commission_quantity: 2, note: null } })
 })
+
+for (const remaining of [0, 4]) {
+  test(`tạo thẻ cũ tổng 10, còn ${remaining} buổi và không ghi đè số nhập riêng`, async ({ page }) => {
+    const writes = await setup(page)
+    await page.goto('/treatments')
+    await page.getByRole('button', { name: 'Tạo thẻ', exact: true }).click()
+    await page.getByRole('combobox', { name: 'Tìm khách hàng' }).click()
+    await page.getByRole('option', { name: 'Khách A' }).click()
+    await page.getByRole('combobox', { name: 'Tìm dịch vụ' }).click()
+    await page.getByRole('option', { name: 'Điều trị sẹo' }).click()
+    await page.getByLabel('Số buổi', { exact: true }).fill('8')
+    const balance = page.getByLabel('Số buổi còn lại', { exact: false })
+    await expect(balance).toHaveValue('8')
+    await balance.fill(String(remaining))
+    await page.getByLabel('Số buổi', { exact: true }).fill('10')
+    await expect(balance).toHaveValue(String(remaining))
+    await balance.fill('11')
+    await page.getByRole('dialog').getByRole('button', { name: 'Tạo thẻ', exact: true }).click()
+    expect(writes).toHaveLength(0)
+    await balance.fill(String(remaining))
+    await page.getByRole('dialog').getByRole('button', { name: 'Tạo thẻ', exact: true }).click()
+    await expect.poll(() => writes.length).toBe(1)
+    expect(writes[0].body).toMatchObject({ total_sessions: 10, remaining_sessions: remaining })
+  })
+}
 
 test('tạo dịch vụ một mức mặc định, thêm hai bậc và chặn khoảng hở/chồng', async ({ page }) => {
   const writes = await setup(page)

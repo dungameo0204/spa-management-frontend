@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test('phiếu nhập kho tải lại danh sách sau khi tạo', async ({ page }) => {
   let reads = 0

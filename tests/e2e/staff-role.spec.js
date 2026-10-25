@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 for (const systemRole of ['STAFF', 'MANAGER']) {
   test(`${systemRole} sửa hồ sơ nhân viên bằng danh sách chức vụ từ API`, async ({ page }) => {

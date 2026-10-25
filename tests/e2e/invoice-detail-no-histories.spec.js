@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test('chi tiết hóa đơn chỉ hiển thị hóa đơn, không tải hay hiển thị buổi thực hiện', async ({ page }) => {
   const paths = []

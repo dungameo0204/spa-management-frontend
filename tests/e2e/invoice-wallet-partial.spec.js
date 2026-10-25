@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 for (const width of [1920, 1440, 1100, 768, 390, 320]) {
   test(`ví nhập một phần, giữ bảng sau POST/PUT và liên kết đúng khách (${width}px)`, async ({ page }) => {

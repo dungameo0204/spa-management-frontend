@@ -1,6 +1,16 @@
 import { describe, expect, it } from 'vitest'
-import { validateInvoiceDraft, validateProductDraft, validateDateRange } from './validation'
+import { validateCustomerBirthDate, validateTreatmentDraft, validateInvoiceDraft, validateProductDraft, validateDateRange } from './validation'
 describe('kiểm tra đầu vào', () => {
+  it('kiểm tra số buổi còn lại của thẻ cũ, bao gồm số 0', () => {
+    const draft = { customer_id: 1, product_id: 2, total_sessions: 10, commission_base_price: 0, commission_quantity: 1 }
+    for (const remaining_sessions of [undefined, 0, 4, 10, '4']) expect(validateTreatmentDraft({ ...draft, remaining_sessions })).toBe('')
+    for (const remaining_sessions of [-1, 11, 1.5, '', null, true, NaN, Infinity]) expect(validateTreatmentDraft({ ...draft, remaining_sessions })).toMatch(/Số buổi còn lại/)
+    for (const total_sessions of [0, -1, 1.5, 2147483648, true]) expect(validateTreatmentDraft({ ...draft, total_sessions })).toMatch(/Số buổi/)
+  })
+  it('ngày sinh tùy chọn phải là ngày lịch hợp lệ và không ở tương lai', () => {
+    for (const value of [undefined, null, '', '2000-02-29', '1000-01-01', '2026-10-25']) expect(validateCustomerBirthDate(value, '2026-10-25')).toBe('')
+    for (const value of ['1900-02-29', '2026-02-30', '2026-13-01', '0999-01-01', '2026-10-26', '21/08/1995']) expect(validateCustomerBirthDate(value, '2026-10-25')).toMatch(/Ngày sinh/)
+  })
   it('chặn tiền ví không hợp lệ, vượt số dư hoặc vượt tổng hóa đơn', () => {
     const draft = { customer_id: 1, items: [{ product_id: 3, quantity: 1 }], total_amount: 1000000, wallet_balance: 800000, paid_amount: 0 }
     for (const wallet_used of [-1, NaN, Infinity, 900000]) expect(validateInvoiceDraft({ ...draft, wallet_used })).toMatch(/Tiền dùng ví/)

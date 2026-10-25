@@ -1,8 +1,9 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, mockSessionEndpoint } from './fixtures'
 
 test('trang liệu trình: ô nhân viên gọn hai cột và chọn bằng menu riêng trên điện thoại', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true })
   const page = await context.newPage()
+  mockSessionEndpoint(page)
     await page.addInitScript(() => localStorage.setItem('xuly.session', JSON.stringify({ token: 'manager-test', user: { id: 1, fullname: 'Quản lý', system_role: 'MANAGER' } })))
     await page.route('**/api/**', route => {
       const path = new URL(route.request().url()).pathname
@@ -99,6 +100,7 @@ test('trang liệu trình hiển thị chung mọi cơ sở dù nhân viên hay 
   ]
   for (const [role, branchId] of [['STAFF', 1], ['STAFF', 2], ['MANAGER', 2]]) {
     const page = await browser.newPage()
+    mockSessionEndpoint(page)
     const queries = []
     await page.addInitScript(({ role, branchId }) => {
       localStorage.setItem('xuly.session', JSON.stringify({ token: 'test', user: { id: branchId, fullname: 'Người dùng', system_role: role, branch_id: branchId } }))

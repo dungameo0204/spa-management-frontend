@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test('chi tiết phiếu chi trong báo cáo hiển thị từng khoản chi, không hiển thị thông tin giảm giá', async ({ page }) => {
   const requested = []

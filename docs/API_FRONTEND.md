@@ -46,9 +46,12 @@ Token hệ thống có hiệu lực **15 giờ**. Token customer MiniApp (nếu 
 
 | Tình huống | HTTP | Response |
 |---|---:|---|
-| Thiếu `Authorization: Bearer ...` | 401 | `{ "message": "Từ chối truy cập! Không tìm thấy Token xác thực." }` |
-| Token sai/hết hạn | 403 | `{ "message": "Token không hợp lệ hoặc đã hết hạn." }` |
-| Không phải `SUPER_ADMIN`/`MANAGER` | 403 | `{ "message": "..." }` |
+| Thiếu header Authorization | 401 | `{ "code": "AUTH_TOKEN_MISSING", "message": "..." }` |
+| Header/token sai định dạng, sai chữ ký hoặc chưa có hiệu lực | 401 | `{ "code": "AUTH_TOKEN_INVALID", "message": "..." }` |
+| Token hết hạn | 401 | `{ "code": "AUTH_TOKEN_EXPIRED", "message": "..." }` |
+| Không phải `SUPER_ADMIN`/`MANAGER` | 403 | `{ "code": "FORBIDDEN", "message": "..." }` |
+
+Từ 2026-10-25, middleware token nhân sự trả **401 thay vì 403** khi token sai/hết hạn. Không phân loại lỗi bằng regex `message`. Các API nghiệp vụ khác có thể vẫn trả 403 không có `code`: không tự logout vì 403. Luồng `verifyCustomerToken` MiniApp không đổi.
 
 ## 3. Quy ước dữ liệu và response
 
@@ -78,7 +81,7 @@ Tại thời điểm hiện tại, `src/server.js` mount các endpoint hoạt đ
 
 | Nhóm | Endpoint |
 |---|---|
-| Auth | `POST /api/auth/login` |
+| Auth | `POST /api/auth/login`, `GET /api/auth/me` |
 | Tenant | `POST /api/tenants/create`, `GET /api/tenants`, `GET/PUT/DELETE /api/tenants/:id`, `PATCH /api/tenants/:id/restore`, `POST /api/tenants/:id/renew`, `GET /api/tenants/:id/managers`, `PATCH /api/tenants/:id/managers/:userId/password` |
 | User | `POST /api/users/create`, `GET /api/users`, `GET/PUT/DELETE /api/users/:id`, `PATCH /api/users/:id/restore` |
 | Role | `POST/GET /api/roles`, `GET/PUT/DELETE /api/roles/:id`, `PATCH /api/roles/:id/restore` |
@@ -131,8 +134,56 @@ Tại thời điểm hiện tại, `src/server.js` mount các endpoint hoạt đ
 }
 ```
 
-- Thất bại: `400` khi thiếu username/password; `401` khi không tồn tại, bị xóa mềm hoặc sai mật khẩu.
+- Thất bại: `400 AUTH_INPUT_INVALID` khi thiếu/sai kiểu username/password; `401 AUTH_CREDENTIALS_INVALID` khi không tồn tại, bị xóa mềm hoặc sai mật khẩu; `403 TENANT_DISABLED`/`TENANT_EXPIRED` khi Spa không sử dụng được; `500 AUTH_SERVICE_ERROR` khi lỗi database/cấu hình/ký token. Giới hạn đăng nhập vẫn trả `429` kèm `Retry-After`.
 - Frontend lưu `data.token`; password không được trả về.
+
+### `GET /api/auth/me` — Kiểm tra phiên khi reload (2026-10-25)
+
+- Header bắt buộc: `Authorization: Bearer <token>`; không có body, không truyền tenant/user ID.
+- Response auth (cả login và me, kể cả lỗi) có `Cache-Control: no-store`.
+- Backend xác minh JWT, đọc user/tenant hiện tại. Không phát token mới, không gia hạn 15 giờ.
+- `200`:
+
+```json
+{
+  "message": "Phiên đăng nhập hợp lệ.",
+  "data": {
+    "user": {
+      "id": 12,
+      "tenant_id": 3,
+      "branch_id": null,
+      "username": "manager.demo",
+      "fullname": "Nguyễn Văn A",
+      "system_role": "MANAGER"
+    },
+    "tenant": { "id": 3, "spa_name": "Spa Demo", "expire_at": null },
+    "expires_at": "2026-10-26T05:00:00.000Z"
+  }
+}
+```
+
+`expires_at` là thời điểm hết hạn token ISO 8601 UTC (giá trị trên chỉ minh họa); `tenant.expire_at` là hạn gói phần mềm, `null` nếu không giới hạn. `tenant` là `null` cho SUPER_ADMIN không thuộc tenant. User chỉ gồm các field trong ví dụ, không có password/database name/permissions động. Frontend Spa vẫn chỉ nhận MANAGER/STAFF.
+
+| Lỗi `/me` | HTTP | Frontend xử lý |
+|---|---:|---|
+| `AUTH_TOKEN_MISSING`, `AUTH_TOKEN_INVALID`, `AUTH_TOKEN_EXPIRED` | 401 | Xóa phiên, yêu cầu đăng nhập lại. |
+| `AUTH_SESSION_INVALID` (user không còn hoạt động, JWT không phải phiên nhân sự hợp lệ) | 401 | Xóa phiên, yêu cầu đăng nhập lại. |
+| `AUTH_SESSION_CHANGED` (role/tenant/branch khác JWT hiện tại) | 401 | Xóa phiên, đăng nhập lại để nhận quyền mới. |
+| `TENANT_DISABLED` (tenant không tồn tại hoặc bị khóa), `TENANT_EXPIRED` | 403 | Giữ token; hiển thị trạng thái bị chặn/gia hạn, không cho vào protected pages. |
+| `AUTH_SERVICE_ERROR` | 500 | Giữ phiên, hiển thị lỗi và cho thử lại. |
+
+**Luồng frontend bắt buộc để tránh logout khi reload:**
+
+1. Đọc phiên lưu, cấu hình token provider **trước khi request đầu tiên chạy**. Không chỉ cấu hình trong effect cha trong khi các trang con đã mount và gọi API.
+2. Có token thì vào trạng thái `checking`, gọi `/api/auth/me`; chặn protected pages và truy vấn nghiệp vụ cho đến khi xác minh thành công. Không redirect login chỉ vì chưa tải xong user.
+3. `200`: giữ token cũ, thay user cache bằng `data.user`, lưu tenant/expires_at nếu cần; giữ nguyên pathname/query/hash.
+4. `401` của phiên hiện tại: logout. Login 401 chỉ là sai thông tin đăng nhập, không dùng handler hết phiên toàn cục.
+5. `403` không phải hết phiên. Lỗi mạng/timeout/abort/429/5xx cũng không xóa storage; cung cấp trạng thái lỗi và nút thử lại, tôn trọng Retry-After khi có.
+6. Chống request xác minh trùng (kể cả React StrictMode); bỏ qua response cũ sau logout/login bằng tài khoản khác. Chỉ handler lỗi của token đang được dùng mới được phép logout.
+
+**Giới hạn bảo mật:** `/me` kiểm tra user/quyền hiện tại khi xác minh phiên; các API nghiệp vụ vẫn dựa vào claims JWT hiện có. Đây không phải cơ chế thu hồi toàn bộ JWT ngay sau đổi mật khẩu/role/xóa tài khoản. Không có refresh token; hết 15 giờ phải đăng nhập lại. Giữ `JWT_SECRET` ổn định và giống nhau giữa các instance backend.
+
+Kiểm thử backend không cần MySQL: `npm run test:auth-session` (database giả lập, HTTP localhost cổng ngẫu nhiên).
 
 ---
 
@@ -441,6 +492,13 @@ Cần JWT của MANAGER. Tenant được lấy từ token; backend bỏ hoàn to
 
 ### `POST /api/customers` — Cần token
 
+**Ngày sinh (bản nâng cấp 25/10/2026):** field tùy chọn `date_of_birth`, ví dụ `"1995-08-21"`.
+Chỉ nhận ngày lịch tồn tại theo `YYYY-MM-DD`, năm 1000–9999, không được sau ngày hiện tại của máy backend; sai định dạng/ngày không tồn tại trả `400`.
+POST bỏ field, gửi `null` hoặc `""` thì lưu NULL. PUT bỏ field giữ nguyên, gửi `null` hoặc `""` xóa ngày sinh.
+GET danh sách, chi tiết và `GET /api/customers/:id/overview` (trong `data.customer`) trả `date_of_birth` dạng chuỗi `YYYY-MM-DD` hoặc null, không có giờ/múi giờ.
+Frontend hiển thị DD/MM/YYYY nhưng gửi chuỗi YYYY-MM-DD; không dùng `toISOString()` để chuyển ngày sinh.
+Triển khai phải migrate tenant và template trước khi bật code mới; xem `docs/migrations/README_customer_upgrade.md`.
+
 ```json
 {
   "fullname": "Phạm Khách Hàng",
@@ -500,7 +558,7 @@ Body hỗ trợ: `fullname`, `phone_number`, `password`, `avatar`, `address`, `n
 
 ## 12. Sản phẩm/Dịch vụ `/api/products` (MANAGER và STAFF quản lý)
 
-> Bản triển khai giá bán riêng (chỉ tenant đã migration): `price` là **giá niêm yết**, `sale_price` là **giá bán**. POST product nhận `sale_price` tùy chọn (không gửi thì bằng `price`); PUT product có thể sửa `sale_price` riêng. Nếu PUT chỉ gửi `price`, backend đồng bộ `sale_price` theo `price` để tương thích client cũ; muốn giữ giá bán khác giá niêm yết, gửi cả hai trường. GET danh sách/chi tiết trả về cả `price` và `sale_price`. `sale_price` phải là số không âm, không nhận `null`/chuỗi rỗng. Frontend tính phần trăm hiển thị; khi POST/PUT invoice phải gửi `items[].unit_price` bằng giá bán mong muốn. Nếu bỏ `unit_price` và alias `items[].price`, invoice vẫn dùng `products.price` (giá niêm yết), **không tự lấy `sale_price` và không tự tính chiết khấu**. Xem `docs/migrations/README_product_sale_price.md` trước khi deploy.
+> Bản triển khai giá bán riêng (chỉ tenant đã migration): `price` là **giá niêm yết**, `sale_price` là **giá bán**. POST product bắt buộc gửi cả hai, với `0 <= sale_price < price` (vì vậy `price > 0`). PUT có thể sửa một hoặc cả hai giá; backend kiểm tra cặp giá sau cập nhật, không tự đồng bộ giá còn lại. Nếu dữ liệu cũ đang có `sale_price >= price`, vẫn được sửa các trường không liên quan đến giá mà không tự thay đổi giá; mọi PUT sửa giá phải đưa cặp giá về hợp lệ. GET danh sách/chi tiết trả về cả `price` và `sale_price`. Frontend tính phần trăm hiển thị; khi POST/PUT invoice phải gửi `items[].unit_price` bằng giá bán mong muốn. Nếu bỏ `unit_price` và alias `items[].price`, invoice vẫn dùng `products.price` (giá niêm yết), **không tự lấy `sale_price` và không tự tính chiết khấu**. Xem `docs/migrations/README_product_sale_price.md` trước khi deploy.
 
 Mọi endpoint trong mục này yêu cầu Bearer token. MANAGER và STAFF đều có quyền tạo/sửa/xóa mềm/khôi phục sản phẩm. Chỉ MANAGER được gửi `commissions` **hoặc** `commission_tiers` khi tạo hoặc sửa (`STAFF` gửi một trong hai field, kể cả `[]` hay `null`, sẽ nhận `403`, không ghi dữ liệu). Product được tạo trong **một transaction** cùng cấu hình hoa hồng/tồn kho ban đầu (nếu có); nếu một bước lỗi thì toàn bộ thao tác bị rollback.
 
@@ -515,6 +573,7 @@ Ví dụ MANAGER tạo dịch vụ có **hai bậc công** cho chức vụ `role
   "description": "Mô tả dịch vụ",
   "benefits": "Phục hồi, dưỡng ẩm",
   "price": 900000,
+  "sale_price": 800000,
   "unit": "nốt",
   "is_product": false,
   "is_treatment_combo": false,
@@ -535,7 +594,7 @@ Ví dụ giá bán một đơn vị là 900.000đ thì khớp bậc `[0, 1.000.0
 
 | Field | Bắt buộc | Quy tắc |
 |---|---:|---|
-| `name`, `price`, `is_product` | Có | Tên unique trong product chưa xóa; `price >= 0`; `is_product` nhận boolean hoặc `0/1`. |
+| `name`, `price`, `sale_price`, `is_product` | Có | Tên unique trong product chưa xóa; `0 <= sale_price < price`; `is_product` nhận boolean hoặc `0/1`. Không gửi hoặc gửi `null`/chuỗi rỗng cho giá sẽ bị từ chối. |
 | `images` | Không | Mảng JSON hoặc `null`. |
 | `description`, `benefits`, `unit` | Không | Chuỗi; rỗng được lưu `null`. |
 | `is_treatment_combo`, `default_sessions`, `session_unit`, `next_appointment_days` | Không | Default theo schema; hai field số buổi/ngày là số nguyên `>= 0`. |
@@ -571,7 +630,7 @@ Thành công `201`: `{ "message": "Tạo sản phẩm/dịch vụ thành công",
 
 ### `PUT /api/products/:id` (MANAGER/STAFF; cấu hình công ca chỉ MANAGER)
 
-- Partial update: `name`, `images`, `description`, `benefits`, `price`, `unit`, `is_product`, `is_treatment_combo`, `default_sessions`, `session_unit`, `next_appointment_days`.
+- Partial update: `name`, `images`, `description`, `benefits`, `price`, `sale_price`, `unit`, `is_product`, `is_treatment_combo`, `default_sessions`, `session_unit`, `next_appointment_days`. Sửa một trong hai giá phải bảo đảm `0 <= sale_price < price` sau cập nhật; không tự thay đổi giá còn lại. Sản phẩm cũ có giá không hợp lệ vẫn được sửa các trường khác nhưng không được sửa giá thành cặp không hợp lệ.
 - `is_active` là cột legacy trong schema và bị API Product bỏ qua khi create/update; trạng thái sử dụng product được quản lý bằng xóa mềm (`deleted_at`).
 - Nếu gửi `commissions`, backend đồng bộ toàn bộ danh sách: role không còn trong body bị xóa mềm, role trong body được tạo/cập nhật. Có thể gửi `[]` để xóa hết commission.
 - Nếu gửi `commission_tiers`, backend thay toàn bộ bậc của sản phẩm trong transaction; `[]` xóa tất cả bậc. Nếu không gửi, giữ nguyên. Chỉ MANAGER được gửi field này.
@@ -1197,7 +1256,8 @@ Tạo thẻ thủ công.
 
 - `customer_id`, `product_id`, `total_sessions` bắt buộc; số buổi là số nguyên và `total_sessions > 0`.
 - `commission_base_price` bắt buộc (đơn giá trước giảm, >= 0); `commission_quantity` tùy chọn (số đơn vị trong một buổi dịch vụ không combo, mặc định 1). Không gửi `invoice_id` khác null: thẻ từ hóa đơn tạo qua API hóa đơn.
-- `remaining_sessions` tùy chọn, mặc định bằng `total_sessions`, không được lớn hơn tổng số buổi.
+- `remaining_sessions` tùy chọn: bỏ field thì mặc định bằng `total_sessions`; cho phép 0, không được lớn hơn tổng số buổi. Hai số buổi phải là số nguyên trong phạm vi INT (tổng >= 1, còn lại >= 0); chấp nhận chuỗi chỉ chứa chữ số cho form cũ, từ chối null/chuỗi rỗng/boolean/số lẻ.
+- Nhập thẻ cũ: tổng 10 còn 4 thì gửi `total_sessions: 10, remaining_sessions: 4`; backend không sinh 6 lịch sử/hoa hồng quá khứ. Buổi tiếp theo còn 3. `completed_sessions` suy ra từ tổng trừ còn lại có thể lớn hơn số lịch sử trên hệ thống mới. Không áp dụng số dư nhập này cho thẻ tự sinh qua hóa đơn.
 - Thành công `201`: `{ "message": "Tạo thẻ liệu trình thủ công thành công", "treatmentId": 1 }`.
 
 ### `POST /api/treatments/execute`

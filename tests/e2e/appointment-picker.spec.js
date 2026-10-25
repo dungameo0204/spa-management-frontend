@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test('chọn khách trong lịch hẹn giữ tên hiển thị và gửi đúng mã khách', async ({ page }) => {
   let saved
