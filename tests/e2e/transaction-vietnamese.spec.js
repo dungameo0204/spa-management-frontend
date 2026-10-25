@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test('biểu mẫu nạp ví hiển thị Tiền thưởng với dấu tiếng Việt', async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('xuly.session', JSON.stringify({ token: 'staff-test', user: { id: 1, fullname: 'Nhân viên', system_role: 'STAFF', branch_id: 1 } })))

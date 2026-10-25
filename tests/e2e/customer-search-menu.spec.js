@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test('menu tìm khách hàng trong hóa đơn đồng bộ menu cơ sở ở giao diện tối', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })

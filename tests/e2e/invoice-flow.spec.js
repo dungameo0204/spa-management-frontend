@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test('trên điện thoại ô tìm sản phẩm hóa đơn hiện danh sách và dòng nhập không tràn ngang', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })

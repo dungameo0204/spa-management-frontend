@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test('danh sách phiếu chi hiển thị ghi chú thay cho nội dung khoản chi', async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('xuly.session', JSON.stringify({ token: 'test', user: { id: 1, branch_id: 1, system_role: 'STAFF', fullname: 'Nhân viên' } })))
@@ -66,7 +66,7 @@ test('tạo khách mới bằng Enter khi ô tìm không có kết quả', async
   await page.getByRole('textbox', { name: 'Ghi chú (tùy chọn)' }).fill('Khách mới')
   await page.getByRole('button', { name: 'Lưu khách hàng' }).click()
   await expect.poll(() => writes.length).toBe(1)
-  expect(writes[0]).toEqual({ fullname: 'Khách Mới', phone_number: '0901234567', address: 'Số 1 Đường Hoa', note: 'Khách mới' })
+  expect(writes[0]).toEqual({ fullname: 'Khách Mới', phone_number: '0901234567', date_of_birth: '', address: 'Số 1 Đường Hoa', note: 'Khách mới' })
   await expect(page.getByText('Đã tạo khách hàng.')).toHaveClass(/success-alert/)
   await expect(page.getByRole('combobox', { name: 'Tìm khách hàng' })).toHaveValue('Khách Mới')
 })

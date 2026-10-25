@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 const product = { id: 1, name: 'Serum phục hồi', price: '450000.00', is_product: 1, inventory: [{ branch_name: 'Cơ sở 1', quantity: 12 }] }
 async function setup(page, role) {
   const writes = []

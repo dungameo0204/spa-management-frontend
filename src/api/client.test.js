@@ -18,4 +18,17 @@ describe('API client', () => {
     await expect(request('/api/reports/revenue')).rejects.toBeInstanceOf(ApiError)
     expect(expired).not.toHaveBeenCalled()
   })
+  it.each([403, 429, 500, 503])('không logout với HTTP %s dù message đề cập token', async status => {
+    const expired = vi.fn(); configureClient(() => 'staff-token', expired)
+    fetch.mockResolvedValue({ ok: false, status, json: async () => ({ code: 'FORBIDDEN', message: 'Token không hợp lệ hoặc hết hạn' }) })
+    await expect(request('/api/products')).rejects.toMatchObject({ status, code: 'FORBIDDEN' })
+    expect(expired).not.toHaveBeenCalled()
+  })
+  it('401 login không đăng xuất và không gửi token hiện tại', async () => {
+    const expired = vi.fn(); configureClient(() => 'staff-token', expired)
+    fetch.mockResolvedValue({ ok: false, status: 401, json: async () => ({ message: 'Sai mật khẩu' }) })
+    await expect(request('/api/auth/login', { method: 'POST', body: {} })).rejects.toMatchObject({ status: 401 })
+    expect(expired).not.toHaveBeenCalled()
+    expect(fetch.mock.calls[0][1].headers.Authorization).toBeUndefined()
+  })
 })

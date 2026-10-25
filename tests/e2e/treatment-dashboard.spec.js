@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test('tick buổi hôm nay rồi gán nhân viên qua hai API', async ({ page }) => {
   const writes = []

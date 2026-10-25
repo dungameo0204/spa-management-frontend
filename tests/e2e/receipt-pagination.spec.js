@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test('hóa đơn giấy thường nhiều sản phẩm có tiêu đề lặp và tổng kết liền khối', async ({ page }) => {
   await page.addInitScript(() => {
