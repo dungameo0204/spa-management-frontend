@@ -41,6 +41,7 @@ const dateKeys = new Set(['appointment_date', 'expense_date', 'booking_time', 'e
 
 function Field({ field, value, onChange, lookups, manager, editing }) {
   if (field.managerOnly && !manager) return null
+  if (field.key === 'expense_date' && !manager) return null
   if (field.key === 'branchId' && value.systemRole === 'MANAGER') return null
   if (value.is_product == 1 && ['is_treatment_combo', 'default_sessions', 'next_appointment_days'].includes(field.key)) return null
   if (field.key === 'default_sessions' && !value.is_treatment_combo) return null
@@ -85,6 +86,7 @@ export default function ResourcePage({ resource }) {
     if (resource === 'customers' && result.date_of_birth === '') result.date_of_birth = null
     if (resource === 'appointments' && result.appointment_date) result.appointment_date = appointmentDate(result.appointment_date)
     if (resource === 'expenses' && result.expense_date) result.expense_date = dateOnly(result.expense_date)
+    if (resource === 'expenses' && !manager) delete result.expense_date
     if (resource === 'products') { result.is_product = Number(result.is_product); result.sale_price = body.sale_price === '' ? NaN : Number(result.sale_price); result.price = result.is_product ? (body.price === '' ? NaN : Number(result.price)) : result.sale_price; result.is_treatment_combo = result.is_product ? false : Boolean(result.is_treatment_combo); result.default_sessions = result.is_product ? 0 : Number(result.default_sessions || 1); if (result.is_product) result.next_appointment_days = null; else if (result.next_appointment_days !== undefined && result.next_appointment_days !== '') result.next_appointment_days = Number(result.next_appointment_days); if (manager) result.commission_tiers = serializeCommissionTiers(result.is_product ? [] : body.commission_tiers || []); if (manager) result.commissions = result.is_product ? [] : (body.commissions || []).filter(c => c.role_id).map(c => ({ role_id: Number(c.role_id), commission_percent: Number(c.commission_percent || 0), commission_fixed_amount: Number(c.commission_fixed_amount || 0) })); if (!selected.id) result.inventory = result.is_product ? (body.inventory || []).filter(i => i.branch_id && i.quantity !== '').map(i => ({ branch_id: Number(i.branch_id), quantity: Number(i.quantity) })) : []; else delete result.inventory }
     if (resource === 'products' && !result.is_product && !result.is_treatment_combo) result.default_sessions = 1
     if (resource === 'users') { if (!result.password) delete result.password; if (result.systemRole === 'MANAGER') result.branchId = null; else { if (selected?.id && !result.branchId && selected.branch_id) result.branchId = selected.branch_id; if (result.branchId) result.branchId = Number(result.branchId) } }
