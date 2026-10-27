@@ -10,7 +10,7 @@ export default function TreatmentHistoryList({ histories, branches, user, onAssi
     return <div key={history.id} className="line-item">
       <strong>{formatSpaDate(history.execution_date)} · Cơ sở thực hiện: {branchName}</strong>
       <p>{history.staffs?.map(staff => staff.staff_name).join(', ') || 'Chưa gán nhân viên'}</p>
-      {canEdit && <div className="drawer-actions"><button className="btn secondary" onClick={() => onAssign(history)}>Gán nhân viên</button><button className="btn danger" onClick={() => onUndo(history.id)}>Hoàn tác</button></div>}
+      {canEdit && <div className="drawer-actions"><button className="btn secondary" onClick={() => onAssign(history)}>Gán nhân viên</button>{user.system_role === 'MANAGER' && <button className="btn danger" onClick={() => onUndo(history.id)}>Hoàn tác</button>}</div>}
     </div>
   })
 }

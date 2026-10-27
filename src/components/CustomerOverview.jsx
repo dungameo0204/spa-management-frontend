@@ -7,6 +7,7 @@ import { dateOnly, formatCurrency, formatSpaDate, today } from '../utils/format'
 import { useBranch } from './AppShell'
 import { useAuth } from '../auth/AuthProvider'
 import RoleStaffPicker from './RoleStaffPicker'
+import DetailNote from './DetailNote'
 
 export default function CustomerOverview({ customerId, overview, onOverview }) {
   const { user } = useAuth(), { branchId } = useBranch(), manager = user.system_role === 'MANAGER', qc = useQueryClient()
@@ -17,6 +18,7 @@ export default function CustomerOverview({ customerId, overview, onOverview }) {
   const { customer, timeline = [] } = overview
   return <section className="customer-overview">
     <div className="customer-identity"><strong>{customer.fullname}</strong><span>{customer.phone_number}</span><span>{customer.address || 'Chưa có địa chỉ'}</span><span>Ví: {formatCurrency(customer.wallet_balance)}</span><span>Nợ: <DebtAmount value={customer.total_debt} /></span></div>
+    <DetailNote note={customer.note} />
     {message && <p role={messageType === 'error' ? 'alert' : 'status'} className={messageType === 'error' ? 'form-alert' : 'success-alert'}>{message}</p>}
     <h3>Lịch sử mua và chăm sóc</h3>
     {!timeline.length && <p className="small-muted">Khách chưa có giao dịch hoặc liệu trình.</p>}
