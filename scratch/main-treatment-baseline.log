@@ -1,0 +1,32 @@
+
+Running 1 test using 1 worker
+
+[1/1] tests\e2e\treatment-dashboard.spec.js:28:1 › quản lý chọn cơ sở ngay ở dòng trước khi xác nhận buổi thực hiện
+  1) tests\e2e\treatment-dashboard.spec.js:28:1 › quản lý chọn cơ sở ngay ở dòng trước khi xác nhận buổi thực hiện 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+        "compact": true,
+        "fits": true,
+    -   "sameLine": true,
+    +   "sameLine": false,
+      }
+
+      56 |     return { sameLine: selects.every(select => Math.abs(select.bottom - selects[0].bottom) < 3) && Math.abs(button.bottom - selects[0].bottom) < 3, compact: staff.every(select => select.width <= 115 && select.height <= 33), fits: button.right <= element.getBoundingClientRect().right && selects.every(select => select.right <= element.getBoundingClientRect().right) }
+      57 |   })
+    > 58 |   expect(layout).toEqual({ sameLine: true, compact: true, fits: true })
+         |                  ^
+      59 |   await page.setViewportSize({ width: 390, height: 844 })
+      60 |   const mobile = await row.evaluate(element => {
+      61 |     const strip = element.querySelector('.role-staff-picker')
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\treatment-dashboard.spec.js:58:18
+
+    Error Context: test-results\treatment-dashboard-quản-l-03bb2-khi-xác-nhận-buổi-thực-hiện\error-context.md
+
+
+  1 failed
+    tests\e2e\treatment-dashboard.spec.js:28:1 › quản lý chọn cơ sở ngay ở dòng trước khi xác nhận buổi thực hiện 
