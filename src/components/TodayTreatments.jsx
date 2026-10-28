@@ -4,7 +4,7 @@ import { useBranch } from './AppShell'
 import { useAuth } from '../auth/AuthProvider'
 import { canUndoTreatmentExecution } from '../auth/permissions'
 import { assignTreatmentStaffs, executeTreatment, getResource, listResource, undoTreatmentExecution } from '../api/resources'
-import { today } from '../utils/format'
+import { dateOnly, today } from '../utils/format'
 import RoleStaffPicker from './RoleStaffPicker'
 import ConfirmDialog from './ConfirmDialog'
 import MobileSelect from './MobileSelect'
@@ -28,9 +28,10 @@ export default function TodayTreatments() {
   const branches = useQuery({ queryKey: ['branches', 'dashboard-treatment'], queryFn: () => listResource('branches', {}, 1, 100), enabled: manager })
   const allCards = query.data || []
   const cardDetails = useQueries({ queries: allCards.map(card => ({ queryKey: ['dashboard-treatments', 'detail', card.id], queryFn: () => getResource('treatments', card.id), staleTime: 15_000 })) })
-  const cards = allCards.map((card, index) => ({ card, detail: cardDetails[index] })).filter(({ card, detail }) => (card.created_at?.slice(0, 10) === today() && (!branchId || card.branch_id == null || Number(card.branch_id) === Number(branchId))) || detail.data?.histories?.some(h => h.execution_date?.slice(0, 10) === today() && (!branchId || Number(h.branch_id) === Number(branchId))))
+  const currentDay = today()
+  const cards = allCards.map((card, index) => ({ card, detail: cardDetails[index] })).filter(({ card, detail }) => (dateOnly(card.created_at) === currentDay && (!branchId || card.branch_id == null || Number(card.branch_id) === Number(branchId))) || detail.data?.histories?.some(h => dateOnly(h.execution_date) === currentDay && (!branchId || Number(h.branch_id) === Number(branchId))))
   const rows = cards.flatMap(({ card, detail }) => {
-    const histories = (detail.data?.histories || []).filter(h => h.execution_date?.slice(0, 10) === today() && (!branchId || Number(h.branch_id) === Number(branchId)))
+    const histories = (detail.data?.histories || []).filter(h => dateOnly(h.execution_date) === currentDay && (!branchId || Number(h.branch_id) === Number(branchId)))
     return histories.length ? histories.map(history => ({ card, detail, history, multiple: histories.length > 1 })) : [{ card, detail, history: null }]
   })
   const pages = Math.max(1, Math.ceil(rows.length / 20))

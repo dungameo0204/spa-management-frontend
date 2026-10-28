@@ -3,8 +3,8 @@ import { discountPayload, invoiceConsultants, invoiceLineFromApi, invoiceTotal, 
 import { appointmentDate, toSqlDateTime } from './format'
 
 describe('Ngày giờ gửi MySQL', () => {
-  it('loại bỏ ISO Z khi lưu hóa đơn mà không dịch giờ do trình duyệt', () => {
-    expect(toSqlDateTime('2026-10-09T15:02:13.000Z')).toBe('2026-10-09 15:02:13')
+  it('đổi timestamp sang giờ Việt Nam và giữ giờ nhập không có offset', () => {
+    expect(toSqlDateTime('2026-10-09T15:02:13.000Z')).toBe('2026-10-09 22:02:13')
     expect(toSqlDateTime('2026-10-09T09:30')).toBe('2026-10-09 09:30:00')
   })
   it('giữ ngày hẹn đã chọn và đặt giờ mặc định theo schema DATETIME', () => {
