@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react'
 import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useBranch } from './AppShell'
 import { useAuth } from '../auth/AuthProvider'
+import { canUndoTreatmentExecution } from '../auth/permissions'
 import { assignTreatmentStaffs, executeTreatment, getResource, listResource, undoTreatmentExecution } from '../api/resources'
 import { today } from '../utils/format'
 import RoleStaffPicker from './RoleStaffPicker'
@@ -42,7 +43,11 @@ export default function TodayTreatments() {
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['dashboard-treatments'] }); qc.invalidateQueries({ queryKey: ['treatments'] }); qc.invalidateQueries({ queryKey: ['commissions'] }); setMessageType('success'); setMessage('Đã ghi nhận buổi và lưu nhân viên thực hiện.'); setSelected(null) },
     onError: err => { qc.invalidateQueries({ queryKey: ['dashboard-treatments'] }); setMessageType('error'); setMessage(err.message) },
   })
-  const undoMutation = useMutation({ mutationFn: id => { if (!manager) throw new Error('Chỉ quản lý được hoàn tác buổi thực hiện.'); return undoTreatmentExecution(id) }, onSuccess: () => { qc.invalidateQueries({ queryKey: ['dashboard-treatments'] }); qc.invalidateQueries({ queryKey: ['treatments'] }); qc.invalidateQueries({ queryKey: ['commissions'] }); setUndo(null); setSelected(null); setMessageType('success'); setMessage('Đã hoàn tác buổi hôm nay.') }, onError: err => { setUndo(null); setMessageType('error'); setMessage(err.message) } })
+  const undoMutation = useMutation({ mutationFn: id => {
+    const history = cardDetails.flatMap(detail => detail.data?.histories || []).find(history => history.id === id)
+    if (!canUndoTreatmentExecution(user, history)) throw new Error('Bạn không có quyền hoàn tác buổi thực hiện này.')
+    return undoTreatmentExecution(id)
+  }, onSuccess: () => { qc.invalidateQueries({ queryKey: ['dashboard-treatments'] }); qc.invalidateQueries({ queryKey: ['treatments'] }); qc.invalidateQueries({ queryKey: ['commissions'] }); setUndo(null); setSelected(null); setMessageType('success'); setMessage('Đã hoàn tác buổi hôm nay.') }, onError: err => { setUndo(null); setMessageType('error'); setMessage(err.message) } })
   function pick(card, detail) {
     if (selected?.card.id === card.id) { setSelected(null); setMessage(''); return }
     const history = (detail?.histories || []).find(h => h.execution_date?.slice(0, 10) === today() && (!branchId || Number(h.branch_id) === Number(branchId)))
@@ -64,14 +69,15 @@ export default function TodayTreatments() {
   }
   return <section className="section-card">
     <div className="surface-heading"><div><span className="eyebrow">KHÁCH LÀM DỊCH VỤ</span><h2>Khách hàng hôm nay</h2></div></div>
-    <p className="small-muted">Gồm thẻ tạo hôm nay và thẻ đã thực hiện hôm nay. Tick để ghi nhận, bấm tên nhân viên để sửa{manager ? ', bỏ tick để hoàn tác.' : '.'}</p>
+    <p className="small-muted">Thẻ tạo hôm nay hoặc có buổi thực hiện hôm nay. Tick để ghi nhận, bấm tên nhân viên để sửa, bỏ tick để hoàn tác.{!manager && ' Nhân viên chỉ được hoàn tác buổi có ngày thực hiện và ngày tạo đều là hôm nay, tại cơ sở của mình.'}</p>
     {message && !selected && <p role={messageType === 'error' ? 'alert' : 'status'} className={messageType === 'error' ? 'form-alert' : 'success-alert'}>{message}</p>}
     {query.isError ? <p className="form-alert">Không tải được thẻ: {query.error.message}</p> : query.isLoading || cardDetails.some(d => d.isLoading) ? <p>Đang tải thẻ...</p> : cards.length ? <div className="table-scroll"><table><thead><tr><th>Khách hàng</th><th>Dịch vụ</th><th>Đã làm hôm nay</th><th>Nhân viên thực hiện</th></tr></thead><tbody>
       {cards.slice((page - 1) * 20, page * 20).map(({ card, detail: cardQuery }) => {
         const detail = cardQuery?.data
         const history = (detail?.histories || []).find(h => h.execution_date?.slice(0, 10) === today() && (!branchId || Number(h.branch_id) === Number(branchId)))
         const active = selected?.card.id === card.id
-        return <Fragment key={card.id}><tr><td data-label="Khách hàng">{card.customer_name}</td><td data-label="Dịch vụ">{card.product_name}</td><td data-label="Đã làm hôm nay"><input type="checkbox" aria-label={`Đã làm ${card.customer_name} - ${card.product_name}`} checked={Boolean(history) || (active && !selected.historyId)} disabled={(!manager && Boolean(history)) || cardQuery?.isLoading || cardQuery?.isError || (!history && Number(card.remaining_sessions) < 1) || mutation.isPending || undoMutation.isPending} onChange={e => e.target.checked ? pick(card, detail) : manager && history && setUndo(history.id)} /></td><td data-label="Nhân viên thực hiện">
+        const canUndo = canUndoTreatmentExecution(user, history)
+        return <Fragment key={card.id}><tr><td data-label="Khách hàng">{card.customer_name}</td><td data-label="Dịch vụ">{card.product_name}</td><td data-label="Đã làm hôm nay"><input type="checkbox" aria-label={`Đã làm ${card.customer_name} - ${card.product_name}`} checked={Boolean(history) || (active && !selected.historyId)} disabled={(Boolean(history) && !canUndo) || cardQuery?.isLoading || cardQuery?.isError || (!history && Number(card.remaining_sessions) < 1) || mutation.isPending || undoMutation.isPending} onChange={e => e.target.checked ? pick(card, detail) : canUndo && setUndo(history.id)} /></td><td data-label="Nhân viên thực hiện">
           {cardQuery?.isError ? 'Không tải được lịch sử' : active ? 'Đang chọn nhân viên bên dưới' : history ? <button type="button" className="text-action" onClick={() => pick(card, detail)} aria-label={`Sửa nhân viên ${card.customer_name} - ${card.product_name}`}>{(history.staffs || []).map(s => s.staff_name || s.fullname).join(', ') || 'Chưa gán nhân viên · Bấm để sửa'}</button> : 'Chưa thực hiện'}
         </td></tr>{active && <tr className="today-staff-row"><td colSpan={4}><div className="treatment-actions today-staff-actions">
           {manager && !selected.historyId && <label className="field">Cơ sở thực hiện<MobileSelect aria-label="Cơ sở thực hiện" value={executionBranch} onChange={e => { setExecutionBranch(e.target.value); setStaffs([]); setMessage('') }}><option value="">Chọn cơ sở</option>{branches.data?.data?.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}</MobileSelect></label>}
@@ -81,6 +87,6 @@ export default function TodayTreatments() {
       })}
     </tbody></table></div> : <p className="small-muted">Chưa có khách làm dịch vụ hôm nay.</p>}
     {pages > 1 && <div className="picker-pages"><button disabled={page === 1} onClick={() => setPage(page - 1)}>Trước</button><span>{page} / {pages}</span><button disabled={page >= pages} onClick={() => setPage(page + 1)}>Sau</button></div>}
-    {manager && undo && <ConfirmDialog title="Hoàn tác buổi hôm nay?" message="Buổi thực hiện và tiền công đã ghi nhận sẽ bị hoàn tác." pending={undoMutation.isPending} onCancel={() => setUndo(null)} onConfirm={() => undoMutation.mutate(undo)} />}
+    {undo && <ConfirmDialog title="Hoàn tác buổi hôm nay?" message="Buổi thực hiện và tiền công đã ghi nhận sẽ bị hoàn tác." pending={undoMutation.isPending} onCancel={() => setUndo(null)} onConfirm={() => undoMutation.mutate(undo)} />}
   </section>
 }
