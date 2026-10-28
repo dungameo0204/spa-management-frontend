@@ -29,7 +29,12 @@ export default function TodayTreatments() {
   const allCards = query.data || []
   const cardDetails = useQueries({ queries: allCards.map(card => ({ queryKey: ['dashboard-treatments', 'detail', card.id], queryFn: () => getResource('treatments', card.id), staleTime: 15_000 })) })
   const cards = allCards.map((card, index) => ({ card, detail: cardDetails[index] })).filter(({ card, detail }) => (card.created_at?.slice(0, 10) === today() && (!branchId || card.branch_id == null || Number(card.branch_id) === Number(branchId))) || detail.data?.histories?.some(h => h.execution_date?.slice(0, 10) === today() && (!branchId || Number(h.branch_id) === Number(branchId))))
-  const pages = Math.max(1, Math.ceil(cards.length / 20))
+  const rows = cards.flatMap(({ card, detail }) => {
+    const histories = (detail.data?.histories || []).filter(h => h.execution_date?.slice(0, 10) === today() && (!branchId || Number(h.branch_id) === Number(branchId)))
+    return histories.length ? histories.map(history => ({ card, detail, history, multiple: histories.length > 1 })) : [{ card, detail, history: null }]
+  })
+  const pages = Math.max(1, Math.ceil(rows.length / 20))
+  const currentPage = Math.min(page, pages)
   const mutation = useMutation({
     mutationFn: async ({ card, historyId, assigned, branch, execution_date }) => {
       if (historyId) return assignTreatmentStaffs(historyId, assigned)
@@ -48,9 +53,8 @@ export default function TodayTreatments() {
     if (!canUndoTreatmentExecution(user, history)) throw new Error('Bạn không có quyền hoàn tác buổi thực hiện này.')
     return undoTreatmentExecution(id)
   }, onSuccess: () => { qc.invalidateQueries({ queryKey: ['dashboard-treatments'] }); qc.invalidateQueries({ queryKey: ['treatments'] }); qc.invalidateQueries({ queryKey: ['commissions'] }); setUndo(null); setSelected(null); setMessageType('success'); setMessage('Đã hoàn tác buổi hôm nay.') }, onError: err => { setUndo(null); setMessageType('error'); setMessage(err.message) } })
-  function pick(card, detail) {
-    if (selected?.card.id === card.id) { setSelected(null); setMessage(''); return }
-    const history = (detail?.histories || []).find(h => h.execution_date?.slice(0, 10) === today() && (!branchId || Number(h.branch_id) === Number(branchId)))
+  function pick(card, history) {
+    if (selected?.card.id === card.id && selected.historyId === history?.id) { setSelected(null); setMessage(''); return }
     setSelected({ card, historyId: history?.id })
     setExecutionDate(today())
     setExecutionBranch(String(history?.branch_id || branchId || card.branch_id || ''))
@@ -72,13 +76,12 @@ export default function TodayTreatments() {
     <p className="small-muted">Thẻ tạo hôm nay hoặc có buổi thực hiện hôm nay. Tick để ghi nhận, bấm tên nhân viên để sửa, bỏ tick để hoàn tác.{!manager && ' Nhân viên chỉ được hoàn tác buổi có ngày thực hiện và ngày tạo đều là hôm nay, tại cơ sở của mình.'}</p>
     {message && !selected && <p role={messageType === 'error' ? 'alert' : 'status'} className={messageType === 'error' ? 'form-alert' : 'success-alert'}>{message}</p>}
     {query.isError ? <p className="form-alert">Không tải được thẻ: {query.error.message}</p> : query.isLoading || cardDetails.some(d => d.isLoading) ? <p>Đang tải thẻ...</p> : cards.length ? <div className="table-scroll"><table><thead><tr><th>Khách hàng</th><th>Dịch vụ</th><th>Đã làm hôm nay</th><th>Nhân viên thực hiện</th></tr></thead><tbody>
-      {cards.slice((page - 1) * 20, page * 20).map(({ card, detail: cardQuery }) => {
-        const detail = cardQuery?.data
-        const history = (detail?.histories || []).find(h => h.execution_date?.slice(0, 10) === today() && (!branchId || Number(h.branch_id) === Number(branchId)))
-        const active = selected?.card.id === card.id
+      {rows.slice((currentPage - 1) * 20, currentPage * 20).map(({ card, detail: cardQuery, history, multiple }) => {
+        const active = selected?.card.id === card.id && selected.historyId === history?.id
         const canUndo = canUndoTreatmentExecution(user, history)
-        return <Fragment key={card.id}><tr><td data-label="Khách hàng">{card.customer_name}</td><td data-label="Dịch vụ">{card.product_name}</td><td data-label="Đã làm hôm nay"><input type="checkbox" aria-label={`Đã làm ${card.customer_name} - ${card.product_name}`} checked={Boolean(history) || (active && !selected.historyId)} disabled={(Boolean(history) && !canUndo) || cardQuery?.isLoading || cardQuery?.isError || (!history && Number(card.remaining_sessions) < 1) || mutation.isPending || undoMutation.isPending} onChange={e => e.target.checked ? pick(card, detail) : canUndo && setUndo(history.id)} /></td><td data-label="Nhân viên thực hiện">
-          {cardQuery?.isError ? 'Không tải được lịch sử' : active ? 'Đang chọn nhân viên bên dưới' : history ? <button type="button" className="text-action" onClick={() => pick(card, detail)} aria-label={`Sửa nhân viên ${card.customer_name} - ${card.product_name}`}>{(history.staffs || []).map(s => s.staff_name || s.fullname).join(', ') || 'Chưa gán nhân viên · Bấm để sửa'}</button> : 'Chưa thực hiện'}
+        const suffix = multiple ? ` · Buổi #${history.id}` : ''
+        return <Fragment key={`${card.id}-${history?.id || 'new'}`}><tr data-history-id={history?.id}><td data-label="Khách hàng">{card.customer_name}</td><td data-label="Dịch vụ">{card.product_name}{history && <small className="small-muted" style={{ display: 'block' }}>Buổi #{history.id}</small>}</td><td data-label="Đã làm hôm nay"><input type="checkbox" aria-label={`Đã làm ${card.customer_name} - ${card.product_name}${suffix}`} checked={Boolean(history) || (active && !selected.historyId)} disabled={(Boolean(history) && !canUndo) || cardQuery?.isLoading || cardQuery?.isError || (!history && Number(card.remaining_sessions) < 1) || mutation.isPending || undoMutation.isPending} onChange={e => e.target.checked ? pick(card, history) : canUndo && setUndo(history.id)} /></td><td data-label="Nhân viên thực hiện">
+          {cardQuery?.isError ? 'Không tải được lịch sử' : active ? 'Đang chọn nhân viên bên dưới' : history ? <button type="button" className="text-action" onClick={() => pick(card, history)} aria-label={`Sửa nhân viên ${card.customer_name} - ${card.product_name}${suffix}`}>{(history.staffs || []).map(s => s.staff_name || s.fullname).join(', ') || 'Chưa gán nhân viên · Bấm để sửa'}</button> : 'Chưa thực hiện'}
         </td></tr>{active && <tr className="today-staff-row"><td colSpan={4}><div className="treatment-actions today-staff-actions">
           {manager && !selected.historyId && <label className="field">Cơ sở thực hiện<MobileSelect aria-label="Cơ sở thực hiện" value={executionBranch} onChange={e => { setExecutionBranch(e.target.value); setStaffs([]); setMessage('') }}><option value="">Chọn cơ sở</option>{branches.data?.data?.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}</MobileSelect></label>}
           {manager && !selected.historyId && <label className="field">Ngày thực hiện<input type="date" required value={executionDate} onChange={e => setExecutionDate(e.target.value)} /></label>}
@@ -86,7 +89,7 @@ export default function TodayTreatments() {
         </div>{branches.isError && manager && !selected.historyId && <p className="form-alert">Không tải được cơ sở: {branches.error.message}</p>}{message && <p role="alert" className="form-alert">{message}</p>}</td></tr>}</Fragment>
       })}
     </tbody></table></div> : <p className="small-muted">Chưa có khách làm dịch vụ hôm nay.</p>}
-    {pages > 1 && <div className="picker-pages"><button disabled={page === 1} onClick={() => setPage(page - 1)}>Trước</button><span>{page} / {pages}</span><button disabled={page >= pages} onClick={() => setPage(page + 1)}>Sau</button></div>}
+    {pages > 1 && <div className="picker-pages"><button disabled={currentPage === 1} onClick={() => setPage(currentPage - 1)}>Trước</button><span>{currentPage} / {pages}</span><button disabled={currentPage >= pages} onClick={() => setPage(currentPage + 1)}>Sau</button></div>}
     {undo && <ConfirmDialog title="Hoàn tác buổi hôm nay?" message="Buổi thực hiện và tiền công đã ghi nhận sẽ bị hoàn tác." pending={undoMutation.isPending} onCancel={() => setUndo(null)} onConfirm={() => undoMutation.mutate(undo)} />}
   </section>
 }
