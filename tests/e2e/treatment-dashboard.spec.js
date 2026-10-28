@@ -1,4 +1,5 @@
 import { test, expect } from './fixtures'
+import { today } from '../../src/utils/format'
 
 test('tick buổi hôm nay rồi gán nhân viên qua hai API', async ({ page }) => {
   const writes = []
@@ -79,14 +80,14 @@ test('quản lý chọn cơ sở ngay ở dòng trước khi xác nhận buổi 
 test('thẻ cũ đã làm hôm nay hiện trên tổng quan, sửa nhân viên và hoàn tác bằng DELETE', async ({ page }) => {
   const writes = []
   let executed = true
-  const day = new Date().toISOString().slice(0, 10)
+  const day = today()
   await page.route('**/api/**', route => {
     const path = new URL(route.request().url()).pathname
     if (!path.startsWith('/api/')) return route.continue()
     if (path === '/api/auth/login') return route.fulfill({ json: { data: { token: 'staff-test', user: { id: 1, fullname: 'Nhân viên', system_role: 'STAFF', branch_id: 1 } } } })
     if (path === '/api/treatments/execute/77/staffs' && route.request().method() === 'PUT') { writes.push('PUT'); return route.fulfill({ json: {} }) }
     if (path === '/api/treatments/execute/77' && route.request().method() === 'DELETE') { writes.push('DELETE'); executed = false; return route.fulfill({ json: {} }) }
-    if (path === '/api/treatments/10') return route.fulfill({ json: { data: { id: 10, histories: executed ? [{ id: 77, branch_id: 1, execution_date: day, staffs: [{ staff_id: 2, staff_name: 'Nhân viên B' }] }] : [] } } })
+    if (path === '/api/treatments/10') return route.fulfill({ json: { data: { id: 10, histories: executed ? [{ id: 77, branch_id: 1, execution_date: day, created_at: `${day} 09:00:00`, staffs: [{ staff_id: 2, staff_name: 'Nhân viên B' }] }] : [] } } })
     if (path === '/api/treatments') return route.fulfill({ json: { data: [{ id: 10, created_at: '2020-01-01', customer_name: 'Khách A', product_name: 'Da', remaining_sessions: 2, branch_id: 2 }], total: 1 } })
     if (path === '/api/staffs') return route.fulfill({ json: { data: [{ id: 2, fullname: 'Nhân viên B', branch_id: 1 }], total: 1 } })
     return route.fulfill({ json: { data: [], total: 0 } })
@@ -103,4 +104,61 @@ test('thẻ cũ đã làm hôm nay hiện trên tổng quan, sửa nhân viên v
   await page.getByRole('checkbox', { name: /Đã làm Khách A/ }).click()
   await page.getByRole('alertdialog').getByRole('button', { name: 'Xác nhận' }).click()
   await expect.poll(() => writes).toEqual(['PUT', 'DELETE'])
+  await expect(page.getByRole('checkbox', { name: /Đã làm Khách A/ })).toHaveCount(0)
 })
+
+for (const scenario of ['old', 'missing', 'other-branch', 'cancel', 'error', 'manager']) {
+  test(`hoàn tác tổng quan: ${scenario}`, async ({ page }) => {
+    const day = today()
+    const manager = scenario === 'manager'
+    const user = { id: 1, fullname: 'Kiểm thử', system_role: manager ? 'MANAGER' : 'STAFF', branch_id: 1 }
+    const history = { id: 77, branch_id: scenario === 'other-branch' || manager ? 2 : 1, execution_date: day, created_at: scenario === 'old' || manager ? '2020-01-01 09:00:00' : scenario === 'missing' ? null : `${day} 09:00:00`, staffs: [] }
+    let deletes = 0
+    let executed = true
+    await page.addInitScript(user => localStorage.setItem('xuly.session', JSON.stringify({ token: 'undo-test', user })), user)
+    await page.route('**/api/**', route => {
+      const path = new URL(route.request().url()).pathname
+      if (!path.startsWith('/api/')) return route.continue()
+      if (path === '/api/treatments/execute/77' && route.request().method() === 'DELETE') {
+        deletes++
+        if (scenario === 'error') return route.fulfill({ status: 403, json: { message: 'Không được hoàn tác buổi này.' } })
+        executed = false
+        return route.fulfill({ json: {} })
+      }
+      if (path === '/api/treatments/10') return route.fulfill({ json: { data: { id: 10, histories: executed ? [history] : [] } } })
+      if (path === '/api/treatments') return route.fulfill({ json: { data: [{ id: 10, customer_name: 'Khách Undo', product_name: 'Da', branch_id: 1, created_at: day, remaining_sessions: 0 }], total: 1 } })
+      return route.fulfill({ json: { data: [], total: 0 } })
+    })
+    await page.goto('/')
+    await expect(page.getByRole('heading', { name: 'Khách hàng hôm nay' })).toBeVisible()
+    const checkbox = page.getByRole('checkbox', { name: /Đã làm Khách Undo/ })
+    if (scenario === 'other-branch') {
+      // The dashboard must not select a history from another execution branch.
+      await expect(checkbox).not.toBeChecked()
+      await expect(checkbox).toBeDisabled()
+    } else {
+      await expect(checkbox).toBeChecked()
+      if (scenario === 'old' || scenario === 'missing') await expect(checkbox).toBeDisabled()
+      else {
+        await expect(checkbox).toBeEnabled()
+        await checkbox.click()
+        const dialog = page.getByRole('alertdialog')
+        await expect(dialog).toBeVisible()
+        expect(deletes).toBe(0)
+        if (scenario === 'cancel') {
+          await dialog.getByRole('button', { name: 'Giữ lại' }).click()
+          await expect(dialog).toHaveCount(0)
+          await expect(checkbox).toBeChecked()
+        } else {
+          await dialog.getByRole('button', { name: 'Xác nhận' }).click()
+          await expect.poll(() => deletes).toBe(1)
+          if (scenario === 'error') {
+            await expect(page.getByRole('alert')).toContainText('Không được hoàn tác buổi này.')
+            await expect(checkbox).toBeChecked()
+          } else await expect(checkbox).not.toBeChecked()
+        }
+      }
+    }
+    expect(deletes).toBe(scenario === 'error' || manager ? 1 : 0)
+  })
+}

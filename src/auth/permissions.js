@@ -18,3 +18,10 @@ export function canEditSameDay(record, now = new Date()) {
   const date = record?.created_at
   return Boolean(date && new Date(date).toDateString() === now.toDateString())
 }
+export function canUndoTreatmentExecution(user, history, now = new Date()) {
+  if (!history) return false
+  if (user?.system_role === 'MANAGER') return true
+  return user?.system_role === 'STAFF' && user.branch_id != null && history.branch_id != null &&
+    Number(user.branch_id) === Number(history.branch_id) &&
+    canEditSameDay(history, now) && canEditSameDay({ created_at: history.execution_date }, now)
+}
