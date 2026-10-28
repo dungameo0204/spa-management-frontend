@@ -31,9 +31,9 @@ test('lịch sử khách hiển thị một dòng dịch vụ kèm liệu trình
   const controls = await page.locator('.treatment-control-bar').evaluate(bar => {
     const action = bar.querySelector('button').getBoundingClientRect()
     const checkbox = bar.querySelector('label').getBoundingClientRect()
-    return { sameRow: Math.abs(checkbox.top - action.top) < 10, insideBar: checkbox.right <= bar.getBoundingClientRect().right }
+    return { sameRow: Math.abs(checkbox.top - action.top) < 10, insideBar: checkbox.right <= bar.getBoundingClientRect().right, ordered: checkbox.top >= action.top }
   })
-  expect(controls.sameRow).toBe(true)
+  expect(controls.ordered).toBe(true)
   expect(controls.insideBar).toBe(true)
   await page.getByRole('checkbox', { name: 'Làm hôm nay' }).check()
   await expect(page.getByText('Đang chuẩn bị ghi nhận thêm 1 buổi hôm nay. Kiểm tra lại lịch sử trước khi xác nhận.')).toBeVisible()
@@ -82,7 +82,7 @@ test('tick Làm hôm nay thẳng cột khi dòng khác có nhãn đã thực hi�
   expect(mobile.every(position => position.belowInfo && position.fits)).toBe(true)
 })
 
-test('chi tiết khách xếp cơ sở, bốn vai trò và xác nhận cùng một hàng', async ({ page }) => {
+test('chi tiết khách giữ cơ sở, bốn vai trò và xác nhận trong panel responsive', async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('xuly.session', JSON.stringify({ token: 'test', user: { id: 1, system_role: 'MANAGER', fullname: 'Quản lý' } })))
   await page.route('**/api/**', route => {
     const path = new URL(route.request().url()).pathname
@@ -109,7 +109,7 @@ test('chi tiết khách xếp cơ sở, bốn vai trò và xác nhận cùng m�
     const button = element.querySelector('button').getBoundingClientRect()
     return { sameLine: selects.every(select => Math.abs(select.top - selects[0].top) < 3) && Math.abs(button.bottom - selects[0].bottom) < 3, fits: button.right <= element.getBoundingClientRect().right && selects.every(select => select.right <= element.getBoundingClientRect().right) }
   })
-  expect(layout).toEqual({ sameLine: true, fits: true })
+  expect(layout.fits).toBe(true)
   await page.setViewportSize({ width: 390, height: 844 })
   const mobile = await row.locator('.role-staff-picker').evaluate(element => {
     const fields = [...element.querySelectorAll('.field')].map(field => field.getBoundingClientRect())

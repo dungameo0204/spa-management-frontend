@@ -7,7 +7,9 @@ import { dateOnly, formatCurrency, formatSpaDate, today } from '../utils/format'
 import { useBranch } from './AppShell'
 import { useAuth } from '../auth/AuthProvider'
 import RoleStaffPicker from './RoleStaffPicker'
-import DetailNote from './DetailNote'
+import CustomerProfile from './CustomerProfile'
+import SkinImageAlbum from './SkinImageAlbum'
+import './CustomerOverview.css'
 
 export default function CustomerOverview({ customerId, overview, onOverview }) {
   const { user } = useAuth(), { branchId } = useBranch(), manager = user.system_role === 'MANAGER', qc = useQueryClient()
@@ -18,7 +20,7 @@ export default function CustomerOverview({ customerId, overview, onOverview }) {
   const { customer, timeline = [] } = overview
   return <section className="customer-overview">
     <div className="customer-identity"><strong>{customer.fullname}</strong><span>{customer.phone_number}</span><span>{customer.address || 'Chưa có địa chỉ'}</span><span>Ví: {formatCurrency(customer.wallet_balance)}</span><span>Nợ: <DebtAmount value={customer.total_debt} /></span></div>
-    <DetailNote note={customer.note} />
+    <div className="customer-overview-columns"><div className="customer-timeline customer-panel">
     {message && <p role={messageType === 'error' ? 'alert' : 'status'} className={messageType === 'error' ? 'form-alert' : 'success-alert'}>{message}</p>}
     <h3>Lịch sử mua và chăm sóc</h3>
     {!timeline.length && <p className="small-muted">Khách chưa có giao dịch hoặc liệu trình.</p>}
@@ -28,15 +30,17 @@ export default function CustomerOverview({ customerId, overview, onOverview }) {
       const todayExecutions = treatment?.histories?.filter(history => dateOnly(history.execution_date) === today()).length || 0
       const selectedForToday = active?.id === treatment?.id
       if (!purchase && !treatment) return null
-      return <div className="timeline-row" key={`${entry.type}-${purchase?.invoice_item_id || treatment.id}-${index}`}><time>{formatSpaDate(entry.date)}</time><div className="timeline-main">
-        {purchase && <><strong>{purchase.product_name}</strong><small>Hóa đơn #{purchase.invoice_id} · {Number(purchase.is_product) ? 'Sản phẩm' : 'Dịch vụ'} · {purchase.quantity} × {formatCurrency(purchase.unit_price)} · Thành tiền {formatCurrency(purchase.final_price)}</small></>}
+       return <div className="timeline-row" key={`${entry.type}-${purchase?.invoice_item_id || treatment.id}-${index}`}><time>{formatSpaDate(entry.date)}</time><div className={`timeline-main timeline-purchase-card ${purchase && Number(purchase.is_product) ? 'is-product' : 'is-service'} ${treatment && Number(treatment.remaining_sessions) <= 0 ? 'is-completed' : ''}`}>
+        <span className="timeline-kind">{purchase && Number(purchase.is_product) ? 'Sản phẩm đã mua' : 'Dịch vụ đã mua'}</span>
+        {purchase && <><strong>{purchase.product_name}</strong><small>Hóa đơn #{purchase.invoice_id} · {purchase.quantity} × {formatCurrency(purchase.unit_price)}</small><div className="timeline-purchase-total"><span>Thành tiền</span><strong>{formatCurrency(purchase.final_price)}</strong></div></>}
         {treatment && <>
-          <div className="treatment-control-bar"><div className="treatment-control-info"><button type="button" className="text-action" onClick={() => setExpanded(expanded === treatment.id ? null : treatment.id)}>{!purchase && <><strong>{treatment.product_name}</strong> · </>}còn {treatment.remaining_sessions}/{treatment.total_sessions} buổi · Xem lịch sử</button>{todayExecutions > 0 && <span className="today-execution-badge">Đã thực hiện {todayExecutions} buổi hôm nay</span>}</div>{Number(treatment.remaining_sessions) > 0 && <label className={`choice-row ${selectedForToday ? 'is-selected' : ''}`}><input type="checkbox" checked={selectedForToday} onChange={event => { setActive(event.target.checked ? { id: treatment.id, staffs: [], branch: branchId || treatment.branch_id || '' } : null); setMessage('') }} />{selectedForToday ? 'Đang chọn ghi nhận hôm nay' : 'Làm hôm nay'}</label>}</div>
+          <div className="treatment-control-bar"><div className="treatment-control-info">{!purchase && <strong className="timeline-service-name">{treatment.product_name}</strong>}<div className="timeline-treatment-meta"><span>còn {treatment.remaining_sessions}/{treatment.total_sessions} buổi</span><span aria-hidden="true">·</span><button type="button" className="timeline-history-link" aria-expanded={expanded === treatment.id} onClick={() => setExpanded(expanded === treatment.id ? null : treatment.id)}>{expanded === treatment.id ? 'Ẩn lịch sử' : 'Xem lịch sử'}</button></div>{todayExecutions > 0 && <span className="today-execution-badge">Đã thực hiện {todayExecutions} buổi hôm nay</span>}</div>{Number(treatment.remaining_sessions) > 0 && <label className={`choice-row ${selectedForToday ? 'is-selected' : ''}`}><input type="checkbox" checked={selectedForToday} onChange={event => { setActive(event.target.checked ? { id: treatment.id, staffs: [], branch: branchId || treatment.branch_id || '' } : null); setMessage('') }} />{selectedForToday ? 'Đang chọn ghi nhận hôm nay' : 'Làm hôm nay'}</label>}</div>
           {selectedForToday && <div className="today-selection-notice" role="status">Đang chuẩn bị ghi nhận thêm 1 buổi hôm nay. Kiểm tra lại lịch sử trước khi xác nhận.</div>}
           {selectedForToday && <div className="treatment-actions customer-inline-actions">{manager && <label className="field">Cơ sở thực hiện<MobileSelect value={active.branch} onChange={event => setActive({ ...active, branch: event.target.value, staffs: [] })}><option value="">Chọn cơ sở</option>{branches.data?.data?.map(branch => <option key={branch.id} value={branch.id}>{branch.name}</option>)}</MobileSelect></label>}<RoleStaffPicker selected={active.staffs} onChange={staffs => setActive({ ...active, staffs })} branchId={manager && !active.branch ? 'required' : active.branch} /><button className="btn primary" type="button" disabled={execution.isPending || (manager && !active.branch)} onClick={() => execution.mutate({ treatment_id: treatment.id, ...(manager ? { branch_id: Number(active.branch) } : {}), staffs: active.staffs })}>Xác nhận hôm nay</button></div>}
           {expanded === treatment.id && <div className="treatment-history">{treatment.histories?.length ? treatment.histories.map(history => <p key={history.id}>{formatSpaDate(history.execution_date)} · Cơ sở thực hiện: {history.branch_name || (history.branch_id != null ? `Cơ sở #${history.branch_id}` : 'Chưa rõ cơ sở')} · {history.staffs?.map(person => person.staff_name).join(', ') || 'Chưa gán nhân viên'}</p>) : <p>Chưa thực hiện buổi nào.</p>}</div>}
         </>}
       </div></div>
     })}
+    </div><aside className="customer-profile-column"><CustomerProfile customer={customer} /><SkinImageAlbum key={customerId} customerId={customerId} /></aside></div>
   </section>
 }

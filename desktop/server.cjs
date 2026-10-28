@@ -11,14 +11,14 @@ const contentTypes = {
 }
 
 function backendUrl(value) {
-  const url = new URL(value || 'http://127.0.0.1:5000')
+  const url = new URL(value || 'http://127.0.0.1:5002')
   if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password || url.search || url.hash || url.pathname !== '/') {
     throw new Error('XULY_API_BASE_URL phải là địa chỉ HTTP(S) của backend, không có đường dẫn hoặc thông tin đăng nhập.')
   }
   return url
 }
 
-function startServer({ distDir, apiBaseUrl = process.env.XULY_API_BASE_URL || 'https://api-spa-xuly.infinityhavocx.men' } = {}) {
+function startServer({ distDir, apiBaseUrl = process.env.XULY_API_BASE_URL || 'http://127.0.0.1:5002' } = {}) {
   const backend = backendUrl(apiBaseUrl)
   const root = path.resolve(distDir)
   const server = http.createServer((req, res) => {

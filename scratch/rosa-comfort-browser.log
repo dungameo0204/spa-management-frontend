@@ -1,0 +1,17 @@
+﻿
+Running 12 tests using 1 worker
+
+  Γ£ô   1 tests\e2e\customer-overview-merged.spec.js:3:1 ΓÇ║ lß╗ïch sß╗¡ kh├ích hiß╗ân thß╗ï mß╗Öt d├▓ng dß╗ïch vß╗Ñ k├¿m liß╗çu tr├¼nh v├á th├┤ng b├ío th├ánh c├┤ng m├áu xanh (2.4s)
+  Γ£ô   2 tests\e2e\customer-overview-merged.spec.js:45:1 ΓÇ║ tick L├ám h├┤m nay thß║│ng cß╗Öt khi d├▓ng kh├íc c├│ nh├ún ─æ├ú thß╗▒c hiß╗çn (814ms)
+  Γ£ô   3 tests\e2e\customer-overview-merged.spec.js:85:1 ΓÇ║ chi tiß║┐t kh├ích giß╗» c╞í sß╗ƒ, bß╗æn vai tr├▓ v├á x├íc nhß║¡n trong panel responsive (967ms)
+  Γ£ô   4 tests\e2e\rosa-album-recovery.spec.js:5:1 ΓÇ║ album errors remain inline, drafts survive and deleting the last session goes back a page (2.0s)
+  Γ£ô   5 tests\e2e\rosa-customer-album.spec.js:5:3 ΓÇ║ Rosa profile and authenticated album CRUD 1440px (2.8s)
+  Γ£ô   6 tests\e2e\rosa-customer-album.spec.js:5:3 ΓÇ║ Rosa profile and authenticated album CRUD 1024px (2.8s)
+  Γ£ô   7 tests\e2e\rosa-customer-album.spec.js:5:3 ΓÇ║ Rosa profile and authenticated album CRUD 768px (2.6s)
+  Γ£ô   8 tests\e2e\rosa-customer-album.spec.js:5:3 ΓÇ║ Rosa profile and authenticated album CRUD 390px (2.8s)
+  Γ£ô   9 tests\e2e\rosa-customer-form.spec.js:4:3 ΓÇ║ Rosa customer create/edit at 1440px (1.2s)
+  Γ£ô  10 tests\e2e\rosa-customer-form.spec.js:4:3 ΓÇ║ Rosa customer create/edit at 1024px (1.3s)
+  Γ£ô  11 tests\e2e\rosa-customer-form.spec.js:4:3 ΓÇ║ Rosa customer create/edit at 768px (1.3s)
+  Γ£ô  12 tests\e2e\rosa-customer-form.spec.js:4:3 ΓÇ║ Rosa customer create/edit at 390px (1.3s)
+
+  12 passed (28.1s)

@@ -1,0 +1,17 @@
+﻿
+Running 13 tests using 2 workers
+
+[1/13] tests\e2e\customer-birth-date.spec.js:3:1 ΓÇ║ tß║ío nhanh kh├ích trong h├│a ─æ╞ín c┼⌐ng gß╗¡i ng├áy sinh
+[2/13] tests\e2e\customer-overview-merged.spec.js:3:1 ΓÇ║ lß╗ïch sß╗¡ kh├ích hiß╗ân thß╗ï mß╗Öt d├▓ng dß╗ïch vß╗Ñ k├¿m liß╗çu tr├¼nh v├á th├┤ng b├ío th├ánh c├┤ng m├áu xanh
+[3/13] tests\e2e\customer-birth-date.spec.js:30:1 ΓÇ║ ng├áy sinh trong th├¬m/sß╗¡a kh├ích, kh├┤ng hiß╗çn ß╗ƒ danh s├ích v├á tß╗òng quan; vß║½n t├¼m v├á x├│a ─æ╞░ß╗úc
+[4/13] tests\e2e\customer-overview-merged.spec.js:45:1 ΓÇ║ tick L├ám h├┤m nay thß║│ng cß╗Öt khi d├▓ng kh├íc c├│ nh├ún ─æ├ú thß╗▒c hiß╗çn
+[5/13] tests\e2e\customer-overview-merged.spec.js:85:1 ΓÇ║ chi tiß║┐t kh├ích giß╗» c╞í sß╗ƒ, bß╗æn vai tr├▓ v├á x├íc nhß║¡n trong panel responsive
+[6/13] tests\e2e\rosa-customer-album.spec.js:5:3 ΓÇ║ Rosa profile and authenticated album CRUD 1440px
+[7/13] tests\e2e\rosa-customer-form.spec.js:4:3 ΓÇ║ Rosa customer create/edit at 1440px
+[8/13] tests\e2e\rosa-customer-album.spec.js:5:3 ΓÇ║ Rosa profile and authenticated album CRUD 1024px
+[9/13] tests\e2e\rosa-customer-form.spec.js:4:3 ΓÇ║ Rosa customer create/edit at 1024px
+[10/13] tests\e2e\rosa-customer-form.spec.js:4:3 ΓÇ║ Rosa customer create/edit at 768px
+[11/13] tests\e2e\rosa-customer-album.spec.js:5:3 ΓÇ║ Rosa profile and authenticated album CRUD 768px
+[12/13] tests\e2e\rosa-customer-form.spec.js:4:3 ΓÇ║ Rosa customer create/edit at 390px
+[13/13] tests\e2e\rosa-customer-album.spec.js:5:3 ΓÇ║ Rosa profile and authenticated album CRUD 390px
+  13 passed (29.6s)

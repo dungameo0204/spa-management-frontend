@@ -14,6 +14,7 @@ vi.mock('../api/resources', () => ({
   listResource: vi.fn(), getResource: vi.fn(), getCustomerOverview: vi.fn(),
   createResource: vi.fn(), updateResource: vi.fn(), deleteResource: vi.fn(), restoreResource: vi.fn(),
   getReportDetails: vi.fn(), executeTreatment: vi.fn(), assignTreatmentStaffs: vi.fn(),
+  listSkinSessions: vi.fn(async () => ({ data: [], totalPages: 0 })),
 }))
 
 const note = 'Khách VIP\n27/10/2026 Khách đổi 1 buổi nặn mụn thành 1 buổi peel\n28/10/2026 Khách muốn đổi lịch'

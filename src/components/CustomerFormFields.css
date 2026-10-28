@@ -1,0 +1,29 @@
+.customer-form-sections{display:grid;gap:16px;min-width:0}
+.customer-form-intro{display:flex;align-items:flex-start;gap:12px;padding:16px;border-radius:14px;background:var(--sage-light);color:var(--sage)}
+.customer-form-intro svg{flex-shrink:0}.customer-form-intro p{margin:5px 0 0;font-size:13px;line-height:1.5;color:var(--muted)}
+.customer-form-card{padding:20px;border:1px solid var(--line);border-radius:16px;background:var(--white);min-width:0}
+.customer-form-card h3{display:flex;align-items:center;gap:9px;margin:0 0 18px;font-size:16px;color:var(--sage)}
+.customer-form-card>.field+.field{margin-top:14px}.customer-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.customer-form-grid .field{min-width:0}.customer-form-full{grid-column:1/-1}.customer-required{color:var(--danger)}
+.customer-form-card textarea{resize:vertical;min-height:88px;line-height:1.5;width:100%;box-sizing:border-box}
+.customer-choice-group{border:0;padding:0;margin:0 0 16px;min-width:0}.customer-choice-group legend{font-weight:600;font-size:13px}
+.customer-form-hint{font-size:12px;color:var(--muted);margin:6px 0 12px}.customer-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.customer-choice{display:flex;align-items:center;gap:9px;padding:12px;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-size:13px;line-height:1.4;transition:background .15s,border-color .15s}
+.customer-choice:hover,.customer-choice.is-selected{background:var(--sage-light);border-color:var(--sage)}
+.customer-choice:focus-within{outline:2px solid var(--sage);outline-offset:2px}.customer-choice input{width:17px;height:17px;min-height:0;margin:0;flex-shrink:0;accent-color:var(--sage)}
+.customer-choice-actions{display:flex;gap:8px 18px;flex-wrap:wrap;margin-top:12px}.customer-choice-actions button{border:0;background:none;padding:4px 0;color:var(--sage);font:inherit;font-size:12px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.customer-history summary{display:flex;align-items:center;gap:10px;cursor:pointer;color:var(--sage);font-weight:600;list-style:none}.customer-history summary::-webkit-details-marker{display:none}
+.customer-history summary::after{content:'+';margin-left:auto;font-size:22px}.customer-history[open] summary::after{content:'−'}.customer-history small{display:block;font-size:12px;font-weight:400;color:var(--muted);margin-top:5px}
+.customer-history[open] summary{margin-bottom:20px}.customer-history summary svg{flex-shrink:0}
+.customer-drawer .customer-form-actions{position:sticky;bottom:0;margin-top:0;padding:14px 0;background:var(--white);border-top:1px solid var(--line);z-index:2}
+.customer-form-sections{gap:12px}.customer-form-card{padding:16px;border-radius:12px}.customer-form-card h3{font-size:14px;margin-bottom:12px}
+.customer-form-intro{align-items:center;padding:10px 12px;gap:8px;border-radius:10px}.customer-form-intro p{margin:0;font-size:12px}
+.customer-form-grid{gap:10px 12px;align-items:start}.customer-form-card .field{gap:5px;align-content:start}.customer-form-card>.field+.field{margin-top:10px}
+.customer-form-card .field input,.customer-form-card .field select,.customer-form-card .mobile-select-trigger{height:40px;min-height:40px;padding:8px 11px;font-size:14px;font-weight:400}
+.customer-form-card .field textarea,.skin-album .field textarea{display:block;width:100%;min-height:64px;max-height:320px;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:var(--cream);color:var(--ink);font:inherit;font-size:14px;font-weight:400;line-height:1.55;resize:vertical;outline:none;transition:border-color .15s,box-shadow .15s}
+.customer-form-card .field textarea:focus,.skin-album .field textarea:focus{border-color:var(--sage);box-shadow:0 0 0 3px var(--sage-light)}
+.customer-choice-grid{display:flex;flex-wrap:wrap;gap:7px}.customer-choice{min-height:36px;padding:7px 10px;border-radius:18px;font-size:12px;gap:7px}.customer-choice input{width:15px;height:15px}
+.customer-choice-group{margin-bottom:10px}.customer-form-hint{margin:4px 0 8px;font-size:11px}.customer-choice-actions{margin-top:6px;gap:6px 16px}.customer-choice-actions button{min-height:32px;font-size:11px}
+.customer-history small{font-size:11px;margin-top:3px}.customer-history[open] summary{margin-bottom:12px}
+@media(pointer:coarse){.customer-choice,.customer-choice-actions button{min-height:44px}.customer-form-card .field input,.customer-form-card .field select,.customer-form-card .mobile-select-trigger{height:44px;min-height:44px;font-size:16px}}
+@media(max-width:600px){.customer-form-grid,.customer-choice-grid{grid-template-columns:1fr}.customer-form-card{padding:16px}.customer-form-sections{gap:12px}.customer-form-intro{padding:14px}.customer-drawer .customer-form-actions .btn{flex:1;justify-content:center}}

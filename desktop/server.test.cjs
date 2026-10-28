@@ -6,6 +6,10 @@ const path = require('node:path')
 const http = require('node:http')
 const { backendUrl, startServer } = require('./server.cjs')
 
+test('backend mặc định dùng môi trường Rosa local', () => {
+  assert.equal(backendUrl().origin, 'http://127.0.0.1:5002')
+})
+
 test('từ chối URL backend không hợp lệ', () => {
   assert.throws(() => backendUrl('file:///tmp/test'))
   assert.throws(() => backendUrl('http://user:pass@localhost:5000'))

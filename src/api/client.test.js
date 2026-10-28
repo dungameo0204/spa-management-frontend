@@ -3,6 +3,25 @@ import { ApiError, configureClient, normalizePagedResponse, request } from './cl
 beforeEach(() => { configureClient(() => 'staff-token', () => {}); globalThis.fetch = vi.fn() })
 afterEach(() => vi.restoreAllMocks())
 describe('API client', () => {
+  it('gửi multipart không đặt Content-Type để trình duyệt sinh boundary', async () => {
+    fetch.mockResolvedValue({ ok: true, json: async () => ({ data: {} }) })
+    const body = new FormData()
+    body.append('images', new Blob(['png'], { type: 'image/png' }), 'skin.png')
+    await request('/api/customers/1/skin-image-sessions', { method: 'POST', body })
+    expect(fetch.mock.calls[0][1].body).toBe(body)
+    expect(fetch.mock.calls[0][1].headers['Content-Type']).toBeUndefined()
+    expect(fetch.mock.calls[0][1].headers.Authorization).toBe('Bearer staff-token')
+  })
+  it('đọc bytes ảnh bằng Bearer, không đọc JSON và giữ xử lý lỗi 401', async () => {
+    const blob = new Blob(['png'], { type: 'image/png' }), expired = vi.fn()
+    configureClient(() => 'staff-token', expired)
+    fetch.mockResolvedValueOnce({ ok: true, blob: async () => blob })
+    expect(await request('/api/customers/1/skin-image-sessions/2/images/3/file', { responseType: 'blob' })).toBe(blob)
+    expect(fetch.mock.calls[0][1].cache).toBe('no-store')
+    fetch.mockResolvedValueOnce({ ok: false, status: 401, json: async () => ({ message: 'Hết phiên' }) })
+    await expect(request('/api/customers/1/skin-image-sessions/2/images/3/file', { responseType: 'blob' })).rejects.toMatchObject({ status: 401 })
+    expect(expired).toHaveBeenCalledOnce()
+  })
   it('gửi Bearer và query page, chuẩn hóa tổng số theo server', async () => {
     fetch.mockResolvedValue({ ok: true, json: async () => ({ total: 27, page: 2, pageSize: 10, totalPages: 3, data: [{ id: 1 }] }) })
     const result = normalizePagedResponse(await request('/api/products', { query: { search: 'da', page: 2, pageSize: 10 } }), 2, 10)

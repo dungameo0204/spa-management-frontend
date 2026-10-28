@@ -18,6 +18,13 @@ export function getResource(resource, id) {
   return request(`${endpoint(resource)}/${encodeURIComponent(id)}`).then(result => result.data)
 }
 export const getCustomerOverview = id => request(`/api/customers/${encodeURIComponent(id)}/overview`).then(result => result.data)
+const skinPath = (customerId, sessionId) => `/api/customers/${encodeURIComponent(customerId)}/skin-image-sessions${sessionId == null ? '' : `/${encodeURIComponent(sessionId)}`}`
+export const listSkinSessions = (customerId, page = 1) => request(skinPath(customerId), { query: { page, pageSize: 10 } }).then(result => normalizePagedResponse(result, page, 10))
+export const saveSkinSession = (customerId, sessionId, body) => request(skinPath(customerId, sessionId), { method: sessionId == null ? 'POST' : 'PUT', body })
+export const appendSkinImages = (customerId, sessionId, body) => request(`${skinPath(customerId, sessionId)}/images`, { method: 'POST', body })
+export const deleteSkinSession = (customerId, sessionId) => request(skinPath(customerId, sessionId), { method: 'DELETE' })
+export const deleteSkinImage = (customerId, sessionId, imageId) => request(`${skinPath(customerId, sessionId)}/images/${encodeURIComponent(imageId)}`, { method: 'DELETE' })
+export const getSkinImage = (customerId, sessionId, imageId, signal) => request(`${skinPath(customerId, sessionId)}/images/${encodeURIComponent(imageId)}/file`, { signal, responseType: 'blob' })
 export function createResource(resource, body) {
   if (readonly.has(resource)) throw new Error('Tài nguyên chỉ đọc')
   return request(resource === 'users' ? '/api/users/create' : endpoint(resource), { method: 'POST', body })
