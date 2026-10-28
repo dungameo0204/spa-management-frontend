@@ -1,3 +1,5 @@
+import { dateOnly } from '../utils/format'
+
 const managers = ['MANAGER']
 const everyone = ['MANAGER', 'STAFF']
 export const permissions = {
@@ -20,7 +22,8 @@ export function resolveBranch(user, selected) {
 // Only a hint; the backend uses its own clock and creation date to authorize writes.
 export function canEditSameDay(record, now = new Date()) {
   const date = record?.created_at
-  return Boolean(date && new Date(date).toDateString() === now.toDateString())
+  const day = dateOnly(date)
+  return Boolean(day && day === dateOnly(now))
 }
 export function canUndoTreatmentExecution(user, history, now = new Date()) {
   if (!history) return false

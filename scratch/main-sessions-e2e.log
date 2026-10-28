@@ -1,0 +1,15 @@
+﻿
+Running 10 tests using 1 worker
+
+  Γ£ô   1 tests\e2e\treatment-dashboard-sessions.spec.js:5:3 ΓÇ║ hai buß╗òi c├╣ng thß║╗ c├│ d├▓ng v├á thao t├íc ri├¬ng 1440px (3.2s)
+  Γ£ô   2 tests\e2e\treatment-dashboard-sessions.spec.js:5:3 ΓÇ║ hai buß╗òi c├╣ng thß║╗ c├│ d├▓ng v├á thao t├íc ri├¬ng 390px (1.6s)
+  Γ£ô   3 tests\e2e\treatment-dashboard.spec.js:4:1 ΓÇ║ tick buß╗òi h├┤m nay rß╗ôi g├ín nh├ón vi├¬n qua hai API (1.2s)
+  Γ£ô   4 tests\e2e\treatment-dashboard.spec.js:80:1 ΓÇ║ thß║╗ c┼⌐ ─æ├ú l├ám h├┤m nay hiß╗çn tr├¬n tß╗òng quan, sß╗¡a nh├ón vi├¬n v├á ho├án t├íc bß║▒ng DELETE (1.0s)
+  Γ£ô   5 tests\e2e\treatment-dashboard.spec.js:111:3 ΓÇ║ ho├án t├íc tß╗òng quan: old (561ms)
+  Γ£ô   6 tests\e2e\treatment-dashboard.spec.js:111:3 ΓÇ║ ho├án t├íc tß╗òng quan: missing (578ms)
+  Γ£ô   7 tests\e2e\treatment-dashboard.spec.js:111:3 ΓÇ║ ho├án t├íc tß╗òng quan: other-branch (601ms)
+  Γ£ô   8 tests\e2e\treatment-dashboard.spec.js:111:3 ΓÇ║ ho├án t├íc tß╗òng quan: cancel (648ms)
+  Γ£ô   9 tests\e2e\treatment-dashboard.spec.js:111:3 ΓÇ║ ho├án t├íc tß╗òng quan: error (737ms)
+  Γ£ô  10 tests\e2e\treatment-dashboard.spec.js:111:3 ΓÇ║ ho├án t├íc tß╗òng quan: manager (695ms)
+
+  10 passed (14.9s)

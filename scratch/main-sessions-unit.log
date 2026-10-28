@@ -1,0 +1,26 @@
+﻿
+> spa-management-frontend@0.1.0 test
+> vitest run src/pages/TreatmentExecutionDate.test.jsx src/auth/permissions.test.js
+
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90mD:/Project/SpaManagement/spa-management-frontend-main[39m
+
+ [32mΓ£ô[39m src/auth/permissions.test.js [2m([22m[2m15 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32mΓ£ô[39m src/pages/TreatmentExecutionDate.test.jsx [2m([22m[2m32 tests[22m[2m)[22m[33m 8501[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m dashboard: mß╗ùi buß╗òi mß╗Öt d├▓ng, sß╗¡a nh├ón vi├¬n v├á ho├án t├íc ─æ├║ng buß╗òi thß╗⌐ hai [33m 809[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF ho├án t├íc today [33m 507[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF ho├án t├íc cancel [33m 406[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF ho├án t├íc error [33m 446[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc today [33m 362[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc old-created [33m 352[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc missing-created [33m 455[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc other-branch [33m 397[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc error [33m 318[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER chß╗ìn ng├áy v├á gß╗¡i execution_date dß║íng YYYY-MM-DD [33m 382[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF giß╗» nguy├¬n giao diß╗çn v├á kh├┤ng gß╗¡i execution_date [33m 477[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m47 passed[39m[22m[90m (47)[39m
+[2m   Start at [22m 19:01:37
+[2m   Duration [22m 49.93s[2m (transform 1.09s, setup 8.02s, collect 9.90s, tests 8.52s, environment 50.23s, prepare 3.35s)[22m
+
