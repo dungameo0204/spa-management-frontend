@@ -26,36 +26,51 @@ beforeEach(() => {
   getResource.mockImplementation(async resource => resource === 'treatments' ? { ...card, histories: [] } : { id: 20, fullname: 'Lan', total_debt: 0 })
   executeTreatment.mockResolvedValue({ treatmentHistoryId: 30 })
   assignTreatmentStaffs.mockResolvedValue({})
+  undoTreatmentExecution.mockReset().mockResolvedValue({})
 })
 afterEach(cleanup)
 
 for (const role of ['STAFF', 'MANAGER']) {
   for (const entry of ['detail', 'dashboard']) {
-    it(`${entry}: ${role} chỉ có thể hoàn tác khi là quản lý`, async () => {
+    for (const scenario of ['today', 'old-created', 'missing-created', 'other-branch', 'cancel', 'error']) {
+    it(`${entry}: ${role} hoàn tác ${scenario}`, async () => {
       auth.role = role
-      getResource.mockImplementation(async resource => resource === 'treatments' ? { ...card, histories: [{ id: 30, branch_id: 2, execution_date: today(), staffs: [] }] } : {})
+      const history = { id: 30, branch_id: scenario === 'other-branch' ? 3 : 2, execution_date: today(), created_at: scenario === 'old-created' ? '2020-01-01 09:00:00' : scenario === 'missing-created' ? null : `${today()} 09:00:00`, staffs: [] }
+      getResource.mockImplementation(async resource => resource === 'treatments' ? { ...card, histories: [history] } : {})
+      if (scenario === 'error') undoTreatmentExecution.mockRejectedValue(new Error('Không được hoàn tác buổi này.'))
+      const allowed = role === 'MANAGER' || !['old-created', 'missing-created', 'other-branch'].includes(scenario)
+      const visibleHistory = entry === 'detail' || scenario !== 'other-branch'
       const actor = userEvent.setup()
       show(entry === 'dashboard' ? <TodayTreatments /> : <TreatmentsPage />)
       if (entry === 'detail') {
         await actor.click(await screen.findByRole('button', { name: 'Lan: 1 dịch vụ' }))
         await actor.click(await screen.findByRole('button', { name: 'Chăm sóc da · Xem lịch sử' }))
-        expect(await screen.findByRole('button', { name: 'Gán nhân viên' })).toBeInTheDocument()
-        if (role === 'STAFF') expect(screen.queryByRole('button', { name: 'Hoàn tác', exact: true })).not.toBeInTheDocument()
+        await screen.findByText(/Cơ sở thực hiện:/)
+        if (!allowed) expect(screen.queryByRole('button', { name: 'Hoàn tác', exact: true })).not.toBeInTheDocument()
         else await actor.click(screen.getByRole('button', { name: 'Hoàn tác', exact: true }))
       } else {
         const checkbox = await screen.findByRole('checkbox', { name: 'Đã làm Lan - Chăm sóc da' })
-        await waitFor(() => expect(checkbox).toBeChecked())
-        if (role === 'STAFF') expect(checkbox).toBeDisabled()
-        await actor.click(checkbox)
+        await waitFor(() => expect(checkbox.checked).toBe(visibleHistory))
+        if (!allowed && visibleHistory) expect(checkbox).toBeDisabled()
+        if (allowed && visibleHistory) await actor.click(checkbox)
       }
-      if (role === 'MANAGER') {
+      if (allowed && visibleHistory) {
+        expect(undoTreatmentExecution).not.toHaveBeenCalled()
+        if (scenario === 'cancel') {
+          await actor.click(within(screen.getByRole('alertdialog')).getByRole('button', { name: 'Giữ lại' }))
+          expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument()
+          expect(undoTreatmentExecution).not.toHaveBeenCalled()
+          return
+        }
         await actor.click(within(screen.getByRole('alertdialog')).getByRole('button', { name: 'Xác nhận', exact: true }))
         await waitFor(() => expect(undoTreatmentExecution).toHaveBeenCalledWith(30))
+        if (scenario === 'error') expect(await screen.findByText('Không được hoàn tác buổi này.')).toBeInTheDocument()
       } else {
         expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument()
         expect(undoTreatmentExecution).not.toHaveBeenCalled()
       }
     })
+    }
   }
 }
 
