@@ -30,6 +30,26 @@ beforeEach(() => {
 })
 afterEach(cleanup)
 
+it('dashboard: mỗi buổi một dòng, sửa nhân viên và hoàn tác đúng buổi thứ hai', async () => {
+  const histories = [
+    { id: 30, branch_id: 2, execution_date: today(), created_at: today(), staffs: [{ staff_id: 1, staff_name: 'Nhân viên Một' }] },
+    { id: 31, branch_id: 2, execution_date: today(), created_at: today(), staffs: [{ staff_id: 2, staff_name: 'Nhân viên Hai' }] },
+  ]
+  getResource.mockResolvedValue({ ...card, histories })
+  const actor = userEvent.setup()
+  show(<TodayTreatments />)
+  await screen.findByText('Buổi #31')
+  const first = document.querySelector('tr[data-history-id="30"]'), second = document.querySelector('tr[data-history-id="31"]')
+  expect(within(first).getByText('Nhân viên Một')).toBeInTheDocument()
+  expect(within(first).queryByText('Nhân viên Hai')).not.toBeInTheDocument()
+  await actor.click(within(second).getByRole('button', { name: /Sửa nhân viên/ }))
+  await actor.click(screen.getByRole('button', { name: 'Xác nhận', exact: true }))
+  await waitFor(() => expect(assignTreatmentStaffs).toHaveBeenCalledWith(31, [{ staff_id: 2 }]))
+  await actor.click(within(second).getByRole('checkbox'))
+  await actor.click(within(screen.getByRole('alertdialog')).getByRole('button', { name: 'Xác nhận', exact: true }))
+  await waitFor(() => expect(undoTreatmentExecution).toHaveBeenCalledWith(31))
+})
+
 for (const role of ['STAFF', 'MANAGER']) {
   for (const entry of ['detail', 'dashboard']) {
     for (const scenario of ['today', 'old-created', 'missing-created', 'other-branch', 'cancel', 'error']) {
