@@ -9,6 +9,10 @@ export const permissions = {
   'treatments.execute': everyone, 'bookings.view': everyone, 'commissions.view': managers, 'consultants.view': managers,
 }
 export function canAccess(user, permission) { return Boolean(user && permissions[permission]?.includes(user.system_role)) }
+export function canFollowUpTreatmentHistory(user, history) {
+  return Boolean(history?.id && !history.deleted_at && (user?.system_role === 'MANAGER' ||
+    (user?.system_role === 'STAFF' && user.branch_id != null && history.branch_id != null && Number(user.branch_id) === Number(history.branch_id))))
+}
 export function resolveBranch(user, selected) {
   if (user?.system_role === 'STAFF') return { branchId: user.branch_id, locked: true }
   return { branchId: selected ? Number(selected) : null, locked: false }

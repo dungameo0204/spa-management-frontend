@@ -1,0 +1,28 @@
+﻿
+> spa-management-frontend@0.1.0 test
+> vitest run src/pages/TreatmentExecutionDate.test.jsx src/components/TreatmentSessionDialog.test.jsx
+
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90mD:/Project/SpaManagement/spa-management-frontend[39m
+
+ [32mΓ£ô[39m src/components/TreatmentSessionDialog.test.jsx [2m([22m[2m7 tests[22m[2m)[22m[33m 1873[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m buß╗òi c┼⌐ ─æ├ú k├╜ vß║½n sß╗¡a v├á x├│a ghi ch├║, kh├┤ng cho k├╜ ─æ├¿ [33m 595[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m l╞░u note tr╞░ß╗¢c khi k├╜, kh├│a chß╗» k├╜ nh╞░ng vß║½n cho sß╗¡a note [33m 503[2mms[22m[39m
+ [32mΓ£ô[39m src/pages/TreatmentExecutionDate.test.jsx [2m([22m[2m32 tests[22m[2m)[22m[33m 7799[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m dashboard: mß╗ùi buß╗òi mß╗Öt d├▓ng, sß╗¡a nh├ón vi├¬n v├á ho├án t├íc ─æ├║ng buß╗òi thß╗⌐ hai [33m 510[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF ho├án t├íc today [33m 375[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF ho├án t├íc cancel [33m 363[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc today [33m 334[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc old-created [33m 371[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc missing-created [33m 317[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc other-branch [33m 311[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc error [33m 364[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m inline: MANAGER chß╗ìn ng├áy v├á gß╗¡i execution_date dß║íng YYYY-MM-DD [33m 436[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER chß╗ìn ng├áy v├á gß╗¡i execution_date dß║íng YYYY-MM-DD [33m 580[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF giß╗» nguy├¬n giao diß╗çn v├á kh├┤ng gß╗¡i execution_date [33m 313[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m39 passed[39m[22m[90m (39)[39m
+[2m   Start at [22m 17:49:38
+[2m   Duration [22m 18.48s[2m (transform 1.11s, setup 1.64s, collect 4.55s, tests 9.67s, environment 10.53s, prepare 1.44s)[22m
+

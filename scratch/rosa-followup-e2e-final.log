@@ -1,0 +1,17 @@
+﻿
+Running 12 tests using 1 worker
+
+  Γ£ô   1 tests\e2e\rosa-session-followup.spec.js:5:3 ΓÇ║ ghi ch├║ sau k├╜ v├á k├╜ bß╗ò sung ─æ├║ng buß╗òi, kh├┤ng tß║ío execution - desktop (4.6s)
+  Γ£ô   2 tests\e2e\rosa-session-followup.spec.js:5:3 ΓÇ║ ghi ch├║ sau k├╜ v├á k├╜ bß╗ò sung ─æ├║ng buß╗òi, kh├┤ng tß║ío execution - mobile (1.9s)
+  Γ£ô   3 tests\e2e\rosa-session-signature.spec.js:4:3 ΓÇ║ ghi ch├║, k├╜ lß║íi, cß║únh b├ío bß╗Å k├╜ v├á phß╗Ñc hß╗ôi lß╗ùi 1440px (2.4s)
+  Γ£ô   4 tests\e2e\rosa-session-signature.spec.js:4:3 ΓÇ║ ghi ch├║, k├╜ lß║íi, cß║únh b├ío bß╗Å k├╜ v├á phß╗Ñc hß╗ôi lß╗ùi 390px (3.9s)
+  Γ£ô   5 tests\e2e\treatment-dashboard.spec.js:4:1 ΓÇ║ tick buß╗òi h├┤m nay rß╗ôi g├ín nh├ón vi├¬n qua hai API (2.1s)
+  Γ£ô   6 tests\e2e\treatment-dashboard.spec.js:80:1 ΓÇ║ thß║╗ c┼⌐ ─æ├ú l├ám h├┤m nay hiß╗çn tr├¬n tß╗òng quan, sß╗¡a nh├ón vi├¬n v├á ho├án t├íc bß║▒ng DELETE (2.9s)
+  Γ£ô   7 tests\e2e\treatment-dashboard.spec.js:111:3 ΓÇ║ ho├án t├íc tß╗òng quan: old (1.9s)
+  Γ£ô   8 tests\e2e\treatment-dashboard.spec.js:111:3 ΓÇ║ ho├án t├íc tß╗òng quan: missing (1.6s)
+  Γ£ô   9 tests\e2e\treatment-dashboard.spec.js:111:3 ΓÇ║ ho├án t├íc tß╗òng quan: other-branch (1.9s)
+  Γ£ô  10 tests\e2e\treatment-dashboard.spec.js:111:3 ΓÇ║ ho├án t├íc tß╗òng quan: cancel (1.5s)
+  Γ£ô  11 tests\e2e\treatment-dashboard.spec.js:111:3 ΓÇ║ ho├án t├íc tß╗òng quan: error (1.4s)
+  Γ£ô  12 tests\e2e\treatment-dashboard.spec.js:111:3 ΓÇ║ ho├án t├íc tß╗òng quan: manager (1.5s)
+
+  12 passed (43.5s)

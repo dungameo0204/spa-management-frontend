@@ -1,0 +1,21 @@
+.session-dialog-layer{z-index:120}
+.session-dialog .signature-pad{display:block;width:100%;height:150px;box-sizing:border-box;background:white;border:1px dashed var(--sage);border-radius:8px;touch-action:none;cursor:crosshair;user-select:none}
+.session-dialog .session-signature .btn{margin-top:6px;font-size:12px;padding:7px 10px}
+.session-dialog{box-sizing:border-box;width:min(100%,600px);max-height:calc(100dvh - 40px);overflow-y:auto}
+.session-dialog .field{display:grid;gap:9px;margin-bottom:16px}
+.session-dialog textarea{box-sizing:border-box;width:100%;min-height:108px;resize:vertical;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--cream);color:var(--ink);font:inherit;font-size:13px;line-height:1.7}
+.session-dialog textarea:focus{outline:none;border-color:var(--sage);box-shadow:0 0 0 3px var(--sage-light)}
+.session-dialog-message{white-space:pre-wrap;overflow-wrap:anywhere;padding:10px;border-radius:10px;background:var(--sage-light)}
+.session-saved-signature img{display:block;width:300px;max-width:100%;height:100px;object-fit:contain;background:white;border:1px solid var(--line);border-radius:8px;margin-top:8px}
+.session-followup-button{display:inline-flex;align-items:center;justify-content:center;gap:5px;border:1px solid var(--line);border-radius:20px;padding:7px 11px;min-height:34px;background:var(--sage-light);color:var(--sage);font:inherit;font-size:12px;cursor:pointer}
+.session-followup-button:hover{filter:brightness(.96)}
+.today-session-signatures{display:flex;align-items:center;gap:10px;min-width:270px}
+.today-signature-preview{display:grid;justify-items:start;gap:3px;min-width:120px}
+.today-session-signatures .session-followup-button{flex-shrink:0;white-space:nowrap}
+.today-treatments table{width:auto;min-width:min(100%,980px)}
+.today-treatments th,.today-treatments td{padding:10px 14px;vertical-align:middle}
+.today-treatments .today-session-id{display:block;font-size:11px;color:var(--muted);margin-top:3px}
+.today-session-signatures img{width:120px;height:38px;object-fit:contain;background:white;border:1px solid var(--line);border-radius:6px}
+.today-session-signatures small{font-size:11px;color:var(--muted)}
+@media(max-width:767px){.today-treatments table{width:100%;min-width:0}.today-treatments td{box-sizing:border-box;padding:6px 0}.today-treatments td[data-label="Chữ ký khách hàng"]{display:block;text-align:left}.today-treatments td[data-label="Chữ ký khách hàng"]::before{display:block;margin-bottom:6px}.today-session-signatures{min-width:0;gap:8px;justify-content:space-between}.today-session-signatures .session-followup-button{padding:7px 9px;font-size:11px}}
+@media(max-width:600px){.session-dialog{padding:18px;max-height:calc(100dvh - 24px)}.session-dialog-layer{padding:12px}.session-dialog textarea{font-size:16px}.session-dialog .drawer-actions{flex-wrap:wrap}.session-followup-button{min-height:38px}}

@@ -1,0 +1,5 @@
+﻿
+> spa-management-frontend@0.1.0 check:vietnamese
+> node scripts/check-vietnamese.mjs
+
+No corrupted Vietnamese text found in application source and tests.

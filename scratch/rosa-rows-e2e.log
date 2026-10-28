@@ -1,0 +1,15 @@
+﻿
+Running 10 tests using 1 worker
+
+  Γ£ô   1 tests\e2e\rosa-session-followup.spec.js:5:3 ΓÇ║ ghi ch├║ sau k├╜ v├á k├╜ bß╗ò sung ─æ├║ng buß╗òi, kh├┤ng tß║ío execution - desktop (4.8s)
+  Γ£ô   2 tests\e2e\rosa-session-followup.spec.js:5:3 ΓÇ║ ghi ch├║ sau k├╜ v├á k├╜ bß╗ò sung ─æ├║ng buß╗òi, kh├┤ng tß║ío execution - mobile (2.2s)
+  Γ£ô   3 tests\e2e\treatment-dashboard.spec.js:4:1 ΓÇ║ tick buß╗òi h├┤m nay rß╗ôi g├ín nh├ón vi├¬n qua hai API (1.3s)
+  Γ£ô   4 tests\e2e\treatment-dashboard.spec.js:80:1 ΓÇ║ thß║╗ c┼⌐ ─æ├ú l├ám h├┤m nay hiß╗çn tr├¬n tß╗òng quan, sß╗¡a nh├ón vi├¬n v├á ho├án t├íc bß║▒ng DELETE (1.2s)
+  Γ£ô   5 tests\e2e\treatment-dashboard.spec.js:111:3 ΓÇ║ ho├án t├íc tß╗òng quan: old (594ms)
+  Γ£ô   6 tests\e2e\treatment-dashboard.spec.js:111:3 ΓÇ║ ho├án t├íc tß╗òng quan: missing (715ms)
+  Γ£ô   7 tests\e2e\treatment-dashboard.spec.js:111:3 ΓÇ║ ho├án t├íc tß╗òng quan: other-branch (640ms)
+  Γ£ô   8 tests\e2e\treatment-dashboard.spec.js:111:3 ΓÇ║ ho├án t├íc tß╗òng quan: cancel (732ms)
+  Γ£ô   9 tests\e2e\treatment-dashboard.spec.js:111:3 ΓÇ║ ho├án t├íc tß╗òng quan: error (754ms)
+  Γ£ô  10 tests\e2e\treatment-dashboard.spec.js:111:3 ΓÇ║ ho├án t├íc tß╗òng quan: manager (800ms)
+
+  10 passed (18.9s)

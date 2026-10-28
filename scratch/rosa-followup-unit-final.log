@@ -1,0 +1,36 @@
+﻿
+> spa-management-frontend@0.1.0 test
+> vitest run src/components/TreatmentSessionDialog.test.jsx src/components/CustomerOverview.test.jsx src/pages/TreatmentExecutionDate.test.jsx src/auth/permissions.test.js
+
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90mD:/Project/SpaManagement/spa-management-frontend[39m
+
+ [32mΓ£ô[39m src/auth/permissions.test.js [2m([22m[2m15 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32mΓ£ô[39m src/components/TreatmentSessionDialog.test.jsx [2m([22m[2m7 tests[22m[2m)[22m[33m 3173[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m buß╗òi c┼⌐ ─æ├ú k├╜ vß║½n sß╗¡a v├á x├│a ghi ch├║, kh├┤ng cho k├╜ ─æ├¿ [33m 937[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m l╞░u note tr╞░ß╗¢c khi k├╜, kh├│a chß╗» k├╜ nh╞░ng vß║½n cho sß╗¡a note [33m 781[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m lß╗ùi k├╜ giß╗» n├⌐t k├╜ v├á kh├┤ng l╞░u note lß║ºn nß╗»a khi thß╗¡ lß║íi [33m 532[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m pending kh├│a ─æ├│ng v├á l╞░u, lß╗ùi note kh├┤ng gß╗ìi k├╜ v├á giß╗» nhß║¡p liß╗çu [33m 467[2mms[22m[39m
+ [32mΓ£ô[39m src/components/CustomerOverview.test.jsx [2m([22m[2m5 tests[22m[2m)[22m[33m 4041[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m ch╞░a k├╜: phß║úi x├íc nhß║¡n, quay lß║íi giß╗» ghi ch├║ v├á kh├┤ng gß╗¡i API [33m 1801[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m lß╗ùi API giß╗» dß╗» liß╗çu, lß║ºn thß╗¡ lß║íi vß║½n hß╗Åi x├íc nhß║¡n kh├┤ng k├╜ [33m 1190[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m mß╗ƒ buß╗òi c┼⌐ ─æ├ú k├╜ trong hß╗ô s╞í, sß╗¡a note v├á tß║úi lß║íi overview [33m 599[2mms[22m[39m
+ [32mΓ£ô[39m src/pages/TreatmentExecutionDate.test.jsx [2m([22m[2m31 tests[22m[2m)[22m[33m 9298[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF ho├án t├íc today [33m 1258[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF ho├án t├íc old-created [33m 364[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF ho├án t├íc other-branch [33m 315[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF ho├án t├íc cancel [33m 461[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF ho├án t├íc error [33m 441[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc today [33m 350[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc cancel [33m 309[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc error [33m 303[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m inline: MANAGER chß╗ìn ng├áy v├á gß╗¡i execution_date dß║íng YYYY-MM-DD [33m 324[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER chß╗ìn ng├áy v├á gß╗¡i execution_date dß║íng YYYY-MM-DD [33m 772[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF giß╗» nguy├¬n giao diß╗çn v├á kh├┤ng gß╗¡i execution_date [33m 690[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m dashboard: MANAGER chß╗ìn ng├áy v├á gß╗¡i execution_date dß║íng YYYY-MM-DD [33m 307[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m58 passed[39m[22m[90m (58)[39m
+[2m   Start at [22m 17:35:48
+[2m   Duration [22m 25.23s[2m (transform 3.12s, setup 5.72s, collect 11.45s, tests 16.53s, environment 25.03s, prepare 7.89s)[22m
+

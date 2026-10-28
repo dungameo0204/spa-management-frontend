@@ -1,0 +1,7 @@
+﻿
+Running 2 tests using 1 worker
+
+  Γ£ô  1 tests\e2e\rosa-session-followup.spec.js:5:3 ΓÇ║ ghi ch├║ sau k├╜ v├á k├╜ bß╗ò sung ─æ├║ng buß╗òi, kh├┤ng tß║ío execution - desktop (3.3s)
+  Γ£ô  2 tests\e2e\rosa-session-followup.spec.js:5:3 ΓÇ║ ghi ch├║ sau k├╜ v├á k├╜ bß╗ò sung ─æ├║ng buß╗òi, kh├┤ng tß║ío execution - mobile (1.5s)
+
+  2 passed (9.1s)

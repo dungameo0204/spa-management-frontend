@@ -27,7 +27,7 @@ test('lịch sử khách hiển thị một dòng dịch vụ kèm liệu trình
   await page.getByRole('button', { name: /Xem lịch sử/ }).click()
   await expect(timeline.first()).toContainText('Kỹ thuật viên')
    await expect(timeline.first().locator('.treatment-history p').first()).toContainText('Cơ sở thực hiện: Cơ sở Hai')
-   await expect(timeline.first().locator('.treatment-history p').nth(1)).toContainText('Cơ sở thực hiện: Cơ sở #3')
+   await expect(timeline.first().locator('.customer-session-history').nth(1)).toContainText('Cơ sở thực hiện: Cơ sở #3')
   const controls = await page.locator('.treatment-control-bar').evaluate(bar => {
     const action = bar.querySelector('button').getBoundingClientRect()
     const checkbox = bar.querySelector('label').getBoundingClientRect()
@@ -39,6 +39,8 @@ test('lịch sử khách hiển thị một dòng dịch vụ kèm liệu trình
   await expect(page.getByText('Đang chuẩn bị ghi nhận thêm 1 buổi hôm nay. Kiểm tra lại lịch sử trước khi xác nhận.')).toBeVisible()
   await expect(page.getByRole('checkbox', { name: 'Đang chọn ghi nhận hôm nay' }).locator('..')).toHaveClass(/is-selected/)
   await page.getByRole('button', { name: 'Xác nhận hôm nay' }).click()
+  await expect(page.getByRole('alertdialog')).toContainText('Bạn có chắc chắn muốn ghi nhận buổi mà không có chữ ký khách hàng?')
+  await page.getByRole('button', { name: 'Ghi nhận không có chữ ký' }).click()
   await expect(page.getByText('Đã ghi nhận một buổi thực hiện.')).toHaveClass(/success-alert/)
 })
 
