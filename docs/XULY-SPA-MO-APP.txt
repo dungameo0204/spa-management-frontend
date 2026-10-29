@@ -5,7 +5,7 @@ Phiên bản 0.1.0
 - Mở Xuly-Spa-0.1.0-portable.exe trên máy Windows x64.
 - App dùng tên Xuly Spa, logo hoa sen và cửa sổ riêng mặc định phóng lớn.
 - Backend và cơ sở dữ liệu phải được triển khai riêng; bản này không phải gói offline.
-- Mặc định app kết nối backend tại http://127.0.0.1:5000.
+- Nhánh O'HINA mặc định kết nối https://api-spa-ohina.infinityhavocx.men, không cần backend local.
 - Đăng nhập bằng tài khoản đã được cấp. Không kèm tài khoản/mật khẩu trong bộ này.
 
 2. DÙNG BACKEND Ở MÁY KHÁC

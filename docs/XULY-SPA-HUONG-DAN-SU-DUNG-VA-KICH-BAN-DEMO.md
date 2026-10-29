@@ -22,7 +22,7 @@ Xuly Spa tập trung các công việc hằng ngày: quản lý khách hàng, l�
 1. Chuẩn bị máy Windows x64, backend của hệ thống và cơ sở dữ liệu đã cấu hình.
 2. Mở file `Xuly-Spa-0.1.0-portable.exe`. Bản portable không yêu cầu chạy trình cài đặt; lần mở có thể mất thời gian giải nén.
 3. App mở cửa sổ riêng với logo và tên Xuly Spa. Cửa sổ mặc định phóng lớn để dễ thao tác và quay màn hình.
-4. Backend mặc định là `http://127.0.0.1:5000`. Nếu dùng backend trên máy khác, cấu hình `XULY_API_BASE_URL` trước khi mở app; xem tài liệu MỞ-APP trong bộ bàn giao.
+4. Trên nhánh O'HINA, backend mặc định là `https://api-spa-ohina.infinityhavocx.men`. Nếu dùng backend khác, cấu hình `XULY_API_BASE_URL` trước khi mở app; xem tài liệu MỞ-APP trong bộ bàn giao.
 5. Đăng nhập bằng tài khoản đã được cấp. Không có tài khoản/mật khẩu mặc định được nhúng trong app.
 
 App Windows chỉ đóng gói giao diện và proxy kết nối API, không chứa sẵn MySQL hoặc backend. Không gọi đây là bản “offline hoàn toàn”. Bản đóng gói chưa có chữ ký số; Windows có thể cảnh báo. Chỉ sử dụng file từ nguồn tin cậy, không tắt bảo vệ hệ thống để chạy file không rõ nguồn.
