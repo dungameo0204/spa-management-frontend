@@ -63,7 +63,7 @@
 @keyframes alert-attention{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 0 4px #d52e3970;background:#ffd5d8}}
 .login-logo{display:flex;align-items:center;gap:12px}.login-logo img{display:block;flex-shrink:0;border-radius:11px}.brand img.brand-symbol{display:block;flex-shrink:0;border-radius:9px}
 
-/* O'HINA: luminous champagne gold on ivory, with dark gold for readable text. */
+/* KAS: luminous champagne gold on ivory, with dark gold for readable text. */
 .hero-banner{background:linear-gradient(115deg,#fffdf7 0%,#f8eccf 35%,#dfc184 63%,#fff5df 100%);color:#302d27;box-shadow:inset 0 1px 0 #fff9,0 12px 32px #97733a1c}
 .hero-banner span,.hero-banner h2 em{color:#76551e}
 .hero-banner p{color:#514737}

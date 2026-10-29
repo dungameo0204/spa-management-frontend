@@ -11,7 +11,7 @@ export default defineConfig({
     registerType: 'autoUpdate',
     includeAssets: ['icons/icon.svg', 'icons/apple-touch-icon.png'],
     manifest: {
-      name: "O'HINA · Quản lý Spa", short_name: "O'HINA", lang: 'vi',
+      name: "KAS", short_name: "KAS", lang: 'vi',
       description: 'Chăm chút từng khoảnh khắc, nâng niu mỗi trải nghiệm.', start_url: '/', scope: '/', display: 'standalone',
       background_color: '#faf8f3', theme_color: '#aa843f',
       icons: [

@@ -45,7 +45,8 @@ it('writes real customer Excel cells with phone text, numeric money, date and sa
 it('exports product types, treatment flags and prices as the appropriate cell types', () => {
   const options = directoryExportOptions('products', [])
   const row = { name: 'Laser', is_product: '0', price: '1000000', sale_price: '800000', is_treatment_combo: '1', default_sessions: '5' }
-  expect(options.columns.map(col => col.value(row))).toEqual(['Laser', 'Dịch vụ', '', 1000000, 800000, 'Có', 5, null])
+  expect(options.columns.map(col => col.value(row))).toEqual(['Laser', 'Dịch vụ', '', null, 800000, 'Có', 5, null])
+  expect(options.columns[3].value({ ...row, is_product: '1' })).toBe(1000000)
 })
 
 it('exports both active and completed treatment cards, preserving card identity', () => {

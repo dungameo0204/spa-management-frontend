@@ -12,7 +12,7 @@ export const directoryExports = {
   },
   products: {
     title: 'Sản phẩm & dịch vụ', filename: 'san-pham-dich-vu',
-    columns: [text('name', 'Tên sản phẩm / dịch vụ'), { label: 'Loại', value: row => Number(row.is_product) === 1 ? 'Sản phẩm' : 'Dịch vụ' }, text('unit', 'Đơn vị'), number('price', 'Giá niêm yết', true), number('sale_price', 'Giá bán', true), { label: 'Là liệu trình', value: row => Number(row.is_treatment_combo) === 1 ? 'Có' : 'Không' }, number('default_sessions', 'Số buổi tự tạo'), number('next_appointment_days', 'Ngày tới lần hẹn kế tiếp')],
+    columns: [text('name', 'Tên sản phẩm / dịch vụ'), { label: 'Loại', value: row => Number(row.is_product) === 1 ? 'Sản phẩm' : 'Dịch vụ' }, text('unit', 'Đơn vị'), { ...number('price', 'Giá niêm yết', true), value: row => Number(row.is_product) === 0 ? null : number('price', 'Giá niêm yết', true).value(row) }, number('sale_price', 'Giá bán', true), { label: 'Là liệu trình', value: row => Number(row.is_treatment_combo) === 1 ? 'Có' : 'Không' }, number('default_sessions', 'Số buổi tự tạo'), number('next_appointment_days', 'Ngày tới lần hẹn kế tiếp')],
   },
   inventory: {
     title: 'Tồn kho', filename: 'ton-kho',
@@ -48,4 +48,4 @@ export function directoryExportOptions(resource, rows, context = []) {
   return { title, columns, rows, context: ['Ngày xuất', today(), ...context] }
 }
 
-export const directoryExportFilename = resource => `Xuly-${directoryExports[resource].filename}-${today()}.xlsx`
+export const directoryExportFilename = resource => `KAS-${directoryExports[resource].filename}-${today()}.xlsx`

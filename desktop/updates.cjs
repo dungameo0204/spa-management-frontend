@@ -10,8 +10,8 @@ function startUpdates(app, window) {
   autoUpdater.on('update-downloaded', async info => {
     if (window.isDestroyed()) return
     const { response } = await dialog.showMessageBox(window, {
-      type: 'info', title: "Cập nhật O'HINA",
-      message: `Đã tải O'HINA v${info.version}`,
+      type: 'info', title: "Cập nhật KAS",
+      message: `Đã tải KAS v${info.version}`,
       detail: 'Lưu công việc trước khi khởi động lại để cài bản mới. Dữ liệu nghiệp vụ được lưu trên máy chủ.',
       buttons: ['Khởi động lại và cập nhật', 'Để sau'], defaultId: 1, cancelId: 1,
     })

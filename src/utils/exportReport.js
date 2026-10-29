@@ -28,13 +28,13 @@ async function allPages(loader) {
 export async function createReportWorkbook(range, commissionsOnly = false) {
   const ExcelJS = (await import('exceljs')).default
   const book = new ExcelJS.Workbook()
-  book.creator = "O'HINA"
+  book.creator = "KAS"
   const context = ['Từ ngày', range.startDate, 'Đến ngày', range.endDate, 'Mã chi nhánh', range.branchId || 'Tất cả']
   for (const [kind, name] of Object.entries(commissionsOnly ? { commissions: kinds.commissions } : kinds)) {
     const people = ['commissions', 'consultants'].includes(kind)
     const { rows, totalAmount } = await allPages(page => people ? getStaffTotals(kind, range, page, 100) : getReportDetails(kind, range, page, 100))
     const sheet = book.addWorksheet(name)
-    sheet.addRow([`O'HINA · ${name.toUpperCase()}`])
+    sheet.addRow([`KAS · ${name.toUpperCase()}`])
     sheet.addRow(['Từ ngày', range.startDate, 'Đến ngày', range.endDate, 'Mã chi nhánh', range.branchId || 'Tất cả'])
     sheet.addRow(['Tổng tiền toàn kỳ', numeric(totalAmount), 'Số dòng/nhóm', rows.length])
     sheet.getCell('B3').numFmt = '#,##0" đ"'
@@ -83,5 +83,5 @@ export async function createReportWorkbook(range, commissionsOnly = false) {
 
 export async function exportReport(range, commissionsOnly = false) {
   const book = await createReportWorkbook(range, commissionsOnly)
-  await downloadWorkbook(book, `OHINA-${commissionsOnly ? 'cong-ca-tat-ca-nhan-vien' : 'bao-cao'}-${range.startDate}-${range.endDate}.xlsx`)
+  await downloadWorkbook(book, `KAS-${commissionsOnly ? 'cong-ca-tat-ca-nhan-vien' : 'bao-cao'}-${range.startDate}-${range.endDate}.xlsx`)
 }

@@ -1,9 +1,9 @@
 {
   "name": "spa-management-frontend",
   "private": true,
-  "description": "O'HINA - Phần mềm quản lý bán hàng, khách hàng và vận hành spa",
-  "author": "O'HINA",
-  "version": "0.1.0",
+  "description": "KAS - Phần mềm quản lý bán hàng, khách hàng và vận hành spa",
+  "author": "KAS",
+  "version": "0.1.4",
   "type": "module",
   "main": "desktop/main.cjs",
   "scripts": {
@@ -48,7 +48,7 @@
   },
   "build": {
     "appId": "vn.xuly.spa.desktop",
-    "productName": "O'HINA",
+    "productName": "KAS",
     "compression": "normal",
     "directories": {
       "output": "release"
@@ -64,9 +64,9 @@
       "signExecutable": false
     },
     "publish": { "provider": "github", "owner": "dungameo0204", "repo": "ohina-release" },
-    "nsis": { "artifactName": "OHINA-Setup-${version}.exe", "oneClick": false, "perMachine": false },
+    "nsis": { "artifactName": "KAS-Setup-${version}.exe", "shortcutName": "KAS", "oneClick": false, "perMachine": false },
     "portable": {
-      "artifactName": "OHINA-${version}-portable.exe"
+      "artifactName": "KAS-${version}-portable.exe"
     }
   }
 }

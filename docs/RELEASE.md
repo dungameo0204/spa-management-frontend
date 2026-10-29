@@ -1,4 +1,13 @@
-# Phát hành O'HINA
+# Phát hành KAS
+
+## Bản KAS 0.1.4 — 29/10/2026
+
+- Bộ cài bàn giao: `release/KAS-Setup-0.1.4.exe`; kèm `.exe.blockmap` và `latest.yml` nếu phát hành tự cập nhật. Không gửi các bộ cài Xuly/Solea/OHINA cũ còn trong thư mục `release`.
+- Tên hiển thị Windows và shortcut là **KAS**. Giữ `appId`, kênh GitHub `ohina-release`, backend và thư mục hồ sơ desktop `O'HINA` cũ để tương thích bản đã cài; đây là định danh kỹ thuật, không phải branding hiển thị.
+- PWA có `name`, `short_name` và Apple home-screen title là **KAS**, dùng logo KAS hiện có. Cần deploy bản web mới để điện thoại nhận thay đổi. Nếu shortcut cũ vẫn giữ tên/icon, xóa shortcut/app PWA cũ và thêm lại từ bản web mới.
+- Dịch vụ không hiện giá niêm yết ở danh sách, chi tiết, form hoặc Excel; sản phẩm vẫn giữ hai giá. Không thay đổi hợp đồng giá gửi lên API.
+- Build local không tự publish, deploy hoặc kiểm chứng nâng cấp trên máy khách. Bộ cài chưa ký số; cần thử nâng cấp từ bản khách đang dùng trước khi phát hành rộng.
+
 > Trạng thái 21/10/2026: Pages project `xuly-spa` đã được tạo bằng **Direct Upload** và đã deploy từ máy local lên `https://xuly-spa.pages.dev` (HTTP 200, route `/login` cũng HTTP 200). Custom domain `app-spa-xuly.infinityhavocx.men` đã được thêm nhưng còn pending vì thiếu DNS CNAME. Wrangler OAuth đã được cấp quyền Pages, nhưng **không có quyền DNS record** (Cloudflare API trả 403). Trong Cloudflare DNS zone `infinityhavocx.men`, cần tạo CNAME `app-spa-xuly` → `xuly-spa.pages.dev` (theo chỉ dẫn tại Pages > Custom domains), rồi kiểm tra trạng thái Active. Backend công khai tại `https://api-spa-xuly.infinityhavocx.men` đã trả `/health` = `{"status":"ok"}`, POST `/api/auth/login` bằng thông tin thử không tồn tại trả 401 và OPTIONS CORS cho origin frontend trả 204; chưa kiểm tra đăng nhập bằng tài khoản thật hoặc nghiệp vụ có ghi dữ liệu.
 
 > **Quan trọng:** Pages project Direct Upload hiện tại không thể chuyển trực tiếp sang Git integration. Để deploy tự động từ GitHub về sau, tạo Pages project **mới** dạng Connect to Git, chuyển custom domain sang project mới sau khi kiểm tra xong; hoặc giữ project Direct Upload và cấu hình GitHub Actions deploy bằng Wrangler. Không bật hai project cùng dùng một custom domain cùng lúc.
@@ -11,7 +20,7 @@
 
 ## Windows (bản cài NSIS x64)
 
-- `npm ci`, `npm run lint`, `npm test`, `npm run test:desktop`, `npm run desktop:dist` trên Windows Node 22. Installer `release/OHINA-Setup-${version}.exe`, `.blockmap` và `latest.yml` ở `release/`; build local **không tự upload**. Mặc định bản desktop chuyển tiếp `/api` sang backend `https://api-spa-ohina.infinityhavocx.men`; không cần chạy backend trên máy người dùng. Có thể ghi đè bằng `XULY_API_BASE_URL` (origin HTTP(S), không thêm `/api`) trước khi chạy nếu dùng backend khác. Giữ nguyên `appId` và endpoint cập nhật cũ để tránh phá cấu hình đã cài.
+- `npm ci`, `npm run lint`, `npm test`, `npm run test:desktop`, `npm run desktop:dist` trên Windows Node 22. Installer `release/KAS-Setup-${version}.exe`, `.blockmap` và `latest.yml` ở `release/`; build local **không tự upload**. Mặc định bản desktop chuyển tiếp `/api` sang backend `https://api-spa-ohina.infinityhavocx.men`; không cần chạy backend trên máy người dùng. Có thể ghi đè bằng `XULY_API_BASE_URL` (origin HTTP(S), không thêm `/api`) trước khi chạy nếu dùng backend khác. Giữ nguyên `appId` và endpoint cập nhật cũ để tránh phá cấu hình đã cài.
 - Workflow `.github/workflows/windows-release.yml` chạy khi push tag `vX.Y.Z` đúng bằng `package.json` version, tạo **draft** GitHub Release kèm ba tệp trên. Người có quyền kiểm tra rồi Publish release để khách tải installer và ứng dụng đã cài nhận bản mới. GitHub repository và Releases phải **public** để khách không cần GitHub token; repository private cần cơ chế phân phối có xác thực riêng, không nhúng token vào app.
 - Bắt đầu từ **installer**, không dùng portable demo để tự cập nhật. Sau này tăng version theo semver, commit, push tag; không thay đổi tệp của release đã phát hành. App kiểm tra khi mở, tải cập nhật, hỏi trước khi khởi động lại để cài; dữ liệu kinh doanh nằm trên backend, cần lưu thao tác đang dở trước khi cập nhật. Không có ký số hiện tại nên Windows có thể cảnh báo; trước khi đưa cho khách nên ký code, thử trên máy Windows sạch và thử nâng cấp thực từ một phiên bản đã Publish sang phiên bản mới.
 - Bản `npm run build:exe` vẫn là portable dành cho demo, không phải kênh auto-update. Không phát hành tag `v0.1.0` nếu đó chỉ là demo: tăng version khi chuẩn bị release đầu tiên và xác nhận GitHub repository public, domain/API hoạt động.

@@ -3,7 +3,9 @@ const path = require('node:path')
 const { startServer } = require('./server.cjs')
 const { startUpdates } = require('./updates.cjs')
 
-app.setName("O'HINA")
+// Preserve the installed application's profile path across the display-name change.
+app.setPath('userData', path.join(app.getPath('appData'), "O'HINA"))
+app.setName("KAS")
 app.setAppUserModelId('vn.xuly.spa.desktop')
 let server
 app.whenReady().then(async () => {
@@ -13,7 +15,7 @@ app.whenReady().then(async () => {
     const window = new BrowserWindow({
       icon: path.join(__dirname, '..', 'dist', 'icons', 'icon.ico'),
       width: 1280, height: 850, minWidth: 800, minHeight: 600,
-      title: "O'HINA · Phần mềm quản lý Spa", autoHideMenuBar: true,
+      title: "KAS · Phần mềm quản lý Spa", autoHideMenuBar: true,
       show: false, backgroundColor: '#faf8f3',
       webPreferences: { nodeIntegration: false, contextIsolation: true, sandbox: true },
     })
