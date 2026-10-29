@@ -37,6 +37,7 @@ export function restoreResource(resource, id) {
 export const loginRequest = credentials => request('/api/auth/login', { method: 'POST', body: credentials })
 export const getSession = () => request('/api/auth/me')
 export const getRemainingDebt = id => request(`/api/debt-payments/invoices/${encodeURIComponent(id)}/remaining-debt`).then(r => r.data)
+export const createLegacyDebtPayment = body => request('/api/debt-payments/legacy', { method: 'POST', body })
 export const getRevenue = range => request('/api/reports/revenue', { query: range })
 export const getReportDetails = (type, range, page = 1, pageSize = 20, staffId) => request(`/api/reports/details/${type}`, { query: { ...range, page, pageSize, staffId } }).then(r => normalizePagedResponse(r, page, pageSize))
 export const getStaffTotals = (kind, range, page = 1, pageSize = 20) => request(`/api/reports/${kind}`, { query: { ...range, page, pageSize } })

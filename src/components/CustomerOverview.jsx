@@ -1,5 +1,6 @@
 import MobileSelect from './MobileSelect'
 import DebtAmount from './DebtAmount'
+import CustomerDebtSummary from './CustomerDebtSummary'
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { executeTreatment, getCustomerOverview, listResource } from '../api/resources'
@@ -18,6 +19,7 @@ export default function CustomerOverview({ customerId, overview, onOverview }) {
   const { customer, timeline = [] } = overview
   return <section className="customer-overview">
     <div className="customer-identity"><strong>{customer.fullname}</strong><span>{customer.phone_number}</span><span>{customer.address || 'Chưa có địa chỉ'}</span><span>Ví: {formatCurrency(customer.wallet_balance)}</span><span>Nợ: <DebtAmount value={customer.total_debt} /></span></div>
+    <CustomerDebtSummary customer={customer} />
     <DetailNote note={customer.note} />
     {message && <p role={messageType === 'error' ? 'alert' : 'status'} className={messageType === 'error' ? 'form-alert' : 'success-alert'}>{message}</p>}
     <h3>Lịch sử mua và chăm sóc</h3>
