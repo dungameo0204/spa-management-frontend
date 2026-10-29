@@ -7,7 +7,6 @@ export const routes = [
   { path: '/invoices', label: 'Bán hàng', icon: ShoppingBag, group: 'main' },
   { path: '/products', label: 'Sản phẩm & dịch vụ', icon: Package, group: 'operations', permission: 'products.view' },
   { path: '/treatments', label: 'Liệu trình', icon: Sparkles, group: 'operations' },
-  { path: '/bookings', label: 'Booking từ khách', icon: ClipboardList, group: 'operations' },
   { path: '/imports', label: 'Nhập kho', icon: Boxes, group: 'operations' },
   { path: '/inventory', label: 'Tồn kho', icon: Package, group: 'operations', permission: 'inventory.manage' },
   { path: '/expenses', label: 'Phiếu chi', icon: ReceiptText, group: 'operations' },

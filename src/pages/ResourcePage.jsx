@@ -21,6 +21,8 @@ import CustomerOverview from '../components/CustomerOverview'
 import MobileSelect from '../components/MobileSelect'
 import CommissionTiersEditor from '../components/CommissionTiersEditor'
 import { serializeCommissionTiers, validateCommissionTiers } from '../utils/commissionTiers'
+import ExportTableButton from '../components/ExportTableButton'
+import { directoryExportFilename, directoryExportOptions, loadDirectoryRows } from '../utils/directoryExport'
 
 const text = (key, label, required = false) => ({ key, label, required })
 const specs = {
@@ -112,6 +114,7 @@ export default function ResourcePage({ resource }) {
   return <div className="page"><div className="page-heading"><div><span className="eyebrow">KHÔNG GIAN VẬN HÀNH</span><h1>{spec.title}</h1><p>Thông tin được đồng bộ trực tiếp từ spa của bạn.</p></div>{writable && <button className="btn primary" onClick={beginCreate}><Plus size={19} /> Thêm mới</button>}</div>{message && !selected && <div className={messageType === 'error' ? 'form-alert' : 'success-alert'} role={messageType === 'error' ? 'alert' : 'status'}>{message}</div>}
     {resource === 'commissions' ? <><DateRangeFilter startDate={commissionStart} endDate={commissionEnd} onChange={(start, end) => { setCommissionStart(start); setCommissionEnd(end); setPage(1) }} />{commissionStart <= commissionEnd ? <StaffEarnings key={`${commissionStart}-${commissionEnd}-${branchId}`} kind="commissions" range={{ startDate: commissionStart, endDate: commissionEnd, ...(branchId ? { branchId } : {}) }} /> : <p className="form-alert">Khoảng ngày không hợp lệ.</p>}<h3>Từng lượt phân công</h3></> : dated && <DateRangeFilter startDate={startDate} endDate={endDate} onChange={(start, end) => { setStartDate(start); setEndDate(end); setPage(1) }} />}
     {!validDates && <p className="form-alert">Khoảng ngày không hợp lệ.</p>}
+    {['customers', 'products'].includes(resource) && <ExportTableButton disabled={query.isFetching || query.isError || searchInput !== search || !query.data?.data?.length} filename={directoryExportFilename(resource)} options={async () => directoryExportOptions(resource, await loadDirectoryRows(resource, filters), ['Tìm kiếm', search || 'Tất cả'])} />}
     <DataList data={visibleData} columns={cols} search={searchInput} onSearch={setSearchInput} page={page} onPage={setPage} loading={query.isLoading} error={query.error} onRetry={() => query.refetch()} onRow={resource === 'commissions' ? undefined : openItem} />
     {selected && <FormDrawer className={resource === 'customers' ? 'customer-drawer' : resource === 'expenses' ? 'expense-drawer' : ''} title={selected.id ? (editing ? `Chỉnh sửa ${spec.title.toLowerCase()}` : `Chi tiết ${spec.title.toLowerCase()}`) : `Thêm ${spec.title.toLowerCase()}`} onClose={() => setSelected(null)}>
       {message && <div className={messageType === 'error' ? 'form-alert' : 'success-alert'}>{message}</div>}
