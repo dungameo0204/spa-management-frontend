@@ -4,7 +4,7 @@ import { useBranch } from './AppShell'
 import { useAuth } from '../auth/AuthProvider'
 import { canUndoTreatmentExecution } from '../auth/permissions'
 import { assignTreatmentStaffs, executeTreatment, getResource, listResource, undoTreatmentExecution } from '../api/resources'
-import { dateOnly, today } from '../utils/format'
+import { today } from '../utils/format'
 import RoleStaffPicker from './RoleStaffPicker'
 import ConfirmDialog from './ConfirmDialog'
 import MobileSelect from './MobileSelect'
@@ -12,6 +12,9 @@ import { Pencil } from 'lucide-react'
 import { canFollowUpTreatmentHistory } from '../auth/permissions'
 import { formatSpaDate } from '../utils/format'
 import TreatmentSessionDialog from './TreatmentSessionDialog'
+import { canExecuteCard, todayTreatmentRows, treatmentCards } from '../utils/todayTreatments'
+import TreatmentGroupSignature from './TreatmentGroupSignature'
+import './TodayTreatments.css'
 
 export default function TodayTreatments() {
   const { branchId } = useBranch(), { user } = useAuth(), qc = useQueryClient()
@@ -31,14 +34,17 @@ export default function TodayTreatments() {
   const staffBranch = manager ? (selected ? executionBranch : branchId) : branchId
   const employees = useQuery({ queryKey: ['staffs', 'today', staffBranch], queryFn: () => listResource('staffs', staffBranch ? { branchId: staffBranch } : {}, 1, 100), enabled: !manager || Boolean(staffBranch) })
   const branches = useQuery({ queryKey: ['branches', 'dashboard-treatment'], queryFn: () => listResource('branches', {}, 1, 100), enabled: manager })
+  const roles = useQuery({ queryKey: ['roles', 'staff-picker'], queryFn: () => listResource('roles', {}, 1, 100) })
+  function staffSummary(history) {
+    return (history.staffs || []).map(staff => {
+      const role = staff.role_name || staff.role_type || roles.data?.data?.find(role => Number(role.id) === Number(staff.role_id))?.name || ''
+      return `${role.replace(/^bác sĩ/i, 'BS').replace(/^kỹ thuật viên/i, 'KTV')} ${staff.staff_name || staff.fullname || `#${staff.staff_id}`}`.trim()
+    }).join(' · ')
+  }
   const allCards = query.data || []
   const cardDetails = useQueries({ queries: allCards.map(card => ({ queryKey: ['dashboard-treatments', 'detail', card.id], queryFn: () => getResource('treatments', card.id), staleTime: 15_000 })) })
   const currentDay = today()
-  const cards = allCards.map((card, index) => ({ card, detail: cardDetails[index] })).filter(({ card, detail }) => (dateOnly(card.created_at) === currentDay && (!branchId || card.branch_id == null || Number(card.branch_id) === Number(branchId))) || detail.data?.histories?.some(h => dateOnly(h.execution_date) === currentDay && (!branchId || Number(h.branch_id) === Number(branchId))))
-  const rows = cards.flatMap(({ card, detail }) => {
-    const histories = (detail.data?.histories || []).filter(h => dateOnly(h.execution_date) === currentDay && (!branchId || Number(h.branch_id) === Number(branchId)))
-    return histories.length ? histories.map(history => ({ card, detail, history, multiple: histories.length > 1 })) : [{ card, detail, history: null }]
-  })
+  const rows = todayTreatmentRows(allCards, cardDetails, currentDay, branchId)
   const pages = Math.max(1, Math.ceil(rows.length / 20))
   const currentPage = Math.min(page, pages)
   const mutation = useMutation({
@@ -55,7 +61,7 @@ export default function TodayTreatments() {
     onError: err => { qc.invalidateQueries({ queryKey: ['dashboard-treatments'] }); setMessageType('error'); setMessage(err.message) },
   })
   const undoMutation = useMutation({ mutationFn: id => {
-    const history = cardDetails.flatMap(detail => detail.data?.histories || []).find(history => history.id === id)
+    const history = cardDetails.flatMap(detail => detail.data ? treatmentCards(detail.data).flatMap(card => card.histories || []) : []).find(history => history.id === id)
     if (!canUndoTreatmentExecution(user, history)) throw new Error('Bạn không có quyền hoàn tác buổi thực hiện này.')
     return undoTreatmentExecution(id)
   }, onSuccess: () => { qc.invalidateQueries({ queryKey: ['dashboard-treatments'] }); qc.invalidateQueries({ queryKey: ['treatments'] }); qc.invalidateQueries({ queryKey: ['commissions'] }); setUndo(null); setSelected(null); setMessageType('success'); setMessage('Đã hoàn tác buổi hôm nay.') }, onError: err => { setUndo(null); setMessageType('error'); setMessage(err.message) } })
@@ -68,7 +74,7 @@ export default function TodayTreatments() {
     setMessage('')
   }
   function save() {
-    if (!selected.historyId && Number(selected.card.remaining_sessions) < 1) return setMessage('Thẻ đã hết buổi.')
+    if (!selected.historyId && !canExecuteCard(selected.card)) return setMessage('Thẻ đã hết buổi hoặc đã đóng.')
     if (manager && !selected.historyId && !Number(executionBranch)) return setMessage('Chọn cơ sở thực hiện ngay tại dòng này trước khi xác nhận.')
     if (manager && !selected.historyId && !executionDate) return setMessage('Chọn ngày thực hiện.')
     if (employees.isLoading || (manager && !employees.data)) return setMessage('Đang tải danh sách nhân viên. Vui lòng chờ trước khi xác nhận.')
@@ -81,16 +87,20 @@ export default function TodayTreatments() {
     <div className="surface-heading"><div><span className="eyebrow">KHÁCH LÀM DỊCH VỤ</span><h2>Khách hàng hôm nay</h2></div></div>
     <p className="small-muted">Thẻ tạo hôm nay hoặc có buổi thực hiện hôm nay. Tick để ghi nhận, bấm tên nhân viên để sửa, bỏ tick để hoàn tác.{!manager && ' Nhân viên chỉ được hoàn tác buổi có ngày thực hiện và ngày tạo đều là hôm nay, tại cơ sở của mình.'}</p>
     {message && !selected && <p role={messageType === 'error' ? 'alert' : 'status'} className={messageType === 'error' ? 'form-alert' : 'success-alert'}>{message}</p>}
-    {query.isError ? <p className="form-alert">Không tải được thẻ: {query.error.message}</p> : query.isLoading || cardDetails.some(d => d.isLoading) ? <p>Đang tải thẻ...</p> : cards.length ? <div className="table-scroll"><table><thead><tr><th>Khách hàng</th><th>Dịch vụ</th><th>Đã làm hôm nay</th><th>Nhân viên thực hiện</th><th>Chữ ký khách hàng</th></tr></thead><tbody>
-      {rows.slice((currentPage - 1) * 20, currentPage * 20).map(({ card, detail: cardQuery, history, multiple }) => {
+    {query.isError ? <p className="form-alert">Không tải được thẻ: {query.error.message}</p> : query.isLoading || cardDetails.some(d => d.isLoading) ? <p>Đang tải thẻ...</p> : rows.length ? <div className="table-scroll"><table><thead><tr><th>Khách hàng</th><th>Dịch vụ</th><th>Đã làm hôm nay</th><th>Nhân viên thực hiện</th><th>Chữ ký khách hàng</th></tr></thead><tbody>
+      {rows.slice((currentPage - 1) * 20, currentPage * 20).map(({ card, detail: cardQuery, history, multiple, group, child }) => {
+        if (group) {
+          const sessions = todayTreatmentRows([card], [{ data: card }], currentDay, branchId).filter(row => row.child && row.history).map(({ card, history }) => ({ card, history }))
+          return <tr key={`group-${card.id}`} className="today-treatment-group"><td data-label="Khách hàng"><strong>{card.customer_name}</strong></td><td colSpan={3}><div className="today-group-heading"><strong>{card.product_name}</strong><small>{card.children.length} dịch vụ</small></div></td><td data-label="Chữ ký khách hàng"><TreatmentGroupSignature card={card} sessions={sessions} user={user} /></td></tr>
+        }
         const active = selected?.card.id === card.id && selected.historyId === history?.id
         const canUndo = canUndoTreatmentExecution(user, history)
         const signed = Boolean(history?.customer_signature_svg || history?.customer_signed_at)
         const allowed = canFollowUpTreatmentHistory(user, history)
         const suffix = multiple ? ` · Buổi #${history.id}` : ''
-        return <Fragment key={`${card.id}-${history?.id || 'new'}`}><tr data-history-id={history?.id}><td data-label="Khách hàng">{card.customer_name}</td><td data-label="Dịch vụ">{card.product_name}{history && <small className="today-session-id">Buổi #{history.id}</small>}</td><td data-label="Đã làm hôm nay"><input type="checkbox" aria-label={`Đã làm ${card.customer_name} - ${card.product_name}${suffix}`} checked={Boolean(history) || (active && !selected.historyId)} disabled={(Boolean(history) && !canUndo) || cardQuery?.isLoading || cardQuery?.isError || (!history && Number(card.remaining_sessions) < 1) || mutation.isPending || undoMutation.isPending} onChange={e => e.target.checked ? pick(card, history) : canUndo && setUndo(history.id)} /></td><td data-label="Nhân viên thực hiện">
-          {cardQuery?.isError ? 'Không tải được lịch sử' : active ? 'Đang chọn nhân viên bên dưới' : history ? <button type="button" className="text-action" onClick={() => pick(card, history)} aria-label={`Sửa nhân viên ${card.customer_name} - ${card.product_name}${suffix}`}>{(history.staffs || []).map(s => s.staff_name || s.fullname).join(', ') || 'Chưa gán nhân viên · Bấm để sửa'}</button> : 'Chưa thực hiện'}
-        </td><td data-label="Chữ ký khách hàng">{cardQuery?.isError ? 'Không tải được lịch sử' : history ? <div className="today-session-signatures"><div className="today-signature-preview">{history.customer_signature_svg && <img src={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(history.customer_signature_svg)}`} alt={`Chữ ký buổi #${history.id}`} />}<small>{signed ? 'Đã ký' : 'Chưa ký'}{history.customer_signed_at ? ` · ${formatSpaDate(history.customer_signed_at, { timeStyle: 'short' })}` : ''}</small></div><button type="button" className="session-followup-button" aria-label={`${allowed ? 'Ghi chú và chữ ký' : 'Xem buổi'} #${history.id} - ${card.customer_name}`} onClick={() => setSessionEditor({ card, history })}><Pencil size={13} aria-hidden="true" />{allowed ? signed ? 'Sửa ghi chú / Xem' : 'Ghi chú / Ký' : 'Xem'}</button></div> : '—'}</td></tr>{active && <tr className="today-staff-row"><td colSpan={5}><div className="treatment-actions today-staff-actions">
+        return <Fragment key={`${card.id}-${history?.id || 'new'}`}><tr className={child ? 'today-treatment-child' : 'today-treatment-standalone'} data-history-id={history?.id}><td data-label="Khách hàng">{child ? null : card.customer_name}</td><td data-label="Dịch vụ"><span className={child ? 'today-child-service' : undefined}>{card.product_name}</span></td><td data-label="Đã làm hôm nay"><input type="checkbox" aria-label={`Đã làm ${card.customer_name} - ${card.product_name}${suffix}`} checked={Boolean(history) || (active && !selected.historyId)} disabled={(Boolean(history) && !canUndo) || cardQuery?.isLoading || cardQuery?.isError || (!history && !canExecuteCard(card)) || mutation.isPending || undoMutation.isPending} onChange={e => e.target.checked ? pick(card, history) : canUndo && setUndo(history.id)} /></td><td data-label="Nhân viên thực hiện">
+          {cardQuery?.isError ? 'Không tải được lịch sử' : active ? 'Đang chọn nhân viên bên dưới' : history ? <button type="button" className="text-action" onClick={() => pick(card, history)} aria-label={`Sửa nhân viên ${card.customer_name} - ${card.product_name}${suffix}`}>{staffSummary(history) || 'Chưa gán nhân viên · Bấm để sửa'}</button> : 'Chưa thực hiện'}
+        </td><td data-label="Chữ ký khách hàng">{child ? null : cardQuery?.isError ? 'Không tải được lịch sử' : history ? <div className="today-session-signatures"><div className="today-signature-preview">{history.customer_signature_svg && <img src={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(history.customer_signature_svg)}`} alt={`Chữ ký buổi #${history.id}`} />}<small>{signed ? 'Đã ký' : 'Chưa ký'}{history.customer_signed_at ? ` · ${formatSpaDate(history.customer_signed_at, { timeStyle: 'short' })}` : ''}</small></div><button type="button" className="session-followup-button" aria-label={`${allowed ? 'Ghi chú và chữ ký' : 'Xem buổi'} #${history.id} - ${card.customer_name}`} onClick={() => setSessionEditor({ card, history })}><Pencil size={13} aria-hidden="true" />{allowed ? signed ? 'Sửa ghi chú / Xem' : 'Ghi chú / Ký' : 'Xem'}</button></div> : '—'}</td></tr>{active && <tr className="today-staff-row"><td colSpan={5}><div className="treatment-actions today-staff-actions">
           {manager && !selected.historyId && <label className="field">Cơ sở thực hiện<MobileSelect aria-label="Cơ sở thực hiện" value={executionBranch} onChange={e => { setExecutionBranch(e.target.value); setStaffs([]); setMessage('') }}><option value="">Chọn cơ sở</option>{branches.data?.data?.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}</MobileSelect></label>}
           {manager && !selected.historyId && <label className="field">Ngày thực hiện<input type="date" required value={executionDate} onChange={e => setExecutionDate(e.target.value)} /></label>}
           <RoleStaffPicker selected={staffs} onChange={setStaffs} branchId={staffBranch || 'required'} /><button type="button" className="btn primary" disabled={mutation.isPending || !navigator.onLine} onClick={save}>{mutation.isPending ? 'Đang lưu...' : 'Xác nhận'}</button><button type="button" className="btn secondary" onClick={() => { setSelected(null); setMessage('') }}>Hủy</button>

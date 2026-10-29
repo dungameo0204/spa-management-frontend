@@ -1,5 +1,4 @@
 .session-dialog-layer{z-index:120}
-.session-dialog .signature-pad{display:block;width:100%;height:150px;box-sizing:border-box;background:white;border:1px dashed var(--sage);border-radius:8px;touch-action:none;cursor:crosshair;user-select:none}
 .session-dialog .session-signature .btn{margin-top:6px;font-size:12px;padding:7px 10px}
 .session-dialog{box-sizing:border-box;width:min(100%,600px);max-height:calc(100dvh - 40px);overflow-y:auto}
 .session-dialog .field{display:grid;gap:9px;margin-bottom:16px}

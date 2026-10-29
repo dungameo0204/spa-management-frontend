@@ -19,6 +19,12 @@ describe('ghi nhận dịch vụ bằng mapping response tạo hóa đơn', () =
     expect(getResource).not.toHaveBeenCalled()
   })
 
+  it('không thực hiện thẻ cha có dịch vụ con kể cả khi còn cờ làm ngay', async () => {
+    await recordInvoiceSessions(12, [{ ...line, serviceChildren: [{ product_id: 12, total_sessions: null }] }], 1, mappings)
+    expect(executeTreatment).not.toHaveBeenCalled()
+    expect(getResource).not.toHaveBeenCalled()
+  })
+
   it('dùng treatment_id và gán nhân viên bằng historyId', async () => {
     await recordInvoiceSessions(12, [{ ...line, performStaffs: [{ staff_id: 2 }] }], 1, mappings)
     expect(getResource).toHaveBeenCalledWith('treatments', 41)
@@ -71,5 +77,33 @@ describe('ghi nhận dịch vụ bằng mapping response tạo hóa đơn', () =
 
   it('giữ ID dòng bán khi chuyển API sang form', () => {
     expect(invoiceLineFromApi({ id: 31, product_id: 3, snapshot_name: 'Sẹo', snapshot_price: '900000', quantity: 3 })).toMatchObject({ invoice_item_id: 31, product_id: 3, unit_price: '900000', quantity: 3 })
+  })
+
+  it('thực hiện con lifetime theo ID thật, không thực hiện cha, gửi ghi chú/chữ ký và nhân viên cùng buổi', async () => {
+    const group = { ...line, sessionNote: ' Da đỏ ', sessionSignature: '<svg/>', serviceChildren: [{ product_id: 12, total_sessions: null, performNow: true, performStaffs: [{ staff_id: 2 }] }, { product_id: 15, total_sessions: 5, performNow: false }] }
+    getResource.mockResolvedValue({ id: 52, product_id: 12, parent_treatment_id: 41, remaining_sessions: null, histories: [] })
+    await recordInvoiceSessions(12, [group], 1, [{ ...mappings[0], children: [{ id: 53, product_id: 15 }, { id: 52, product_id: 12 }] }])
+    expect(executeTreatment).toHaveBeenCalledExactlyOnceWith({ treatment_id: 52, branch_id: 1, staffs: [{ staff_id: 2 }], note: 'Da đỏ', customer_signature_svg: '<svg/>' })
+    expect(assignTreatmentStaffs).not.toHaveBeenCalled()
+  })
+
+  it('hai gói cùng con dùng mapping theo dòng, không trộn ID', async () => {
+    const group = { ...line, serviceChildren: [{ product_id: 12, total_sessions: 5, performNow: true }] }
+    getResource.mockImplementation(async (_, id) => ({ id, parent_treatment_id: id === 52 ? 41 : 42, product_id: 12, remaining_sessions: 5, histories: [] }))
+    await recordInvoiceSessions(12, [group, group], 1, [{ request_index: 1, treatment_id: 42, children: [{ id: 62, product_id: 12 }] }, { ...mappings[0], children: [{ id: 52, product_id: 12 }] }])
+    expect(executeTreatment.mock.calls.map(([body]) => body.treatment_id)).toEqual([52, 62])
+  })
+
+  it.each([{ children: [] }, { children: [{ id: 52, product_id: 15 }] }, { children: [{ id: 52, product_id: 12 }, { id: 53, product_id: 12 }] }, { children: {} }])('không đoán mapping con khi thiếu hoặc trùng: %j', async ({ children }) => {
+    const group = { ...line, serviceChildren: [{ product_id: 12, performNow: true }] }
+    expect(await recordInvoiceSessions(12, [group], 1, [{ ...mappings[0], children }])).toHaveLength(1)
+    expect(executeTreatment).not.toHaveBeenCalled()
+  })
+
+  it('lỗi buổi con không retry, không thực hiện con tiếp theo', async () => {
+    getResource.mockResolvedValue({ product_id: 12, parent_treatment_id: 41, remaining_sessions: 5, histories: [] })
+    executeTreatment.mockRejectedValue(new Error('Mất mạng'))
+    await expect(recordInvoiceSessions(12, [{ ...line, serviceChildren: [{ product_id: 12, performNow: true }, { product_id: 15, performNow: true }] }], 1, [{ ...mappings[0], children: [{ id: 52, product_id: 12 }, { id: 53, product_id: 15 }] }])).rejects.toThrow('Kiểm tra lịch sử thẻ')
+    expect(executeTreatment).toHaveBeenCalledTimes(1)
   })
 })

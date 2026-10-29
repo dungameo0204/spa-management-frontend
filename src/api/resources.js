@@ -51,7 +51,10 @@ export const getProductRevenue = (range, page = 1, pageSize = 20) => request('/a
 export const getProductInvoices = (id, range, page = 1, pageSize = 20) => request(`/api/reports/products/${encodeURIComponent(id)}/invoices`, { query: { ...range, page, pageSize } }).then(r => normalizePagedResponse(r, page, pageSize))
 export const getAppointmentQueue = (kind, filters = {}, page = 1) => request(`/api/appointments/${kind}`, { query: { ...filters, page, pageSize: 20 } }).then(r => normalizePagedResponse(r, page))
 export const executeTreatment = body => request('/api/treatments/execute', { method: 'POST', body })
+export const closeTreatment = (id, body) => request(`/api/treatments/${encodeURIComponent(id)}/close`, { method: 'POST', body })
 export const assignTreatmentStaffs = (id, staffs) => request(`/api/treatments/execute/${id}/staffs`, { method: 'PUT', body: { staffs } })
 export const undoTreatmentExecution = id => request(`/api/treatments/execute/${id}`, { method: 'DELETE' })
 export const updateTreatmentHistoryNote = (id, note) => request(`/api/treatments/execute/${encodeURIComponent(id)}/note`, { method: 'PUT', body: { note } })
 export const signTreatmentHistory = (id, customer_signature_svg) => request(`/api/treatments/execute/${encodeURIComponent(id)}/sign`, { method: 'POST', body: { customer_signature_svg } })
+export const updateTreatmentGroupNote = (id, note) =>
+  request(`/api/treatments/${encodeURIComponent(id)}/note`, { method: 'PUT', body: { note } })

@@ -1,7 +1,7 @@
 import { formatSpaDate } from '../utils/format'
 import { canUndoTreatmentExecution } from '../auth/permissions'
 
-export default function TreatmentHistoryList({ histories, branches, user, onAssign, onUndo }) {
+export default function TreatmentHistoryList({ histories, branches, user, onAssign, onUndo, onFollowUp }) {
   if (!histories?.length) return <p className="muted">Chưa thực hiện buổi nào.</p>
 
   return histories.map(history => {
@@ -11,7 +11,11 @@ export default function TreatmentHistoryList({ histories, branches, user, onAssi
     return <div key={history.id} className="line-item">
       <strong>{formatSpaDate(history.execution_date)} · Cơ sở thực hiện: {branchName}</strong>
       <p>{history.staffs?.map(staff => staff.staff_name).join(', ') || 'Chưa gán nhân viên'}</p>
-      {canEdit && <div className="drawer-actions"><button className="btn secondary" onClick={() => onAssign(history)}>Gán nhân viên</button>{canUndoTreatmentExecution(user, history) && <button className="btn danger" onClick={() => onUndo(history.id)}>Hoàn tác</button>}</div>}
+      {history.note && <p className="session-note">Ghi chú: {history.note}</p>}
+      {history.customer_signature_svg && <img className="treatment-history-signature" src={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(history.customer_signature_svg)}`} alt="Chữ ký khách hàng xác nhận buổi thực hiện" />}
+      <p className="small-muted">{history.customer_signed_at ? `Đã ký: ${formatSpaDate(history.customer_signed_at, { timeStyle: 'short' })}` : history.customer_signature_svg ? 'Đã ký' : 'Chưa có chữ ký khách hàng'}</p>
+      {onFollowUp && <button className="session-followup-button" onClick={() => onFollowUp(history)}>Ghi chú / Chữ ký buổi #{history.id}</button>}
+      {canEdit && <div className="drawer-actions">{onAssign && <button className="btn secondary" onClick={() => onAssign(history)}>Gán nhân viên</button>}{onUndo && canUndoTreatmentExecution(user, history) && <button className="btn danger" onClick={() => onUndo(history.id)}>Hoàn tác</button>}</div>}
     </div>
   })
 }

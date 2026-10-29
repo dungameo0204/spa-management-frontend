@@ -1,0 +1,87 @@
+import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { afterEach, beforeEach, expect, it, vi } from 'vitest'
+import SignaturePad from './SignaturePad'
+
+beforeEach(() => {
+  vi.stubGlobal('PointerEvent', MouseEvent)
+  vi.spyOn(SVGElement.prototype, 'getBoundingClientRect').mockReturnValue({ left: 0, top: 0, width: 600, height: 360 })
+})
+afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals() })
+function draw() {
+  const pad = screen.getByRole('img', { name: 'Vùng ký tên khách hàng' })
+  fireEvent.pointerDown(pad, { button: 0, clientX: 10, clientY: 20 })
+  fireEvent.pointerMove(pad, { clientX: 100, clientY: 70 })
+  fireEvent.pointerUp(pad)
+}
+it('opens a separate dialog, keeps strokes local until confirmed and restores scroll styles', async () => {
+  const onChange = vi.fn(), actor = userEvent.setup()
+  document.body.style.overflow = 'auto'
+  const { container } = render(<SignaturePad onChange={onChange} customerName="Khách A" productName="Chăm sóc da" />)
+  expect(screen.queryByRole('img')).not.toBeInTheDocument()
+  await actor.click(screen.getByRole('button', { name: 'Khách hàng ký tên' }))
+  expect(container.inert).toBe(true)
+  expect(document.body.style.position).toBe('fixed')
+  expect(screen.getByText('Khách A · Chăm sóc da')).toBeInTheDocument()
+  expect(screen.getByRole('button', { name: 'Dùng chữ ký này' })).toBeDisabled()
+  draw()
+  expect(onChange).not.toHaveBeenCalled()
+  await actor.click(screen.getByRole('button', { name: 'Dùng chữ ký này' }))
+  expect(onChange).toHaveBeenCalledWith(expect.stringContaining('<path d="M 10.0 20.0 L 100.0 70.0"'))
+  expect(onChange).toHaveBeenCalledWith(expect.stringContaining('viewBox="2 12 106 66"'))
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  expect(container.inert).not.toBe(true)
+  expect(document.body.style.position).toBe('')
+  expect(document.body.style.overflow).toBe('auto')
+  expect(screen.getByRole('img', { name: 'Chữ ký nháp của khách hàng' })).toBeInTheDocument()
+  document.body.style.overflow = ''
+})
+it('canceling a replacement keeps the selected signature; clearing publishes null', async () => {
+  const onChange = vi.fn(), actor = userEvent.setup()
+  render(<SignaturePad onChange={onChange} />)
+  await actor.click(screen.getByRole('button', { name: 'Khách hàng ký tên' }))
+  draw()
+  await actor.click(screen.getByRole('button', { name: 'Dùng chữ ký này' }))
+  const original = screen.getByRole('img').getAttribute('src')
+  await actor.click(screen.getByRole('button', { name: 'Ký lại', exact: true }))
+  draw()
+  await actor.keyboard('{Escape}')
+  await actor.click(screen.getByRole('button', { name: 'Tiếp tục ký' }))
+  expect(screen.getByRole('button', { name: 'Dùng chữ ký này' })).toBeEnabled()
+  await actor.click(screen.getByRole('button', { name: 'Đóng vùng ký' }))
+  await actor.click(screen.getByRole('button', { name: 'Bỏ bản nháp' }))
+  expect(screen.getByRole('img').getAttribute('src')).toBe(original)
+  expect(onChange).toHaveBeenCalledTimes(1)
+  await actor.click(screen.getByRole('button', { name: 'Xóa chữ ký', exact: true }))
+  expect(onChange).toHaveBeenLastCalledWith(null)
+})
+it('clearing the drawing disables confirmation and allows closing without discard', async () => {
+  const onChange = vi.fn(), actor = userEvent.setup()
+  render(<SignaturePad onChange={onChange} />)
+  await actor.click(screen.getByRole('button', { name: 'Khách hàng ký tên' }))
+  draw()
+  await actor.click(screen.getByRole('button', { name: 'Xóa chữ ký / Ký lại' }))
+  expect(screen.getByRole('button', { name: 'Dùng chữ ký này' })).toBeDisabled()
+  await actor.click(screen.getByRole('button', { name: 'Đóng vùng ký' }))
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  expect(onChange).not.toHaveBeenCalled()
+})
+it('does not allow opening while disabled', () => {
+  render(<SignaturePad disabled onChange={vi.fn()} />)
+  expect(screen.getByRole('button', { name: 'Khách hàng ký tên' })).toBeDisabled()
+})
+it('crops all strokes with padding even at the edge, without changing their coordinates', async () => {
+  const onChange = vi.fn(), actor = userEvent.setup()
+  render(<SignaturePad onChange={onChange} />)
+  await actor.click(screen.getByRole('button', { name: 'Khách hàng ký tên' }))
+  draw()
+  const pad = screen.getByRole('img', { name: 'Vùng ký tên khách hàng' })
+  fireEvent.pointerDown(pad, { button: 0, clientX: 0, clientY: 0 })
+  fireEvent.pointerMove(pad, { clientX: 200, clientY: 0 })
+  fireEvent.pointerUp(pad)
+  await actor.click(screen.getByRole('button', { name: 'Dùng chữ ký này' }))
+  const svg = onChange.mock.calls[0][0]
+  expect(svg).toContain('viewBox="-8 -8 216 86"')
+  expect(svg).toContain('<path d="M 10.0 20.0 L 100.0 70.0"')
+  expect(svg).toContain('<path d="M 0.0 0.0 L 200.0 0.0"')
+})

@@ -56,7 +56,8 @@ for (const mobile of [false, true]) {
     await page.getByRole('button', { name: 'Ghi chú và chữ ký #78 - Khách Followup' }).click()
     dialog = page.getByRole('dialog', { name: 'Ghi chú và chữ ký' })
     await dialog.getByRole('textbox').fill('Ghi chú trước ký')
-    const pad = dialog.getByRole('img', { name: 'Vùng ký tên khách hàng' })
+    await dialog.getByRole('button', { name: 'Khách hàng ký tên' }).click()
+    const pad = page.getByRole('img', { name: 'Vùng ký tên khách hàng' })
     await pad.scrollIntoViewIfNeeded()
     const box = await pad.boundingBox()
     if (mobile) {
@@ -67,6 +68,7 @@ for (const mobile of [false, true]) {
       await page.mouse.move(box.x + 10, box.y + 20); await page.mouse.down()
       await page.mouse.move(box.x + 90, box.y + 65, { steps: 8 }); await page.mouse.up()
     }
+    await page.getByRole('button', { name: 'Dùng chữ ký này' }).click()
     await dialog.getByRole('button', { name: 'Lưu và ký xác nhận' }).click()
     await expect(dialog.getByRole('status')).toHaveText('Đã ký xác nhận buổi.')
     await expect(dialog.getByRole('img', { name: 'Chữ ký khách hàng xác nhận buổi thực hiện' })).toBeVisible()

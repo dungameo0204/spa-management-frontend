@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { discountPayload, invoiceConsultants, invoiceLineFromApi, invoiceTotal, lineTotal, pairedDiscount, paymentAmounts, paymentFromInput, priceLineForProduct, refreshLineDiscount, synchronizeInvoiceDiscount, syncInvoicePayment, validateConsultants } from './invoice'
+import { discountPayload, invoiceConsultants, invoiceLineFromApi, invoiceTotal, lineTotal, pairedDiscount, paymentAmounts, paymentFromInput, priceLineForProduct, refreshLineDiscount, synchronizeInvoiceDiscount, syncInvoicePayment, updateInvoiceLine, validateConsultants } from './invoice'
 import { appointmentDate, toSqlDateTime } from './format'
 
 describe('Ngày giờ gửi MySQL', () => {
@@ -13,6 +13,22 @@ describe('Ngày giờ gửi MySQL', () => {
 })
 
 describe('Chiết khấu và thanh toán', () => {
+  it('tính đơn giá theo số buổi hữu hạn, cập nhật giảm giá và tiền khách trả', () => {
+    let line = { quantity:1, unit_price:2000000, treatmentConfigured:true, treatmentTotalSessions:1, discount_mode:'percent', discount_percent:10 }
+    line = updateInvoiceLine(line, 'treatmentTotalSessions', '10')
+    expect(line).toMatchObject({ quantity:'10', discount_amount:2000000 })
+    expect(lineTotal(line)).toBe(18000000)
+    expect(invoiceTotal({ items:[line] })).toBe(18000000)
+    expect(discountPayload(line)).toEqual({ discount_percent:10, discount_amount:0 })
+    expect(paymentFromInput(invoiceTotal({ items:[line] }), 0, false).paid_amount).toBe(18000000)
+    expect(lineTotal(updateInvoiceLine(line, 'treatmentTotalSessions', '5'))).toBe(9000000)
+    const byAmount = updateInvoiceLine(line, 'discount_amount', 1000000)
+    expect(lineTotal(byAmount)).toBe(19000000)
+    expect(lineTotal(updateInvoiceLine(byAmount, 'treatmentTotalSessions', '5'))).toBe(9000000)
+    const sale = { ...line, discount_mode:'unit_amount', unit_discount:200000 }
+    expect(updateInvoiceLine(sale, 'treatmentTotalSessions', '10').discount_amount).toBe(2000000)
+    expect(lineTotal(updateInvoiceLine(line, 'treatmentTotalSessions', null))).toBe(1800000)
+  })
   it('mặc định dùng tối đa ví nhưng giữ đúng số tiền ví nhập thủ công, kể cả 0', () => {
     expect(paymentFromInput(1000000, 800000, true, undefined)).toEqual({ wallet_used: 800000, paid_amount: 200000, debt_amount: 0 })
     expect(paymentFromInput(1000000, 800000, true, undefined, '400000')).toEqual({ wallet_used: 400000, paid_amount: 600000, debt_amount: 0 })

@@ -1,0 +1,16 @@
+.treatment-root-panel { margin-top: 2px; min-width: 0; }
+.treatment-parent-heading { background: #eff8f4; border-left: 3px solid #72a68f; padding: 10px; gap: 8px; flex-wrap: wrap; }
+.treatment-parent-heading .text-action { white-space: normal; text-align: left; }
+.treatment-child-row { margin-left: 18px; padding: 8px 10px; border-top: 1px solid #e2ece6; display: flex; justify-content: space-between; gap: 12px; }
+.treatment-child-history { border-top: 1px solid #e2ece6; padding-top: 8px; }
+.treatment-closure { display: grid; gap: 6px; padding: 10px; }
+.treatment-closure img, .treatment-history-signature { display: block; max-width: 220px; max-height: 90px; object-fit: contain; }
+.treatment-root-panel fieldset { border: 0; padding: 0; min-width: 0; }
+.treatment-root-panel .treatment-execution-form { padding: 12px; }
+.treatment-child-execution { border-top: 1px solid #e2ece6; padding: 8px 0; }
+.treatment-root-panel .session-note { white-space: pre-wrap; overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+  .treatment-child-row { margin-left: 8px; flex-wrap: wrap; }
+  .treatment-parent-heading { display: flex; align-items: flex-start; }
+  .treatment-parent-heading > .text-action:first-child { flex-basis: 100%; }
+}

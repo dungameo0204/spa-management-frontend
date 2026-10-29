@@ -1,6 +1,6 @@
 import { test, expect } from './fixtures'
 
-for (const width of [1440, 390]) {
+for (const width of [1440, 390, 320, 768, 1024]) {
   test(`ghi chú, ký lại, cảnh báo bỏ ký và phục hồi lỗi ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 1000 })
     await page.addInitScript(() => localStorage.setItem('xuly.session', JSON.stringify({ token: 'test', user: { id: 1, branch_id: 1, system_role: 'STAFF' } })))
@@ -46,7 +46,16 @@ for (const width of [1440, 390]) {
     expect(writes).toHaveLength(0)
     await page.getByRole('button', { name: 'Quay lại ký' }).click()
     await expect(page.getByRole('textbox', { name: /Ghi chú buổi thực hiện/ })).toHaveValue('  Da nhạy cảm\nTheo dõi thêm  ')
+    await page.getByRole('button', { name: 'Khách hàng ký tên' }).click()
     const pad = page.getByRole('img', { name: 'Vùng ký tên khách hàng' })
+    const signing = page.getByRole('dialog', { name: 'Chữ ký khách hàng', exact: true })
+    await expect(signing.getByRole('button', { name: 'Dùng chữ ký này' })).toBeDisabled()
+    expect(await page.locator('body').evaluate(el => getComputedStyle(el).position)).toBe('fixed')
+    expect(await signing.evaluate(element => {
+      const rect = element.getBoundingClientRect(), pad = element.querySelector('svg').getBoundingClientRect()
+      return rect.left >= 0 && rect.right <= innerWidth && rect.top >= 0 && rect.bottom <= innerHeight && rect.width <= 520 && rect.height < 600 && element.scrollWidth <= element.clientWidth && pad.height >= 160 && pad.height <= 200
+    })).toBe(true)
+    await expect(signing.getByRole('button', { name: 'Dùng chữ ký này' })).toBeInViewport()
     const draw = async () => {
       await pad.scrollIntoViewIfNeeded()
       const box = await pad.boundingBox()
@@ -67,11 +76,36 @@ for (const width of [1440, 390]) {
     await expect(pad.locator('path')).toHaveCount(1)
     await page.getByRole('button', { name: 'Xóa chữ ký / Ký lại' }).click()
     await expect(pad.locator('path')).toHaveCount(0)
+    await page.getByRole('button', { name: 'Đóng vùng ký' }).click()
     await submit.click()
     await page.getByRole('button', { name: 'Ghi nhận không có chữ ký' }).click()
     await expect(page.getByRole('alert')).toContainText('Lỗi thử nghiệm')
     expect(writes[0]).toEqual({ treatment_id: 36, staffs: [], note: 'Da nhạy cảm\nTheo dõi thêm' })
+    await page.getByRole('button', { name: 'Khách hàng ký tên' }).click()
     await draw()
+    const originalPath = await pad.locator('path').getAttribute('d')
+    const originalViewBox = await pad.getAttribute('viewBox')
+    await page.setViewportSize({ width: 844, height: 390 })
+    await expect(pad.locator('path')).toHaveAttribute('d', originalPath)
+    await expect(pad).toHaveAttribute('viewBox', originalViewBox)
+    await expect(signing.getByRole('button', { name: 'Dùng chữ ký này' })).toBeInViewport()
+    await page.getByRole('button', { name: 'Dùng chữ ký này' }).click()
+    await expect(page.getByRole('button', { name: 'Ký lại', exact: true })).toBeFocused()
+    const preview = page.getByRole('img', { name: 'Chữ ký nháp của khách hàng' })
+    const originalSignature = await preview.getAttribute('src')
+    const savedViewBox = await preview.evaluate(element => {
+      const svg = new DOMParser().parseFromString(decodeURIComponent(element.src.split(',')[1]), 'image/svg+xml')
+      return svg.documentElement.getAttribute('viewBox').split(' ').map(Number)
+    })
+    expect(savedViewBox[2]).toBeLessThan(110)
+    expect(savedViewBox[3]).toBeLessThan(80)
+    await page.getByRole('button', { name: 'Ký lại', exact: true }).click()
+    await draw()
+    await page.keyboard.press('Escape')
+    await page.getByRole('button', { name: 'Bỏ bản nháp' }).click()
+    await expect(page.getByRole('button', { name: 'Ký lại', exact: true })).toBeFocused()
+    await expect(preview).toHaveAttribute('src', originalSignature)
+    await page.setViewportSize({ width, height: 1000 })
     fail = false
     await submit.click()
     await expect(page.getByText('Đã ghi nhận một buổi thực hiện.')).toBeVisible()
