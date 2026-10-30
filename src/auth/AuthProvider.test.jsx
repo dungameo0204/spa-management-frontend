@@ -97,3 +97,38 @@ it('khôi phục storage cũ khi chỉ có token và di chuyển sang localStora
   await waitFor(() => expect(sessionStorage.getItem('xuly.session')).toBeNull())
   expect(JSON.parse(localStorage.getItem('xuly.session')).token).toBe('legacy')
 })
+
+it('không xác minh khi không có phiên đã lưu', () => {
+  localStorage.clear()
+  setup()
+  expect(screen.getByText('Chưa đăng nhập')).toBeInTheDocument()
+  expect(fetch).not.toHaveBeenCalled()
+})
+
+it.each([null, { system_role: 'ADMIN' }])('chặn dữ liệu người dùng không hợp lệ và cho thử lại: %s', async invalidUser => {
+  fetch.mockResolvedValueOnce(response(200, { data: { user: invalidUser } })).mockResolvedValueOnce(valid())
+  setup()
+  expect(await screen.findByRole('alert')).toHaveTextContent('Thông tin phiên không hợp lệ')
+  expect(businessMounts).not.toHaveBeenCalled()
+  expect(localStorage.getItem('xuly.session')).not.toBeNull()
+  fireEvent.click(screen.getByRole('button', { name: 'Thử lại' }))
+  expect(await screen.findByText(user.fullname)).toBeInTheDocument()
+})
+
+it('thử lại chờ xác minh và không gửi yêu cầu trùng; logout bỏ qua response muộn', async () => {
+  let resolve
+  fetch.mockResolvedValueOnce(response(503, { message: 'Máy chủ tạm thời gián đoạn' }))
+    .mockImplementationOnce(() => new Promise(done => { resolve = done }))
+  setup()
+  await screen.findByRole('alert')
+  const retry = screen.getByRole('button', { name: 'Thử lại' })
+  act(() => { retry.click(); retry.click() })
+  expect(screen.getByRole('status')).toBeInTheDocument()
+  expect(fetch).toHaveBeenCalledTimes(2)
+  expect(businessMounts).not.toHaveBeenCalled()
+  fireEvent.click(screen.getByRole('button', { name: 'Đăng xuất' }))
+  await act(async () => resolve(valid()))
+  expect(screen.getByText('Chưa đăng nhập')).toBeInTheDocument()
+  expect(localStorage.getItem('xuly.session')).toBeNull()
+  expect(businessMounts).not.toHaveBeenCalled()
+})

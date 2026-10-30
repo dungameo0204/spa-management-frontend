@@ -1,9 +1,10 @@
 import { formatSpaDate } from './format'
 
 export const dailyRevenueMoneyColumns = [
-  { label: 'Doanh thu bán hàng', value: row => row.totalRevenue },
+  { label: 'Tổng doanh thu', value: row => row.totalRevenue },
   { label: 'Doanh thu dịch vụ', value: row => row.serviceRevenue },
   { label: 'Doanh thu sản phẩm', value: row => row.productRevenue },
+  { label: 'Doanh thu thu nợ cũ', value: row => row.legacyDebtRevenue },
   { label: 'Thu hóa đơn', value: row => row.receipts?.invoiceCash },
   { label: 'Thu nợ', value: row => row.receipts?.debtPayments },
   { label: 'Nạp ví', value: row => row.receipts?.walletTopups },

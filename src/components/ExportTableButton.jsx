@@ -7,7 +7,9 @@ export default function ExportTableButton({ options, filename, disabled, label =
     setError('')
     try {
       const { exportTable } = await import('../utils/exportTable')
-      await exportTable(options, filename)
+      const resolvedOptions = typeof options === 'function' ? await options() : options
+      if (!resolvedOptions.rows.length) throw new Error('Không có dữ liệu phù hợp để xuất.')
+      await exportTable(resolvedOptions, filename)
     } catch (err) { setError(`Không thể xuất Excel: ${err.message}`) }
     finally { setExporting(false) }
   }

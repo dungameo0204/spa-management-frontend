@@ -1,3 +1,5 @@
+.page-heading-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+@media(max-width:767px){.page-heading-actions{width:100%}.page-heading-actions .btn{flex:1 1 140px;width:auto}}
 /* Receipt printed outside drawers; page size is chosen at runtime by ReceiptPrint. */
 .receipt-print{display:none}
 @media print{
