@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MemoryRouter } from 'react-router-dom'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, expect, it, vi } from 'vitest'
 import ResourcePage from './ResourcePage'
@@ -46,6 +46,9 @@ it('exports all stock pages for only the selected branch', async () => {
 
 it('exports all loaded treatment cards rather than the visible customer page', async () => {
   show(<TreatmentsPage />)
+  const actions = screen.getByRole('group', { name: 'Thao tác liệu trình' })
+  expect(within(actions).getByRole('button', { name: 'Xuất Excel' })).toBeInTheDocument()
+  expect(within(actions).getByRole('button', { name: 'Tạo thẻ' })).toBeInTheDocument()
   await waitFor(() => expect(screen.getByRole('button', { name: 'Xuất Excel' })).toBeEnabled())
   await userEvent.click(screen.getByRole('button', { name: 'Xuất Excel' }))
   await waitFor(() => expect(exportTable).toHaveBeenCalledTimes(1))

@@ -10,7 +10,6 @@ export default function CustomerDebtSummary({ customer }) {
     <p>Tổng công nợ: <strong>{balance(customer?.total_debt)}</strong></p>
     <p>Nợ hóa đơn còn lại: <strong>{balance(customer?.invoice_debt)}</strong></p>
     <p>Nợ cũ không có hóa đơn còn lại: <strong>{balance(customer?.legacy_debt)}</strong></p>
-    <p className="helper-text">Công nợ toàn khách hàng, không phụ thuộc cơ sở hoặc bộ lọc ngày.</p>
     {customer?.invoice_debt != null && customer?.total_debt != null && Number(customer.invoice_debt) > Number(customer.total_debt) && <p role="alert" className="form-alert">Nợ hóa đơn đang lớn hơn tổng công nợ; cần đối soát dữ liệu.</p>}
   </div>
 }

@@ -41,6 +41,12 @@ it('mở chi tiết khách hàng hiển thị ghi chú nhiều dòng từ hồ s
   await userEvent.setup().click(await screen.findByRole('button', { name: 'Xem Lan' }))
   await screen.findByRole('region', { name: 'Ghi chú' })
   expectMultilineNote()
+  const dialog = screen.getByRole('dialog')
+  expect(within(dialog).getAllByText('Nợ:')).toHaveLength(1)
+  expect(dialog.querySelector('.customer-identity')).toHaveTextContent('Nợ: 0 ₫')
+  expect(within(dialog).queryByLabelText('Công nợ khách hàng')).not.toBeInTheDocument()
+  expect(within(dialog).queryByText('Nợ hóa đơn còn lại:')).not.toBeInTheDocument()
+  expect(within(dialog).queryByText('Nợ cũ không có hóa đơn còn lại:')).not.toBeInTheDocument()
 })
 
 it('mở chi tiết hóa đơn hiển thị ghi chú từ API chi tiết, giữ xuống dòng', async () => {

@@ -21,6 +21,18 @@ for (const resource of ['customers', 'products', 'inventory', 'treatments']) {
       return route.fulfill({ json: { data: [], total: 0, totalPages: 0 } })
     })
     await page.goto(`/${resource}`)
+    if (resource === 'treatments') {
+      const actions = page.getByRole('group', { name: 'Thao tác liệu trình' })
+      await expect(actions.getByRole('button', { name: 'Tạo thẻ' })).toBeVisible()
+      for (const width of [1440, 390]) {
+        await page.setViewportSize({ width, height: 900 })
+        const layout = await actions.evaluate(element => {
+          const buttons = [...element.querySelectorAll('button')].map(button => button.getBoundingClientRect())
+          return { sameRow: Math.abs(buttons[0].top - buttons[1].top) < 2, fits: buttons.every(box => box.left >= 0 && box.right <= innerWidth) }
+        })
+        expect(layout).toEqual({ sameRow: true, fits: true })
+      }
+    }
     const button = page.getByRole('button', { name: 'Xuất Excel', exact: true })
     await expect(button).toBeEnabled().catch(async error => { throw new Error(`${error.message}\nURL: ${page.url()}\nPage errors: ${pageErrors.join('; ')}\nBody: ${await page.locator('body').innerText()}`) })
     const downloadPromise = page.waitForEvent('download')
