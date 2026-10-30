@@ -19,6 +19,8 @@ test('lịch sử khách hiển thị một dòng dịch vụ kèm liệu trình
   })
   await page.goto('/customers')
   await page.getByText('Khách thử').first().click()
+  await expect(page.getByLabel('Công nợ khách hàng')).toHaveCount(0)
+  await expect(page.locator('.customer-identity')).toContainText('Nợ:')
   const timeline = page.locator('.customer-overview .timeline-row')
   await expect(timeline).toHaveCount(1)
   await expect(timeline.first()).toContainText('Hóa đơn #49')

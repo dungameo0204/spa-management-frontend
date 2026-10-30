@@ -18,7 +18,7 @@ function saveSession(session) {
 }
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(readSession)
-  const [status, setStatus] = useState(() => session ? 'authenticated' : 'anonymous')
+  const [status, setStatus] = useState(() => session ? 'checking' : 'anonymous')
   const [error, setError] = useState(null)
   const current = useRef(session), identity = useRef({}), pending = useRef(null), mounted = useRef(false)
   const queryClient = useQueryClient()
@@ -30,7 +30,7 @@ export function AuthProvider({ children }) {
   const restore = useCallback(() => {
     if (!current.current || pending.current) return pending.current
     const attempt = identity.current, saved = current.current
-    setError(null)
+    setError(null); setStatus('checking')
     const task = getSession().then(result => {
       if (!mounted.current || identity.current !== attempt) return
       if (!allowedUser(result?.data?.user)) throw new Error('Thông tin phiên không hợp lệ hoặc tài khoản không thuộc ứng dụng quản lý spa.')
@@ -43,6 +43,9 @@ export function AuthProvider({ children }) {
       } else if (err.status === 403 && ['TENANT_DISABLED', 'TENANT_EXPIRED'].includes(err.code)) {
         setError(err)
         setStatus('blocked')
+      } else {
+        setError(err)
+        setStatus('error')
       }
     }).finally(() => { if (pending.current === task) pending.current = null })
     pending.current = task
