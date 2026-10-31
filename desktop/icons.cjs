@@ -10,7 +10,7 @@ async function generateIcons() {
     ['icon-192.png', 192], ['icon-512.png', 512], ['apple-touch-icon.png', 180],
   ].map(async ([name, size]) => fs.writeFile(path.join(dir, name), await png(size))))
   // Keep the lotus inside the maskable icon's central safe area.
-  await sharp({ create: { width: 512, height: 512, channels: 4, background: '#123d35' } })
+  await sharp({ create: { width: 512, height: 512, channels: 4, background: '#ffffff' } })
     .composite([{ input: await png(400), left: 56, top: 56 }])
     .png().toFile(path.join(dir, 'icon-maskable-512.png'))
   const sizes = [16, 24, 32, 48, 64, 128, 256]
