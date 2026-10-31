@@ -1,0 +1,124 @@
+/* Phân trang hiện đại cao cấp toàn hệ thống */
+.app-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  border-top: 1px solid var(--line);
+  background: var(--white);
+  flex-wrap: wrap;
+}
+
+.app-pagination-info {
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.app-pagination-info strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.app-pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.app-page-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .18s ease;
+}
+
+.app-page-btn:hover:not(:disabled) {
+  background: var(--cream);
+  border-color: var(--sage);
+  color: var(--sage);
+}
+
+.app-page-btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  background: var(--white);
+  color: var(--muted);
+  border-color: var(--line);
+}
+
+.app-page-numbers {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.app-page-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .18s ease;
+}
+
+.app-page-num:hover:not(.is-active) {
+  background: var(--cream);
+  border-color: var(--sage);
+  color: var(--sage);
+}
+
+.app-page-num.is-active {
+  background: var(--sage);
+  border-color: var(--sage);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(49, 94, 80, 0.25);
+  cursor: default;
+}
+
+.app-page-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 34px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+@media (max-width: 600px) {
+  .app-pagination {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .app-pagination-controls {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
