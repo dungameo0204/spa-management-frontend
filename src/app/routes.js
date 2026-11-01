@@ -3,9 +3,10 @@ import { LayoutDashboard, CalendarDays, UsersRound, ShoppingBag, Package, Contac
 export const routes = [
   { path: '/', label: 'Tổng quan', icon: LayoutDashboard, group: 'main' },
   { path: '/customers', label: 'Khách hàng', icon: UsersRound, group: 'main' },
-  { path: '/appointments', label: 'Lịch hẹn', icon: CalendarDays, group: 'main' },
+  { path: '/customer-bookings', label: 'Khách đặt lịch', icon: CalendarDays, group: 'main', permission: 'bookings.manage' },
   { path: '/invoices', label: 'Bán hàng', icon: ShoppingBag, group: 'main' },
   { path: '/products', label: 'Sản phẩm & dịch vụ', icon: Package, group: 'operations', permission: 'products.view' },
+  { path: '/appointments', label: 'Lịch hẹn', icon: CalendarDays, group: 'operations' },
   { path: '/treatments', label: 'Liệu trình', icon: Sparkles, group: 'operations' },
   { path: '/imports', label: 'Nhập kho', icon: Boxes, group: 'operations' },
   { path: '/inventory', label: 'Tồn kho', icon: Package, group: 'operations', permission: 'inventory.manage' },

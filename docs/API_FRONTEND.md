@@ -1018,7 +1018,7 @@ Query tùy chọn: `search`, `branchId`, `customerId`, `productId`, `status`, `s
 - `branchId`: cả MANAGER và STAFF đều có thể lọc branch; bỏ qua thì xem toàn spa, không xem chéo tenant.
 - `customerId`, `productId`, `status`: lọc khớp chính xác.
 - `startDate`, `endDate`: lọc theo `arrival_date` dạng `YYYY-MM-DD`, bao gồm hai đầu. Thứ tự `arrival_date`, `arrival_time`, `created_at`, `id` tăng dần.
-- `startTime`, `endTime`: lọc giờ hẹn `arrival_time`, nhận HH:mm/HH:mm:ss, bao gồm hai đầu; có thể gửi một đầu. Ví dụ 07:00–08:00 áp dụng cho mỗi ngày trong khoảng lọc, loại giờ NULL. Sai định dạng hoặc đầu > cuối trả 400, không hỗ trợ qua đêm.
+- `startTime`, `endTime`: lọc giờ hẹn `arrival_time`, nhận HH:mm/HH:mm:ss, bao gồm hai đầu; có thể gửi một đầu. Ví dụ 07:00–08:00 áp dụng cho mỗi ngày trong khoảng lọc, vẫn bao gồm giờ NULL (backend cập nhật 2026-11-01). Frontend hiển thị theo ngày tăng dần, giờ tăng dần và giờ NULL cuối mỗi ngày; created_at/id tăng dần khi trùng lịch. Sai định dạng hoặc đầu > cuối trả 400, không hỗ trợ qua đêm.
 - `has_arrived`: boolean tính động ở list/detail, true nếu khách phát sinh hóa đơn hoặc thẻ liệu trình chưa xóa mềm từ 00:00 ngày tạo booking (`created_at`) đến hiện tại. Khách EXISTING ghép customer_id; NEW chưa có ID ghép số điện thoại trùng chính xác. Kiểm tra toàn spa, không dùng ngày hẹn; không tự đổi status hay thêm cột DB.
 - Kết quả trả thêm `branch_name`, `product_name`; nếu booking liên kết customer hệ thống thì có thêm `registered_customer_name`, `registered_customer_phone`.
 - Thành công `200`: `{ "message": "Lấy danh sách booking khách hàng thành công", "total": 1, "page": 1, "pageSize": 20, "totalPages": 1, "data": [ ... ] }`.

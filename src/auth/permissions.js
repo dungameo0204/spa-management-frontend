@@ -8,7 +8,7 @@ export const permissions = {
   'treatments.create': managers, 'staffs.manage': everyone, 'customers.manage': everyone,
   'appointments.manage': everyone, 'invoices.manage': everyone, 'inventory.manage': everyone,
   'expenses.manage': everyone, 'wallet.manage': everyone, 'debts.manage': everyone,
-  'treatments.execute': everyone, 'bookings.view': everyone, 'commissions.view': managers, 'consultants.view': managers,
+  'treatments.execute': everyone, 'bookings.view': everyone, 'bookings.manage': everyone, 'commissions.view': managers, 'consultants.view': managers,
 }
 export function canAccess(user, permission) { return Boolean(user && permissions[permission]?.includes(user.system_role)) }
 export function canFollowUpTreatmentHistory(user, history) {

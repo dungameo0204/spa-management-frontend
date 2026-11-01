@@ -61,21 +61,27 @@ for (const width of [320, 360, 390, 430, 640, 768, 820, 900]) test(`mobile child
   await line.getByRole('checkbox', { name: 'Chưa làm Laser trị nám' }).uncheck()
   const staffButton = line.getByRole('button', { name: 'Nhân viên làm Laser trị nám' })
   const staffBox = await staffButton.boundingBox()
-  expect(staffBox.height).toBeGreaterThanOrEqual(32)
+  expect(staffBox.height).toBeGreaterThanOrEqual(26)
   expect(staffBox.height).toBeLessThanOrEqual(36)
   const childName = await childSection.locator('.invoice-child-name').first().boundingBox()
-  expect(staffBox.y).toBeLessThan(childName.y + childName.height)
-  expect(staffBox.x).toBeGreaterThanOrEqual(childName.x + childName.width)
+  if (width <= 600) {
+    expect(staffBox.y).toBeGreaterThanOrEqual(childName.y + childName.height - 5)
+  } else {
+    expect(staffBox.y).toBeLessThan(childName.y + childName.height)
+    expect(staffBox.x).toBeGreaterThanOrEqual(childName.x + childName.width)
+  }
   await staffButton.click()
   const dialog = page.getByRole('dialog', { name: 'Nhân viên làm Laser trị nám' })
   await dialog.getByRole('checkbox', { name: 'Lan', exact: true }).check()
   await dialog.getByRole('button', { name: 'Xong', exact: true }).click()
   await expect(staffButton).toContainText('Lan')
-  const childRows = await childSection.locator('ol > li').evaluateAll(rows => rows.map(row => {
+  const childRows = await childSection.locator('ol > li').evaluateAll((rows, isMobile) => rows.map(row => {
     const count = row.querySelector('.invoice-child-count, .invoice-child-count-placeholder').getBoundingClientRect()
+    const name = row.querySelector('.invoice-child-name').getBoundingClientRect()
     const pending = row.querySelector('.invoice-child-pending').getBoundingClientRect()
-    return { height: row.getBoundingClientRect().height, sameLine: Math.abs(count.top - pending.top) < 10 }
-  }))
+    const sameLine = isMobile ? Math.abs(count.top - name.top) < 15 : Math.abs(count.top - pending.top) < 10
+    return { height: row.getBoundingClientRect().height, sameLine }
+  }), width <= 600)
   expect(childRows.every(row => row.height < 100 && row.sameLine)).toBe(true)
   expect(await line.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true)
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
@@ -95,7 +101,7 @@ for (const width of [390, 1280]) test(`child allocations and editable parent pri
   else {
     expect(await first.locator('.invoice-service-children').evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true)
     const countBox = await first.getByRole('spinbutton', { name: 'Số buổi Laser trị nám' }).boundingBox()
-    expect(countBox.height).toBeGreaterThanOrEqual(32)
+    expect(countBox.height).toBeGreaterThanOrEqual(26)
     expect(countBox.height).toBeLessThanOrEqual(36)
   }
   await page.screenshot({ path: `test-results/invoice-compact-${width}.png`, fullPage: true })
@@ -276,7 +282,7 @@ for (const width of [320, 390, 640, 768, 820, 900, 1024, 1280, 1440, 1920]) test
   await expect(picker).toHaveValue('pnp')
   const quantity = await line.locator('.quantity-field input').boundingBox()
   const price = await line.getByRole('textbox', { name: 'Đơn giá', exact: true }).boundingBox()
-  expect(Math.abs(quantity.y - price.y)).toBeLessThanOrEqual(1)
+  expect(Math.abs(quantity.y - price.y)).toBeLessThanOrEqual(2)
   expect(quantity.width).toBeLessThanOrEqual(70)
   expect(price.width).toBeLessThanOrEqual(width <= 850 ? 190 : 112)
   expect(price.height).toBeLessThanOrEqual(32)

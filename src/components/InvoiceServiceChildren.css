@@ -57,9 +57,8 @@
   .invoice-staff-role { grid-template-columns:auto 1fr; align-items:center; }
   .invoice-staff-role select { width:100%; }
   .invoice-staff-options { grid-template-columns:1fr; }
-  .invoice-drawer .invoice-service-children { margin-left:0; overflow-x:auto; }
-  .invoice-drawer .invoice-service-children ol { min-width:550px; }
-  .invoice-drawer .invoice-service-children li { grid-template-columns:minmax(95px,1fr) 72px 48px 76px minmax(220px,1.5fr); gap:5px; }
-  .invoice-drawer .invoice-service-children .invoice-child-count { width:48px; }
+  .invoice-drawer .invoice-service-children { margin-left:0; width:100%; min-width:0; }
+  .invoice-drawer .invoice-service-children ol { width:100%; min-width:0; }
+  .invoice-drawer .invoice-service-children .invoice-child-count { font-size:12px; width:44px; height:28px; min-height:28px; }
   .invoice-drawer .invoice-item-actions .invoice-session-actions { margin:0; }
 }
