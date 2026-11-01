@@ -37,8 +37,10 @@ it.each([
 })
 
 it('sinh mốc giờ 30 phút và đặt khung lọc mặc định theo ca làm việc', () => {
-  expect(arrivalTimeSlots).toHaveLength(48)
-  expect(arrivalTimeSlots).toEqual(expect.arrayContaining(['00:00', '06:30', '23:30']))
+  expect(arrivalTimeSlots).toHaveLength(34)
+  expect(arrivalTimeSlots[0]).toBe('07:00')
+  expect(arrivalTimeSlots).toEqual(expect.arrayContaining(['07:30', '23:30']))
+  expect(arrivalTimeSlots).not.toContain('06:30')
   expect(defaultBookingFilters(new Date('2026-11-01T00:00:00+07:00'))).toMatchObject({ startDate: '2026-11-01', endDate: '2026-11-01', startTime: '', endTime: '' })
   expect(defaultBookingFilters(new Date('2026-11-01T07:29:00+07:00'))).toMatchObject({ startDate: '2026-11-01', endDate: '2026-11-01', startTime: '', endTime: '' })
   expect(defaultBookingFilters(new Date('2026-11-01T07:30:00+07:00'))).toMatchObject({ startDate: '2026-11-01', endDate: '2026-11-01', startTime: '07:30', endTime: '09:30' })

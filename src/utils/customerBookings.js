@@ -1,7 +1,7 @@
 import { dateOnly, SPA_TIME_ZONE } from './format'
 
-export const arrivalTimeSlots = Array.from({ length: 48 }, (_, index) => {
-  const hour = String(Math.floor(index / 2)).padStart(2, '0')
+export const arrivalTimeSlots = Array.from({ length: 34 }, (_, index) => {
+  const hour = String(7 + Math.floor(index / 2)).padStart(2, '0')
   return `${hour}:${index % 2 ? '30' : '00'}`
 })
 

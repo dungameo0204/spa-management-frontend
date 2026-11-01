@@ -112,6 +112,18 @@ it('sửa lịch, giữ status backend và lưu giá trị tư vấn nguyên VND
   await waitFor(() => expect(updateCustomerBooking).toHaveBeenCalledWith(7, expect.objectContaining({ status: 'CUSTOM_STATUS', consultation_total: '123' })))
 })
 
+it('giữ giờ hẹn đã lưu trước 07:00 khi sửa lịch cũ', async () => {
+  getCustomerBooking.mockResolvedValue({ ...row, arrival_time: '06:30:00' })
+  const user = userEvent.setup(); mount()
+  await user.click(await screen.findByRole('button', { name: 'Sửa lịch Lan' }))
+  const time = screen.getByLabelText('Giờ đến (không bắt buộc)', { selector: 'select' })
+  expect(time).toHaveValue('06:30')
+  expect(time.options[1]).toHaveTextContent('06:30 (giờ đã lưu)')
+  expect(time.options[2]).toHaveTextContent('07:00')
+  await user.click(screen.getByRole('button', { name: 'Lưu lịch đặt' }))
+  await waitFor(() => expect(updateCustomerBooking).toHaveBeenCalledWith(7, expect.objectContaining({ arrival_time: '06:30' })))
+})
+
 it('xóa có xác nhận, lỗi API cho thử lại', async () => {
   deleteCustomerBooking.mockRejectedValueOnce(new Error('Không thể xóa'))
   const user = userEvent.setup(); mount()

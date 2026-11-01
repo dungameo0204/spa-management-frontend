@@ -58,7 +58,7 @@ for (const width of [390, 768, 1024, 1440]) {
     await expect(page.getByRole('button', { name: 'Xóa bộ lọc' })).toBeVisible()
     expect((await page.locator('.booking-filter-reset').boundingBox()).y).toBeGreaterThan((await filterGrid.boundingBox()).y)
     const heading = page.getByLabel('Tiêu đề cột lịch đặt').first()
-    if (width >= 1200) {
+    if (width >= 900) {
       await expect(heading).toBeVisible()
       const columns = await page.evaluate(() => {
         const head = document.querySelector('.booking-table-heading')
@@ -68,8 +68,21 @@ for (const width of [390, 768, 1024, 1440]) {
       expect(columns[0]).toBe(columns[1])
       const time = await cards.nth(2).locator('.booking-card-time').boundingBox()
       const customer = await cards.nth(2).locator('.booking-card-main').boundingBox()
-      expect(customer.x - (time.x + time.width)).toBeGreaterThanOrEqual(12)
+      expect(customer.x - (time.x + time.width)).toBeGreaterThanOrEqual(width >= 1200 ? 12 : 8)
+      if (width < 1200) {
+        const notes = await cards.nth(1).locator('.booking-card-notes').boundingBox()
+        const service = await cards.nth(1).locator('.booking-card-service').boundingBox()
+        const arrival = await cards.nth(1).locator('.booking-arrival').boundingBox()
+        expect(notes.x).toBeGreaterThan(service.x + service.width)
+        expect(Math.abs(arrival.x - service.x)).toBeLessThan(2)
+        const pickerBox = await page.locator('.booking-filter-grid .picker').boundingBox()
+        const dateBox = await page.locator('.booking-date-field').first().boundingBox()
+        expect(pickerBox.y).toBeLessThan(dateBox.y)
+        expect(pickerBox.width).toBeLessThan((await filterGrid.boundingBox()).width * .6)
+      }
     } else await expect(heading).toBeHidden()
+    const startOptions = await page.locator('.booking-time-field', { hasText: 'Từ giờ' }).locator('select option').allTextContents()
+    expect(startOptions.slice(0, 3)).toEqual(['Tất cả giờ', '07:00', '07:30'])
     const filterPicker = page.getByRole('form', { name: 'Lọc lịch đặt' }).getByRole('combobox', { name: 'Tìm dịch vụ quan tâm' })
     await filterPicker.click()
     const filterOptions = page.getByRole('form', { name: 'Lọc lịch đặt' }).getByRole('listbox')
@@ -97,6 +110,14 @@ for (const width of [390, 768, 1024, 1440]) {
     await page.getByRole('combobox', { name: 'Tìm khách hàng đã đăng ký' }).fill('Hoa')
     await page.getByRole('option', { name: /Hoa đã đăng ký/ }).click()
     const dialog = page.getByRole('dialog')
+    const consultationFonts = await dialog.locator('.booking-soft-field textarea').evaluateAll(elements => elements.map(element => ({
+      actual: getComputedStyle(element).fontFamily,
+      expected: getComputedStyle(element.closest('form').querySelector('input')).fontFamily,
+    })))
+    expect(consultationFonts).toHaveLength(2)
+    for (const { actual, expected } of consultationFonts) expect(actual).toBe(expected)
+    const formOptions = await dialog.locator('.booking-time-field select option').allTextContents()
+    expect(formOptions.slice(0, 3)).toEqual(['Chưa chọn giờ', '07:00', '07:30'])
     await dialog.getByRole('combobox', { name: 'Tìm dịch vụ quan tâm' }).fill('da')
     await page.getByRole('option', { name: 'Chăm sóc da' }).click()
     if (width < 768) await dialog.getByLabel('Giờ đến (không bắt buộc)').and(page.locator('select')).selectOption('09:00')
