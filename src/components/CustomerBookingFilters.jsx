@@ -10,7 +10,7 @@ export function shiftBookingDay(day, offset) {
   return date.toISOString().slice(0, 10)
 }
 
-export default function CustomerBookingFilters({ value, onChange, branchId, onBranchChange, branches, manager, productLabel, onProductLabel }) {
+export default function CustomerBookingFilters({ value, onChange, productLabel, onProductLabel }) {
   const set = (key, next) => onChange({ ...value, [key]: next })
   const error = validateBookingFilters(value)
   function quickDay(offset, span = 0) {
@@ -26,7 +26,6 @@ export default function CustomerBookingFilters({ value, onChange, branchId, onBr
       <label className="field booking-date-field"><span>Đến ngày</span><input type="date" value={value.endDate} onChange={event => set('endDate', event.target.value)} /></label>
       <label className="field booking-time-field"><span>Từ giờ</span><MobileSelect aria-label="Từ giờ" value={value.startTime} onChange={event => set('startTime', event.target.value)}><option value="">Tất cả giờ</option>{arrivalTimeSlots.map(time => <option key={time} value={time}>{time}</option>)}</MobileSelect></label>
       <label className="field booking-time-field"><span>Đến giờ</span><MobileSelect aria-label="Đến giờ" value={value.endTime} onChange={event => set('endTime', event.target.value)}><option value="">Tất cả giờ</option>{[...arrivalTimeSlots, '23:59'].map(time => <option key={time} value={time}>{time}</option>)}</MobileSelect></label>
-      {manager && <label className="field booking-branch-field"><span>Chi nhánh lọc</span><select value={branchId || ''} onChange={event => onBranchChange(event.target.value)}><option value="">Tất cả chi nhánh</option>{branches.map(branch => <option key={branch.id} value={branch.id}>{branch.name}</option>)}</select></label>}
       <SearchPicker resource="products" label="Dịch vụ quan tâm" value={value.productId} initialLabel={productLabel} emptyOptionLabel="Tất cả dịch vụ" onChange={item => { set('productId', item?.id || ''); onProductLabel(item?.name || '') }} />
     </div>
     <div className="booking-filter-reset"><button type="button" className="btn secondary" onClick={() => { onChange(emptyBookingFilters()); onProductLabel('') }}>Xóa bộ lọc</button></div>

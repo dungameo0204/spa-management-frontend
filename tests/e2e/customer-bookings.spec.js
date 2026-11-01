@@ -140,3 +140,76 @@ for (const width of [390, 768, 1024, 1440]) {
     await expect.poll(() => deleted).toBe(true)
   })
 }
+
+for (const width of [390, 768, 820, 1024, 1440]) {
+  test(`quản lý lọc chi nhánh trên thanh trên cùng và chọn chi nhánh khi tạo lịch (${width}px)`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 1024 })
+    await page.addInitScript(() => localStorage.setItem('xuly.session', JSON.stringify({ token: 'test-token', user: { id: 2, fullname: 'Quản lý', system_role: 'MANAGER' } })))
+    const requests = []
+    await page.route('**/api/**', route => {
+      const url = new URL(route.request().url())
+      if (!url.pathname.startsWith('/api/')) return route.continue()
+      if (url.pathname === '/api/branches') return route.fulfill({ json: { data: [{ id: 1, name: 'Cơ sở Rosa' }, { id: 2, name: 'Cơ sở Sen' }], totalPages: 1 } })
+      if (url.pathname === '/api/customer-bookings') {
+        requests.push(url.searchParams.get('branchId'))
+        const branch = url.searchParams.get('branchId')
+        const row = { id: branch === '2' ? 2 : 1, branch_id: branch === '2' ? 2 : 1, branch_name: branch === '2' ? 'Cơ sở Sen' : 'Cơ sở Rosa', customer_name: branch === '2' ? 'Khách Sen' : 'Khách Rosa', customer_type: 'NEW', arrival_date: '2026-11-01', arrival_time: '08:00:00', promotion_note: 'Ưu đãi mới', note: 'Gọi trước khi đến' }
+        return route.fulfill({ json: { data: [row], totalPages: 1 } })
+      }
+      return route.fulfill({ json: { data: [], totalPages: 1 } })
+    })
+    await page.goto('/customer-bookings')
+    await expect(page.getByRole('heading', { name: 'Khách đặt lịch', exact: true })).toBeVisible()
+    const picker = page.getByRole('button', { name: 'Chọn chi nhánh' })
+    await expect(picker).toBeVisible()
+    await expect(page.getByLabel('Chi nhánh lọc')).toHaveCount(0)
+    await expect(page.getByRole('button', { name: 'Xem lịch Khách Rosa' })).toBeVisible()
+    expect(requests[0]).toBe(null)
+    await picker.click()
+    await page.locator('.branch-picker-options').getByRole('button', { name: 'Cơ sở Sen' }).click()
+    await expect(page.getByRole('button', { name: 'Xem lịch Khách Sen' })).toBeVisible()
+    await expect.poll(() => requests.at(-1)).toBe('2')
+    await picker.click()
+    await page.locator('.branch-picker-options').getByRole('button', { name: 'Tất cả chi nhánh' }).click()
+    await expect(page.getByRole('button', { name: 'Xem lịch Khách Rosa' })).toBeVisible()
+    await expect.poll(() => page.evaluate(() => sessionStorage.getItem('xuly.branch'))).toBe('')
+
+    if (width >= 768 && width <= 899) {
+      const positions = await page.locator('.booking-filter-grid').evaluate(grid => [...grid.children].map(element => ({ label: element.textContent.trim(), top: Math.round(element.getBoundingClientRect().bottom), left: Math.round(element.getBoundingClientRect().left) })))
+      const [search, startDate, endDate, startTime, endTime, service] = positions
+      expect(search.top).toBe(service.top)
+      expect(search.left).toBeLessThan(service.left)
+      expect(startDate.top).toBe(endDate.top)
+      expect(startDate.top).toBe(startTime.top)
+      expect(startDate.top).toBe(endTime.top)
+      expect(startDate.top).toBeGreaterThan(search.top)
+      expect(startDate.left).toBeLessThan(endDate.left)
+      expect(endDate.left).toBeLessThan(startTime.left)
+      expect(startTime.left).toBeLessThan(endTime.left)
+      const card = page.locator('.booking-card').first()
+      const cardColumns = await card.evaluate(element => ({ main: element.querySelector('.booking-card-main').getBoundingClientRect().top, service: element.querySelector('.booking-card-service').getBoundingClientRect().top, notes: element.querySelector('.booking-card-notes').getBoundingClientRect().top }))
+      expect(Math.abs(cardColumns.main - cardColumns.service)).toBeLessThan(2)
+      expect(cardColumns.notes).toBeGreaterThan(cardColumns.main)
+    }
+
+    await page.getByRole('button', { name: 'Tạo lịch đặt', exact: true }).click()
+    const dialog = page.getByRole('dialog')
+    const branch = dialog.getByLabel('Chi nhánh tiếp nhận')
+    await expect(branch).toBeVisible()
+    await expect(branch).toHaveValue('')
+    await expect(branch.locator('option')).toHaveCount(3)
+    const fields = await dialog.locator('.booking-form-branch-service').evaluate(element => {
+      const branch = element.querySelector('.field').getBoundingClientRect()
+      const service = element.querySelector('.picker').getBoundingClientRect()
+      return { branchTop: branch.top, serviceTop: service.top, branchWidth: branch.width, serviceWidth: service.width }
+    })
+    if (width >= 768) {
+      expect(Math.abs(fields.branchTop - fields.serviceTop)).toBeLessThan(3)
+      expect(fields.serviceWidth / fields.branchWidth).toBeGreaterThan(1.8)
+      expect(fields.serviceWidth / fields.branchWidth).toBeLessThan(2.2)
+    } else expect(fields.serviceTop).toBeGreaterThan(fields.branchTop)
+    await branch.selectOption('2')
+    await expect(branch).toHaveValue('2')
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
+  })
+}

@@ -5,15 +5,15 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import CustomerBookingsPage from './CustomerBookingsPage'
 import { createCustomerBooking, deleteCustomerBooking, getCustomerBooking, listCustomerBookings, updateCustomerBooking } from '../api/customerBookings'
 
-const actor = vi.hoisted(() => ({ user: { system_role: 'STAFF', branch_id: 1 } }))
+const actor = vi.hoisted(() => ({ user: { system_role: 'STAFF', branch_id: 1 }, branchId: 1 }))
 vi.mock('../auth/AuthProvider', () => ({ useAuth: () => ({ user: actor.user }) }))
-vi.mock('../components/AppShell', () => ({ useBranch: () => ({ branchId: 1 }) }))
+vi.mock('../components/AppShell', () => ({ useBranch: () => ({ branchId: actor.branchId }) }))
 vi.mock('../api/customerBookings', () => ({ listCustomerBookings: vi.fn(), getCustomerBooking: vi.fn(), createCustomerBooking: vi.fn(), updateCustomerBooking: vi.fn(), deleteCustomerBooking: vi.fn() }))
 vi.mock('../api/resources', () => ({ listResource: vi.fn(async resource => ({ data: resource === 'products' ? [{ id: 9, name: 'Chăm sóc da' }] : [{ id: 1, name: 'Cơ sở 1' }], totalPages: 1 })) }))
 const row = { id: 7, branch_id: 1, customer_type: 'NEW', customer_name: 'Lan', customer_phone: '0901234567', arrival_date: '2026-11-01', arrival_time: null, status: 'PENDING' }
 function mount() { return render(<QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } })}><CustomerBookingsPage /></QueryClientProvider>) }
 beforeEach(() => {
-  vi.clearAllMocks(); actor.user = { system_role: 'STAFF', branch_id: 1 }
+  vi.clearAllMocks(); actor.user = { system_role: 'STAFF', branch_id: 1 }; actor.branchId = 1
   listCustomerBookings.mockResolvedValue([row]); getCustomerBooking.mockResolvedValue(row)
   createCustomerBooking.mockResolvedValue({}); updateCustomerBooking.mockResolvedValue({}); deleteCustomerBooking.mockResolvedValue({})
 })
@@ -134,10 +134,15 @@ it('xóa có xác nhận, lỗi API cho thử lại', async () => {
   await waitFor(() => expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument())
 })
 
-it('MANAGER chọn chi nhánh khi tạo và thấy filter chi nhánh', async () => {
+it('MANAGER lọc theo chi nhánh trên cùng nhưng vẫn chọn chi nhánh tiếp nhận khi tạo lịch', async () => {
   actor.user = { system_role: 'MANAGER' }
-  const user = userEvent.setup(); mount()
-  expect(screen.getByLabelText('Chi nhánh lọc')).toBeInTheDocument()
+  const user = userEvent.setup(); const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+  const view = render(<QueryClientProvider client={client}><CustomerBookingsPage /></QueryClientProvider>)
+  expect(screen.queryByLabelText('Chi nhánh lọc')).not.toBeInTheDocument()
+  await waitFor(() => expect(listCustomerBookings).toHaveBeenCalledWith(expect.objectContaining({ branchId: 1 }), expect.anything()))
+  actor.branchId = null; view.rerender(<QueryClientProvider client={client}><CustomerBookingsPage /></QueryClientProvider>)
+  await waitFor(() => expect(listCustomerBookings).toHaveBeenCalledWith(expect.objectContaining({ branchId: null }), expect.anything()))
   await user.click(screen.getByRole('button', { name: 'Tạo lịch đặt' }))
-  expect(await screen.findByLabelText('Chi nhánh tiếp nhận')).toHaveValue('1')
+  expect(await screen.findByLabelText('Chi nhánh tiếp nhận')).toHaveValue('')
+  expect(screen.getByLabelText('Chi nhánh tiếp nhận').closest('.booking-form-branch-service')).toContainElement(within(screen.getByRole('dialog')).getByRole('combobox', { name: 'Tìm dịch vụ quan tâm' }))
 })

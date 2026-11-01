@@ -4,7 +4,6 @@ import { CalendarDays, Plus, ChevronLeft, ChevronRight, RefreshCw } from 'lucide
 import { useAuth } from '../auth/AuthProvider'
 import { useBranch } from '../components/AppShell'
 import { canAccess } from '../auth/permissions'
-import { listResource } from '../api/resources'
 import { listCustomerBookings, getCustomerBooking, createCustomerBooking, updateCustomerBooking, deleteCustomerBooking } from '../api/customerBookings'
 import CustomerBookingFilters, { shiftBookingDay } from '../components/CustomerBookingFilters'
 import CustomerBookingCard from '../components/CustomerBookingCard'
@@ -22,17 +21,14 @@ export default function CustomerBookingsPage() {
   const { user } = useAuth(), { branchId } = useBranch(), client = useQueryClient()
   const manager = user.system_role === 'MANAGER'
   const [filters, setFilters] = useState(defaultBookingFilters), [debouncedSearch, setDebouncedSearch] = useState(filters.search), [productLabel, setProductLabel] = useState('')
-  const [branchOverride, setBranchOverride] = useState({ context: branchId, value: branchId || '' })
-  const filterBranch = branchOverride.context === branchId ? branchOverride.value : branchId || ''
   const [paging, setPaging] = useState({ key: '', page: 1 })
   const [drawer, setDrawer] = useState(null), [removing, setRemoving] = useState(null), [message, setMessage] = useState('')
   useEffect(() => { const timeout = setTimeout(() => setDebouncedSearch(filters.search), 300); return () => clearTimeout(timeout) }, [filters.search])
   const queryFilters = { ...filters, search: debouncedSearch }
   const filterError = validateBookingFilters(filters)
-  const key = JSON.stringify([queryFilters, filterBranch])
+  const key = JSON.stringify([queryFilters, branchId])
   const page = paging.key === key ? paging.page : 1
-  const query = useQuery({ queryKey: ['customer-bookings', queryFilters, filterBranch], queryFn: ({ signal }) => listCustomerBookings({ ...queryFilters, branchId: filterBranch }, signal), enabled: !filterError })
-  const branches = useQuery({ queryKey: ['branches', 'booking-filter'], queryFn: ({ signal }) => listResource('branches', {}, 1, 100, signal), enabled: manager })
+  const query = useQuery({ queryKey: ['customer-bookings', queryFilters, branchId], queryFn: ({ signal }) => listCustomerBookings({ ...queryFilters, branchId }, signal), enabled: !filterError })
   const detail = useQuery({ queryKey: ['customer-booking', drawer?.id], queryFn: ({ signal }) => getCustomerBooking(drawer.id, signal), enabled: Boolean(drawer?.id), staleTime: 0 })
   const writable = booking => canAccess(user, 'bookings.manage') && (manager || Number(booking.branch_id) === Number(user.branch_id))
   const mutation = useMutation({
@@ -55,8 +51,7 @@ export default function CustomerBookingsPage() {
   const selected = detail.data
   return <div className="page customer-bookings">
     <div className="page-heading booking-page-heading"><h1>Khách đặt lịch</h1><button className="btn primary" onClick={() => open('create')}><Plus size={18} />Tạo lịch đặt</button></div>
-    <CustomerBookingFilters value={filters} onChange={changeFilters} manager={manager} branches={branches.data?.data || []} branchId={filterBranch} onBranchChange={value => { setBranchOverride({ context: branchId, value }); setPaging({ key: '', page: 1 }) }} productLabel={productLabel} onProductLabel={setProductLabel} />
-    {branches.isError && <p role="alert" className="form-alert">Không tải được chi nhánh. <button onClick={() => branches.refetch()}>Thử lại</button></p>}
+    <CustomerBookingFilters value={filters} onChange={changeFilters} productLabel={productLabel} onProductLabel={setProductLabel} />
     {message && <p role="status" className="success-alert">{message}</p>}
     <section className="booking-agenda" aria-label="Danh sách lịch đặt" aria-busy={query.isFetching}>
       <header className="booking-agenda-header"><div><CalendarDays size={21} /><strong>{filters.startDate && filters.startDate === filters.endDate ? formatSpaDate(filters.startDate) : 'Lịch đặt theo bộ lọc'}</strong><span className="small-muted">{query.isPending ? 'Đang tải…' : `${data.length} lịch đặt`}</span></div><div className="booking-quick-actions"><button className="icon-btn" aria-label="Ngày trước" onClick={() => changeDay(-1)}><ChevronLeft size={20} /></button><button className="icon-btn" aria-label="Ngày tiếp theo" onClick={() => changeDay(1)}><ChevronRight size={20} /></button><button className="icon-btn" aria-label="Tải lại lịch đặt" disabled={query.isFetching} onClick={() => query.refetch()}><RefreshCw size={17} /></button></div></header>
@@ -66,7 +61,7 @@ export default function CustomerBookingsPage() {
     </section>
     {drawer && <FormDrawer title={drawer.mode === 'create' ? 'Tạo lịch đặt' : drawer.mode === 'edit' ? 'Chỉnh sửa lịch đặt' : 'Chi tiết lịch đặt'} className="booking-drawer" onClose={close}>
       {mutation.isError && <p className="form-alert" role="alert">{mutation.error.message}</p>}
-      {drawer.id && detail.isPending ? <p role="status">Đang tải chi tiết…</p> : drawer.id && detail.isError ? <div role="alert"><p>{detail.error.message}</p><button className="btn secondary" onClick={() => detail.refetch()}>Thử lại</button></div> : drawer.mode === 'create' || (drawer.mode === 'edit' && selected && writable(selected)) ? <CustomerBookingForm key={drawer.id || 'new'} booking={drawer.id ? selected : null} branchId={filterBranch} user={user} pending={mutation.isPending} onCancel={close} onSave={body => mutation.mutate({ id: drawer.id, body })} /> : selected && <>
+      {drawer.id && detail.isPending ? <p role="status">Đang tải chi tiết…</p> : drawer.id && detail.isError ? <div role="alert"><p>{detail.error.message}</p><button className="btn secondary" onClick={() => detail.refetch()}>Thử lại</button></div> : drawer.mode === 'create' || (drawer.mode === 'edit' && selected && writable(selected)) ? <CustomerBookingForm key={drawer.id || 'new'} booking={drawer.id ? selected : null} branchId={branchId} user={user} pending={mutation.isPending} onCancel={close} onSave={body => mutation.mutate({ id: drawer.id, body })} /> : selected && <>
         <div className="detail-list">{[['Khách hàng', selected.customer_name || selected.registered_customer_name], ['Số điện thoại', selected.customer_phone || selected.registered_customer_phone], ['Ngày đến', formatSpaDate(selected.arrival_date)], ['Giờ đến', selected.arrival_time || 'Chưa chọn giờ'], ['Dịch vụ', selected.product_name || 'Chưa chọn dịch vụ'], ['Chi nhánh', selected.branch_name], ['Trạng thái đến', selected.has_arrived ? 'Đã đến' : 'Chưa đến'], ['Giá trị tư vấn', formatCurrency(selected.consultation_total)], ['Nhu cầu / ưu đãi', selected.promotion_note], ['Ghi chú', selected.note]].map(([label, value]) => <div key={label}><span>{label}</span><strong>{value || '—'}</strong></div>)}</div>
         {writable(selected) ? <div className="drawer-actions"><button className="btn danger" onClick={() => { mutation.reset(); setRemoving(selected) }}>Xóa lịch</button><button className="btn primary" onClick={() => setDrawer({ ...drawer, mode: 'edit' })}>Chỉnh sửa</button></div> : <p className="small-muted">Chỉ được chỉnh sửa lịch thuộc chi nhánh của bạn.</p>}
       </>}
