@@ -16,11 +16,11 @@ test('parent signs once for performed children; pending children have no signatu
   await page.route('**/api/**', route => {
     const path = new URL(route.request().url()).pathname
     if (!path.startsWith('/api/')) return route.continue()
-    if (path === '/api/treatments/10/note') {
+    if (path === '/api/treatments/execute/101/note') {
       const body = route.request().postDataJSON()
       notes.push(body)
-      root.note = body.note
-      return route.fulfill({ json: { data: { id:10, note:body.note } } })
+      children[0].histories[0].note = body.note
+      return route.fulfill({ json: { data: children[0].histories[0] } })
     }
     if (path === '/api/treatments') return route.fulfill({ json: { data: [standalone, secondSession, root], total: 3, totalPages: 1 } })
     if (path === '/api/treatments/21') return route.fulfill({ json:{ data:secondSession } })
@@ -65,7 +65,7 @@ test('parent signs once for performed children; pending children have no signatu
   await expect(dialog.getByRole('textbox')).toHaveCount(1)
   await dialog.getByRole('textbox').fill('làm lần 1')
   await dialog.getByRole('button', { name:'Lưu ghi chú', exact:true }).click()
-  await expect(dialog.getByRole('status')).toContainText('Đã lưu ghi chú chung')
+  await expect(dialog.getByRole('status')).toContainText('Đã lưu ghi chú buổi thực hiện')
   expect(notes).toEqual([{ note:'làm lần 1' }])
   await dialog.getByRole('button', { name: 'Khách hàng ký tên' }).click()
   const box = await page.getByRole('img', { name: 'Vùng ký tên khách hàng' }).boundingBox()
@@ -81,6 +81,6 @@ test('parent signs once for performed children; pending children have no signatu
   await dialog.getByRole('button', { name: 'Đóng', exact: true }).click()
   await expect(table.locator('.today-treatment-group')).toContainText('Đã ký')
   await groupButton.click()
-  await expect(page.getByRole('textbox', { name:'Ghi chú chung liệu trình' })).toHaveValue('làm lần 1')
+  await expect(page.getByRole('textbox', { name:'Ghi chú buổi thực hiện' })).toHaveValue('làm lần 1')
   await expect(page.getByRole('textbox')).toHaveCount(1)
 })

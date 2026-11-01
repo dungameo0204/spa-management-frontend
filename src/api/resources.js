@@ -57,5 +57,3 @@ export const assignTreatmentStaffs = (id, staffs) => request(`/api/treatments/ex
 export const undoTreatmentExecution = id => request(`/api/treatments/execute/${id}`, { method: 'DELETE' })
 export const updateTreatmentHistoryNote = (id, note) => request(`/api/treatments/execute/${encodeURIComponent(id)}/note`, { method: 'PUT', body: { note } })
 export const signTreatmentHistory = (id, customer_signature_svg) => request(`/api/treatments/execute/${encodeURIComponent(id)}/sign`, { method: 'POST', body: { customer_signature_svg } })
-export const updateTreatmentGroupNote = (id, note) =>
-  request(`/api/treatments/${encodeURIComponent(id)}/note`, { method: 'PUT', body: { note } })

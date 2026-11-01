@@ -1,0 +1,503 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "D:\\Project\\SpaManagement\\spa-management-frontend\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/e2e/mobile-workflows.spec.js",
+      "--workers=2",
+      "--reporter=json"
+    ],
+    "configFile": "D:\\Project\\SpaManagement\\spa-management-frontend\\playwright.config.js",
+    "rootDir": "D:/Project/SpaManagement/spa-management-frontend/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/Project/SpaManagement/spa-management-frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/Project/SpaManagement/spa-management-frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e",
+        "snapshotDir": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 30000,
+        "use": {
+          "baseURL": "http://127.0.0.1:4174",
+          "browserName": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 2,
+    "webServer": {
+      "command": "npm run dev -- --host 127.0.0.1 --port 4174",
+      "url": "http://127.0.0.1:4174/login",
+      "reuseExistingServer": true,
+      "timeout": 60000
+    }
+  },
+  "suites": [
+    {
+      "title": "mobile-workflows.spec.js",
+      "file": "mobile-workflows.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "today visit and execution controls fit 320px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4091,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:12:57.130Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1df52d85a363647c6ee2-c60f0d4a58dc6fb87c02",
+          "file": "mobile-workflows.spec.js",
+          "line": 34,
+          "column": 3
+        },
+        {
+          "title": "treatment card and embedded execution fit 320px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1467,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m-1\u001b[39m\nReceived:    \u001b[31m-514\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m-1\u001b[39m\nReceived:    \u001b[31m-514\u001b[39m\n    at expectContained (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:29:17)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:52:5",
+                    "location": {
+                      "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                      "column": 17,
+                      "line": 29
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m   expect(\u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mevaluate(el \u001b[33m=>\u001b[39m el\u001b[33m.\u001b[39mscrollWidth \u001b[33m<=\u001b[39m el\u001b[33m.\u001b[39mclientWidth \u001b[33m+\u001b[39m \u001b[35m1\u001b[39m))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\n \u001b[90m 28 |\u001b[39m   \u001b[36mconst\u001b[39m box \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mboundingBox()\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 29 |\u001b[39m   expect(box\u001b[33m.\u001b[39mx)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[33m-\u001b[39m\u001b[35m1\u001b[39m)\n \u001b[90m    |\u001b[39m                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 30 |\u001b[39m   expect(box\u001b[33m.\u001b[39mx \u001b[33m+\u001b[39m box\u001b[33m.\u001b[39mwidth)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(\u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mpage()\u001b[33m.\u001b[39mevaluate(() \u001b[33m=>\u001b[39m innerWidth \u001b[33m+\u001b[39m \u001b[35m1\u001b[39m))\n \u001b[90m 31 |\u001b[39m }\n \u001b[90m 32 |\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                        "column": 17,
+                        "line": 29
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m-1\u001b[39m\nReceived:    \u001b[31m-514\u001b[39m\n\n  27 |   expect(await locator.evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true)\n  28 |   const box = await locator.boundingBox()\n> 29 |   expect(box.x).toBeGreaterThanOrEqual(-1)\n     |                 ^\n  30 |   expect(box.x + box.width).toBeLessThanOrEqual(await locator.page().evaluate(() => innerWidth + 1))\n  31 | }\n  32 |\n    at expectContained (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:29:17)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:52:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:13:02.204Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\mobile-workflows-treatment-2536f-mbedded-execution-fit-320px\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                    "column": 17,
+                    "line": 29
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1df52d85a363647c6ee2-5de3ac6874c08e80a76b",
+          "file": "mobile-workflows.spec.js",
+          "line": 46,
+          "column": 3
+        },
+        {
+          "title": "today visit and execution controls fit 360px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3913,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:13:06.405Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1df52d85a363647c6ee2-940d0e2dbad6676cbdaa",
+          "file": "mobile-workflows.spec.js",
+          "line": 34,
+          "column": 3
+        },
+        {
+          "title": "treatment card and embedded execution fit 360px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1593,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m-1\u001b[39m\nReceived:    \u001b[31m-474\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m-1\u001b[39m\nReceived:    \u001b[31m-474\u001b[39m\n    at expectContained (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:29:17)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:52:5",
+                    "location": {
+                      "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                      "column": 17,
+                      "line": 29
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m   expect(\u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mevaluate(el \u001b[33m=>\u001b[39m el\u001b[33m.\u001b[39mscrollWidth \u001b[33m<=\u001b[39m el\u001b[33m.\u001b[39mclientWidth \u001b[33m+\u001b[39m \u001b[35m1\u001b[39m))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\n \u001b[90m 28 |\u001b[39m   \u001b[36mconst\u001b[39m box \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mboundingBox()\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 29 |\u001b[39m   expect(box\u001b[33m.\u001b[39mx)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[33m-\u001b[39m\u001b[35m1\u001b[39m)\n \u001b[90m    |\u001b[39m                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 30 |\u001b[39m   expect(box\u001b[33m.\u001b[39mx \u001b[33m+\u001b[39m box\u001b[33m.\u001b[39mwidth)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(\u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mpage()\u001b[33m.\u001b[39mevaluate(() \u001b[33m=>\u001b[39m innerWidth \u001b[33m+\u001b[39m \u001b[35m1\u001b[39m))\n \u001b[90m 31 |\u001b[39m }\n \u001b[90m 32 |\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                        "column": 17,
+                        "line": 29
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m-1\u001b[39m\nReceived:    \u001b[31m-474\u001b[39m\n\n  27 |   expect(await locator.evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true)\n  28 |   const box = await locator.boundingBox()\n> 29 |   expect(box.x).toBeGreaterThanOrEqual(-1)\n     |                 ^\n  30 |   expect(box.x + box.width).toBeLessThanOrEqual(await locator.page().evaluate(() => innerWidth + 1))\n  31 | }\n  32 |\n    at expectContained (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:29:17)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:52:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:13:10.736Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\mobile-workflows-treatment-1bffe-mbedded-execution-fit-360px\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                    "column": 17,
+                    "line": 29
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1df52d85a363647c6ee2-63495d8de435dc92ee55",
+          "file": "mobile-workflows.spec.js",
+          "line": 46,
+          "column": 3
+        },
+        {
+          "title": "today visit and execution controls fit 390px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3388,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:13:14.559Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1df52d85a363647c6ee2-b03902affb5f38c527ea",
+          "file": "mobile-workflows.spec.js",
+          "line": 34,
+          "column": 3
+        },
+        {
+          "title": "treatment card and embedded execution fit 390px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1245,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m-1\u001b[39m\nReceived:    \u001b[31m-444\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m-1\u001b[39m\nReceived:    \u001b[31m-444\u001b[39m\n    at expectContained (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:29:17)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:52:5",
+                    "location": {
+                      "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                      "column": 17,
+                      "line": 29
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m   expect(\u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mevaluate(el \u001b[33m=>\u001b[39m el\u001b[33m.\u001b[39mscrollWidth \u001b[33m<=\u001b[39m el\u001b[33m.\u001b[39mclientWidth \u001b[33m+\u001b[39m \u001b[35m1\u001b[39m))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\n \u001b[90m 28 |\u001b[39m   \u001b[36mconst\u001b[39m box \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mboundingBox()\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 29 |\u001b[39m   expect(box\u001b[33m.\u001b[39mx)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[33m-\u001b[39m\u001b[35m1\u001b[39m)\n \u001b[90m    |\u001b[39m                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 30 |\u001b[39m   expect(box\u001b[33m.\u001b[39mx \u001b[33m+\u001b[39m box\u001b[33m.\u001b[39mwidth)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(\u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mpage()\u001b[33m.\u001b[39mevaluate(() \u001b[33m=>\u001b[39m innerWidth \u001b[33m+\u001b[39m \u001b[35m1\u001b[39m))\n \u001b[90m 31 |\u001b[39m }\n \u001b[90m 32 |\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                        "column": 17,
+                        "line": 29
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m-1\u001b[39m\nReceived:    \u001b[31m-444\u001b[39m\n\n  27 |   expect(await locator.evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true)\n  28 |   const box = await locator.boundingBox()\n> 29 |   expect(box.x).toBeGreaterThanOrEqual(-1)\n     |                 ^\n  30 |   expect(box.x + box.width).toBeLessThanOrEqual(await locator.page().evaluate(() => innerWidth + 1))\n  31 | }\n  32 |\n    at expectContained (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:29:17)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:52:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:13:18.308Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\mobile-workflows-treatment-03c55-mbedded-execution-fit-390px\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                    "column": 17,
+                    "line": 29
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1df52d85a363647c6ee2-2b2f56bc0d34031d9bc3",
+          "file": "mobile-workflows.spec.js",
+          "line": 46,
+          "column": 3
+        },
+        {
+          "title": "today visit and execution controls fit 430px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2779,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:13:20.886Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1df52d85a363647c6ee2-fb092ef1e8bf4990abaa",
+          "file": "mobile-workflows.spec.js",
+          "line": 34,
+          "column": 3
+        },
+        {
+          "title": "treatment card and embedded execution fit 430px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1001,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m-1\u001b[39m\nReceived:    \u001b[31m-404\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m-1\u001b[39m\nReceived:    \u001b[31m-404\u001b[39m\n    at expectContained (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:29:17)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:52:5",
+                    "location": {
+                      "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                      "column": 17,
+                      "line": 29
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m   expect(\u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mevaluate(el \u001b[33m=>\u001b[39m el\u001b[33m.\u001b[39mscrollWidth \u001b[33m<=\u001b[39m el\u001b[33m.\u001b[39mclientWidth \u001b[33m+\u001b[39m \u001b[35m1\u001b[39m))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\n \u001b[90m 28 |\u001b[39m   \u001b[36mconst\u001b[39m box \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mboundingBox()\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 29 |\u001b[39m   expect(box\u001b[33m.\u001b[39mx)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[33m-\u001b[39m\u001b[35m1\u001b[39m)\n \u001b[90m    |\u001b[39m                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 30 |\u001b[39m   expect(box\u001b[33m.\u001b[39mx \u001b[33m+\u001b[39m box\u001b[33m.\u001b[39mwidth)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(\u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mpage()\u001b[33m.\u001b[39mevaluate(() \u001b[33m=>\u001b[39m innerWidth \u001b[33m+\u001b[39m \u001b[35m1\u001b[39m))\n \u001b[90m 31 |\u001b[39m }\n \u001b[90m 32 |\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                        "column": 17,
+                        "line": 29
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m-1\u001b[39m\nReceived:    \u001b[31m-404\u001b[39m\n\n  27 |   expect(await locator.evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true)\n  28 |   const box = await locator.boundingBox()\n> 29 |   expect(box.x).toBeGreaterThanOrEqual(-1)\n     |                 ^\n  30 |   expect(box.x + box.width).toBeLessThanOrEqual(await locator.page().evaluate(() => innerWidth + 1))\n  31 | }\n  32 |\n    at expectContained (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:29:17)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:52:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:13:23.899Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\mobile-workflows-treatment-79712-mbedded-execution-fit-430px\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                    "column": 17,
+                    "line": 29
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1df52d85a363647c6ee2-c9662f6fb228e6573f90",
+          "file": "mobile-workflows.spec.js",
+          "line": 46,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-31T14:12:50.923Z",
+    "duration": 34860.908,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 4,
+    "flaky": 0
+  }
+}

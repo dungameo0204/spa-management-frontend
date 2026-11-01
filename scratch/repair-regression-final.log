@@ -1,0 +1,65 @@
+
+Running 61 tests using 2 workers
+
+[1/61] tests\e2e\invoice-date-repair.spec.js:3:1 › manager edits the Vietnam invoice day without shifting it through UTC
+[2/61] tests\e2e\invoice-service-children.spec.js:52:43 › mobile child cards have no horizontal scroll at 320px
+[3/61] tests\e2e\mobile-workflows.spec.js:35:1 › desktop workflow geometry is unchanged by mobile overrides
+[4/61] tests\e2e\invoice-service-children.spec.js:52:43 › mobile child cards have no horizontal scroll at 360px
+[5/61] tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (single) at 320px
+[6/61] tests\e2e\invoice-service-children.spec.js:52:43 › mobile child cards have no horizontal scroll at 390px
+[7/61] tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (grouped) at 320px
+[8/61] tests\e2e\mobile-workflows.spec.js:146:3 › single execution collapses without blank space at 320px
+[9/61] tests\e2e\invoice-service-children.spec.js:52:43 › mobile child cards have no horizontal scroll at 430px
+[10/61] tests\e2e\mobile-workflows.spec.js:173:3 › completed customer actions stay inside their cells at 320px
+[11/61] tests\e2e\invoice-service-children.spec.js:82:34 › child allocations and editable parent price at 390px
+[12/61] tests\e2e\mobile-workflows.spec.js:192:3 › today visit and execution controls fit 320px
+[13/61] tests\e2e\mobile-workflows.spec.js:206:3 › treatment card and embedded execution fit 320px
+[14/61] tests\e2e\invoice-service-children.spec.js:82:34 › child allocations and editable parent price at 1280px
+[15/61] tests\e2e\mobile-workflows.spec.js:225:3 › customer overview uses compact embedded execution at 320px
+[16/61] tests\e2e\invoice-service-children.spec.js:119:1 › grouped staff picker, pending children, parent note and signature save only the selected child
+[17/61] tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (single) at 360px
+[18/61] tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (grouped) at 360px
+[19/61] tests\e2e\mobile-workflows.spec.js:146:3 › single execution collapses without blank space at 360px
+[20/61] tests\e2e\invoice-service-children.spec.js:157:1 › failed child execution leaves the saved invoice locked instead of posting it again
+[21/61] tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 390px
+[22/61] tests\e2e\mobile-workflows.spec.js:173:3 › completed customer actions stay inside their cells at 360px
+[23/61] tests\e2e\mobile-workflows.spec.js:192:3 › today visit and execution controls fit 360px
+[24/61] tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1024px
+[25/61] tests\e2e\mobile-workflows.spec.js:206:3 › treatment card and embedded execution fit 360px
+[26/61] tests\e2e\mobile-workflows.spec.js:225:3 › customer overview uses compact embedded execution at 360px
+[27/61] tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1280px
+[28/61] tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (single) at 390px
+[29/61] tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (grouped) at 390px
+[30/61] tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1440px
+[31/61] tests\e2e\mobile-workflows.spec.js:146:3 › single execution collapses without blank space at 390px
+[32/61] tests\e2e\mobile-workflows.spec.js:173:3 › completed customer actions stay inside their cells at 390px
+[33/61] tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1500px
+[34/61] tests\e2e\mobile-workflows.spec.js:192:3 › today visit and execution controls fit 390px
+[35/61] tests\e2e\mobile-workflows.spec.js:206:3 › treatment card and embedded execution fit 390px
+[36/61] tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1920px
+[37/61] tests\e2e\mobile-workflows.spec.js:225:3 › customer overview uses compact embedded execution at 390px
+[38/61] tests\e2e\invoice-service-children.spec.js:244:1 › long standalone name and large price keep the complete desktop row usable
+[39/61] tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (single) at 430px
+[40/61] tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (grouped) at 430px
+[41/61] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 320px
+[42/61] tests\e2e\mobile-workflows.spec.js:146:3 › single execution collapses without blank space at 430px
+[43/61] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 390px
+[44/61] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 640px
+[45/61] tests\e2e\mobile-workflows.spec.js:173:3 › completed customer actions stay inside their cells at 430px
+[46/61] tests\e2e\mobile-workflows.spec.js:192:3 › today visit and execution controls fit 430px
+[47/61] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 768px
+[48/61] tests\e2e\mobile-workflows.spec.js:206:3 › treatment card and embedded execution fit 430px
+[49/61] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1024px
+[50/61] tests\e2e\mobile-workflows.spec.js:225:3 › customer overview uses compact embedded execution at 430px
+[51/61] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1280px
+[52/61] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1440px
+[53/61] tests\e2e\receipt-pagination.spec.js:3:1 › hóa đơn giấy thường nhiều sản phẩm có tiêu đề lặp và tổng kết liền khối
+[54/61] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1920px
+[55/61] tests\e2e\invoice-service-children.spec.js:287:34 › 50 staff can be searched and filtered without losing selection at 390px
+[56/61] tests\e2e\invoice-service-children.spec.js:287:34 › 50 staff can be searched and filtered without losing selection at 1280px
+[57/61] tests\e2e\invoice-service-children.spec.js:319:1 › 10 finite sessions at 2 million less 10 percent displays and posts 18 million
+[58/61] tests\e2e\invoice-service-children.spec.js:346:1 › failed child loading blocks save
+[59/61] tests\e2e\invoice-service-children.spec.js:359:1 › API rejection preserves draft price and lifetime selection
+[60/61] tests\e2e\invoice-service-children.spec.js:374:1 › invoice detail uses actual cards and allows amendment and deletion actions
+[61/61] tests\e2e\invoice-service-children.spec.js:384:1 › all pending children hide parent session actions; unchecking restores actions and staff
+  61 passed (1.0m)

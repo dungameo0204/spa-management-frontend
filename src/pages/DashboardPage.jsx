@@ -6,9 +6,11 @@ import { useBranch } from '../components/AppShell'
 import { getRevenue, getAppointmentQueue, getResource, deleteResource } from '../api/resources'
 import FormDrawer from '../components/FormDrawer'
 import ConfirmDialog from '../components/ConfirmDialog'
+import Pagination from '../components/Pagination'
 import { useState } from 'react'
 import TodayTreatments from '../components/TodayTreatments'
 import { today, formatCurrency, formatSpaDate } from '../utils/format'
+
 export default function DashboardPage() {
   const { user } = useAuth(), { branchId } = useBranch(), manager = user.system_role === 'MANAGER'
   const qc = useQueryClient()
@@ -20,7 +22,39 @@ export default function DashboardPage() {
   const pending = useQuery({ queryKey: ['dashboard-pending', branchId, pendingPage], queryFn: () => getAppointmentQueue('not-arrived', branchId ? { branchId } : {}, pendingPage) })
   const removal = useMutation({ mutationFn: id => deleteResource('appointments', id), onSuccess: () => { qc.invalidateQueries({ queryKey: ['dashboard-appointments'] }); qc.invalidateQueries({ queryKey: ['dashboard-pending'] }); qc.invalidateQueries({ queryKey: ['appointments'] }); setAppointment(null); setRemove(null); setError('') }, onError: err => { setError(err.message); setRemove(null) } })
   async function openAppointment(id) { setError(''); try { setAppointment(await getResource('appointments', id)) } catch (err) { setError(err.message) } }
-  function queue(query, page, setPage, label) { return <div><h3>{label}</h3>{query.isError ? <p className="form-alert">{query.error.message}</p> : query.isLoading ? <p className="muted">Đang tải...</p> : query.data?.data?.length ? <div className="appointment-list">{query.data.data.map(a => <div className="appointment-row" key={a.id}><span className="time-chip">{formatSpaDate(a.appointment_date)}</span><button type="button" className="text-action" onClick={() => openAppointment(a.id)}><strong>{a.customer_name}</strong><small>{a.phone_number || a.branch_name || 'Chưa có số điện thoại'}</small></button><button type="button" className="btn danger" aria-label={`Xóa lịch hẹn ${a.customer_name} #${a.id}`} onClick={() => setRemove(a.id)}>Xóa</button></div>)}</div> : <p className="muted">Không có lịch hẹn.</p>}{query.data?.totalPages > 1 && <div className="picker-pages"><button disabled={page === 1} onClick={() => setPage(page - 1)}>Trước</button><span>{page} / {query.data.totalPages}</span><button disabled={page >= query.data.totalPages} onClick={() => setPage(page + 1)}>Sau</button></div>}</div> }
+  function queue(query, page, setPage, label) {
+    return <div>
+      <h3>{label}</h3>
+      {query.isError ? (
+        <p className="form-alert">{query.error.message}</p>
+      ) : query.isLoading ? (
+        <p className="muted">Đang tải...</p>
+      ) : query.data?.data?.length ? (
+        <div className="appointment-list">
+          {query.data.data.map(a => (
+            <div className="appointment-row" key={a.id}>
+              <span className="time-chip">{formatSpaDate(a.appointment_date)}</span>
+              <button type="button" className="text-action" onClick={() => openAppointment(a.id)}>
+                <strong>{a.customer_name}</strong>
+                <small>{a.phone_number || a.branch_name || 'Chưa có số điện thoại'}</small>
+              </button>
+              <button type="button" className="btn danger" aria-label={`Xóa lịch hẹn ${a.customer_name} #${a.id}`} onClick={() => setRemove(a.id)}>Xóa</button>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="muted">Không có lịch hẹn.</p>
+      )}
+      <Pagination
+        page={page}
+        totalPages={query.data?.totalPages || 1}
+        totalItems={query.data?.total}
+        pageSize={10}
+        onChange={setPage}
+        label="lịch hẹn"
+      />
+    </div>
+  }
   const summary = [
     { icon: TrendingUp, label: 'Doanh thu tháng', value: formatCurrency(report.data?.totalRevenue), tone: 'sage' },
     { icon: Banknote, label: 'Doanh thu thu nợ cũ', value: formatCurrency(report.data?.legacyDebtRevenue), tone: 'sand' },

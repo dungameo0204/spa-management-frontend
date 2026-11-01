@@ -49,6 +49,39 @@ async function addPackage(page, pending = true) {
   return line
 }
 
+for (const width of [320, 360, 390, 430, 640, 768, 820, 900]) test(`mobile child cards have no horizontal scroll at ${width}px`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 900 })
+  await setup(page)
+  await page.getByRole('button', { name: 'Tạo hóa đơn' }).click()
+  const line = await addPackage(page)
+  const childSection = line.locator('.invoice-service-children')
+  expect(await childSection.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true)
+  await line.getByRole('spinbutton', { name: 'Số buổi Laser trị nám' }).fill('5')
+  await line.getByRole('checkbox', { name: 'Trọn đời Điện di' }).check()
+  await line.getByRole('checkbox', { name: 'Chưa làm Laser trị nám' }).uncheck()
+  const staffButton = line.getByRole('button', { name: 'Nhân viên làm Laser trị nám' })
+  const staffBox = await staffButton.boundingBox()
+  expect(staffBox.height).toBeGreaterThanOrEqual(32)
+  expect(staffBox.height).toBeLessThanOrEqual(36)
+  const childName = await childSection.locator('.invoice-child-name').first().boundingBox()
+  expect(staffBox.y).toBeLessThan(childName.y + childName.height)
+  expect(staffBox.x).toBeGreaterThanOrEqual(childName.x + childName.width)
+  await staffButton.click()
+  const dialog = page.getByRole('dialog', { name: 'Nhân viên làm Laser trị nám' })
+  await dialog.getByRole('checkbox', { name: 'Lan', exact: true }).check()
+  await dialog.getByRole('button', { name: 'Xong', exact: true }).click()
+  await expect(staffButton).toContainText('Lan')
+  const childRows = await childSection.locator('ol > li').evaluateAll(rows => rows.map(row => {
+    const count = row.querySelector('.invoice-child-count, .invoice-child-count-placeholder').getBoundingClientRect()
+    const pending = row.querySelector('.invoice-child-pending').getBoundingClientRect()
+    return { height: row.getBoundingClientRect().height, sameLine: Math.abs(count.top - pending.top) < 10 }
+  }))
+  expect(childRows.every(row => row.height < 100 && row.sameLine)).toBe(true)
+  expect(await line.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+  await page.screenshot({ path: `test-results/mobile-invoice-${width}.png`, fullPage: true })
+})
+
 for (const width of [390, 1280]) test(`child allocations and editable parent price at ${width}px`, async ({ page }) => {
   await page.setViewportSize({ width, height: 900 })
   const requests = await setup(page)
@@ -58,7 +91,13 @@ for (const width of [390, 1280]) test(`child allocations and editable parent pri
   const first = await addPackage(page)
   await expect(first.locator('.invoice-child-name').first()).toContainText('Laser trị nám')
   const sizes = await first.evaluate(element => ({ parent: element.querySelector('.product-entry-row').getBoundingClientRect().height, children: [...element.querySelectorAll('.invoice-service-children li')].map(row => row.getBoundingClientRect().height) }))
-  expect(sizes.children.every(height => height <= sizes.parent && height <= 46)).toBe(true)
+  if (width > 600) expect(sizes.children.every(height => height <= sizes.parent && height <= 46)).toBe(true)
+  else {
+    expect(await first.locator('.invoice-service-children').evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true)
+    const countBox = await first.getByRole('spinbutton', { name: 'Số buổi Laser trị nám' }).boundingBox()
+    expect(countBox.height).toBeGreaterThanOrEqual(32)
+    expect(countBox.height).toBeLessThanOrEqual(36)
+  }
   await page.screenshot({ path: `test-results/invoice-compact-${width}.png`, fullPage: true })
   await first.getByRole('spinbutton', { name: 'Số buổi Laser trị nám' }).fill('5')
   await first.getByRole('checkbox', { name: 'Trọn đời Điện di' }).check()
@@ -134,7 +173,7 @@ test('failed child execution leaves the saved invoice locked instead of posting 
   expect(executions).toHaveLength(1)
 })
 
-for (const width of [390, 1024, 1280, 1440, 1500, 1920]) test(`standalone lifetime aligned and editable; unsigned confirmation at ${width}px`, async ({ page }) => {
+for (const width of [390, 768, 820, 1024, 1280, 1440, 1500, 1920]) test(`standalone lifetime aligned and editable; unsigned confirmation at ${width}px`, async ({ page }) => {
   await page.setViewportSize({ width, height: 900 })
   const executions = []
   const requests = await setup(page, { executions })
@@ -221,6 +260,64 @@ test('long standalone name and large price keep the complete desktop row usable'
   await line.locator('.invoice-line-scroll').evaluate(el => { el.scrollLeft = el.scrollWidth })
   await line.getByRole('button', { name:'Tư vấn', exact:true }).click()
   await expect(page.getByRole('dialog', { name:'Nhân viên tư vấn' })).toBeVisible()
+})
+
+for (const width of [320, 390, 640, 768, 820, 900, 1024, 1280, 1440, 1920]) test(`service menu stays clickable across invoice lines without horizontal scrolling at ${width}px`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 900 })
+  await setup(page)
+  await page.getByRole('button', { name: 'Tạo hóa đơn' }).click()
+  const add = page.getByRole('button', { name: /Thêm sản phẩm\s*\/\s*dịch vụ/ })
+  await add.click()
+  await add.click()
+  const line = page.locator('.compact-invoice-line').first()
+  const picker = line.getByRole('combobox', { name: 'Tìm sản phẩm / dịch vụ' })
+  await picker.click()
+  await page.getByRole('option', { name: 'pnp', exact: true }).click()
+  await expect(picker).toHaveValue('pnp')
+  const quantity = await line.locator('.quantity-field input').boundingBox()
+  const price = await line.getByRole('textbox', { name: 'Đơn giá', exact: true }).boundingBox()
+  expect(Math.abs(quantity.y - price.y)).toBeLessThanOrEqual(1)
+  expect(quantity.width).toBeLessThanOrEqual(70)
+  expect(price.width).toBeLessThanOrEqual(width <= 850 ? 190 : 112)
+  expect(price.height).toBeLessThanOrEqual(32)
+  const note = await line.getByRole('button', { name: 'Ghi chú', exact: true }).boundingBox()
+  const signature = await line.getByRole('button', { name: 'Chữ ký', exact: true }).boundingBox()
+  expect(note.y).toBe(signature.y)
+  if (width > 600 && width <= 900) {
+    const product = await picker.boundingBox()
+    const staff = await line.getByRole('button', { name: 'Nhân viên làm pnp' }).boundingBox()
+    expect(staff.y).toBeGreaterThanOrEqual(product.y + product.height)
+    const total = await line.locator('.line-total strong').boundingBox()
+    expect(Math.abs(total.y - price.y)).toBeLessThanOrEqual(1)
+  }
+  await picker.click()
+  await page.getByRole('option', { name: 'Serum', exact: true }).click()
+  await expect(picker).toHaveValue('Serum')
+  await picker.click()
+  await page.getByRole('option', { name: parent.name, exact: true }).click()
+  await expect(line.getByRole('region', { name: 'Số buổi dịch vụ con' })).toBeVisible()
+  if (width > 600) {
+    const rows = await line.locator('.invoice-service-children ol > li').evaluateAll(elements => elements.map(el => el.getBoundingClientRect().height))
+    expect(rows.every(height => height <= 36)).toBe(true)
+    if (width <= 900) expect((await line.locator('.product-entry-row').boundingBox()).height).toBeLessThanOrEqual(width <= 850 ? 180 : 110)
+  }
+  if (width > 900) {
+    const second = page.locator('.compact-invoice-line').nth(1)
+    for (const selector of ['.product-picker-stack', '.invoice-quantity-options', '.money-field', '.percent-field', '.line-total']) {
+      const firstBox = await line.locator(selector).first().boundingBox()
+      const secondBox = await second.locator(selector).first().boundingBox()
+      expect(Math.abs(firstBox.x - secondBox.x), selector).toBeLessThanOrEqual(1)
+      expect(Math.abs(firstBox.width - secondBox.width), selector).toBeLessThanOrEqual(1)
+    }
+    expect((await picker.boundingBox()).width).toBeLessThanOrEqual(width <= 1199 ? 360 : 220)
+  }
+  if (width > 700) await expectDesktopInvoiceLine(line)
+  for (const selector of ['.compact-invoice-line', '.invoice-line-scroll', '.product-entry-scroll', '.drawer-body', '.drawer']) {
+    expect(await page.locator(selector).evaluateAll(elements => elements.every(el => el.scrollWidth <= el.clientWidth + 1)), selector).toBe(true)
+  }
+  await page.locator('.drawer-body').evaluate(el => { el.scrollTop = 0 })
+  await page.screenshot({ path: `test-results/invoice-selection-fixed-${width}.png` })
+  await line.screenshot({ path: `test-results/invoice-row-${width}.png` })
 })
 
 for (const width of [390, 1280]) test(`50 staff can be searched and filtered without losing selection at ${width}px`, async ({ page }) => {

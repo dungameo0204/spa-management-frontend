@@ -1,0 +1,26 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90mD:/Project/SpaManagement/spa-management-frontend[39m
+
+ [32m✓[39m src/utils/format.test.js [2m([22m[2m23 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m src/components/ReceiptPrint.test.jsx [2m([22m[2m4 tests[22m[2m)[22m[32m 197[2mms[22m[39m
+ [32m✓[39m src/pages/TreatmentExecutionDate.test.jsx [2m([22m[2m32 tests[22m[2m)[22m[33m 8317[2mms[22m[39m
+   [33m[2m✓[22m[39m dashboard: mỗi buổi một dòng, sửa nhân viên và hoàn tác đúng buổi thứ hai [33m 539[2mms[22m[39m
+   [33m[2m✓[22m[39m detail: STAFF hoàn tác today [33m 517[2mms[22m[39m
+   [33m[2m✓[22m[39m detail: STAFF hoàn tác old-created [33m 361[2mms[22m[39m
+   [33m[2m✓[22m[39m detail: STAFF hoàn tác cancel [33m 349[2mms[22m[39m
+   [33m[2m✓[22m[39m detail: STAFF hoàn tác error [33m 360[2mms[22m[39m
+   [33m[2m✓[22m[39m detail: MANAGER hoàn tác today [33m 413[2mms[22m[39m
+   [33m[2m✓[22m[39m detail: MANAGER hoàn tác old-created [33m 411[2mms[22m[39m
+   [33m[2m✓[22m[39m detail: MANAGER hoàn tác missing-created [33m 378[2mms[22m[39m
+   [33m[2m✓[22m[39m detail: MANAGER hoàn tác other-branch [33m 348[2mms[22m[39m
+   [33m[2m✓[22m[39m detail: MANAGER hoàn tác cancel [33m 350[2mms[22m[39m
+   [33m[2m✓[22m[39m detail: MANAGER hoàn tác error [33m 363[2mms[22m[39m
+   [33m[2m✓[22m[39m inline: STAFF giữ nguyên giao diện và không gửi execution_date [33m 302[2mms[22m[39m
+   [33m[2m✓[22m[39m detail: MANAGER chọn ngày và gửi execution_date dạng YYYY-MM-DD [33m 360[2mms[22m[39m
+   [33m[2m✓[22m[39m detail: STAFF giữ nguyên giao diện và không gửi execution_date [33m 356[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m59 passed[39m[22m[90m (59)[39m
+[2m   Start at [22m 11:26:13
+[2m   Duration [22m 18.67s[2m (transform 961ms, setup 3.15s, collect 3.86s, tests 8.56s, environment 16.90s, prepare 1.78s)[22m
+

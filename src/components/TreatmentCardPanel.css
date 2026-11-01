@@ -1,16 +1,635 @@
-.treatment-root-panel { margin-top: 2px; min-width: 0; }
-.treatment-parent-heading { background: #eff8f4; border-left: 3px solid #72a68f; padding: 10px; gap: 8px; flex-wrap: wrap; }
-.treatment-parent-heading .text-action { white-space: normal; text-align: left; }
-.treatment-child-row { margin-left: 18px; padding: 8px 10px; border-top: 1px solid #e2ece6; display: flex; justify-content: space-between; gap: 12px; }
-.treatment-child-history { border-top: 1px solid #e2ece6; padding-top: 8px; }
-.treatment-closure { display: grid; gap: 6px; padding: 10px; }
-.treatment-closure img, .treatment-history-signature { display: block; max-width: 220px; max-height: 90px; object-fit: contain; }
-.treatment-root-panel fieldset { border: 0; padding: 0; min-width: 0; }
-.treatment-root-panel .treatment-execution-form { padding: 12px; }
-.treatment-child-execution { border-top: 1px solid #e2ece6; padding: 8px 0; }
-.treatment-root-panel .session-note { white-space: pre-wrap; overflow-wrap: anywhere; }
-@media (max-width: 600px) {
-  .treatment-child-row { margin-left: 8px; flex-wrap: wrap; }
-  .treatment-parent-heading { display: flex; align-items: flex-start; }
-  .treatment-parent-heading > .text-action:first-child { flex-basis: 100%; }
+.treatment-root-panel.treatment-card-item { margin: 0; min-width: 0; padding: 0; border: 1px solid var(--line); border-radius: 8px; background: var(--white); overflow: hidden; }
+.treatment-root-panel.treatment-card-item .treatment-parent-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px 12px; padding: 6px 12px; min-height: 38px; background: transparent; border: 0; flex-wrap: nowrap; }
+.treatment-parent-heading-left { display: flex; align-items: center; gap: 8px; flex: 1 1 auto; min-width: 0; flex-wrap: nowrap; }
+.treatment-root-panel .treatment-parent-heading .treatment-parent-title {
+  width: auto !important;
+  max-width: 295px !important;
+  flex: 0 1 295px !important;
+  min-width: 0 !important;
+  font-weight: 600;
+  font-size: 13px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0;
+  line-height: 1.3;
+}
+.treatment-root-panel .treatment-parent-heading .treatment-parent-title.is-disabled { cursor: default; }
+.treatment-parent-badges { display: flex; align-items: center; gap: 6px; flex-shrink: 0; min-width: 0; }
+.treatment-completed-badge { font-size: 11px; color: var(--muted); background: #eee; padding: 1px 7px; border-radius: 999px; font-weight: 500; white-space: nowrap; }
+.treatment-root-panel .text-action { min-height: 28px; padding: 2px 8px; font-size: 12px; background: transparent; line-height: 1; }
+
+/* Badge đã thực hiện buổi hôm nay */
+.today-execution-badge { display: inline-flex; align-items: center; min-height: 20px; padding: 1px 7px; border-radius: 999px; background: #fff0bf; color: #684a08; font-size: 11px; font-weight: 700; white-space: nowrap; }
+
+/* Các nút hành động được căn thẳng hàng theo từng cột */
+.treatment-parent-actions { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; margin-left: auto; }
+.treatment-parent-actions.is-page-actions {
+  display: grid !important;
+  grid-template-columns: 90px 56px 135px !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex: 0 0 297px !important;
+  width: 297px !important;
+  margin-left: auto !important;
+}
+.treatment-parent-actions.is-page-actions.is-staff-actions {
+  grid-template-columns: 140px 56px 135px !important;
+  flex: 0 0 347px !important;
+  width: 347px !important;
+}
+.treatment-parent-actions.is-page-actions.is-manager-actions {
+  grid-template-columns: 90px 56px 135px !important;
+  flex: 0 0 297px !important;
+  width: 297px !important;
+}
+.treatment-parent-actions.is-page-actions > * {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+  text-align: center !important;
+}
+.treatment-parent-actions .btn { min-height: 28px; padding: 3px 8px; font-size: 11px; white-space: nowrap; }
+.treatment-parent-actions .text-action { min-height: 28px; padding: 3px 6px; font-size: 11px; white-space: nowrap; }
+.treatment-btn-slot { display: block !important; width: 100% !important; height: 28px !important; visibility: hidden !important; }
+
+@media (max-width: 1024px) {
+  .treatment-parent-actions.is-page-actions {
+    display: inline-flex !important;
+    width: auto !important;
+    flex: 0 0 auto !important;
+    gap: 6px !important;
+  }
+  .treatment-parent-actions.is-page-actions > * {
+    width: auto !important;
+  }
+  .treatment-btn-slot {
+    display: none !important;
+  }
+}
+
+/* Nút Ký kết thúc liệu trình: màu đỏ bọc bởi khối màu đỏ mờ mờ */
+.treatment-root-panel .treatment-close-action,
+.treatment-parent-actions .treatment-close-action {
+  color: var(--danger, #d52e39) !important;
+  background: #faeeee !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+  border-radius: 4px !important;
+  padding: 3px 6px !important;
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 0 !important;
+  line-height: 1.2 !important;
+  transition: background .15s !important;
+}
+.treatment-root-panel .treatment-close-action:hover,
+.treatment-parent-actions .treatment-close-action:hover {
+  background: #f8dede !important;
+  color: #b0222b !important;
+  text-decoration: none !important;
+}
+
+.treatment-children { position: relative; padding: 0 14px 6px 32px; }
+.treatment-children::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 15px; width: 1px; background: color-mix(in srgb, var(--sage) 32%, var(--line)); }
+.treatment-child-row { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 8px 16px; min-height: 35px; padding: 4px 2px; border-top: 1px solid var(--line); font-size: 13px; }
+.treatment-child-row::before { content: ''; position: absolute; left: -12px; top: 50%; width: 10px; height: 1px; background: color-mix(in srgb, var(--sage) 32%, var(--line)); }
+.treatment-child-row label { display: flex; align-items: center; gap: 9px; min-width: 0; min-height: 30px; cursor: pointer; overflow-wrap: anywhere; }
+.treatment-child-row input { flex: 0 0 auto; width: 16px; height: 16px; accent-color: var(--sage); }
+.treatment-child-row label:has(input:disabled) { color: var(--muted); cursor: default; }
+.treatment-session-count { color: var(--muted); font-size: 12px; text-align: right; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+
+.treatment-root-panel .treatment-history { padding: 10px 14px; border-top: 1px solid var(--line); }
+.treatment-history-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.treatment-history-header h4 { margin: 0; font-size: 13px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.treatment-history-visit-count { font-size: 12px; font-weight: 500; color: var(--sage); background: var(--sage-light); padding: 2px 8px; border-radius: 999px; }
+
+/* Lịch sử thẻ đơn */
+.treatment-history-compact-list { display: grid; gap: 6px; }
+.treatment-history-compact-item { padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--white); font-size: 12px; }
+.treatment-history-compact-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: nowrap; }
+.treatment-history-meta { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1 1 auto; }
+.treatment-signature-badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 500; flex-shrink: 0; }
+.treatment-signature-badge.is-signed { background: var(--sage-light); color: var(--sage); }
+.treatment-signature-badge.is-unsigned { background: #f4efe5; color: var(--muted); }
+.treatment-history-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-left: auto; }
+.treatment-history-actions .btn.compact, .treatment-history-actions .session-followup-button.compact { min-height: 24px; padding: 2px 8px; font-size: 11px; white-space: nowrap; }
+.treatment-history-compact-bottom { display: flex; align-items: center; gap: 6px; margin-top: 3px; font-size: 11px; flex-wrap: wrap; }
+.treatment-history-staff { color: var(--muted); }
+.treatment-history-note-inline { color: var(--ink); }
+.treatment-history-signature.compact { display: block; max-width: 100%; width: 90px; max-height: 32px; margin-top: 3px; object-fit: contain; }
+
+/* Lịch sử nhóm combo: Padding vừa vặn, chữ thoáng đãng */
+.treatment-grouped-history { display: grid; gap: 6px; }
+.treatment-history-day { padding: 6px 10px; border-bottom: 2px solid #ffffff; background: color-mix(in srgb, var(--cream) 45%, transparent); border-radius: 8px; }
+.treatment-history-day:last-child { border-bottom: 0; }
+.treatment-history-day-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 12px; margin-bottom: 4px; }
+.treatment-history-heading-right { display: flex; align-items: center; gap: 6px; }
+.treatment-history-signature-thumb { display: block; height: 28px; max-width: 85px; object-fit: contain; background: #ffffff; border: 1px solid var(--line); border-radius: 4px; padding: 1px 3px; }
+.treatment-history-services { display: grid; gap: 4px; margin: 4px 0; font-size: 12px; }
+.treatment-history-service-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 3px 8px; min-height: 26px; border-radius: 4px; background: color-mix(in srgb, var(--cream) 60%, transparent); }
+.treatment-history-service-name { font-weight: 500; min-width: 0; }
+.treatment-history-service-meta { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.treatment-history-staff-btn { display: inline-flex; align-items: center; gap: 4px; padding: 1px 5px; border: 1px dashed var(--line); border-radius: 4px; background: var(--white); color: var(--ink); font-size: 11px; cursor: pointer; transition: border-color .15s; }
+.treatment-history-staff-btn:hover { border-color: var(--sage); color: var(--sage); }
+.treatment-history-staff-edit { font-size: 10px; color: var(--muted); text-decoration: underline; }
+.treatment-history-staff-static { color: var(--muted); font-size: 11px; }
+
+/* Nút hoàn tác siêu gọn, không làm giãn dòng */
+.treatment-history-service-row .btn.treatment-history-undo-btn,
+.treatment-history-service-row .treatment-history-undo-btn {
+  min-height: 20px !important;
+  height: 20px !important;
+  padding: 0 6px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  border-radius: 4px !important;
+  background: #faeeee !important;
+  color: var(--danger) !important;
+  border: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background .15s !important;
+}
+.treatment-history-service-row .btn.treatment-history-undo-btn:hover,
+.treatment-history-service-row .treatment-history-undo-btn:hover {
+  background: #f8dede !important;
+  transform: none !important;
+}
+
+.treatment-closure { padding: 8px 0; }
+.treatment-closure img, .treatment-history-signature { display: block; max-width: 100%; width: 140px; max-height: 48px; object-fit: contain; }
+.treatment-root-panel fieldset { border: 0; padding: 0; min-width: 0; margin: 0; width: 100%; }
+.treatment-root-panel .treatment-execution-form { padding: 12px 16px !important; border-top: 1px solid var(--line); width: 100%; box-sizing: border-box; }
+
+/* Bố cục thực hiện combo chia 2 cột */
+.treatment-execution-split { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(240px, 1fr); gap: 14px; align-items: start; }
+.treatment-execution-left-col { min-width: 0; }
+.treatment-execution-right-col { min-width: 0; background: var(--cream); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); }
+.treatment-execution-manager-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: nowrap;
+}
+.treatment-execution-manager-row.no-date .compact-field.branch-field {
+  flex: 1 1 100% !important;
+  max-width: 100% !important;
+}
+.treatment-execution-manager-row .compact-field {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0 !important;
+  position: relative !important;
+  font-size: 11px !important;
+}
+.treatment-execution-manager-row .compact-field span {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: var(--muted) !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+}
+.treatment-execution-manager-row .compact-field.branch-field {
+  flex: 0 1 125px;
+  max-width: 135px;
+  min-width: 110px;
+}
+.treatment-execution-manager-row .compact-field.date-field {
+  flex: 1 1 155px;
+  max-width: 185px;
+  min-width: 135px;
+}
+.treatment-execution-manager-row .compact-field select,
+.treatment-execution-manager-row .compact-field input,
+.treatment-execution-manager-row .compact-field .mobile-select-trigger {
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  padding: 0 10px !important;
+  font-size: 12px !important;
+  background: var(--white) !important;
+  border-radius: 8px !important;
+  box-sizing: border-box !important;
+  border: 1px solid var(--line) !important;
+}
+.treatment-execution-manager-row .compact-field input[type="date"] {
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  line-height: 34px !important;
+  padding: 0 8px !important;
+  font-size: 13px !important;
+  white-space: nowrap !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  width: 100% !important;
+}
+.treatment-execution-manager-row .compact-field input[type="date"]::-webkit-date-and-time-value {
+  line-height: normal !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+  display: flex !important;
+  align-items: center !important;
+}
+.treatment-execution-manager-row .compact-field .mobile-select-trigger {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  font-size: 12px !important;
+  cursor: pointer !important;
+}
+.treatment-execution-manager-row .compact-field .mobile-select-trigger > span:first-child {
+  font-size: 12px !important;
+  line-height: 32px !important;
+}
+.treatment-execution-manager-row .compact-field .mobile-select-trigger > svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+.treatment-execution-manager-row.is-single-manager {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+/* Liệu trình con trong combo: Checkbox + Tên, Số buổi, Chọn nhân viên chia 3 cột thẳng hàng */
+.treatment-child-execution { position: relative; padding: 6px 0 6px 20px; border-top: 1px solid var(--line); }
+.treatment-child-execution.is-child::before { content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 1px; background: color-mix(in srgb, var(--sage) 32%, var(--line)); }
+.treatment-child-execution.is-child::after { content: ''; position: absolute; left: 6px; top: 18px; width: 8px; height: 1px; background: color-mix(in srgb, var(--sage) 32%, var(--line)); }
+.treatment-child-execution-row {
+  display: grid !important;
+  grid-template-columns: minmax(130px, 1fr) 75px 170px !important;
+  align-items: center !important;
+  gap: 8px 12px !important;
+  min-height: 34px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+.treatment-child-label {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  min-width: 130px !important;
+}
+.treatment-child-label input[type="checkbox"] { width: 16px; height: 16px; flex-shrink: 0; accent-color: var(--sage); cursor: pointer; }
+.treatment-child-name {
+  min-width: 100px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+.treatment-child-execution-row .treatment-session-count {
+  color: var(--muted) !important;
+  font-size: 12px !important;
+  white-space: nowrap !important;
+  text-align: right !important;
+  padding-right: 4px !important;
+}
+.treatment-child-staff-inline { flex: none !important; width: 100% !important; min-width: 0 !important; }
+.treatment-child-staff-placeholder { display: block !important; width: 100% !important; height: 34px !important; }
+
+/* Nút Đóng & Xác nhận của combo: Căn sát lề phải */
+.treatment-execution-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-top: 12px; padding-top: 8px; width: 100%; box-sizing: border-box; }
+.treatment-execution-actions .btn { min-height: 34px; padding: 6px 16px; font-size: 13px; border-radius: 8px; }
+
+/* Bố cục thực hiện thẻ đơn (như pnp): Đồng bộ chiều cao 34px, padding thông thoáng, các ô đều nhau */
+.treatment-single-execution-row {
+  display: flex !important;
+  align-items: flex-end !important;
+  gap: 10px 12px !important;
+  flex-wrap: wrap !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+}
+.treatment-single-execution-row .treatment-single-staff { flex: 0 1 175px; min-width: 130px; max-width: 200px; }
+.treatment-single-execution-row .session-followup-button {
+  flex-shrink: 0;
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  padding: 0 12px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  border-radius: 8px !important;
+  background: var(--white) !important;
+  border: 1px solid var(--line) !important;
+  color: var(--ink) !important;
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+.treatment-single-execution-row .treatment-execution-signature { flex-shrink: 0; }
+.treatment-single-execution-row .treatment-execution-signature .signature-draft-actions .btn {
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  padding: 0 12px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  border-radius: 8px !important;
+  background: var(--white) !important;
+  border: 1px solid var(--line) !important;
+  color: var(--ink) !important;
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+.treatment-single-execution-row .treatment-execution-signature .signature-draft-preview {
+  height: 34px !important;
+  max-height: 34px !important;
+  border-radius: 8px !important;
+}
+.treatment-single-actions { display: flex !important; align-items: center !important; gap: 8px !important; margin-left: auto !important; flex-shrink: 0 !important; }
+.treatment-single-actions .btn {
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  padding: 0 14px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+.treatment-single-note { margin-top: 6px; }
+
+.treatment-child-execution .invoice-child-staff, .treatment-single-staff .invoice-child-staff { display: flex; align-items: center; gap: 6px; min-width: 0; width: 100%; height: 34px; min-height: 34px; max-height: 34px; padding: 0 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--white); color: var(--muted); font-size: 12px; text-align: left; box-sizing: border-box; }
+.treatment-child-execution .invoice-child-staff > span:first-of-type, .treatment-single-staff .invoice-child-staff > span:first-of-type { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.treatment-child-execution .invoice-child-staff.has-value, .treatment-single-staff .invoice-child-staff.has-value { background: var(--sage-light); color: var(--sage); border-color: var(--sage); }
+.treatment-child-execution .invoice-child-staff > span:first-of-type, .treatment-single-staff .invoice-child-staff > span:first-of-type { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.treatment-child-execution .invoice-child-staff.has-value, .treatment-single-staff .invoice-child-staff.has-value { background: var(--sage-light); color: var(--sage); border-color: var(--sage); }
+
+.treatment-session-tools { display: flex; align-items: center; gap: 7px; padding: 2px 0 4px; }
+.treatment-signature-state { font-size: 11px; color: var(--muted); }
+.treatment-signature-state.has-value { color: var(--sage); font-weight: 600; }
+.treatment-execution-note { display: grid; gap: 4px; margin: 4px 0; font-size: 12px; }
+.treatment-execution-note textarea { box-sizing: border-box; width: 100%; min-height: 48px; resize: vertical; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--white); color: var(--ink); font: inherit; font-size: 12px; line-height: 1.45; }
+.treatment-execution-signature .session-signature { display: flex; align-items: center; gap: 7px; min-height: 32px; }
+.treatment-execution-signature .session-signature .field-label, .treatment-execution-signature .session-signature p { display: none; }
+.treatment-execution-signature .signature-draft-actions { display: flex; align-items: center; gap: 5px; }
+.treatment-execution-signature .signature-draft-actions .btn { min-height: 28px; margin: 0; padding: 3px 8px; font-size: 11px; }
+.treatment-execution-signature .signature-draft-preview { width: 80px; height: 28px; margin: 0; border-radius: 6px; }
+
+.treatment-root-panel .session-note { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; margin: 4px 0; }
+.treatment-customers table { min-width: 860px; }
+.treatment-customers table th,
+.treatment-customers table td { white-space: nowrap; font-size: 13px; }
+.treatment-customers table th:first-child,
+.treatment-customers table td:first-child { white-space: normal; min-width: 140px; }
+.treatment-customers .treatment-service-badge,
+.treatment-customers .treatment-finished-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap !important;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  line-height: 1.2;
+}
+.treatment-customers .treatment-finished-action { background: var(--sage-light); color: var(--sage); }
+.treatment-customers .treatment-finished-action:hover { filter: brightness(.95); }
+.treatment-customers .treatment-service-badge { background: color-mix(in srgb, var(--cream) 60%, transparent); color: var(--ink); border: 1px solid var(--line); }
+.treatment-customers .treatment-service-badge:hover { background: color-mix(in srgb, var(--cream) 90%, var(--sage-light)); }
+.treatment-customers .treatment-card-list { gap: 6px; }
+.customer-overview .treatment-root-panel {
+  margin-top: 6px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 8px !important;
+  background: var(--white) !important;
+}
+.customer-overview .treatment-root-panel .treatment-parent-title {
+  display: none !important;
+}
+.customer-overview .treatment-root-panel .treatment-parent-heading {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  padding: 6px 10px !important;
+  min-height: 38px !important;
+}
+.customer-overview .treatment-root-panel .treatment-parent-heading-left {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex: 1 1 auto !important;
+  margin-bottom: 0 !important;
+}
+.customer-overview .treatment-root-panel .treatment-parent-actions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex: 0 0 auto !important;
+  justify-content: flex-end !important;
+  margin-left: auto !important;
+}
+.customer-overview .treatment-root-panel .treatment-execution-form {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+.customer-overview .treatment-execution-split {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  gap: 12px !important;
+}
+.customer-overview .treatment-execution-left-col {
+  width: 100% !important;
+}
+.customer-overview .treatment-child-execution-row {
+  display: grid !important;
+  grid-template-columns: minmax(130px, 1.5fr) 85px minmax(160px, 1.2fr) !important;
+  align-items: center !important;
+  gap: 8px 14px !important;
+  width: 100% !important;
+}
+.customer-overview .treatment-execution-right-col {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 10px !important;
+  width: 100% !important;
+  padding-top: 10px !important;
+  border-top: 1px dashed var(--line) !important;
+  box-sizing: border-box !important;
+}
+.customer-overview .treatment-execution-controls-row {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-end !important;
+  justify-content: flex-start !important;
+  flex-wrap: wrap !important;
+  gap: 10px 14px !important;
+  width: 100% !important;
+}
+.customer-overview .treatment-execution-manager-row {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-end !important;
+  flex-wrap: nowrap !important;
+  gap: 10px !important;
+  margin: 0 !important;
+  flex: 0 0 auto !important;
+}
+.customer-overview .treatment-execution-manager-row .compact-field.branch-field {
+  width: 145px !important;
+  flex: 0 0 145px !important;
+  max-width: 165px !important;
+}
+.customer-overview .treatment-execution-manager-row .compact-field.date-field {
+  width: 205px !important;
+  min-width: 200px !important;
+  max-width: 230px !important;
+  flex: 0 0 205px !important;
+}
+.customer-overview .treatment-execution-manager-row .compact-field.date-field input[type="date"] {
+  min-width: 195px !important;
+  width: 100% !important;
+  white-space: nowrap !important;
+  font-size: 13px !important;
+  padding: 6px 10px !important;
+  text-align: left !important;
+  line-height: normal !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+.customer-overview .treatment-execution-manager-row .compact-field.date-field input[type="date"]::-webkit-date-and-time-value {
+  text-align: left !important;
+  white-space: nowrap !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  min-height: 0 !important;
+  line-height: normal !important;
+}
+.customer-overview .treatment-session-tools {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  height: 34px !important;
+  flex: 0 0 auto !important;
+}
+.customer-overview .treatment-session-tools .session-followup-button {
+  height: 34px !important;
+  min-height: 34px !important;
+  padding: 6px 12px !important;
+  font-size: 12px !important;
+  border-radius: 8px !important;
+  white-space: nowrap !important;
+}
+.customer-overview .treatment-signature-state {
+  display: inline-flex !important;
+  align-items: center !important;
+  height: 34px !important;
+  padding: 4px 8px !important;
+  border-radius: 8px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: var(--muted) !important;
+  background: var(--cream) !important;
+  white-space: nowrap !important;
+}
+.customer-overview .treatment-signature-state.has-value {
+  color: var(--sage) !important;
+  background: var(--sage-light) !important;
+}
+.customer-overview .treatment-execution-signature {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex: none !important;
+}
+.customer-overview .treatment-execution-signature .field-label,
+.customer-overview .treatment-execution-signature .small-muted {
+  display: none !important;
+}
+.customer-overview .treatment-execution-signature .signature-draft-actions {
+  display: inline-flex !important;
+  margin: 0 !important;
+  gap: 6px !important;
+}
+.customer-overview .treatment-execution-signature .signature-draft-actions .btn {
+  margin: 0 !important;
+  min-height: 34px !important;
+  height: 34px !important;
+  padding: 6px 12px !important;
+  font-size: 12px !important;
+  border-radius: 8px !important;
+  white-space: nowrap !important;
+}
+.customer-overview .treatment-execution-signature .signature-draft-preview {
+  display: none !important;
+}
+.customer-overview .treatment-execution-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+  margin-top: 8px !important;
+  width: 100% !important;
+}
+.customer-overview .treatment-single-execution-row {
+  min-width: 500px !important;
+}
+
+@media (max-width: 768px) {
+  .treatment-root-panel.treatment-card-item .treatment-parent-heading { padding: 6px 10px; min-height: 36px; }
+  .treatment-parent-heading-left { gap: 6px; }
+  .treatment-root-panel .treatment-parent-heading .treatment-parent-title {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    flex: 1 1 auto !important;
+    font-size: 12px;
+  }
+  .treatment-parent-actions { gap: 4px; }
+  .treatment-parent-actions .btn { min-height: 26px; padding: 2px 8px; font-size: 11px; }
+  .treatment-parent-actions .text-action { min-height: 26px; padding: 2px 6px; font-size: 11px; }
+  .treatment-single-execution-row { flex-wrap: wrap; }
+  .treatment-single-actions { margin-left: 0; width: 100%; justify-content: flex-end; }
+  .treatment-history-service-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .treatment-history-service-meta { width: 100%; justify-content: space-between; }
+  .treatment-child-execution-row { flex-wrap: wrap; }
+  .customer-overview .treatment-child-execution-row {
+    display: grid !important;
+    grid-template-columns: minmax(130px, 1fr) 75px 170px !important;
+    flex-wrap: nowrap !important;
+  }
+}
+
+@media (max-width: 540px) {
+  .treatment-execution-split { grid-template-columns: 1fr !important; }
 }

@@ -7,8 +7,11 @@ export function validateInvoiceServiceGroups(lines) {
     if (!line.serviceChildren?.length && !line.treatmentConfigured) continue
     const perSession = !line.serviceChildren?.length && line.treatmentConfigured && line.treatmentTotalSessions !== null && Number(line.quantity) === Number(line.treatmentTotalSessions)
     if (Number(line.quantity) !== 1 && !perSession) return 'Dòng có cấu hình liệu trình cần số lượng 1 hoặc số lượng bằng số buổi của dịch vụ đơn lẻ.'
-    const cards = [...(line.serviceChildren || []), ...(line.treatmentConfigured ? [{ total_sessions: line.treatmentTotalSessions }] : [])]
-    if (cards.some(child => child.total_sessions !== null && (!/^[0-9]+$/.test(String(child.total_sessions)) || Number(child.total_sessions) < 1 || Number(child.total_sessions) > 2147483647))) return 'Số buổi phải là số nguyên từ 1 đến 2147483647, hoặc chọn Trọn đời.'
+    if (line.treatmentConfigured && line.treatmentTotalSessions !== null && (!/^[0-9]+$/.test(String(line.treatmentTotalSessions)) || Number(line.treatmentTotalSessions) < 1 || Number(line.treatmentTotalSessions) > 2147483647)) return 'Số buổi phải là số nguyên từ 1 đến 2147483647, hoặc chọn Trọn đời.'
+    if ((line.serviceChildren || []).some(child => child.total_sessions !== null && (!/^[0-9]+$/.test(String(child.total_sessions)) || Number(child.total_sessions) < 0 || Number(child.total_sessions) > 2147483647))) return 'Số buổi phải là số nguyên từ 0 đến 2147483647, hoặc chọn Trọn đời.'
+    if ((line.serviceChildren || []).some(child => child.total_sessions !== null && Number(child.total_sessions) === 0 && child.performNow)) return 'Dịch vụ con có 0 buổi không thể ghi nhận làm ngay.'
+
+
   }
   return ''
 }

@@ -1,0 +1,25 @@
+
+Running 21 tests using 1 worker
+
+[1/21] tests\e2e\mobile-workflows.spec.js:30:1 › desktop workflow geometry is unchanged by mobile overrides
+[2/21] tests\e2e\mobile-workflows.spec.js:124:3 › single execution collapses without blank space at 320px
+[3/21] tests\e2e\mobile-workflows.spec.js:151:3 › completed customer actions stay inside their cells at 320px
+[4/21] tests\e2e\mobile-workflows.spec.js:170:3 › today visit and execution controls fit 320px
+[5/21] tests\e2e\mobile-workflows.spec.js:184:3 › treatment card and embedded execution fit 320px
+[6/21] tests\e2e\mobile-workflows.spec.js:203:3 › customer overview uses compact embedded execution at 320px
+[7/21] tests\e2e\mobile-workflows.spec.js:124:3 › single execution collapses without blank space at 360px
+[8/21] tests\e2e\mobile-workflows.spec.js:151:3 › completed customer actions stay inside their cells at 360px
+[9/21] tests\e2e\mobile-workflows.spec.js:170:3 › today visit and execution controls fit 360px
+[10/21] tests\e2e\mobile-workflows.spec.js:184:3 › treatment card and embedded execution fit 360px
+[11/21] tests\e2e\mobile-workflows.spec.js:203:3 › customer overview uses compact embedded execution at 360px
+[12/21] tests\e2e\mobile-workflows.spec.js:124:3 › single execution collapses without blank space at 390px
+[13/21] tests\e2e\mobile-workflows.spec.js:151:3 › completed customer actions stay inside their cells at 390px
+[14/21] tests\e2e\mobile-workflows.spec.js:170:3 › today visit and execution controls fit 390px
+[15/21] tests\e2e\mobile-workflows.spec.js:184:3 › treatment card and embedded execution fit 390px
+[16/21] tests\e2e\mobile-workflows.spec.js:203:3 › customer overview uses compact embedded execution at 390px
+[17/21] tests\e2e\mobile-workflows.spec.js:124:3 › single execution collapses without blank space at 430px
+[18/21] tests\e2e\mobile-workflows.spec.js:151:3 › completed customer actions stay inside their cells at 430px
+[19/21] tests\e2e\mobile-workflows.spec.js:170:3 › today visit and execution controls fit 430px
+[20/21] tests\e2e\mobile-workflows.spec.js:184:3 › treatment card and embedded execution fit 430px
+[21/21] tests\e2e\mobile-workflows.spec.js:203:3 › customer overview uses compact embedded execution at 430px
+  21 passed (38.4s)

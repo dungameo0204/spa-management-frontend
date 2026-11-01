@@ -1,0 +1,1465 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "D:\\Project\\SpaManagement\\spa-management-frontend\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/e2e/mobile-workflows.spec.js",
+      "tests/e2e/invoice-service-children.spec.js",
+      "tests/e2e/today-group-signature.spec.js",
+      "--workers=2",
+      "--reporter=json"
+    ],
+    "configFile": "D:\\Project\\SpaManagement\\spa-management-frontend\\playwright.config.js",
+    "rootDir": "D:/Project/SpaManagement/spa-management-frontend/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 2
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/Project/SpaManagement/spa-management-frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/Project/SpaManagement/spa-management-frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "name": "",
+        "testDir": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e",
+        "snapshotDir": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 30000,
+        "use": {
+          "baseURL": "http://127.0.0.1:4174",
+          "browserName": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 2,
+    "webServer": {
+      "command": "npm run dev -- --host 127.0.0.1 --port 4174",
+      "url": "http://127.0.0.1:4174/login",
+      "reuseExistingServer": true,
+      "timeout": 60000
+    }
+  },
+  "suites": [
+    {
+      "title": "invoice-service-children.spec.js",
+      "file": "invoice-service-children.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "child allocations and editable parent price at 390px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14390,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:04:03.980Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "63204343b4380e6e935c-f7188cb6f94497f445b3",
+          "file": "invoice-service-children.spec.js",
+          "line": 52,
+          "column": 34
+        },
+        {
+          "title": "child allocations and editable parent price at 1280px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5730,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:04:19.598Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "63204343b4380e6e935c-52db653565a9acabf1c7",
+          "file": "invoice-service-children.spec.js",
+          "line": 52,
+          "column": 34
+        },
+        {
+          "title": "grouped staff picker, pending children, parent note and signature save only the selected child",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7143,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:04:25.362Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "63204343b4380e6e935c-97b850a7d61b06406e17",
+          "file": "invoice-service-children.spec.js",
+          "line": 87,
+          "column": 1
+        },
+        {
+          "title": "failed child execution leaves the saved invoice locked instead of posting it again",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4755,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:04:32.537Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "63204343b4380e6e935c-a8f1ad6b10b33979b05f",
+          "file": "invoice-service-children.spec.js",
+          "line": 125,
+          "column": 1
+        },
+        {
+          "title": "standalone lifetime aligned and editable; unsigned confirmation at 390px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5847,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:04:37.322Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "63204343b4380e6e935c-82c356ac56be87d61dda",
+          "file": "invoice-service-children.spec.js",
+          "line": 141,
+          "column": 58
+        },
+        {
+          "title": "standalone lifetime aligned and editable; unsigned confirmation at 1024px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 2512,
+                  "error": {
+                    "message": "Error: [{\"name\":\"Tìm sản phẩm / dịch vụ\",\"x\":53.484375,\"y\":250.1875,\"right\":251.40625,\"bottom\":288.1875},{\"name\":\"Số lượng\",\"x\":259.40625,\"y\":250.1875,\"right\":306.203125,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":324.59375,\"y\":260.1875,\"right\":342.59375,\"bottom\":278.1875},{\"name\":\"text\",\"x\":366.375,\"y\":250.1875,\"right\":487.328125,\"bottom\":288.1875},{\"name\":\"number\",\"x\":495.328125,\"y\":250.1875,\"right\":561.3125,\"bottom\":288.1875},{\"name\":\"text\",\"x\":569.3125,\"y\":250.1875,\"right\":679.265625,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":130.296875,\"y\":316.1875,\"right\":146.296875,\"bottom\":332.1875},{\"name\":\"Nhân viên làm pnp\",\"x\":169.296875,\"y\":305.1875,\"right\":319.296875,\"bottom\":343.1875},{\"name\":\"Ghi chú\",\"x\":669.359375,\"y\":353.1875,\"right\":759.234375,\"bottom\":391.1875},{\"name\":\"Chữ ký\",\"x\":767.234375,\"y\":353.1875,\"right\":853,\"bottom\":391.1875}]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m278.1875\u001b[39m\nReceived:   \u001b[31m353.1875\u001b[39m",
+                    "stack": "Error: [{\"name\":\"Tìm sản phẩm / dịch vụ\",\"x\":53.484375,\"y\":250.1875,\"right\":251.40625,\"bottom\":288.1875},{\"name\":\"Số lượng\",\"x\":259.40625,\"y\":250.1875,\"right\":306.203125,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":324.59375,\"y\":260.1875,\"right\":342.59375,\"bottom\":278.1875},{\"name\":\"text\",\"x\":366.375,\"y\":250.1875,\"right\":487.328125,\"bottom\":288.1875},{\"name\":\"number\",\"x\":495.328125,\"y\":250.1875,\"right\":561.3125,\"bottom\":288.1875},{\"name\":\"text\",\"x\":569.3125,\"y\":250.1875,\"right\":679.265625,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":130.296875,\"y\":316.1875,\"right\":146.296875,\"bottom\":332.1875},{\"name\":\"Nhân viên làm pnp\",\"x\":169.296875,\"y\":305.1875,\"right\":319.296875,\"bottom\":343.1875},{\"name\":\"Ghi chú\",\"x\":669.359375,\"y\":353.1875,\"right\":759.234375,\"bottom\":391.1875},{\"name\":\"Chữ ký\",\"x\":767.234375,\"y\":353.1875,\"right\":853,\"bottom\":391.1875}]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m278.1875\u001b[39m\nReceived:   \u001b[31m353.1875\u001b[39m\n    at expectDesktopInvoiceLine (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js:12:67)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-service-children.spec.js:162:5",
+                    "location": {
+                      "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                      "column": 67,
+                      "line": 12
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39minvoice-line-layout.js:12\n\n\u001b[0m \u001b[90m 10 |\u001b[39m   expect(boxes\u001b[33m.\u001b[39mlength)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m8\u001b[39m)\n \u001b[90m 11 |\u001b[39m   \u001b[90m// Every actual control (not its label) shares a horizontal band.\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 12 |\u001b[39m   expect(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmax(\u001b[33m...\u001b[39mboxes\u001b[33m.\u001b[39mmap(b \u001b[33m=>\u001b[39m b\u001b[33m.\u001b[39my))\u001b[33m,\u001b[39m \u001b[33mJSON\u001b[39m\u001b[33m.\u001b[39mstringify(boxes))\u001b[33m.\u001b[39mtoBeLessThan(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmin(\u001b[33m...\u001b[39mboxes\u001b[33m.\u001b[39mmap(b \u001b[33m=>\u001b[39m b\u001b[33m.\u001b[39mbottom)))\n \u001b[90m    |\u001b[39m                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 13 |\u001b[39m   \u001b[36mconst\u001b[39m sorted \u001b[33m=\u001b[39m [\u001b[33m...\u001b[39mboxes]\u001b[33m.\u001b[39msort((a\u001b[33m,\u001b[39m b) \u001b[33m=>\u001b[39m a\u001b[33m.\u001b[39mx \u001b[33m-\u001b[39m b\u001b[33m.\u001b[39mx)\n \u001b[90m 14 |\u001b[39m   \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m1\u001b[39m\u001b[33m;\u001b[39m i \u001b[33m<\u001b[39m sorted\u001b[33m.\u001b[39mlength\u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) expect(sorted[i]\u001b[33m.\u001b[39mx\u001b[33m,\u001b[39m \u001b[33mJSON\u001b[39m\u001b[33m.\u001b[39mstringify(sorted))\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(sorted[i \u001b[33m-\u001b[39m \u001b[35m1\u001b[39m]\u001b[33m.\u001b[39mright \u001b[33m-\u001b[39m \u001b[35m1\u001b[39m)\n \u001b[90m 15 |\u001b[39m   \u001b[36mconst\u001b[39m picker \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m line\u001b[33m.\u001b[39mgetByRole(\u001b[32m'combobox'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Tìm sản phẩm / dịch vụ'\u001b[39m })\u001b[33m.\u001b[39mboundingBox()\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                        "column": 67,
+                        "line": 12
+                      },
+                      "message": "Error: [{\"name\":\"Tìm sản phẩm / dịch vụ\",\"x\":53.484375,\"y\":250.1875,\"right\":251.40625,\"bottom\":288.1875},{\"name\":\"Số lượng\",\"x\":259.40625,\"y\":250.1875,\"right\":306.203125,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":324.59375,\"y\":260.1875,\"right\":342.59375,\"bottom\":278.1875},{\"name\":\"text\",\"x\":366.375,\"y\":250.1875,\"right\":487.328125,\"bottom\":288.1875},{\"name\":\"number\",\"x\":495.328125,\"y\":250.1875,\"right\":561.3125,\"bottom\":288.1875},{\"name\":\"text\",\"x\":569.3125,\"y\":250.1875,\"right\":679.265625,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":130.296875,\"y\":316.1875,\"right\":146.296875,\"bottom\":332.1875},{\"name\":\"Nhân viên làm pnp\",\"x\":169.296875,\"y\":305.1875,\"right\":319.296875,\"bottom\":343.1875},{\"name\":\"Ghi chú\",\"x\":669.359375,\"y\":353.1875,\"right\":759.234375,\"bottom\":391.1875},{\"name\":\"Chữ ký\",\"x\":767.234375,\"y\":353.1875,\"right\":853,\"bottom\":391.1875}]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m278.1875\u001b[39m\nReceived:   \u001b[31m353.1875\u001b[39m\n\n   at invoice-line-layout.js:12\n\n  10 |   expect(boxes.length).toBeGreaterThanOrEqual(8)\n  11 |   // Every actual control (not its label) shares a horizontal band.\n> 12 |   expect(Math.max(...boxes.map(b => b.y)), JSON.stringify(boxes)).toBeLessThan(Math.min(...boxes.map(b => b.bottom)))\n     |                                                                   ^\n  13 |   const sorted = [...boxes].sort((a, b) => a.x - b.x)\n  14 |   for (let i = 1; i < sorted.length; i++) expect(sorted[i].x, JSON.stringify(sorted)).toBeGreaterThanOrEqual(sorted[i - 1].right - 1)\n  15 |   const picker = await line.getByRole('combobox', { name: 'Tìm sản phẩm / dịch vụ' }).boundingBox()\n    at expectDesktopInvoiceLine (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js:12:67)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-service-children.spec.js:162:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:04:43.204Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\invoice-service-children-s-bf6da-gned-confirmation-at-1024px\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                    "column": 67,
+                    "line": 12
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "63204343b4380e6e935c-a8b856e26071df2de9d8",
+          "file": "invoice-service-children.spec.js",
+          "line": 141,
+          "column": 58
+        },
+        {
+          "title": "standalone lifetime aligned and editable; unsigned confirmation at 1280px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5757,
+                  "error": {
+                    "message": "Error: [{\"name\":\"Tìm sản phẩm / dịch vụ\",\"x\":58.609375,\"y\":250.1875,\"right\":326,\"bottom\":288.1875},{\"name\":\"Số lượng\",\"x\":334,\"y\":250.1875,\"right\":412.140625,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":433.921875,\"y\":260.1875,\"right\":451.921875,\"bottom\":278.1875},{\"name\":\"text\",\"x\":475.703125,\"y\":250.1875,\"right\":639.125,\"bottom\":288.1875},{\"name\":\"number\",\"x\":647.125,\"y\":250.1875,\"right\":736.25,\"bottom\":288.1875},{\"name\":\"text\",\"x\":744.25,\"y\":250.1875,\"right\":892.8125,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":135.421875,\"y\":316.1875,\"right\":151.421875,\"bottom\":332.1875},{\"name\":\"Nhân viên làm pnp\",\"x\":174.421875,\"y\":305.1875,\"right\":324.421875,\"bottom\":343.1875},{\"name\":\"Ghi chú\",\"x\":925.359375,\"y\":353.1875,\"right\":1015.234375,\"bottom\":391.1875},{\"name\":\"Chữ ký\",\"x\":1023.234375,\"y\":353.1875,\"right\":1109,\"bottom\":391.1875}]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m278.1875\u001b[39m\nReceived:   \u001b[31m353.1875\u001b[39m",
+                    "stack": "Error: [{\"name\":\"Tìm sản phẩm / dịch vụ\",\"x\":58.609375,\"y\":250.1875,\"right\":326,\"bottom\":288.1875},{\"name\":\"Số lượng\",\"x\":334,\"y\":250.1875,\"right\":412.140625,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":433.921875,\"y\":260.1875,\"right\":451.921875,\"bottom\":278.1875},{\"name\":\"text\",\"x\":475.703125,\"y\":250.1875,\"right\":639.125,\"bottom\":288.1875},{\"name\":\"number\",\"x\":647.125,\"y\":250.1875,\"right\":736.25,\"bottom\":288.1875},{\"name\":\"text\",\"x\":744.25,\"y\":250.1875,\"right\":892.8125,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":135.421875,\"y\":316.1875,\"right\":151.421875,\"bottom\":332.1875},{\"name\":\"Nhân viên làm pnp\",\"x\":174.421875,\"y\":305.1875,\"right\":324.421875,\"bottom\":343.1875},{\"name\":\"Ghi chú\",\"x\":925.359375,\"y\":353.1875,\"right\":1015.234375,\"bottom\":391.1875},{\"name\":\"Chữ ký\",\"x\":1023.234375,\"y\":353.1875,\"right\":1109,\"bottom\":391.1875}]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m278.1875\u001b[39m\nReceived:   \u001b[31m353.1875\u001b[39m\n    at expectDesktopInvoiceLine (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js:12:67)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-service-children.spec.js:162:5",
+                    "location": {
+                      "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                      "column": 67,
+                      "line": 12
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39minvoice-line-layout.js:12\n\n\u001b[0m \u001b[90m 10 |\u001b[39m   expect(boxes\u001b[33m.\u001b[39mlength)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m8\u001b[39m)\n \u001b[90m 11 |\u001b[39m   \u001b[90m// Every actual control (not its label) shares a horizontal band.\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 12 |\u001b[39m   expect(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmax(\u001b[33m...\u001b[39mboxes\u001b[33m.\u001b[39mmap(b \u001b[33m=>\u001b[39m b\u001b[33m.\u001b[39my))\u001b[33m,\u001b[39m \u001b[33mJSON\u001b[39m\u001b[33m.\u001b[39mstringify(boxes))\u001b[33m.\u001b[39mtoBeLessThan(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmin(\u001b[33m...\u001b[39mboxes\u001b[33m.\u001b[39mmap(b \u001b[33m=>\u001b[39m b\u001b[33m.\u001b[39mbottom)))\n \u001b[90m    |\u001b[39m                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 13 |\u001b[39m   \u001b[36mconst\u001b[39m sorted \u001b[33m=\u001b[39m [\u001b[33m...\u001b[39mboxes]\u001b[33m.\u001b[39msort((a\u001b[33m,\u001b[39m b) \u001b[33m=>\u001b[39m a\u001b[33m.\u001b[39mx \u001b[33m-\u001b[39m b\u001b[33m.\u001b[39mx)\n \u001b[90m 14 |\u001b[39m   \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m1\u001b[39m\u001b[33m;\u001b[39m i \u001b[33m<\u001b[39m sorted\u001b[33m.\u001b[39mlength\u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) expect(sorted[i]\u001b[33m.\u001b[39mx\u001b[33m,\u001b[39m \u001b[33mJSON\u001b[39m\u001b[33m.\u001b[39mstringify(sorted))\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(sorted[i \u001b[33m-\u001b[39m \u001b[35m1\u001b[39m]\u001b[33m.\u001b[39mright \u001b[33m-\u001b[39m \u001b[35m1\u001b[39m)\n \u001b[90m 15 |\u001b[39m   \u001b[36mconst\u001b[39m picker \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m line\u001b[33m.\u001b[39mgetByRole(\u001b[32m'combobox'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Tìm sản phẩm / dịch vụ'\u001b[39m })\u001b[33m.\u001b[39mboundingBox()\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                        "column": 67,
+                        "line": 12
+                      },
+                      "message": "Error: [{\"name\":\"Tìm sản phẩm / dịch vụ\",\"x\":58.609375,\"y\":250.1875,\"right\":326,\"bottom\":288.1875},{\"name\":\"Số lượng\",\"x\":334,\"y\":250.1875,\"right\":412.140625,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":433.921875,\"y\":260.1875,\"right\":451.921875,\"bottom\":278.1875},{\"name\":\"text\",\"x\":475.703125,\"y\":250.1875,\"right\":639.125,\"bottom\":288.1875},{\"name\":\"number\",\"x\":647.125,\"y\":250.1875,\"right\":736.25,\"bottom\":288.1875},{\"name\":\"text\",\"x\":744.25,\"y\":250.1875,\"right\":892.8125,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":135.421875,\"y\":316.1875,\"right\":151.421875,\"bottom\":332.1875},{\"name\":\"Nhân viên làm pnp\",\"x\":174.421875,\"y\":305.1875,\"right\":324.421875,\"bottom\":343.1875},{\"name\":\"Ghi chú\",\"x\":925.359375,\"y\":353.1875,\"right\":1015.234375,\"bottom\":391.1875},{\"name\":\"Chữ ký\",\"x\":1023.234375,\"y\":353.1875,\"right\":1109,\"bottom\":391.1875}]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m278.1875\u001b[39m\nReceived:   \u001b[31m353.1875\u001b[39m\n\n   at invoice-line-layout.js:12\n\n  10 |   expect(boxes.length).toBeGreaterThanOrEqual(8)\n  11 |   // Every actual control (not its label) shares a horizontal band.\n> 12 |   expect(Math.max(...boxes.map(b => b.y)), JSON.stringify(boxes)).toBeLessThan(Math.min(...boxes.map(b => b.bottom)))\n     |                                                                   ^\n  13 |   const sorted = [...boxes].sort((a, b) => a.x - b.x)\n  14 |   for (let i = 1; i < sorted.length; i++) expect(sorted[i].x, JSON.stringify(sorted)).toBeGreaterThanOrEqual(sorted[i - 1].right - 1)\n  15 |   const picker = await line.getByRole('combobox', { name: 'Tìm sản phẩm / dịch vụ' }).boundingBox()\n    at expectDesktopInvoiceLine (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js:12:67)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-service-children.spec.js:162:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:05:49.211Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\invoice-service-children-s-daba0-gned-confirmation-at-1280px\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                    "column": 67,
+                    "line": 12
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "63204343b4380e6e935c-c2d9fbcd565d3df7aaa3",
+          "file": "invoice-service-children.spec.js",
+          "line": 141,
+          "column": 58
+        },
+        {
+          "title": "standalone lifetime aligned and editable; unsigned confirmation at 1440px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 4526,
+                  "error": {
+                    "message": "Error: [{\"name\":\"Tìm sản phẩm / dịch vụ\",\"x\":193,\"y\":250.1875,\"right\":467.484375,\"bottom\":288.1875},{\"name\":\"Số lượng\",\"x\":475.484375,\"y\":250.1875,\"right\":557.171875,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":578.953125,\"y\":260.1875,\"right\":596.953125,\"bottom\":278.1875},{\"name\":\"text\",\"x\":620.734375,\"y\":250.1875,\"right\":788.484375,\"bottom\":288.1875},{\"name\":\"number\",\"x\":796.484375,\"y\":250.1875,\"right\":887.984375,\"bottom\":288.1875},{\"name\":\"text\",\"x\":895.984375,\"y\":250.1875,\"right\":1048.484375,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":269.8125,\"y\":316.1875,\"right\":285.8125,\"bottom\":332.1875},{\"name\":\"Nhân viên làm pnp\",\"x\":308.8125,\"y\":305.1875,\"right\":458.8125,\"bottom\":343.1875},{\"name\":\"Ghi chú\",\"x\":1085.359375,\"y\":353.1875,\"right\":1175.234375,\"bottom\":391.1875},{\"name\":\"Chữ ký\",\"x\":1183.234375,\"y\":353.1875,\"right\":1269,\"bottom\":391.1875}]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m278.1875\u001b[39m\nReceived:   \u001b[31m353.1875\u001b[39m",
+                    "stack": "Error: [{\"name\":\"Tìm sản phẩm / dịch vụ\",\"x\":193,\"y\":250.1875,\"right\":467.484375,\"bottom\":288.1875},{\"name\":\"Số lượng\",\"x\":475.484375,\"y\":250.1875,\"right\":557.171875,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":578.953125,\"y\":260.1875,\"right\":596.953125,\"bottom\":278.1875},{\"name\":\"text\",\"x\":620.734375,\"y\":250.1875,\"right\":788.484375,\"bottom\":288.1875},{\"name\":\"number\",\"x\":796.484375,\"y\":250.1875,\"right\":887.984375,\"bottom\":288.1875},{\"name\":\"text\",\"x\":895.984375,\"y\":250.1875,\"right\":1048.484375,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":269.8125,\"y\":316.1875,\"right\":285.8125,\"bottom\":332.1875},{\"name\":\"Nhân viên làm pnp\",\"x\":308.8125,\"y\":305.1875,\"right\":458.8125,\"bottom\":343.1875},{\"name\":\"Ghi chú\",\"x\":1085.359375,\"y\":353.1875,\"right\":1175.234375,\"bottom\":391.1875},{\"name\":\"Chữ ký\",\"x\":1183.234375,\"y\":353.1875,\"right\":1269,\"bottom\":391.1875}]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m278.1875\u001b[39m\nReceived:   \u001b[31m353.1875\u001b[39m\n    at expectDesktopInvoiceLine (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js:12:67)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-service-children.spec.js:162:5",
+                    "location": {
+                      "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                      "column": 67,
+                      "line": 12
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39minvoice-line-layout.js:12\n\n\u001b[0m \u001b[90m 10 |\u001b[39m   expect(boxes\u001b[33m.\u001b[39mlength)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m8\u001b[39m)\n \u001b[90m 11 |\u001b[39m   \u001b[90m// Every actual control (not its label) shares a horizontal band.\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 12 |\u001b[39m   expect(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmax(\u001b[33m...\u001b[39mboxes\u001b[33m.\u001b[39mmap(b \u001b[33m=>\u001b[39m b\u001b[33m.\u001b[39my))\u001b[33m,\u001b[39m \u001b[33mJSON\u001b[39m\u001b[33m.\u001b[39mstringify(boxes))\u001b[33m.\u001b[39mtoBeLessThan(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmin(\u001b[33m...\u001b[39mboxes\u001b[33m.\u001b[39mmap(b \u001b[33m=>\u001b[39m b\u001b[33m.\u001b[39mbottom)))\n \u001b[90m    |\u001b[39m                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 13 |\u001b[39m   \u001b[36mconst\u001b[39m sorted \u001b[33m=\u001b[39m [\u001b[33m...\u001b[39mboxes]\u001b[33m.\u001b[39msort((a\u001b[33m,\u001b[39m b) \u001b[33m=>\u001b[39m a\u001b[33m.\u001b[39mx \u001b[33m-\u001b[39m b\u001b[33m.\u001b[39mx)\n \u001b[90m 14 |\u001b[39m   \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m1\u001b[39m\u001b[33m;\u001b[39m i \u001b[33m<\u001b[39m sorted\u001b[33m.\u001b[39mlength\u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) expect(sorted[i]\u001b[33m.\u001b[39mx\u001b[33m,\u001b[39m \u001b[33mJSON\u001b[39m\u001b[33m.\u001b[39mstringify(sorted))\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(sorted[i \u001b[33m-\u001b[39m \u001b[35m1\u001b[39m]\u001b[33m.\u001b[39mright \u001b[33m-\u001b[39m \u001b[35m1\u001b[39m)\n \u001b[90m 15 |\u001b[39m   \u001b[36mconst\u001b[39m picker \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m line\u001b[33m.\u001b[39mgetByRole(\u001b[32m'combobox'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Tìm sản phẩm / dịch vụ'\u001b[39m })\u001b[33m.\u001b[39mboundingBox()\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                        "column": 67,
+                        "line": 12
+                      },
+                      "message": "Error: [{\"name\":\"Tìm sản phẩm / dịch vụ\",\"x\":193,\"y\":250.1875,\"right\":467.484375,\"bottom\":288.1875},{\"name\":\"Số lượng\",\"x\":475.484375,\"y\":250.1875,\"right\":557.171875,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":578.953125,\"y\":260.1875,\"right\":596.953125,\"bottom\":278.1875},{\"name\":\"text\",\"x\":620.734375,\"y\":250.1875,\"right\":788.484375,\"bottom\":288.1875},{\"name\":\"number\",\"x\":796.484375,\"y\":250.1875,\"right\":887.984375,\"bottom\":288.1875},{\"name\":\"text\",\"x\":895.984375,\"y\":250.1875,\"right\":1048.484375,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":269.8125,\"y\":316.1875,\"right\":285.8125,\"bottom\":332.1875},{\"name\":\"Nhân viên làm pnp\",\"x\":308.8125,\"y\":305.1875,\"right\":458.8125,\"bottom\":343.1875},{\"name\":\"Ghi chú\",\"x\":1085.359375,\"y\":353.1875,\"right\":1175.234375,\"bottom\":391.1875},{\"name\":\"Chữ ký\",\"x\":1183.234375,\"y\":353.1875,\"right\":1269,\"bottom\":391.1875}]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m278.1875\u001b[39m\nReceived:   \u001b[31m353.1875\u001b[39m\n\n   at invoice-line-layout.js:12\n\n  10 |   expect(boxes.length).toBeGreaterThanOrEqual(8)\n  11 |   // Every actual control (not its label) shares a horizontal band.\n> 12 |   expect(Math.max(...boxes.map(b => b.y)), JSON.stringify(boxes)).toBeLessThan(Math.min(...boxes.map(b => b.bottom)))\n     |                                                                   ^\n  13 |   const sorted = [...boxes].sort((a, b) => a.x - b.x)\n  14 |   for (let i = 1; i < sorted.length; i++) expect(sorted[i].x, JSON.stringify(sorted)).toBeGreaterThanOrEqual(sorted[i - 1].right - 1)\n  15 |   const picker = await line.getByRole('combobox', { name: 'Tìm sản phẩm / dịch vụ' }).boundingBox()\n    at expectDesktopInvoiceLine (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js:12:67)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-service-children.spec.js:162:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:06:04.194Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\invoice-service-children-s-9a28b-gned-confirmation-at-1440px\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                    "column": 67,
+                    "line": 12
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "63204343b4380e6e935c-ea7c95624f12e0abc2cc",
+          "file": "invoice-service-children.spec.js",
+          "line": 141,
+          "column": 58
+        },
+        {
+          "title": "standalone lifetime aligned and editable; unsigned confirmation at 1500px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5170,
+                  "error": {
+                    "message": "Error: [{\"name\":\"Tìm sản phẩm / dịch vụ\",\"x\":253,\"y\":250.1875,\"right\":527.484375,\"bottom\":288.1875},{\"name\":\"Số lượng\",\"x\":535.484375,\"y\":250.1875,\"right\":617.171875,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":638.953125,\"y\":260.1875,\"right\":656.953125,\"bottom\":278.1875},{\"name\":\"text\",\"x\":680.734375,\"y\":250.1875,\"right\":848.484375,\"bottom\":288.1875},{\"name\":\"number\",\"x\":856.484375,\"y\":250.1875,\"right\":947.984375,\"bottom\":288.1875},{\"name\":\"text\",\"x\":955.984375,\"y\":250.1875,\"right\":1108.484375,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":329.8125,\"y\":316.1875,\"right\":345.8125,\"bottom\":332.1875},{\"name\":\"Nhân viên làm pnp\",\"x\":368.8125,\"y\":305.1875,\"right\":518.8125,\"bottom\":343.1875},{\"name\":\"Ghi chú\",\"x\":1145.359375,\"y\":353.1875,\"right\":1235.234375,\"bottom\":391.1875},{\"name\":\"Chữ ký\",\"x\":1243.234375,\"y\":353.1875,\"right\":1329,\"bottom\":391.1875}]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m278.1875\u001b[39m\nReceived:   \u001b[31m353.1875\u001b[39m",
+                    "stack": "Error: [{\"name\":\"Tìm sản phẩm / dịch vụ\",\"x\":253,\"y\":250.1875,\"right\":527.484375,\"bottom\":288.1875},{\"name\":\"Số lượng\",\"x\":535.484375,\"y\":250.1875,\"right\":617.171875,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":638.953125,\"y\":260.1875,\"right\":656.953125,\"bottom\":278.1875},{\"name\":\"text\",\"x\":680.734375,\"y\":250.1875,\"right\":848.484375,\"bottom\":288.1875},{\"name\":\"number\",\"x\":856.484375,\"y\":250.1875,\"right\":947.984375,\"bottom\":288.1875},{\"name\":\"text\",\"x\":955.984375,\"y\":250.1875,\"right\":1108.484375,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":329.8125,\"y\":316.1875,\"right\":345.8125,\"bottom\":332.1875},{\"name\":\"Nhân viên làm pnp\",\"x\":368.8125,\"y\":305.1875,\"right\":518.8125,\"bottom\":343.1875},{\"name\":\"Ghi chú\",\"x\":1145.359375,\"y\":353.1875,\"right\":1235.234375,\"bottom\":391.1875},{\"name\":\"Chữ ký\",\"x\":1243.234375,\"y\":353.1875,\"right\":1329,\"bottom\":391.1875}]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m278.1875\u001b[39m\nReceived:   \u001b[31m353.1875\u001b[39m\n    at expectDesktopInvoiceLine (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js:12:67)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-service-children.spec.js:162:5",
+                    "location": {
+                      "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                      "column": 67,
+                      "line": 12
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39minvoice-line-layout.js:12\n\n\u001b[0m \u001b[90m 10 |\u001b[39m   expect(boxes\u001b[33m.\u001b[39mlength)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m8\u001b[39m)\n \u001b[90m 11 |\u001b[39m   \u001b[90m// Every actual control (not its label) shares a horizontal band.\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 12 |\u001b[39m   expect(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmax(\u001b[33m...\u001b[39mboxes\u001b[33m.\u001b[39mmap(b \u001b[33m=>\u001b[39m b\u001b[33m.\u001b[39my))\u001b[33m,\u001b[39m \u001b[33mJSON\u001b[39m\u001b[33m.\u001b[39mstringify(boxes))\u001b[33m.\u001b[39mtoBeLessThan(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmin(\u001b[33m...\u001b[39mboxes\u001b[33m.\u001b[39mmap(b \u001b[33m=>\u001b[39m b\u001b[33m.\u001b[39mbottom)))\n \u001b[90m    |\u001b[39m                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 13 |\u001b[39m   \u001b[36mconst\u001b[39m sorted \u001b[33m=\u001b[39m [\u001b[33m...\u001b[39mboxes]\u001b[33m.\u001b[39msort((a\u001b[33m,\u001b[39m b) \u001b[33m=>\u001b[39m a\u001b[33m.\u001b[39mx \u001b[33m-\u001b[39m b\u001b[33m.\u001b[39mx)\n \u001b[90m 14 |\u001b[39m   \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m1\u001b[39m\u001b[33m;\u001b[39m i \u001b[33m<\u001b[39m sorted\u001b[33m.\u001b[39mlength\u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) expect(sorted[i]\u001b[33m.\u001b[39mx\u001b[33m,\u001b[39m \u001b[33mJSON\u001b[39m\u001b[33m.\u001b[39mstringify(sorted))\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(sorted[i \u001b[33m-\u001b[39m \u001b[35m1\u001b[39m]\u001b[33m.\u001b[39mright \u001b[33m-\u001b[39m \u001b[35m1\u001b[39m)\n \u001b[90m 15 |\u001b[39m   \u001b[36mconst\u001b[39m picker \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m line\u001b[33m.\u001b[39mgetByRole(\u001b[32m'combobox'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Tìm sản phẩm / dịch vụ'\u001b[39m })\u001b[33m.\u001b[39mboundingBox()\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                        "column": 67,
+                        "line": 12
+                      },
+                      "message": "Error: [{\"name\":\"Tìm sản phẩm / dịch vụ\",\"x\":253,\"y\":250.1875,\"right\":527.484375,\"bottom\":288.1875},{\"name\":\"Số lượng\",\"x\":535.484375,\"y\":250.1875,\"right\":617.171875,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":638.953125,\"y\":260.1875,\"right\":656.953125,\"bottom\":278.1875},{\"name\":\"text\",\"x\":680.734375,\"y\":250.1875,\"right\":848.484375,\"bottom\":288.1875},{\"name\":\"number\",\"x\":856.484375,\"y\":250.1875,\"right\":947.984375,\"bottom\":288.1875},{\"name\":\"text\",\"x\":955.984375,\"y\":250.1875,\"right\":1108.484375,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":329.8125,\"y\":316.1875,\"right\":345.8125,\"bottom\":332.1875},{\"name\":\"Nhân viên làm pnp\",\"x\":368.8125,\"y\":305.1875,\"right\":518.8125,\"bottom\":343.1875},{\"name\":\"Ghi chú\",\"x\":1145.359375,\"y\":353.1875,\"right\":1235.234375,\"bottom\":391.1875},{\"name\":\"Chữ ký\",\"x\":1243.234375,\"y\":353.1875,\"right\":1329,\"bottom\":391.1875}]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m278.1875\u001b[39m\nReceived:   \u001b[31m353.1875\u001b[39m\n\n   at invoice-line-layout.js:12\n\n  10 |   expect(boxes.length).toBeGreaterThanOrEqual(8)\n  11 |   // Every actual control (not its label) shares a horizontal band.\n> 12 |   expect(Math.max(...boxes.map(b => b.y)), JSON.stringify(boxes)).toBeLessThan(Math.min(...boxes.map(b => b.bottom)))\n     |                                                                   ^\n  13 |   const sorted = [...boxes].sort((a, b) => a.x - b.x)\n  14 |   for (let i = 1; i < sorted.length; i++) expect(sorted[i].x, JSON.stringify(sorted)).toBeGreaterThanOrEqual(sorted[i - 1].right - 1)\n  15 |   const picker = await line.getByRole('combobox', { name: 'Tìm sản phẩm / dịch vụ' }).boundingBox()\n    at expectDesktopInvoiceLine (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js:12:67)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-service-children.spec.js:162:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:06:12.242Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\invoice-service-children-s-dd73d-gned-confirmation-at-1500px\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                    "column": 67,
+                    "line": 12
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "63204343b4380e6e935c-14c42a2930c232063cb8",
+          "file": "invoice-service-children.spec.js",
+          "line": 141,
+          "column": 58
+        },
+        {
+          "title": "standalone lifetime aligned and editable; unsigned confirmation at 1920px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 4110,
+                  "error": {
+                    "message": "Error: [{\"name\":\"Tìm sản phẩm / dịch vụ\",\"x\":673,\"y\":250.1875,\"right\":947.484375,\"bottom\":288.1875},{\"name\":\"Số lượng\",\"x\":955.484375,\"y\":250.1875,\"right\":1037.171875,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":1058.953125,\"y\":260.1875,\"right\":1076.953125,\"bottom\":278.1875},{\"name\":\"text\",\"x\":1100.734375,\"y\":250.1875,\"right\":1268.484375,\"bottom\":288.1875},{\"name\":\"number\",\"x\":1276.484375,\"y\":250.1875,\"right\":1367.984375,\"bottom\":288.1875},{\"name\":\"text\",\"x\":1375.984375,\"y\":250.1875,\"right\":1528.484375,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":749.8125,\"y\":316.1875,\"right\":765.8125,\"bottom\":332.1875},{\"name\":\"Nhân viên làm pnp\",\"x\":788.8125,\"y\":305.1875,\"right\":938.8125,\"bottom\":343.1875},{\"name\":\"Ghi chú\",\"x\":1565.359375,\"y\":353.1875,\"right\":1655.234375,\"bottom\":391.1875},{\"name\":\"Chữ ký\",\"x\":1663.234375,\"y\":353.1875,\"right\":1749,\"bottom\":391.1875}]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m278.1875\u001b[39m\nReceived:   \u001b[31m353.1875\u001b[39m",
+                    "stack": "Error: [{\"name\":\"Tìm sản phẩm / dịch vụ\",\"x\":673,\"y\":250.1875,\"right\":947.484375,\"bottom\":288.1875},{\"name\":\"Số lượng\",\"x\":955.484375,\"y\":250.1875,\"right\":1037.171875,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":1058.953125,\"y\":260.1875,\"right\":1076.953125,\"bottom\":278.1875},{\"name\":\"text\",\"x\":1100.734375,\"y\":250.1875,\"right\":1268.484375,\"bottom\":288.1875},{\"name\":\"number\",\"x\":1276.484375,\"y\":250.1875,\"right\":1367.984375,\"bottom\":288.1875},{\"name\":\"text\",\"x\":1375.984375,\"y\":250.1875,\"right\":1528.484375,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":749.8125,\"y\":316.1875,\"right\":765.8125,\"bottom\":332.1875},{\"name\":\"Nhân viên làm pnp\",\"x\":788.8125,\"y\":305.1875,\"right\":938.8125,\"bottom\":343.1875},{\"name\":\"Ghi chú\",\"x\":1565.359375,\"y\":353.1875,\"right\":1655.234375,\"bottom\":391.1875},{\"name\":\"Chữ ký\",\"x\":1663.234375,\"y\":353.1875,\"right\":1749,\"bottom\":391.1875}]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m278.1875\u001b[39m\nReceived:   \u001b[31m353.1875\u001b[39m\n    at expectDesktopInvoiceLine (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js:12:67)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-service-children.spec.js:162:5",
+                    "location": {
+                      "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                      "column": 67,
+                      "line": 12
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39minvoice-line-layout.js:12\n\n\u001b[0m \u001b[90m 10 |\u001b[39m   expect(boxes\u001b[33m.\u001b[39mlength)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m8\u001b[39m)\n \u001b[90m 11 |\u001b[39m   \u001b[90m// Every actual control (not its label) shares a horizontal band.\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 12 |\u001b[39m   expect(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmax(\u001b[33m...\u001b[39mboxes\u001b[33m.\u001b[39mmap(b \u001b[33m=>\u001b[39m b\u001b[33m.\u001b[39my))\u001b[33m,\u001b[39m \u001b[33mJSON\u001b[39m\u001b[33m.\u001b[39mstringify(boxes))\u001b[33m.\u001b[39mtoBeLessThan(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmin(\u001b[33m...\u001b[39mboxes\u001b[33m.\u001b[39mmap(b \u001b[33m=>\u001b[39m b\u001b[33m.\u001b[39mbottom)))\n \u001b[90m    |\u001b[39m                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 13 |\u001b[39m   \u001b[36mconst\u001b[39m sorted \u001b[33m=\u001b[39m [\u001b[33m...\u001b[39mboxes]\u001b[33m.\u001b[39msort((a\u001b[33m,\u001b[39m b) \u001b[33m=>\u001b[39m a\u001b[33m.\u001b[39mx \u001b[33m-\u001b[39m b\u001b[33m.\u001b[39mx)\n \u001b[90m 14 |\u001b[39m   \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m1\u001b[39m\u001b[33m;\u001b[39m i \u001b[33m<\u001b[39m sorted\u001b[33m.\u001b[39mlength\u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) expect(sorted[i]\u001b[33m.\u001b[39mx\u001b[33m,\u001b[39m \u001b[33mJSON\u001b[39m\u001b[33m.\u001b[39mstringify(sorted))\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(sorted[i \u001b[33m-\u001b[39m \u001b[35m1\u001b[39m]\u001b[33m.\u001b[39mright \u001b[33m-\u001b[39m \u001b[35m1\u001b[39m)\n \u001b[90m 15 |\u001b[39m   \u001b[36mconst\u001b[39m picker \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m line\u001b[33m.\u001b[39mgetByRole(\u001b[32m'combobox'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Tìm sản phẩm / dịch vụ'\u001b[39m })\u001b[33m.\u001b[39mboundingBox()\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                        "column": 67,
+                        "line": 12
+                      },
+                      "message": "Error: [{\"name\":\"Tìm sản phẩm / dịch vụ\",\"x\":673,\"y\":250.1875,\"right\":947.484375,\"bottom\":288.1875},{\"name\":\"Số lượng\",\"x\":955.484375,\"y\":250.1875,\"right\":1037.171875,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":1058.953125,\"y\":260.1875,\"right\":1076.953125,\"bottom\":278.1875},{\"name\":\"text\",\"x\":1100.734375,\"y\":250.1875,\"right\":1268.484375,\"bottom\":288.1875},{\"name\":\"number\",\"x\":1276.484375,\"y\":250.1875,\"right\":1367.984375,\"bottom\":288.1875},{\"name\":\"text\",\"x\":1375.984375,\"y\":250.1875,\"right\":1528.484375,\"bottom\":288.1875},{\"name\":\"checkbox\",\"x\":749.8125,\"y\":316.1875,\"right\":765.8125,\"bottom\":332.1875},{\"name\":\"Nhân viên làm pnp\",\"x\":788.8125,\"y\":305.1875,\"right\":938.8125,\"bottom\":343.1875},{\"name\":\"Ghi chú\",\"x\":1565.359375,\"y\":353.1875,\"right\":1655.234375,\"bottom\":391.1875},{\"name\":\"Chữ ký\",\"x\":1663.234375,\"y\":353.1875,\"right\":1749,\"bottom\":391.1875}]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m278.1875\u001b[39m\nReceived:   \u001b[31m353.1875\u001b[39m\n\n   at invoice-line-layout.js:12\n\n  10 |   expect(boxes.length).toBeGreaterThanOrEqual(8)\n  11 |   // Every actual control (not its label) shares a horizontal band.\n> 12 |   expect(Math.max(...boxes.map(b => b.y)), JSON.stringify(boxes)).toBeLessThan(Math.min(...boxes.map(b => b.bottom)))\n     |                                                                   ^\n  13 |   const sorted = [...boxes].sort((a, b) => a.x - b.x)\n  14 |   for (let i = 1; i < sorted.length; i++) expect(sorted[i].x, JSON.stringify(sorted)).toBeGreaterThanOrEqual(sorted[i - 1].right - 1)\n  15 |   const picker = await line.getByRole('combobox', { name: 'Tìm sản phẩm / dịch vụ' }).boundingBox()\n    at expectDesktopInvoiceLine (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js:12:67)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-service-children.spec.js:162:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:06:21.671Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\invoice-service-children-s-d13e5-gned-confirmation-at-1920px\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                    "column": 67,
+                    "line": 12
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "63204343b4380e6e935c-efd848f675ce097b88e1",
+          "file": "invoice-service-children.spec.js",
+          "line": 141,
+          "column": 58
+        },
+        {
+          "title": "long standalone name and large price keep the complete desktop row usable",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 4633,
+                  "error": {
+                    "message": "Error: [{\"name\":\"Tìm sản phẩm / dịch vụ\",\"x\":58.609375,\"y\":210,\"right\":326,\"bottom\":248},{\"name\":\"Số lượng\",\"x\":334,\"y\":210,\"right\":412.140625,\"bottom\":248},{\"name\":\"checkbox\",\"x\":433.921875,\"y\":220,\"right\":451.921875,\"bottom\":238},{\"name\":\"text\",\"x\":475.703125,\"y\":210,\"right\":639.125,\"bottom\":248},{\"name\":\"number\",\"x\":647.125,\"y\":210,\"right\":736.25,\"bottom\":248},{\"name\":\"text\",\"x\":744.25,\"y\":210,\"right\":892.8125,\"bottom\":248},{\"name\":\"checkbox\",\"x\":135.421875,\"y\":276,\"right\":151.421875,\"bottom\":292},{\"name\":\"Nhân viên làm Dịch vụ chăm sóc da chuyên sâu với tên rất dài không được đẩy các thao tác xuống hàng\",\"x\":174.421875,\"y\":265,\"right\":324.421875,\"bottom\":303},{\"name\":\"Ghi chú\",\"x\":925.359375,\"y\":313,\"right\":1015.234375,\"bottom\":351},{\"name\":\"Chữ ký\",\"x\":1023.234375,\"y\":313,\"right\":1109,\"bottom\":351}]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m238\u001b[39m\nReceived:   \u001b[31m313\u001b[39m",
+                    "stack": "Error: [{\"name\":\"Tìm sản phẩm / dịch vụ\",\"x\":58.609375,\"y\":210,\"right\":326,\"bottom\":248},{\"name\":\"Số lượng\",\"x\":334,\"y\":210,\"right\":412.140625,\"bottom\":248},{\"name\":\"checkbox\",\"x\":433.921875,\"y\":220,\"right\":451.921875,\"bottom\":238},{\"name\":\"text\",\"x\":475.703125,\"y\":210,\"right\":639.125,\"bottom\":248},{\"name\":\"number\",\"x\":647.125,\"y\":210,\"right\":736.25,\"bottom\":248},{\"name\":\"text\",\"x\":744.25,\"y\":210,\"right\":892.8125,\"bottom\":248},{\"name\":\"checkbox\",\"x\":135.421875,\"y\":276,\"right\":151.421875,\"bottom\":292},{\"name\":\"Nhân viên làm Dịch vụ chăm sóc da chuyên sâu với tên rất dài không được đẩy các thao tác xuống hàng\",\"x\":174.421875,\"y\":265,\"right\":324.421875,\"bottom\":303},{\"name\":\"Ghi chú\",\"x\":925.359375,\"y\":313,\"right\":1015.234375,\"bottom\":351},{\"name\":\"Chữ ký\",\"x\":1023.234375,\"y\":313,\"right\":1109,\"bottom\":351}]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m238\u001b[39m\nReceived:   \u001b[31m313\u001b[39m\n    at expectDesktopInvoiceLine (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js:12:67)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-service-children.spec.js:222:3",
+                    "location": {
+                      "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                      "column": 67,
+                      "line": 12
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39minvoice-line-layout.js:12\n\n\u001b[0m \u001b[90m 10 |\u001b[39m   expect(boxes\u001b[33m.\u001b[39mlength)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m8\u001b[39m)\n \u001b[90m 11 |\u001b[39m   \u001b[90m// Every actual control (not its label) shares a horizontal band.\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 12 |\u001b[39m   expect(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmax(\u001b[33m...\u001b[39mboxes\u001b[33m.\u001b[39mmap(b \u001b[33m=>\u001b[39m b\u001b[33m.\u001b[39my))\u001b[33m,\u001b[39m \u001b[33mJSON\u001b[39m\u001b[33m.\u001b[39mstringify(boxes))\u001b[33m.\u001b[39mtoBeLessThan(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmin(\u001b[33m...\u001b[39mboxes\u001b[33m.\u001b[39mmap(b \u001b[33m=>\u001b[39m b\u001b[33m.\u001b[39mbottom)))\n \u001b[90m    |\u001b[39m                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 13 |\u001b[39m   \u001b[36mconst\u001b[39m sorted \u001b[33m=\u001b[39m [\u001b[33m...\u001b[39mboxes]\u001b[33m.\u001b[39msort((a\u001b[33m,\u001b[39m b) \u001b[33m=>\u001b[39m a\u001b[33m.\u001b[39mx \u001b[33m-\u001b[39m b\u001b[33m.\u001b[39mx)\n \u001b[90m 14 |\u001b[39m   \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m1\u001b[39m\u001b[33m;\u001b[39m i \u001b[33m<\u001b[39m sorted\u001b[33m.\u001b[39mlength\u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) expect(sorted[i]\u001b[33m.\u001b[39mx\u001b[33m,\u001b[39m \u001b[33mJSON\u001b[39m\u001b[33m.\u001b[39mstringify(sorted))\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(sorted[i \u001b[33m-\u001b[39m \u001b[35m1\u001b[39m]\u001b[33m.\u001b[39mright \u001b[33m-\u001b[39m \u001b[35m1\u001b[39m)\n \u001b[90m 15 |\u001b[39m   \u001b[36mconst\u001b[39m picker \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m line\u001b[33m.\u001b[39mgetByRole(\u001b[32m'combobox'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Tìm sản phẩm / dịch vụ'\u001b[39m })\u001b[33m.\u001b[39mboundingBox()\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                        "column": 67,
+                        "line": 12
+                      },
+                      "message": "Error: [{\"name\":\"Tìm sản phẩm / dịch vụ\",\"x\":58.609375,\"y\":210,\"right\":326,\"bottom\":248},{\"name\":\"Số lượng\",\"x\":334,\"y\":210,\"right\":412.140625,\"bottom\":248},{\"name\":\"checkbox\",\"x\":433.921875,\"y\":220,\"right\":451.921875,\"bottom\":238},{\"name\":\"text\",\"x\":475.703125,\"y\":210,\"right\":639.125,\"bottom\":248},{\"name\":\"number\",\"x\":647.125,\"y\":210,\"right\":736.25,\"bottom\":248},{\"name\":\"text\",\"x\":744.25,\"y\":210,\"right\":892.8125,\"bottom\":248},{\"name\":\"checkbox\",\"x\":135.421875,\"y\":276,\"right\":151.421875,\"bottom\":292},{\"name\":\"Nhân viên làm Dịch vụ chăm sóc da chuyên sâu với tên rất dài không được đẩy các thao tác xuống hàng\",\"x\":174.421875,\"y\":265,\"right\":324.421875,\"bottom\":303},{\"name\":\"Ghi chú\",\"x\":925.359375,\"y\":313,\"right\":1015.234375,\"bottom\":351},{\"name\":\"Chữ ký\",\"x\":1023.234375,\"y\":313,\"right\":1109,\"bottom\":351}]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m238\u001b[39m\nReceived:   \u001b[31m313\u001b[39m\n\n   at invoice-line-layout.js:12\n\n  10 |   expect(boxes.length).toBeGreaterThanOrEqual(8)\n  11 |   // Every actual control (not its label) shares a horizontal band.\n> 12 |   expect(Math.max(...boxes.map(b => b.y)), JSON.stringify(boxes)).toBeLessThan(Math.min(...boxes.map(b => b.bottom)))\n     |                                                                   ^\n  13 |   const sorted = [...boxes].sort((a, b) => a.x - b.x)\n  14 |   for (let i = 1; i < sorted.length; i++) expect(sorted[i].x, JSON.stringify(sorted)).toBeGreaterThanOrEqual(sorted[i - 1].right - 1)\n  15 |   const picker = await line.getByRole('combobox', { name: 'Tìm sản phẩm / dịch vụ' }).boundingBox()\n    at expectDesktopInvoiceLine (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js:12:67)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-service-children.spec.js:222:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:06:30.089Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\invoice-service-children-l-c3da6-complete-desktop-row-usable\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                    "column": 67,
+                    "line": 12
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "63204343b4380e6e935c-472096d18b8811bfb4ae",
+          "file": "invoice-service-children.spec.js",
+          "line": 212,
+          "column": 1
+        },
+        {
+          "title": "50 staff can be searched and filtered without losing selection at 390px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4112,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:06:38.057Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "63204343b4380e6e935c-172ec3a5b7bfdd445009",
+          "file": "invoice-service-children.spec.js",
+          "line": 230,
+          "column": 34
+        },
+        {
+          "title": "50 staff can be searched and filtered without losing selection at 1280px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3263,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:06:42.671Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "63204343b4380e6e935c-388b1b1fcf0c7c045dca",
+          "file": "invoice-service-children.spec.js",
+          "line": 230,
+          "column": 34
+        },
+        {
+          "title": "10 finite sessions at 2 million less 10 percent displays and posts 18 million",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 2857,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m8\u001b[39m\nReceived:    \u001b[31m7\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m8\u001b[39m\nReceived:    \u001b[31m7\u001b[39m\n    at expectDesktopInvoiceLine (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js:10:24)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-service-children.spec.js:282:3",
+                    "location": {
+                      "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                      "column": 24,
+                      "line": 10
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39minvoice-line-layout.js:10\n\n\u001b[0m \u001b[90m  8 |\u001b[39m     \u001b[36mreturn\u001b[39m { name\u001b[33m:\u001b[39m el\u001b[33m.\u001b[39mgetAttribute(\u001b[32m'aria-label'\u001b[39m) \u001b[33m||\u001b[39m el\u001b[33m.\u001b[39mtextContent \u001b[33m||\u001b[39m el\u001b[33m.\u001b[39mtype\u001b[33m,\u001b[39m x\u001b[33m:\u001b[39m r\u001b[33m.\u001b[39mx\u001b[33m,\u001b[39m y\u001b[33m:\u001b[39m r\u001b[33m.\u001b[39my\u001b[33m,\u001b[39m right\u001b[33m:\u001b[39m r\u001b[33m.\u001b[39mright\u001b[33m,\u001b[39m bottom\u001b[33m:\u001b[39m r\u001b[33m.\u001b[39mbottom }\n \u001b[90m  9 |\u001b[39m   }))\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 10 |\u001b[39m   expect(boxes\u001b[33m.\u001b[39mlength)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m8\u001b[39m)\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 11 |\u001b[39m   \u001b[90m// Every actual control (not its label) shares a horizontal band.\u001b[39m\n \u001b[90m 12 |\u001b[39m   expect(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmax(\u001b[33m...\u001b[39mboxes\u001b[33m.\u001b[39mmap(b \u001b[33m=>\u001b[39m b\u001b[33m.\u001b[39my))\u001b[33m,\u001b[39m \u001b[33mJSON\u001b[39m\u001b[33m.\u001b[39mstringify(boxes))\u001b[33m.\u001b[39mtoBeLessThan(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmin(\u001b[33m...\u001b[39mboxes\u001b[33m.\u001b[39mmap(b \u001b[33m=>\u001b[39m b\u001b[33m.\u001b[39mbottom)))\n \u001b[90m 13 |\u001b[39m   \u001b[36mconst\u001b[39m sorted \u001b[33m=\u001b[39m [\u001b[33m...\u001b[39mboxes]\u001b[33m.\u001b[39msort((a\u001b[33m,\u001b[39m b) \u001b[33m=>\u001b[39m a\u001b[33m.\u001b[39mx \u001b[33m-\u001b[39m b\u001b[33m.\u001b[39mx)\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                        "column": 24,
+                        "line": 10
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m8\u001b[39m\nReceived:    \u001b[31m7\u001b[39m\n\n   at invoice-line-layout.js:10\n\n   8 |     return { name: el.getAttribute('aria-label') || el.textContent || el.type, x: r.x, y: r.y, right: r.right, bottom: r.bottom }\n   9 |   }))\n> 10 |   expect(boxes.length).toBeGreaterThanOrEqual(8)\n     |                        ^\n  11 |   // Every actual control (not its label) shares a horizontal band.\n  12 |   expect(Math.max(...boxes.map(b => b.y)), JSON.stringify(boxes)).toBeLessThan(Math.min(...boxes.map(b => b.bottom)))\n  13 |   const sorted = [...boxes].sort((a, b) => a.x - b.x)\n    at expectDesktopInvoiceLine (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js:10:24)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-service-children.spec.js:282:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:06:45.956Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\invoice-service-children-1-1bb6f-splays-and-posts-18-million\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\invoice-line-layout.js",
+                    "column": 24,
+                    "line": 10
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "63204343b4380e6e935c-7b24bf024e4d2edde6c7",
+          "file": "invoice-service-children.spec.js",
+          "line": 262,
+          "column": 1
+        },
+        {
+          "title": "failed child loading blocks save",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3430,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:06:51.462Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "63204343b4380e6e935c-9bdf72547ebc25e038de",
+          "file": "invoice-service-children.spec.js",
+          "line": 289,
+          "column": 1
+        },
+        {
+          "title": "API rejection preserves draft price and lifetime selection",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2996,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:06:55.278Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "63204343b4380e6e935c-7865626f804711bf0411",
+          "file": "invoice-service-children.spec.js",
+          "line": 302,
+          "column": 1
+        },
+        {
+          "title": "invoice detail uses actual cards and allows amendment and deletion actions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1798,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:06:58.428Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "63204343b4380e6e935c-2d4338a0709e19e93b47",
+          "file": "invoice-service-children.spec.js",
+          "line": 317,
+          "column": 1
+        },
+        {
+          "title": "all pending children hide parent session actions; unchecking restores actions and staff",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2975,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:07:00.264Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "63204343b4380e6e935c-6df1fa18d8bc5ca8d79b",
+          "file": "invoice-service-children.spec.js",
+          "line": 327,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "mobile-workflows.spec.js",
+      "file": "mobile-workflows.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "today visit and execution controls fit 320px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "failed",
+                  "duration": 7991,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.today-treatments').locator('.today-visit').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.today-treatments').locator('.today-visit').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.today-treatments').locator('.today-visit').first()\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.today-treatments').locator('.today-visit').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.today-treatments').locator('.today-visit').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.today-treatments').locator('.today-visit').first()\u001b[22m\n\n    at expectContained (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:25:25)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:38:11",
+                    "location": {
+                      "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                      "column": 25,
+                      "line": 25
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m\n \u001b[90m 24 |\u001b[39m \u001b[36masync\u001b[39m \u001b[36mfunction\u001b[39m expectContained(locator) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 25 |\u001b[39m   \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 26 |\u001b[39m   expect(\u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mevaluate(el \u001b[33m=>\u001b[39m el\u001b[33m.\u001b[39mscrollWidth \u001b[33m<=\u001b[39m el\u001b[33m.\u001b[39mclientWidth \u001b[33m+\u001b[39m \u001b[35m1\u001b[39m))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\n \u001b[90m 27 |\u001b[39m   \u001b[36mconst\u001b[39m box \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mboundingBox()\n \u001b[90m 28 |\u001b[39m   expect(box\u001b[33m.\u001b[39mx)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[33m-\u001b[39m\u001b[35m1\u001b[39m)\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                        "column": 25,
+                        "line": 25
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.today-treatments').locator('.today-visit').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.today-treatments').locator('.today-visit').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.today-treatments').locator('.today-visit').first()\u001b[22m\n\n\n  23 |\n  24 | async function expectContained(locator) {\n> 25 |   await expect(locator).toBeVisible()\n     |                         ^\n  26 |   expect(await locator.evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true)\n  27 |   const box = await locator.boundingBox()\n  28 |   expect(box.x).toBeGreaterThanOrEqual(-1)\n    at expectContained (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:25:25)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:38:11"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:04:04.315Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\mobile-workflows-today-vis-ef790-xecution-controls-fit-320px\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                    "column": 25,
+                    "line": 25
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1df52d85a363647c6ee2-c60f0d4a58dc6fb87c02",
+          "file": "mobile-workflows.spec.js",
+          "line": 33,
+          "column": 3
+        },
+        {
+          "title": "treatment card and embedded execution fit 320px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 1,
+                  "status": "timedOut",
+                  "duration": 30612,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                        "column": 72,
+                        "line": 49
+                      },
+                      "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /Khách mobile:.*dịch vụ/ })\u001b[22m\n\n\n  47 |     await setup(page)\n  48 |     await page.goto('/treatments')\n> 49 |     await page.getByRole('button', { name: /Khách mobile:.*dịch vụ/ }).click()\n     |                                                                        ^\n  50 |     const panel = page.locator('.treatment-root-panel').first()\n  51 |     await expectContained(panel)\n  52 |     await panel.getByRole('button', { name: 'Thực hiện', exact: true }).click()\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:49:72"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:05:55.870Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\mobile-workflows-treatment-2536f-mbedded-execution-fit-320px\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1df52d85a363647c6ee2-5de3ac6874c08e80a76b",
+          "file": "mobile-workflows.spec.js",
+          "line": 45,
+          "column": 3
+        },
+        {
+          "title": "today visit and execution controls fit 360px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 1,
+                  "status": "failed",
+                  "duration": 6902,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.today-treatments').locator('.today-visit').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.today-treatments').locator('.today-visit').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.today-treatments').locator('.today-visit').first()\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.today-treatments').locator('.today-visit').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.today-treatments').locator('.today-visit').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.today-treatments').locator('.today-visit').first()\u001b[22m\n\n    at expectContained (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:25:25)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:38:11",
+                    "location": {
+                      "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                      "column": 25,
+                      "line": 25
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m\n \u001b[90m 24 |\u001b[39m \u001b[36masync\u001b[39m \u001b[36mfunction\u001b[39m expectContained(locator) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 25 |\u001b[39m   \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 26 |\u001b[39m   expect(\u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mevaluate(el \u001b[33m=>\u001b[39m el\u001b[33m.\u001b[39mscrollWidth \u001b[33m<=\u001b[39m el\u001b[33m.\u001b[39mclientWidth \u001b[33m+\u001b[39m \u001b[35m1\u001b[39m))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\n \u001b[90m 27 |\u001b[39m   \u001b[36mconst\u001b[39m box \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mboundingBox()\n \u001b[90m 28 |\u001b[39m   expect(box\u001b[33m.\u001b[39mx)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[33m-\u001b[39m\u001b[35m1\u001b[39m)\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                        "column": 25,
+                        "line": 25
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.today-treatments').locator('.today-visit').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.today-treatments').locator('.today-visit').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.today-treatments').locator('.today-visit').first()\u001b[22m\n\n\n  23 |\n  24 | async function expectContained(locator) {\n> 25 |   await expect(locator).toBeVisible()\n     |                         ^\n  26 |   expect(await locator.evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true)\n  27 |   const box = await locator.boundingBox()\n  28 |   expect(box.x).toBeGreaterThanOrEqual(-1)\n    at expectContained (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:25:25)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:38:11"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:06:31.628Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\mobile-workflows-today-vis-6bb9a-xecution-controls-fit-360px\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                    "column": 25,
+                    "line": 25
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1df52d85a363647c6ee2-940d0e2dbad6676cbdaa",
+          "file": "mobile-workflows.spec.js",
+          "line": 33,
+          "column": 3
+        },
+        {
+          "title": "treatment card and embedded execution fit 360px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 1,
+                  "status": "timedOut",
+                  "duration": 31534,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                        "column": 72,
+                        "line": 49
+                      },
+                      "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /Khách mobile:.*dịch vụ/ })\u001b[22m\n\n\n  47 |     await setup(page)\n  48 |     await page.goto('/treatments')\n> 49 |     await page.getByRole('button', { name: /Khách mobile:.*dịch vụ/ }).click()\n     |                                                                        ^\n  50 |     const panel = page.locator('.treatment-root-panel').first()\n  51 |     await expectContained(panel)\n  52 |     await panel.getByRole('button', { name: 'Thực hiện', exact: true }).click()\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:49:72"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:06:44.484Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\mobile-workflows-treatment-1bffe-mbedded-execution-fit-360px\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1df52d85a363647c6ee2-63495d8de435dc92ee55",
+          "file": "mobile-workflows.spec.js",
+          "line": 45,
+          "column": 3
+        },
+        {
+          "title": "today visit and execution controls fit 390px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 12,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6259,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.today-treatments').locator('.today-visit').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.today-treatments').locator('.today-visit').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.today-treatments').locator('.today-visit').first()\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.today-treatments').locator('.today-visit').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.today-treatments').locator('.today-visit').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.today-treatments').locator('.today-visit').first()\u001b[22m\n\n    at expectContained (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:25:25)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:38:11",
+                    "location": {
+                      "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                      "column": 25,
+                      "line": 25
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m\n \u001b[90m 24 |\u001b[39m \u001b[36masync\u001b[39m \u001b[36mfunction\u001b[39m expectContained(locator) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 25 |\u001b[39m   \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 26 |\u001b[39m   expect(\u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mevaluate(el \u001b[33m=>\u001b[39m el\u001b[33m.\u001b[39mscrollWidth \u001b[33m<=\u001b[39m el\u001b[33m.\u001b[39mclientWidth \u001b[33m+\u001b[39m \u001b[35m1\u001b[39m))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\n \u001b[90m 27 |\u001b[39m   \u001b[36mconst\u001b[39m box \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mboundingBox()\n \u001b[90m 28 |\u001b[39m   expect(box\u001b[33m.\u001b[39mx)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[33m-\u001b[39m\u001b[35m1\u001b[39m)\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                        "column": 25,
+                        "line": 25
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.today-treatments').locator('.today-visit').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.today-treatments').locator('.today-visit').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.today-treatments').locator('.today-visit').first()\u001b[22m\n\n\n  23 |\n  24 | async function expectContained(locator) {\n> 25 |   await expect(locator).toBeVisible()\n     |                         ^\n  26 |   expect(await locator.evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true)\n  27 |   const box = await locator.boundingBox()\n  28 |   expect(box.x).toBeGreaterThanOrEqual(-1)\n    at expectContained (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:25:25)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:38:11"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:07:20.450Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\mobile-workflows-today-vis-91f06-xecution-controls-fit-390px\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                    "column": 25,
+                    "line": 25
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1df52d85a363647c6ee2-b03902affb5f38c527ea",
+          "file": "mobile-workflows.spec.js",
+          "line": 33,
+          "column": 3
+        },
+        {
+          "title": "treatment card and embedded execution fit 390px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 13,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30891,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                        "column": 72,
+                        "line": 49
+                      },
+                      "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /Khách mobile:.*dịch vụ/ })\u001b[22m\n\n\n  47 |     await setup(page)\n  48 |     await page.goto('/treatments')\n> 49 |     await page.getByRole('button', { name: /Khách mobile:.*dịch vụ/ }).click()\n     |                                                                        ^\n  50 |     const panel = page.locator('.treatment-root-panel').first()\n  51 |     await expectContained(panel)\n  52 |     await panel.getByRole('button', { name: 'Thực hiện', exact: true }).click()\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:49:72"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:07:29.974Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\mobile-workflows-treatment-03c55-mbedded-execution-fit-390px\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1df52d85a363647c6ee2-2b2f56bc0d34031d9bc3",
+          "file": "mobile-workflows.spec.js",
+          "line": 45,
+          "column": 3
+        },
+        {
+          "title": "today visit and execution controls fit 430px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 14,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 8220,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.today-treatments').locator('.today-visit').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.today-treatments').locator('.today-visit').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.today-treatments').locator('.today-visit').first()\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.today-treatments').locator('.today-visit').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.today-treatments').locator('.today-visit').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.today-treatments').locator('.today-visit').first()\u001b[22m\n\n    at expectContained (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:25:25)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:38:11",
+                    "location": {
+                      "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                      "column": 25,
+                      "line": 25
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m\n \u001b[90m 24 |\u001b[39m \u001b[36masync\u001b[39m \u001b[36mfunction\u001b[39m expectContained(locator) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 25 |\u001b[39m   \u001b[36mawait\u001b[39m expect(locator)\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 26 |\u001b[39m   expect(\u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mevaluate(el \u001b[33m=>\u001b[39m el\u001b[33m.\u001b[39mscrollWidth \u001b[33m<=\u001b[39m el\u001b[33m.\u001b[39mclientWidth \u001b[33m+\u001b[39m \u001b[35m1\u001b[39m))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\n \u001b[90m 27 |\u001b[39m   \u001b[36mconst\u001b[39m box \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m locator\u001b[33m.\u001b[39mboundingBox()\n \u001b[90m 28 |\u001b[39m   expect(box\u001b[33m.\u001b[39mx)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[33m-\u001b[39m\u001b[35m1\u001b[39m)\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                        "column": 25,
+                        "line": 25
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.today-treatments').locator('.today-visit').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.today-treatments').locator('.today-visit').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('.today-treatments').locator('.today-visit').first()\u001b[22m\n\n\n  23 |\n  24 | async function expectContained(locator) {\n> 25 |   await expect(locator).toBeVisible()\n     |                         ^\n  26 |   expect(await locator.evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true)\n  27 |   const box = await locator.boundingBox()\n  28 |   expect(box.x).toBeGreaterThanOrEqual(-1)\n    at expectContained (D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:25:25)\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:38:11"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:08:17.790Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\mobile-workflows-today-vis-c8469-xecution-controls-fit-430px\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                    "column": 25,
+                    "line": 25
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1df52d85a363647c6ee2-fb092ef1e8bf4990abaa",
+          "file": "mobile-workflows.spec.js",
+          "line": 33,
+          "column": 3
+        },
+        {
+          "title": "treatment card and embedded execution fit 430px",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 15,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30412,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js",
+                        "column": 72,
+                        "line": 49
+                      },
+                      "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /Khách mobile:.*dịch vụ/ })\u001b[22m\n\n\n  47 |     await setup(page)\n  48 |     await page.goto('/treatments')\n> 49 |     await page.getByRole('button', { name: /Khách mobile:.*dịch vụ/ }).click()\n     |                                                                        ^\n  50 |     const panel = page.locator('.treatment-root-panel').first()\n  51 |     await expectContained(panel)\n  52 |     await panel.getByRole('button', { name: 'Thực hiện', exact: true }).click()\n    at D:\\Project\\SpaManagement\\spa-management-frontend\\tests\\e2e\\mobile-workflows.spec.js:49:72"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:08:48.783Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Project\\SpaManagement\\spa-management-frontend\\test-results\\mobile-workflows-treatment-79712-mbedded-execution-fit-430px\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1df52d85a363647c6ee2-c9662f6fb228e6573f90",
+          "file": "mobile-workflows.spec.js",
+          "line": 45,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "title": "today-group-signature.spec.js",
+      "file": "today-group-signature.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "parent signs once for performed children; pending children have no signature action",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3570,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T14:07:03.327Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "55d4d93fc052e919533c-2476980d5bc73d1daa35",
+          "file": "today-group-signature.spec.js",
+          "line": 3,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-31T14:03:47.542Z",
+    "duration": 356136.679,
+    "expected": 12,
+    "skipped": 0,
+    "unexpected": 15,
+    "flaky": 0
+  }
+}

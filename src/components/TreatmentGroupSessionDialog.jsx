@@ -1,17 +1,19 @@
 import { useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { canFollowUpTreatmentHistory } from '../auth/permissions'
-import { getResource, signTreatmentHistory, updateTreatmentGroupNote } from '../api/resources'
+import { getResource, signTreatmentHistory, updateTreatmentHistoryNote } from '../api/resources'
 import SignaturePad from './SignaturePad'
 import useDialogFocus from './useDialogFocus'
 import './TreatmentSessionDialog.css'
 
 const isSigned = history => Boolean(history.customer_signature_svg || history.customer_signed_at)
+const noteEntryFor = entries => entries.find(({ history }) => history.note != null) || entries[0]
 
 export default function TreatmentGroupSessionDialog({ card, sessions, user, onClose }) {
   const [entries, setEntries] = useState(sessions)
-  const [note, setNote] = useState(card.note || '')
-  const savedNote = useRef(card.note?.trim() || null)
+  const initialNoteEntry = noteEntryFor(sessions)
+  const [note, setNote] = useState(initialNoteEntry?.history.note || '')
+  const savedNote = useRef(initialNoteEntry?.history.note?.trim() || null)
   const [signature, setSignature] = useState(null)
   const [pending, setPending] = useState(false), [message, setMessage] = useState('')
   const busy = useRef(false), ref = useRef(null), qc = useQueryClient()
@@ -19,7 +21,8 @@ export default function TreatmentGroupSessionDialog({ card, sessions, user, onCl
   useDialogFocus(ref, close)
   const unsigned = entries.filter(({ history }) => !isSigned(history) && canFollowUpTreatmentHistory(user, history))
   const preview = entries.find(({ history }) => history.customer_signature_svg)?.history.customer_signature_svg
-  const canEditNote = user?.system_role === 'MANAGER' || entries.some(({ history }) => canFollowUpTreatmentHistory(user, history))
+  const noteEntry = noteEntryFor(entries)
+  const canEditNote = Boolean(noteEntry && canFollowUpTreatmentHistory(user, noteEntry.history))
   async function save(withSignature) {
     if (busy.current || (withSignature && !signature)) return
     if (new TextEncoder().encode(note).length > 65535) { setMessage('Ghi chú tối đa 65535 byte UTF-8.'); return }
@@ -29,10 +32,10 @@ export default function TreatmentGroupSessionDialog({ card, sessions, user, onCl
     try {
       const normalizedNote = note.trim() || null
       if (canEditNote && normalizedNote !== savedNote.current) {
-        await updateTreatmentGroupNote(card.id, normalizedNote)
+        await updateTreatmentHistoryNote(noteEntry.history.id, normalizedNote)
         savedNote.current = normalizedNote
       }
-      if (!withSignature) { setMessage('Đã lưu ghi chú chung liệu trình.'); return }
+      if (!withSignature) { setMessage('Đã lưu ghi chú buổi thực hiện.'); return }
       // Re-read each card before writing, including after a partial failure. Never
       // overwrite a signature or accidentally execute another session on retry.
       const details = new Map()
@@ -66,9 +69,9 @@ export default function TreatmentGroupSessionDialog({ card, sessions, user, onCl
   return <div className="confirm-layer session-dialog-layer"><div className="confirm-backdrop" onClick={close} /><section ref={ref} className="confirm-card session-dialog" role="dialog" aria-modal="true" aria-label="Ghi chú và chữ ký nhóm dịch vụ">
     <span className="eyebrow">XÁC NHẬN CÁC DỊCH VỤ ĐÃ LÀM</span><h2>Ghi chú và chữ ký</h2>
     <p>{card.customer_name} · {card.product_name}</p>
-    <label className="field session-note-field"><span>Ghi chú chung liệu trình</span><textarea aria-label="Ghi chú chung liệu trình" rows={3} value={note} disabled={pending || !canEditNote} onChange={event => setNote(event.target.value)} /></label>
+    <label className="field session-note-field"><span>Ghi chú buổi thực hiện</span><textarea aria-label="Ghi chú buổi thực hiện" rows={3} value={note} disabled={pending || !canEditNote} onChange={event => setNote(event.target.value)} /></label>
      
-    {entries.map(({ card: child, history }) => <div className="session-note-field" key={history.id}><strong>{child.product_name} · Buổi #{history.id} · {isSigned(history) ? 'Đã ký' : 'Chưa ký'}</strong>{history.note && <p className="small-muted">Ghi chú riêng đã lưu của buổi: {history.note}</p>}</div>)}
+    {entries.map(({ card: child, history }) => <div className="session-note-field" key={history.id}><strong>{child.product_name} · Buổi #{history.id} · {isSigned(history) ? 'Đã ký' : 'Chưa ký'}</strong></div>)}
     {preview && <div className="session-saved-signature"><img src={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(preview)}`} alt="Chữ ký đã lưu cho buổi thực hiện trong nhóm" /></div>}
     {unsigned.length > 0 && <SignaturePad customerName={card.customer_name} productName={card.product_name} disabled={pending} onChange={setSignature} />}
     {message && <p role="status" className="session-dialog-message">{message}</p>}

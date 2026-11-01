@@ -4,6 +4,7 @@ import { listResource } from '../api/resources'
 import { useBranch } from '../components/AppShell'
 import { Search } from 'lucide-react'
 import ExportTableButton from '../components/ExportTableButton'
+import Pagination from '../components/Pagination'
 import { directoryExportFilename, directoryExportOptions, inventoryExportRows, loadDirectoryRows } from '../utils/directoryExport'
 
 export default function InventoryPage() {
@@ -17,6 +18,13 @@ export default function InventoryPage() {
         const entries = branchId ? (product.inventory || []).filter(entry => Number(entry.branch_id) === Number(branchId)) : product.inventory || []
         return (entries.length ? entries : [{ branch_name: branchId ? 'Cơ sở của bạn' : 'Chưa có tồn kho', quantity: 0 }]).map((entry, index) => <tr key={`${product.id}-${entry.branch_id || index}`}><td data-label="Sản phẩm">{product.name}</td><td data-label="Cơ sở">{entry.branch_name || 'Cơ sở của bạn'}</td><td data-label="Tồn kho"><strong>{entry.quantity ?? 0} {product.unit || ''}</strong></td></tr>)
       })}</tbody></table></div>}
-      {products.data?.totalPages > 1 && <div className="picker-pages"><button disabled={page === 1} onClick={() => setPage(page - 1)}>Trước</button><span>{page} / {products.data.totalPages}</span><button disabled={page >= products.data.totalPages} onClick={() => setPage(page + 1)}>Sau</button></div>}
+      <Pagination
+        page={page}
+        totalPages={products.data?.totalPages || 1}
+        totalItems={products.data?.total}
+        pageSize={20}
+        onChange={setPage}
+        label="sản phẩm"
+      />
     </div></div>
 }

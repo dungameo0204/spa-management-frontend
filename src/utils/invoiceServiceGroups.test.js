@@ -16,12 +16,21 @@ describe('invoice service groups', () => {
     expect(JSON.parse(JSON.stringify(invoiceServiceGroupPayload(line)))).toEqual({ treatment: { total_sessions: null, children: [{ product_id: 12, total_sessions: 5 }, { product_id: 15, total_sessions: null }] } })
     expect(invoiceServiceGroupPayload({})).toEqual({})
   })
-  it.each(['', undefined, -1, 0, '1.5', 'abc', 2147483648])('rejects invalid finite sessions: %s', value => {
+  it.each(['', undefined, -1, '1.5', 'abc', 2147483648])('rejects invalid finite sessions: %s', value => {
     expect(validateInvoiceServiceGroups([{ ...line, serviceChildren: [{ product_id: 12, total_sessions: value }] }])).not.toBe('')
   })
   it('accepts explicit lifetime and requires one package per line', () => {
     expect(validateInvoiceServiceGroups([line])).toBe('')
     expect(validateInvoiceServiceGroups([{ ...line, quantity: 2 }])).toMatch(/số lượng 1/)
+  })
+  it('allows child service total_sessions to be 0 and creates valid payload', () => {
+    const zeroLine = { ...line, serviceChildren: [{ product_id: 12, total_sessions: 0, performNow: false }, { product_id: 15, total_sessions: null }] }
+    expect(validateInvoiceServiceGroups([zeroLine])).toBe('')
+    expect(invoiceServiceGroupPayload(zeroLine)).toEqual({ treatment: { total_sessions: null, children: [{ product_id: 12, total_sessions: 0 }, { product_id: 15, total_sessions: null }] } })
+  })
+  it('rejects child service with 0 sessions when performNow is true', () => {
+    const invalidLine = { ...line, serviceChildren: [{ product_id: 12, total_sessions: 0, performNow: true }] }
+    expect(validateInvoiceServiceGroups([invalidLine])).toMatch(/0 buổi không thể ghi nhận làm ngay/)
   })
   it('allows quantity equal to finite standalone sessions, not child packages or lifetime', () => {
     const standalone = { quantity:10, treatmentConfigured:true, treatmentTotalSessions:10, serviceChildren:[] }

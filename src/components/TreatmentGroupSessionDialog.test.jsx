@@ -3,9 +3,9 @@ import { cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import TreatmentGroupSessionDialog from './TreatmentGroupSessionDialog'
-import { getResource, signTreatmentHistory, updateTreatmentHistoryNote, updateTreatmentGroupNote } from '../api/resources'
+import { getResource, signTreatmentHistory, updateTreatmentHistoryNote } from '../api/resources'
 
-vi.mock('../api/resources', () => ({ getResource: vi.fn(), signTreatmentHistory: vi.fn(), updateTreatmentHistoryNote: vi.fn(), updateTreatmentGroupNote: vi.fn() }))
+vi.mock('../api/resources', () => ({ getResource: vi.fn(), signTreatmentHistory: vi.fn(), updateTreatmentHistoryNote: vi.fn() }))
 vi.mock('./SignaturePad', () => ({ default: ({ onChange }) => <button onClick={() => onChange('<svg/>')}>Ký một lần</button> }))
 const sessions = [
   { card: { id: 11, product_name: 'Laser' }, history: { id: 101, branch_id: 1 } },
@@ -17,17 +17,15 @@ beforeEach(() => {
   getResource.mockImplementation(async (_, id) => ({ histories: sessions.filter(entry => entry.card.id === id).map(entry => entry.history) }))
   signTreatmentHistory.mockResolvedValue({ data: { customer_signature_svg: '<svg/>' } })
   updateTreatmentHistoryNote.mockResolvedValue({})
-  updateTreatmentGroupNote.mockResolvedValue({})
 })
 afterEach(cleanup)
-it('saves one shared note on the parent, never on child histories', async () => {
+it('saves one group note on the representative treatment history only', async () => {
   const actor = open()
   expect(screen.getAllByRole('textbox')).toHaveLength(1)
-  await actor.type(screen.getByRole('textbox', { name: 'Ghi chú chung liệu trình' }), 'làm lần 1')
+  await actor.type(screen.getByRole('textbox', { name: 'Ghi chú buổi thực hiện' }), 'làm lần 1')
   await actor.click(screen.getByRole('button', { name: 'Lưu ghi chú' }))
-  await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Đã lưu ghi chú chung'))
-  expect(updateTreatmentGroupNote.mock.calls).toEqual([[1, 'làm lần 1']])
-  expect(updateTreatmentHistoryNote).not.toHaveBeenCalled()
+  await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Đã lưu ghi chú buổi thực hiện'))
+  expect(updateTreatmentHistoryNote.mock.calls).toEqual([[101, 'làm lần 1']])
   expect(signTreatmentHistory).not.toHaveBeenCalled()
 })
 function open() {

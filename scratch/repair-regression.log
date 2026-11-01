@@ -1,0 +1,290 @@
+
+Running 61 tests using 2 workers
+
+[1/61] tests\e2e\invoice-date-repair.spec.js:3:1 › manager edits the Vietnam invoice day without shifting it through UTC
+[2/61] tests\e2e\invoice-service-children.spec.js:52:43 › mobile child cards have no horizontal scroll at 320px
+[3/61] tests\e2e\invoice-service-children.spec.js:52:43 › mobile child cards have no horizontal scroll at 360px
+[4/61] tests\e2e\invoice-service-children.spec.js:52:43 › mobile child cards have no horizontal scroll at 390px
+[5/61] tests\e2e\invoice-service-children.spec.js:52:43 › mobile child cards have no horizontal scroll at 430px
+[6/61] tests\e2e\invoice-service-children.spec.js:82:34 › child allocations and editable parent price at 390px
+[7/61] tests\e2e\invoice-service-children.spec.js:82:34 › child allocations and editable parent price at 1280px
+[8/61] tests\e2e\invoice-service-children.spec.js:119:1 › grouped staff picker, pending children, parent note and signature save only the selected child
+[9/61] tests\e2e\invoice-service-children.spec.js:157:1 › failed child execution leaves the saved invoice locked instead of posting it again
+[10/61] tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 390px
+[11/61] tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1024px
+[12/61] tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1280px
+[13/61] tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1440px
+[14/61] tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1500px
+[15/61] tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1920px
+[16/61] tests\e2e\invoice-service-children.spec.js:244:1 › long standalone name and large price keep the complete desktop row usable
+[17/61] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 320px
+  1) tests\e2e\invoice-date-repair.spec.js:3:1 › manager edits the Vietnam invoice day without shifting it through UTC 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('row', { name: /Khách ngày bán/ })
+
+
+      21 |   })
+      22 |   await page.goto('/invoices')
+    > 23 |   await page.getByRole('row', { name: /Khách ngày bán/ }).click()
+         |                                                           ^
+      24 |   await page.getByRole('button', { name: 'Chỉnh sửa', exact: true }).click()
+      25 |   const date = page.getByLabel('Ngày hóa đơn', { exact: true })
+      26 |   await expect(date).toHaveValue('2026-10-31')
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-date-repair.spec.js:23:59
+
+    Error Context: test-results\invoice-date-repair-manage-51cdd-out-shifting-it-through-UTC\error-context.md
+
+
+[18/61] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 390px
+[19/61] tests\e2e\mobile-workflows.spec.js:35:1 › desktop workflow geometry is unchanged by mobile overrides
+[20/61] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 640px
+[21/61] tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (single) at 320px
+  2) tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 640px 
+
+    Error: .compact-invoice-line
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      280 |   if (width > 700) await expectDesktopInvoiceLine(line)
+      281 |   for (const selector of ['.compact-invoice-line', '.invoice-line-scroll', '.product-entry-scroll', '.drawer-body', '.drawer']) {
+    > 282 |     expect(await page.locator(selector).evaluateAll(elements => elements.every(el => el.scrollWidth <= el.clientWidth + 1)), selector).toBe(true)
+          |                                                                                                                                        ^
+      283 |   }
+      284 |   await page.screenshot({ path: `test-results/invoice-selection-fixed-${width}.png` })
+      285 | })
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-service-children.spec.js:282:136
+
+    Error Context: test-results\invoice-service-children-s-b1dae-rizontal-scrolling-at-640px\error-context.md
+
+
+  3) tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (single) at 320px ─
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < NaN
+    Received:   32
+
+      141 |     const geometry = await heading.evaluate(node => ({ width: node.getBoundingClientRect().width, height: node.getBoundingClientRect().height, lineHeight: parseFloat(getComputedStyle(node).lineHeight) }))
+      142 |     expect(geometry.width).toBeGreaterThan(120)
+    > 143 |     expect(geometry.height).toBeLessThan(geometry.lineHeight * 5)
+          |                             ^
+      144 |   })
+      145 |
+      146 |   test(`single execution collapses without blank space at ${width}px`, async ({ page }) => {
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\mobile-workflows.spec.js:143:29
+
+    Error Context: test-results\mobile-workflows-history-m-db11d-ys-readable-single-at-320px\error-context.md
+
+
+[22/61] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 768px
+[23/61] tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (grouped) at 320px
+[24/61] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1024px
+  4) tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (grouped) at 320px 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < NaN
+    Received:   32
+
+      141 |     const geometry = await heading.evaluate(node => ({ width: node.getBoundingClientRect().width, height: node.getBoundingClientRect().height, lineHeight: parseFloat(getComputedStyle(node).lineHeight) }))
+      142 |     expect(geometry.width).toBeGreaterThan(120)
+    > 143 |     expect(geometry.height).toBeLessThan(geometry.lineHeight * 5)
+          |                             ^
+      144 |   })
+      145 |
+      146 |   test(`single execution collapses without blank space at ${width}px`, async ({ page }) => {
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\mobile-workflows.spec.js:143:29
+
+    Error Context: test-results\mobile-workflows-history-m-fe64b-s-readable-grouped-at-320px\error-context.md
+
+
+[25/61] tests\e2e\mobile-workflows.spec.js:146:3 › single execution collapses without blank space at 320px
+[26/61] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1280px
+[27/61] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1440px
+[28/61] tests\e2e\mobile-workflows.spec.js:173:3 › completed customer actions stay inside their cells at 320px
+[29/61] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1920px
+[30/61] tests\e2e\mobile-workflows.spec.js:192:3 › today visit and execution controls fit 320px
+[31/61] tests\e2e\invoice-service-children.spec.js:287:34 › 50 staff can be searched and filtered without losing selection at 390px
+[32/61] tests\e2e\mobile-workflows.spec.js:206:3 › treatment card and embedded execution fit 320px
+[33/61] tests\e2e\invoice-service-children.spec.js:287:34 › 50 staff can be searched and filtered without losing selection at 1280px
+[34/61] tests\e2e\mobile-workflows.spec.js:225:3 › customer overview uses compact embedded execution at 320px
+[35/61] tests\e2e\invoice-service-children.spec.js:319:1 › 10 finite sessions at 2 million less 10 percent displays and posts 18 million
+[36/61] tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (single) at 360px
+[37/61] tests\e2e\invoice-service-children.spec.js:346:1 › failed child loading blocks save
+[38/61] tests\e2e\invoice-service-children.spec.js:359:1 › API rejection preserves draft price and lifetime selection
+  5) tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (single) at 360px ─
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < NaN
+    Received:   32
+
+      141 |     const geometry = await heading.evaluate(node => ({ width: node.getBoundingClientRect().width, height: node.getBoundingClientRect().height, lineHeight: parseFloat(getComputedStyle(node).lineHeight) }))
+      142 |     expect(geometry.width).toBeGreaterThan(120)
+    > 143 |     expect(geometry.height).toBeLessThan(geometry.lineHeight * 5)
+          |                             ^
+      144 |   })
+      145 |
+      146 |   test(`single execution collapses without blank space at ${width}px`, async ({ page }) => {
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\mobile-workflows.spec.js:143:29
+
+    Error Context: test-results\mobile-workflows-history-m-86e43-ys-readable-single-at-360px\error-context.md
+
+
+[39/61] tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (grouped) at 360px
+[40/61] tests\e2e\invoice-service-children.spec.js:374:1 › invoice detail uses actual cards and allows amendment and deletion actions
+[41/61] tests\e2e\invoice-service-children.spec.js:384:1 › all pending children hide parent session actions; unchecking restores actions and staff
+  6) tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (grouped) at 360px 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < NaN
+    Received:   32
+
+      141 |     const geometry = await heading.evaluate(node => ({ width: node.getBoundingClientRect().width, height: node.getBoundingClientRect().height, lineHeight: parseFloat(getComputedStyle(node).lineHeight) }))
+      142 |     expect(geometry.width).toBeGreaterThan(120)
+    > 143 |     expect(geometry.height).toBeLessThan(geometry.lineHeight * 5)
+          |                             ^
+      144 |   })
+      145 |
+      146 |   test(`single execution collapses without blank space at ${width}px`, async ({ page }) => {
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\mobile-workflows.spec.js:143:29
+
+    Error Context: test-results\mobile-workflows-history-m-12c1e-s-readable-grouped-at-360px\error-context.md
+
+
+[42/61] tests\e2e\mobile-workflows.spec.js:146:3 › single execution collapses without blank space at 360px
+  7) tests\e2e\invoice-service-children.spec.js:384:1 › all pending children hide parent session actions; unchecking restores actions and staff 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 160
+    Received:    240
+
+      391 |   await line.getByRole('checkbox', { name: 'Chưa làm Laser trị nám' }).uncheck()
+      392 |   await expect(line.getByRole('button', { name: 'Nhân viên làm Laser trị nám' })).toBeVisible()
+    > 393 |   expect((await line.getByRole('button', { name:'Nhân viên làm Laser trị nám' }).boundingBox()).width).toBeLessThanOrEqual(160)
+          |                                                                                                        ^
+      394 |   await page.screenshot({ path:'test-results/invoice-child-compact-staff.png' })
+      395 |   await expect(line.getByRole('button', { name: 'Ghi chú', exact: true })).toBeVisible()
+      396 |   await expect(line.getByRole('button', { name: 'Chữ ký', exact: true })).toBeVisible()
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-service-children.spec.js:393:104
+
+    Error Context: test-results\invoice-service-children-a-8540e--restores-actions-and-staff\error-context.md
+
+
+[43/61] tests\e2e\receipt-pagination.spec.js:3:1 › hóa đơn giấy thường nhiều sản phẩm có tiêu đề lặp và tổng kết liền khối
+[44/61] tests\e2e\mobile-workflows.spec.js:173:3 › completed customer actions stay inside their cells at 360px
+[45/61] tests\e2e\mobile-workflows.spec.js:192:3 › today visit and execution controls fit 360px
+[46/61] tests\e2e\mobile-workflows.spec.js:206:3 › treatment card and embedded execution fit 360px
+[47/61] tests\e2e\mobile-workflows.spec.js:225:3 › customer overview uses compact embedded execution at 360px
+[48/61] tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (single) at 390px
+  8) tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (single) at 390px ─
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < NaN
+    Received:   32
+
+      141 |     const geometry = await heading.evaluate(node => ({ width: node.getBoundingClientRect().width, height: node.getBoundingClientRect().height, lineHeight: parseFloat(getComputedStyle(node).lineHeight) }))
+      142 |     expect(geometry.width).toBeGreaterThan(120)
+    > 143 |     expect(geometry.height).toBeLessThan(geometry.lineHeight * 5)
+          |                             ^
+      144 |   })
+      145 |
+      146 |   test(`single execution collapses without blank space at ${width}px`, async ({ page }) => {
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\mobile-workflows.spec.js:143:29
+
+    Error Context: test-results\mobile-workflows-history-m-7e17b-ys-readable-single-at-390px\error-context.md
+
+
+[49/61] tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (grouped) at 390px
+  9) tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (grouped) at 390px 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < NaN
+    Received:   32
+
+      141 |     const geometry = await heading.evaluate(node => ({ width: node.getBoundingClientRect().width, height: node.getBoundingClientRect().height, lineHeight: parseFloat(getComputedStyle(node).lineHeight) }))
+      142 |     expect(geometry.width).toBeGreaterThan(120)
+    > 143 |     expect(geometry.height).toBeLessThan(geometry.lineHeight * 5)
+          |                             ^
+      144 |   })
+      145 |
+      146 |   test(`single execution collapses without blank space at ${width}px`, async ({ page }) => {
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\mobile-workflows.spec.js:143:29
+
+    Error Context: test-results\mobile-workflows-history-m-ff9d1-s-readable-grouped-at-390px\error-context.md
+
+
+[50/61] tests\e2e\mobile-workflows.spec.js:146:3 › single execution collapses without blank space at 390px
+[51/61] tests\e2e\mobile-workflows.spec.js:173:3 › completed customer actions stay inside their cells at 390px
+[52/61] tests\e2e\mobile-workflows.spec.js:192:3 › today visit and execution controls fit 390px
+[53/61] tests\e2e\mobile-workflows.spec.js:206:3 › treatment card and embedded execution fit 390px
+[54/61] tests\e2e\mobile-workflows.spec.js:225:3 › customer overview uses compact embedded execution at 390px
+[55/61] tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (single) at 430px
+  10) tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (single) at 430px 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < NaN
+    Received:   32
+
+      141 |     const geometry = await heading.evaluate(node => ({ width: node.getBoundingClientRect().width, height: node.getBoundingClientRect().height, lineHeight: parseFloat(getComputedStyle(node).lineHeight) }))
+      142 |     expect(geometry.width).toBeGreaterThan(120)
+    > 143 |     expect(geometry.height).toBeLessThan(geometry.lineHeight * 5)
+          |                             ^
+      144 |   })
+      145 |
+      146 |   test(`single execution collapses without blank space at ${width}px`, async ({ page }) => {
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\mobile-workflows.spec.js:143:29
+
+    Error Context: test-results\mobile-workflows-history-m-c52fa-ys-readable-single-at-430px\error-context.md
+
+
+[56/61] tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (grouped) at 430px
+  11) tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (grouped) at 430px 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < NaN
+    Received:   32
+
+      141 |     const geometry = await heading.evaluate(node => ({ width: node.getBoundingClientRect().width, height: node.getBoundingClientRect().height, lineHeight: parseFloat(getComputedStyle(node).lineHeight) }))
+      142 |     expect(geometry.width).toBeGreaterThan(120)
+    > 143 |     expect(geometry.height).toBeLessThan(geometry.lineHeight * 5)
+          |                             ^
+      144 |   })
+      145 |
+      146 |   test(`single execution collapses without blank space at ${width}px`, async ({ page }) => {
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\mobile-workflows.spec.js:143:29
+
+    Error Context: test-results\mobile-workflows-history-m-265b2-s-readable-grouped-at-430px\error-context.md
+
+
+[57/61] tests\e2e\mobile-workflows.spec.js:146:3 › single execution collapses without blank space at 430px
+[58/61] tests\e2e\mobile-workflows.spec.js:173:3 › completed customer actions stay inside their cells at 430px
+[59/61] tests\e2e\mobile-workflows.spec.js:192:3 › today visit and execution controls fit 430px
+[60/61] tests\e2e\mobile-workflows.spec.js:206:3 › treatment card and embedded execution fit 430px
+[61/61] tests\e2e\mobile-workflows.spec.js:225:3 › customer overview uses compact embedded execution at 430px
+  11 failed
+    tests\e2e\invoice-date-repair.spec.js:3:1 › manager edits the Vietnam invoice day without shifting it through UTC 
+    tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 640px 
+    tests\e2e\invoice-service-children.spec.js:384:1 › all pending children hide parent session actions; unchecking restores actions and staff 
+    tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (single) at 320px ──
+    tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (grouped) at 320px ─
+    tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (single) at 360px ──
+    tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (grouped) at 360px ─
+    tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (single) at 390px ──
+    tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (grouped) at 390px ─
+    tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (single) at 430px ──
+    tests\e2e\mobile-workflows.spec.js:129:39 › history metadata stays readable (grouped) at 430px ─
+  50 passed (1.4m)

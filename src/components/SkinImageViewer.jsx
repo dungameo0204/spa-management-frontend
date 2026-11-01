@@ -7,6 +7,10 @@ export default function SkinImageViewer({ customerId, selection, onClose }) {
   const [index, setIndex] = useState(selection.index), [zoom, setZoom] = useState(1), [offset, setOffset] = useState({ x: 0, y: 0 })
   const [source, setSource] = useState(''), [error, setError] = useState(''), [attempt, setAttempt] = useState(0)
   const ref = useRef(null), stageRef = useRef(null), drag = useRef(null)
+  const touchRef = useRef(null), lastTapRef = useRef(0)
+  const zoomRef = useRef(zoom), offsetRef = useRef(offset)
+  zoomRef.current = zoom
+  offsetRef.current = offset
   const image = selection.images[index], name = image.file?.name || image.original_filename || 'Ảnh da'
   useDialogFocus(ref, onClose)
   const navigate = useCallback(direction => {
@@ -46,6 +50,113 @@ export default function SkinImageViewer({ customerId, selection, onClose }) {
     stage.addEventListener('wheel', wheel, { passive: false })
     return () => stage.removeEventListener('wheel', wheel)
   }, [zoom, offset, source, error])
+
+  useEffect(() => {
+    const stage = stageRef.current
+    if (!stage) return
+
+    const onTouchStart = event => {
+      if (!source || error) return
+      if (event.touches.length === 2) {
+        event.preventDefault()
+        const t1 = event.touches[0], t2 = event.touches[1]
+        const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY)
+        const midX = (t1.clientX + t2.clientX) / 2
+        const midY = (t1.clientY + t2.clientY) / 2
+        touchRef.current = {
+          mode: 'pinch',
+          startDist: dist,
+          midX,
+          midY,
+          startZoom: zoomRef.current,
+          startOffset: { ...offsetRef.current },
+        }
+      } else if (event.touches.length === 1) {
+        const now = Date.now()
+        if (now - lastTapRef.current < 300) {
+          event.preventDefault()
+          changeZoom(zoomRef.current > 1 ? 1 : 2)
+          lastTapRef.current = 0
+          touchRef.current = null
+          return
+        }
+        lastTapRef.current = now
+
+        if (zoomRef.current > 1) {
+          const t = event.touches[0]
+          touchRef.current = {
+            mode: 'pan',
+            startX: t.clientX,
+            startY: t.clientY,
+            startOffset: { ...offsetRef.current },
+          }
+        }
+      }
+    }
+
+    const onTouchMove = event => {
+      if (!touchRef.current || !source || error) return
+      if (touchRef.current.mode === 'pinch' && event.touches.length === 2) {
+        event.preventDefault()
+        const t1 = event.touches[0], t2 = event.touches[1]
+        const currentDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY)
+        if (touchRef.current.startDist > 0) {
+          const scale = currentDist / touchRef.current.startDist
+          const next = Math.max(1, Math.min(4, touchRef.current.startZoom * scale))
+          const bounds = stage.getBoundingClientRect()
+          const x = touchRef.current.midX - bounds.left - bounds.width / 2
+          const y = touchRef.current.midY - bounds.top - bounds.height / 2
+          const ratio = next / touchRef.current.startZoom
+          const currentMidX = (t1.clientX + t2.clientX) / 2
+          const currentMidY = (t1.clientY + t2.clientY) / 2
+          const panX = currentMidX - touchRef.current.midX
+          const panY = currentMidY - touchRef.current.midY
+
+          setOffset(next === 1 ? { x: 0, y: 0 } : {
+            x: x - (x - touchRef.current.startOffset.x) * ratio + panX,
+            y: y - (y - touchRef.current.startOffset.y) * ratio + panY,
+          })
+          setZoom(next)
+        }
+      } else if (touchRef.current.mode === 'pan' && event.touches.length === 1 && zoomRef.current > 1) {
+        event.preventDefault()
+        const t = event.touches[0]
+        const dx = t.clientX - touchRef.current.startX
+        const dy = t.clientY - touchRef.current.startY
+        setOffset({
+          x: touchRef.current.startOffset.x + dx,
+          y: touchRef.current.startOffset.y + dy,
+        })
+      }
+    }
+
+    const onTouchEnd = event => {
+      if (!touchRef.current) return
+      if (event.touches.length === 0) {
+        touchRef.current = null
+      } else if (event.touches.length === 1 && zoomRef.current > 1) {
+        const t = event.touches[0]
+        touchRef.current = {
+          mode: 'pan',
+          startX: t.clientX,
+          startY: t.clientY,
+          startOffset: { ...offsetRef.current },
+        }
+      }
+    }
+
+    stage.addEventListener('touchstart', onTouchStart, { passive: false })
+    stage.addEventListener('touchmove', onTouchMove, { passive: false })
+    stage.addEventListener('touchend', onTouchEnd)
+    stage.addEventListener('touchcancel', onTouchEnd)
+
+    return () => {
+      stage.removeEventListener('touchstart', onTouchStart)
+      stage.removeEventListener('touchmove', onTouchMove)
+      stage.removeEventListener('touchend', onTouchEnd)
+      stage.removeEventListener('touchcancel', onTouchEnd)
+    }
+  }, [source, error])
   return <div ref={ref} className="skin-viewer" role="dialog" aria-modal="true" aria-label="Xem ảnh da">
     <div className="skin-viewer-toolbar"><button type="button" className="btn secondary" onClick={onClose}>Đóng ảnh</button><div className="skin-viewer-zoom"><button type="button" aria-label="Thu nhỏ" disabled={zoom <= 1} onClick={() => changeZoom(zoom - .25)}>−</button><output aria-label="Mức phóng đại">{Math.round(zoom * 100)}%</output><button type="button" aria-label="Phóng to" disabled={zoom >= 4} onClick={() => changeZoom(zoom + .25)}>+</button><button type="button" onClick={() => changeZoom(1)}>Vừa màn hình</button></div></div>
     <div ref={stageRef} className={`skin-viewer-stage ${zoom > 1 ? 'is-zoomed' : ''}`} title="Lăn chuột để phóng to / thu nhỏ · Kéo để di chuyển ảnh" onDoubleClick={() => changeZoom(zoom > 1 ? 1 : 2)} onPointerDown={event => {

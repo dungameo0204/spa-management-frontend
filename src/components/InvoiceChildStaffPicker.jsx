@@ -5,6 +5,7 @@ import { Users, Check, Search, X } from 'lucide-react'
 import { listResource } from '../api/resources'
 import { useAuth } from '../auth/AuthProvider'
 import useDialogFocus from './useDialogFocus'
+import './InvoiceServiceChildren.css'
 
 async function listPickerResources(resource, filters = {}) {
   const first = await listResource(resource, filters, 1, 100)

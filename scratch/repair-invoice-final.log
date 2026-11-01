@@ -1,0 +1,543 @@
+
+Running 42 tests using 2 workers
+
+[1/42] tests\e2e\invoice-service-children.spec.js:52:43 › mobile child cards have no horizontal scroll at 320px
+[2/42] tests\e2e\invoice-flow.spec.js:3:1 › trên điện thoại ô tìm sản phẩm hóa đơn hiện danh sách và dòng nhập không tràn ngang
+  1) tests\e2e\invoice-flow.spec.js:3:1 › trên điện thoại ô tìm sản phẩm hóa đơn hiện danh sách và dòng nhập không tràn ngang 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "inputsSideBySide": true,
+    +   "inputsSideBySide": false,
+        "optionFits": true,
+        "pageFits": true,
+        "productBeforeInputs": true,
+        "totalBelow": true,
+      }
+
+      23 |     return { productBeforeInputs: product.bottom <= quantity.top, inputsSideBySide: Math.abs(quantity.top - price.top) < 2, totalBelow: total.top >= price.bottom, optionFits: option.left >= 0 && option.right <= innerWidth, pageFits: document.documentElement.scrollWidth <= innerWidth }
+      24 |   })
+    > 25 |   expect(layout).toEqual({ productBeforeInputs: true, inputsSideBySide: true, totalBelow: true, optionFits: true, pageFits: true })
+         |                  ^
+      26 |   await option.click()
+      27 |   await expect(product).toHaveValue('Dầu dưỡng')
+      28 | })
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-flow.spec.js:25:18
+
+    Error Context: test-results\invoice-flow-trên-điện-tho-f6b6a--dòng-nhập-không-tràn-ngang\error-context.md
+
+
+[3/42] tests\e2e\invoice-service-children.spec.js:52:43 › mobile child cards have no horizontal scroll at 360px
+[4/42] tests\e2e\invoice-flow.spec.js:30:1 › bảy dòng sản phẩm gọn trong drawer ở màn hình desktop
+[5/42] tests\e2e\invoice-flow.spec.js:60:1 › hóa đơn dịch vụ đã làm: lưu hóa đơn, trừ buổi và gán nhân viên theo vai trò
+[6/42] tests\e2e\invoice-service-children.spec.js:52:43 › mobile child cards have no horizontal scroll at 390px
+[7/42] tests\e2e\invoice-service-children.spec.js:52:43 › mobile child cards have no horizontal scroll at 430px
+[8/42] tests\e2e\invoice-service-children.spec.js:82:34 › child allocations and editable parent price at 390px
+  2) tests\e2e\invoice-flow.spec.js:60:1 › hóa đơn dịch vụ đã làm: lưu hóa đơn, trừ buổi và gán nhân viên theo vai trò 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('combobox', { name: 'Nhân viên thực hiện - Kỹ thuật viên' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('combobox', { name: 'Nhân viên thực hiện - Kỹ thuật viên' }) with timeout 5000ms
+      - waiting for getByRole('combobox', { name: 'Nhân viên thực hiện - Kỹ thuật viên' })
+
+
+      85 |   await page.getByRole('option', { name: /Dịch vụ A/ }).click()
+      86 |   await expect(page.getByRole('checkbox', { name: 'Chưa làm' })).not.toBeChecked()
+    > 87 |   await expect(page.getByRole('combobox', { name: 'Nhân viên thực hiện - Kỹ thuật viên' })).toBeVisible()
+         |                                                                                             ^
+      88 |   await page.getByRole('combobox', { name: 'Nhân viên thực hiện - Kỹ thuật viên' }).selectOption('2')
+      89 |   const itemCard = page.locator('.compact-invoice-line').first()
+      90 |   await expect(itemCard.getByRole('button', { name: 'Bỏ dòng' })).toBeVisible()
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-flow.spec.js:87:93
+
+    Error Context: test-results\invoice-flow-hóa-đơn-dịch--ad8f2--gán-nhân-viên-theo-vai-trò\error-context.md
+
+
+[9/42] tests\e2e\invoice-service-children.spec.js:82:34 › child allocations and editable parent price at 1280px
+[10/42] tests\e2e\invoice-flow.spec.js:113:1 › chọn nhiều tư vấn trong hộp nổi không làm giãn dòng sản phẩm
+[11/42] tests\e2e\invoice-flow.spec.js:144:1 › hiện tồn kho không làm lệch các ô nhập trên dòng sản phẩm
+[12/42] tests\e2e\invoice-service-children.spec.js:119:1 › grouped staff picker, pending children, parent note and signature save only the selected child
+  3) tests\e2e\invoice-flow.spec.js:144:1 › hiện tồn kho không làm lệch các ô nhập trên dòng sản phẩm 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 2
+    Received:    19.59375
+
+      163 |       return { product: rect('.product-picker-stack .picker input[role="combobox"]'), quantity: rect('.quantity-field input'), price: rect('.money-field input'), discount: rect('.percent-field input'), total: rect('.line-total strong'), stock: rect('.stock-hint'), consultant: rect('.consultant-picker') }
+      164 |     })
+    > 165 |     for (const key of ['quantity', 'price', 'discount']) expect(Math.abs(boxes[key].top - boxes.product.top)).toBeLessThanOrEqual(2)
+          |                                                                                                               ^
+      166 |     expect(Math.abs(boxes.total.top - boxes.product.top)).toBeLessThanOrEqual(2)
+      167 |     expect(boxes.stock.top).toBeGreaterThanOrEqual(boxes.product.bottom)
+      168 |     expect(boxes.consultant.width).toBeGreaterThan(0)
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-flow.spec.js:165:111
+
+    Error Context: test-results\invoice-flow-hiện-tồn-kho--de071-c-ô-nhập-trên-dòng-sản-phẩm\error-context.md
+
+
+[13/42] tests\e2e\invoice-flow.spec.js:172:1 › bốn vai trò thực hiện trên một hàng và Tư vấn sát thùng rác
+[14/42] tests\e2e\invoice-service-children.spec.js:157:1 › failed child execution leaves the saved invoice locked instead of posting it again
+[15/42] tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 390px
+[16/42] tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1024px
+  4) tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1024px 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 8
+    Received:    7
+
+       at invoice-line-layout.js:10
+
+       8 |     return { name: el.getAttribute('aria-label') || el.textContent || el.type, x: r.x, y: r.y, right: r.right, bottom: r.bottom }
+       9 |   }))
+    > 10 |   expect(boxes.length).toBeGreaterThanOrEqual(8)
+         |                        ^
+      11 |   // Responsive rows may wrap, but controls must never overlap or leave the line.
+      12 |   const bounds = await line.boundingBox()
+      13 |   for (const [index, box] of boxes.entries()) {
+        at expectDesktopInvoiceLine (D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-line-layout.js:10:24)
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-service-children.spec.js:201:5
+
+    Error Context: test-results\invoice-service-children-s-bf6da-gned-confirmation-at-1024px\error-context.md
+
+
+  5) tests\e2e\invoice-flow.spec.js:172:1 › bốn vai trò thực hiện trên một hàng và Tư vấn sát thùng rác 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.compact-invoice-line').first().locator('.role-staff-picker .field')
+    Expected: 4
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('.compact-invoice-line').first().locator('.role-staff-picker .field') with timeout 5000ms
+      - waiting for locator('.compact-invoice-line').first().locator('.role-staff-picker .field')
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      190 |   await page.getByRole('option', { name: /Dịch vụ A/ }).click()
+      191 |   const card = page.locator('.compact-invoice-line').first()
+    > 192 |   await expect(card.locator('.role-staff-picker .field')).toHaveCount(4)
+          |                                                           ^
+      193 |   for (const width of [1910, 1000, 390]) {
+      194 |     await page.setViewportSize({ width, height: 900 })
+      195 |     const layout = await card.evaluate(element => {
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-flow.spec.js:192:59
+
+    Error Context: test-results\invoice-flow-bốn-vai-trò-t-0fafa-àng-và-Tư-vấn-sát-thùng-rác\error-context.md
+
+
+[17/42] tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1280px
+[18/42] tests\e2e\invoice-flow.spec.js:235:1 › tick Chưa làm ẩn bộ chọn nhân viên và không ghi nhận buổi
+  6) tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1280px 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 8
+    Received:    7
+
+       at invoice-line-layout.js:10
+
+       8 |     return { name: el.getAttribute('aria-label') || el.textContent || el.type, x: r.x, y: r.y, right: r.right, bottom: r.bottom }
+       9 |   }))
+    > 10 |   expect(boxes.length).toBeGreaterThanOrEqual(8)
+         |                        ^
+      11 |   // Responsive rows may wrap, but controls must never overlap or leave the line.
+      12 |   const bounds = await line.boundingBox()
+      13 |   for (const [index, box] of boxes.entries()) {
+        at expectDesktopInvoiceLine (D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-line-layout.js:10:24)
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-service-children.spec.js:201:5
+
+    Error Context: test-results\invoice-service-children-s-daba0-gned-confirmation-at-1280px\error-context.md
+
+
+[19/42] tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1440px
+  7) tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1440px 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 8
+    Received:    7
+
+       at invoice-line-layout.js:10
+
+       8 |     return { name: el.getAttribute('aria-label') || el.textContent || el.type, x: r.x, y: r.y, right: r.right, bottom: r.bottom }
+       9 |   }))
+    > 10 |   expect(boxes.length).toBeGreaterThanOrEqual(8)
+         |                        ^
+      11 |   // Responsive rows may wrap, but controls must never overlap or leave the line.
+      12 |   const bounds = await line.boundingBox()
+      13 |   for (const [index, box] of boxes.entries()) {
+        at expectDesktopInvoiceLine (D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-line-layout.js:10:24)
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-service-children.spec.js:201:5
+
+    Error Context: test-results\invoice-service-children-s-9a28b-gned-confirmation-at-1440px\error-context.md
+
+
+[20/42] tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1500px
+  8) tests\e2e\invoice-flow.spec.js:235:1 › tick Chưa làm ẩn bộ chọn nhân viên và không ghi nhận buổi 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('combobox', { name: 'Nhân viên thực hiện - Kỹ thuật viên' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('combobox', { name: 'Nhân viên thực hiện - Kỹ thuật viên' }) with timeout 5000ms
+      - waiting for getByRole('combobox', { name: 'Nhân viên thực hiện - Kỹ thuật viên' })
+
+
+      255 |   await page.getByRole('option', { name: /Dịch vụ A/ }).click()
+      256 |   const staffPicker = page.getByRole('combobox', { name: 'Nhân viên thực hiện - Kỹ thuật viên' })
+    > 257 |   await expect(staffPicker).toBeVisible()
+          |                             ^
+      258 |   await page.getByRole('checkbox', { name: 'Chưa làm' }).check()
+      259 |   await expect(staffPicker).toHaveCount(0)
+      260 |   await page.getByRole('checkbox', { name: 'Chưa làm' }).uncheck()
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-flow.spec.js:257:29
+
+    Error Context: test-results\invoice-flow-tick-Chưa-làm-6d9f7-viên-và-không-ghi-nhận-buổi\error-context.md
+
+
+[21/42] tests\e2e\invoice-flow.spec.js:268:1 › hóa đơn tìm khách/dịch vụ, đồng bộ chiết khấu và trả ví không tạo nợ
+  9) tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1500px 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 8
+    Received:    7
+
+       at invoice-line-layout.js:10
+
+       8 |     return { name: el.getAttribute('aria-label') || el.textContent || el.type, x: r.x, y: r.y, right: r.right, bottom: r.bottom }
+       9 |   }))
+    > 10 |   expect(boxes.length).toBeGreaterThanOrEqual(8)
+         |                        ^
+      11 |   // Responsive rows may wrap, but controls must never overlap or leave the line.
+      12 |   const bounds = await line.boundingBox()
+      13 |   for (const [index, box] of boxes.entries()) {
+        at expectDesktopInvoiceLine (D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-line-layout.js:10:24)
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-service-children.spec.js:201:5
+
+    Error Context: test-results\invoice-service-children-s-dd73d-gned-confirmation-at-1500px\error-context.md
+
+
+[22/42] tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1920px
+  10) tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1920px 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 8
+    Received:    7
+
+       at invoice-line-layout.js:10
+
+       8 |     return { name: el.getAttribute('aria-label') || el.textContent || el.type, x: r.x, y: r.y, right: r.right, bottom: r.bottom }
+       9 |   }))
+    > 10 |   expect(boxes.length).toBeGreaterThanOrEqual(8)
+         |                        ^
+      11 |   // Responsive rows may wrap, but controls must never overlap or leave the line.
+      12 |   const bounds = await line.boundingBox()
+      13 |   for (const [index, box] of boxes.entries()) {
+        at expectDesktopInvoiceLine (D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-line-layout.js:10:24)
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-service-children.spec.js:201:5
+
+    Error Context: test-results\invoice-service-children-s-d13e5-gned-confirmation-at-1920px\error-context.md
+
+
+[23/42] tests\e2e\invoice-service-children.spec.js:244:1 › long standalone name and large price keep the complete desktop row usable
+[24/42] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 320px
+  11) tests\e2e\invoice-flow.spec.js:268:1 › hóa đơn tìm khách/dịch vụ, đồng bộ chiết khấu và trả ví không tạo nợ 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 0
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      319 |   await expect(page.getByText('80.000 ₫').first()).toBeVisible()
+      320 |   await page.getByRole('button', { name: 'Lưu hóa đơn' }).click()
+    > 321 |   await expect.poll(() => requests.length).toBe(1)
+          |                                            ^
+      322 |   expect(requests[0]).toMatchObject({ customer_id: 1, wallet_used: 100000, paid_amount: 80000, discount_percent: 0, discount_amount: 0, items: [{ product_id: 3, discount_percent: 10, discount_amount: 0 }] })
+      323 | })
+      324 |
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-flow.spec.js:321:44
+
+    Error Context: test-results\invoice-flow-hóa-đơn-tìm-k-358bc-khấu-và-trả-ví-không-tạo-nợ\error-context.md
+
+
+[25/42] tests\e2e\invoice-flow.spec.js:325:1 › quản lý chọn ngày hóa đơn quá khứ khi tạo, để trống thì máy chủ lấy thời điểm hiện tại
+[26/42] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 390px
+[27/42] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 640px
+  12) tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 640px 
+
+    Error: .compact-invoice-line
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      280 |   if (width > 700) await expectDesktopInvoiceLine(line)
+      281 |   for (const selector of ['.compact-invoice-line', '.invoice-line-scroll', '.product-entry-scroll', '.drawer-body', '.drawer']) {
+    > 282 |     expect(await page.locator(selector).evaluateAll(elements => elements.every(el => el.scrollWidth <= el.clientWidth + 1)), selector).toBe(true)
+          |                                                                                                                                        ^
+      283 |   }
+      284 |   await page.screenshot({ path: `test-results/invoice-selection-fixed-${width}.png` })
+      285 | })
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-service-children.spec.js:282:136
+
+    Error Context: test-results\invoice-service-children-s-b1dae-rizontal-scrolling-at-640px\error-context.md
+
+
+[28/42] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 768px
+  13) tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 768px 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 8
+    Received:    5
+
+       at invoice-line-layout.js:10
+
+       8 |     return { name: el.getAttribute('aria-label') || el.textContent || el.type, x: r.x, y: r.y, right: r.right, bottom: r.bottom }
+       9 |   }))
+    > 10 |   expect(boxes.length).toBeGreaterThanOrEqual(8)
+         |                        ^
+      11 |   // Responsive rows may wrap, but controls must never overlap or leave the line.
+      12 |   const bounds = await line.boundingBox()
+      13 |   for (const [index, box] of boxes.entries()) {
+        at expectDesktopInvoiceLine (D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-line-layout.js:10:24)
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-service-children.spec.js:280:20
+
+    Error Context: test-results\invoice-service-children-s-c68fa-rizontal-scrolling-at-768px\error-context.md
+
+
+[29/42] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1024px
+  14) tests\e2e\invoice-flow.spec.js:325:1 › quản lý chọn ngày hóa đơn quá khứ khi tạo, để trống thì máy chủ lấy thời điểm hiện tại 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 0
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      354 |   await date.fill('2026-09-15')
+      355 |   await page.getByRole('button', { name: 'Lưu hóa đơn' }).click()
+    > 356 |   await expect.poll(() => requests.length).toBe(1)
+          |                                            ^
+      357 |   expect(requests[0]).toMatchObject({ branch_id: 1, invoice_date: '2026-09-15 00:00:00' })
+      358 |   await expect(page.getByRole('dialog')).toBeVisible()
+      359 |   await page.getByRole('button', { name: 'Chỉnh sửa', exact: true }).waitFor(); await page.getByRole('dialog').getByRole('button', { name: 'Đóng', exact: true }).first().click()
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-flow.spec.js:356:44
+
+    Error Context: test-results\invoice-flow-quản-lý-chọn--f3530--chủ-lấy-thời-điểm-hiện-tại\error-context.md
+
+
+  15) tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1024px 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 8
+    Received:    5
+
+       at invoice-line-layout.js:10
+
+       8 |     return { name: el.getAttribute('aria-label') || el.textContent || el.type, x: r.x, y: r.y, right: r.right, bottom: r.bottom }
+       9 |   }))
+    > 10 |   expect(boxes.length).toBeGreaterThanOrEqual(8)
+         |                        ^
+      11 |   // Responsive rows may wrap, but controls must never overlap or leave the line.
+      12 |   const bounds = await line.boundingBox()
+      13 |   for (const [index, box] of boxes.entries()) {
+        at expectDesktopInvoiceLine (D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-line-layout.js:10:24)
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-service-children.spec.js:280:20
+
+    Error Context: test-results\invoice-service-children-s-68c99-izontal-scrolling-at-1024px\error-context.md
+
+
+[30/42] tests\e2e\invoice-flow.spec.js:367:1 › tiền tư vấn một người tự bằng giá sau giảm, hai người có ô chia riêng
+[31/42] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1280px
+  16) tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1280px 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 8
+    Received:    5
+
+       at invoice-line-layout.js:10
+
+       8 |     return { name: el.getAttribute('aria-label') || el.textContent || el.type, x: r.x, y: r.y, right: r.right, bottom: r.bottom }
+       9 |   }))
+    > 10 |   expect(boxes.length).toBeGreaterThanOrEqual(8)
+         |                        ^
+      11 |   // Responsive rows may wrap, but controls must never overlap or leave the line.
+      12 |   const bounds = await line.boundingBox()
+      13 |   for (const [index, box] of boxes.entries()) {
+        at expectDesktopInvoiceLine (D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-line-layout.js:10:24)
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-service-children.spec.js:280:20
+
+    Error Context: test-results\invoice-service-children-s-1218d-izontal-scrolling-at-1280px\error-context.md
+
+
+[32/42] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1440px
+  17) tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1440px 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 8
+    Received:    5
+
+       at invoice-line-layout.js:10
+
+       8 |     return { name: el.getAttribute('aria-label') || el.textContent || el.type, x: r.x, y: r.y, right: r.right, bottom: r.bottom }
+       9 |   }))
+    > 10 |   expect(boxes.length).toBeGreaterThanOrEqual(8)
+         |                        ^
+      11 |   // Responsive rows may wrap, but controls must never overlap or leave the line.
+      12 |   const bounds = await line.boundingBox()
+      13 |   for (const [index, box] of boxes.entries()) {
+        at expectDesktopInvoiceLine (D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-line-layout.js:10:24)
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-service-children.spec.js:280:20
+
+    Error Context: test-results\invoice-service-children-s-65ef8-izontal-scrolling-at-1440px\error-context.md
+
+
+[33/42] tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1920px
+  18) tests\e2e\invoice-flow.spec.js:367:1 › tiền tư vấn một người tự bằng giá sau giảm, hai người có ô chia riêng 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 0
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      395 |   await page.getByRole('button', { name: 'Xong' }).click()
+      396 |   await page.getByRole('button', { name: 'Lưu hóa đơn' }).click()
+    > 397 |   await expect.poll(() => requests.length).toBe(1)
+          |                                            ^
+      398 |   expect(requests[0].items[0].consultants).toEqual([{ staff_id: 2, revenue_amount: 180000, role_type: 'Tư vấn' }])
+      399 |   await expect(page.getByRole('dialog')).toBeVisible()
+      400 |   await page.getByRole('button', { name: 'Chỉnh sửa', exact: true }).waitFor(); await page.getByRole('dialog').getByRole('button', { name: 'Đóng', exact: true }).first().click()
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-flow.spec.js:397:44
+
+    Error Context: test-results\invoice-flow-tiền-tư-vấn-m-98c13-m-hai-người-có-ô-chia-riêng\error-context.md
+
+
+[34/42] tests\e2e\invoice-flow.spec.js:412:1 › sửa hóa đơn cập nhật khách trả theo tổng tiền và đưa lỗi máy chủ lên trước mắt
+  19) tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1920px 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 8
+    Received:    5
+
+       at invoice-line-layout.js:10
+
+       8 |     return { name: el.getAttribute('aria-label') || el.textContent || el.type, x: r.x, y: r.y, right: r.right, bottom: r.bottom }
+       9 |   }))
+    > 10 |   expect(boxes.length).toBeGreaterThanOrEqual(8)
+         |                        ^
+      11 |   // Responsive rows may wrap, but controls must never overlap or leave the line.
+      12 |   const bounds = await line.boundingBox()
+      13 |   for (const [index, box] of boxes.entries()) {
+        at expectDesktopInvoiceLine (D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-line-layout.js:10:24)
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-service-children.spec.js:280:20
+
+    Error Context: test-results\invoice-service-children-s-03116-izontal-scrolling-at-1920px\error-context.md
+
+
+[35/42] tests\e2e\invoice-service-children.spec.js:287:34 › 50 staff can be searched and filtered without losing selection at 390px
+[36/42] tests\e2e\receipt-pagination.spec.js:3:1 › hóa đơn giấy thường nhiều sản phẩm có tiêu đề lặp và tổng kết liền khối
+[37/42] tests\e2e\invoice-service-children.spec.js:287:34 › 50 staff can be searched and filtered without losing selection at 1280px
+[38/42] tests\e2e\invoice-service-children.spec.js:319:1 › 10 finite sessions at 2 million less 10 percent displays and posts 18 million
+  20) tests\e2e\invoice-service-children.spec.js:319:1 › 10 finite sessions at 2 million less 10 percent displays and posts 18 million 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 8
+    Received:    7
+
+       at invoice-line-layout.js:10
+
+       8 |     return { name: el.getAttribute('aria-label') || el.textContent || el.type, x: r.x, y: r.y, right: r.right, bottom: r.bottom }
+       9 |   }))
+    > 10 |   expect(boxes.length).toBeGreaterThanOrEqual(8)
+         |                        ^
+      11 |   // Responsive rows may wrap, but controls must never overlap or leave the line.
+      12 |   const bounds = await line.boundingBox()
+      13 |   for (const [index, box] of boxes.entries()) {
+        at expectDesktopInvoiceLine (D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-line-layout.js:10:24)
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-service-children.spec.js:339:3
+
+    Error Context: test-results\invoice-service-children-1-1bb6f-splays-and-posts-18-million\error-context.md
+
+
+[39/42] tests\e2e\invoice-service-children.spec.js:346:1 › failed child loading blocks save
+[40/42] tests\e2e\invoice-service-children.spec.js:359:1 › API rejection preserves draft price and lifetime selection
+[41/42] tests\e2e\invoice-service-children.spec.js:374:1 › invoice detail uses actual cards and allows amendment and deletion actions
+[42/42] tests\e2e\invoice-service-children.spec.js:384:1 › all pending children hide parent session actions; unchecking restores actions and staff
+  21) tests\e2e\invoice-service-children.spec.js:384:1 › all pending children hide parent session actions; unchecking restores actions and staff 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 160
+    Received:    240
+
+      391 |   await line.getByRole('checkbox', { name: 'Chưa làm Laser trị nám' }).uncheck()
+      392 |   await expect(line.getByRole('button', { name: 'Nhân viên làm Laser trị nám' })).toBeVisible()
+    > 393 |   expect((await line.getByRole('button', { name:'Nhân viên làm Laser trị nám' }).boundingBox()).width).toBeLessThanOrEqual(160)
+          |                                                                                                        ^
+      394 |   await page.screenshot({ path:'test-results/invoice-child-compact-staff.png' })
+      395 |   await expect(line.getByRole('button', { name: 'Ghi chú', exact: true })).toBeVisible()
+      396 |   await expect(line.getByRole('button', { name: 'Chữ ký', exact: true })).toBeVisible()
+        at D:\Project\SpaManagement\spa-management-frontend\tests\e2e\invoice-service-children.spec.js:393:104
+
+    Error Context: test-results\invoice-service-children-a-8540e--restores-actions-and-staff\error-context.md
+
+
+  21 failed
+    tests\e2e\invoice-flow.spec.js:3:1 › trên điện thoại ô tìm sản phẩm hóa đơn hiện danh sách và dòng nhập không tràn ngang 
+    tests\e2e\invoice-flow.spec.js:60:1 › hóa đơn dịch vụ đã làm: lưu hóa đơn, trừ buổi và gán nhân viên theo vai trò 
+    tests\e2e\invoice-flow.spec.js:144:1 › hiện tồn kho không làm lệch các ô nhập trên dòng sản phẩm 
+    tests\e2e\invoice-flow.spec.js:172:1 › bốn vai trò thực hiện trên một hàng và Tư vấn sát thùng rác 
+    tests\e2e\invoice-flow.spec.js:235:1 › tick Chưa làm ẩn bộ chọn nhân viên và không ghi nhận buổi 
+    tests\e2e\invoice-flow.spec.js:268:1 › hóa đơn tìm khách/dịch vụ, đồng bộ chiết khấu và trả ví không tạo nợ 
+    tests\e2e\invoice-flow.spec.js:325:1 › quản lý chọn ngày hóa đơn quá khứ khi tạo, để trống thì máy chủ lấy thời điểm hiện tại 
+    tests\e2e\invoice-flow.spec.js:367:1 › tiền tư vấn một người tự bằng giá sau giảm, hai người có ô chia riêng 
+    tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1024px 
+    tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1280px 
+    tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1440px 
+    tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1500px 
+    tests\e2e\invoice-service-children.spec.js:173:58 › standalone lifetime aligned and editable; unsigned confirmation at 1920px 
+    tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 640px 
+    tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 768px 
+    tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1024px 
+    tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1280px 
+    tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1440px 
+    tests\e2e\invoice-service-children.spec.js:262:67 › service menu stays clickable across invoice lines without horizontal scrolling at 1920px 
+    tests\e2e\invoice-service-children.spec.js:319:1 › 10 finite sessions at 2 million less 10 percent displays and posts 18 million 
+    tests\e2e\invoice-service-children.spec.js:384:1 › all pending children hide parent session actions; unchecking restores actions and staff 
+  21 passed (1.3m)

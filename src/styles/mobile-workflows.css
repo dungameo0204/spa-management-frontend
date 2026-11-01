@@ -1,0 +1,266 @@
+/* Shared mobile presentation only. Keep desktop geometry and business handlers intact.
+   Some legacy compact controls use !important; scoped overrides below intentionally
+   take precedence only inside the four customer/treatment workflows. */
+.invoice-children-heading { display: none; }
+
+@media (max-width: 767px) {
+  .treatment-customers .table-scroll { overflow: visible; }
+  .treatment-customers table { display: block; min-width: 0; width: 100%; }
+  .treatment-customers tbody { display: block; width: 100%; }
+  .treatment-customers tr { box-sizing: border-box; width: 100%; }
+  .treatment-customers table td { min-width: 0; white-space: normal; }
+  .treatment-customers .treatment-card-list { box-sizing: border-box; width: 100%; min-width: 0; }
+  .treatment-customers tr.clickable { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 8px 10px; gap: 4px 10px; }
+  .treatment-customers tr.clickable td { display: flex; justify-content: space-between; align-items: center; gap: 6px; padding: 3px 0; font-size: 12px; }
+  .treatment-customers tr.clickable td::before { position: static; width: auto; font-size: 12px; }
+  .treatment-customers tr.clickable td[data-label="Khách hàng"] { grid-column: 1 / -1; font-size: 14px; font-weight: 600; }
+  .treatment-customers tr.clickable td[data-label="Dịch vụ"],
+  .treatment-customers tr.clickable td[data-label="Đã hoàn thành"] {
+    grid-column: 1 / -1; flex-wrap: wrap; align-content: start; align-items: flex-start;
+  }
+  .treatment-customers tr.clickable td[data-label="Dịch vụ"]::before,
+  .treatment-customers tr.clickable td[data-label="Đã hoàn thành"]::before { flex-basis: 100%; }
+  .treatment-customers .treatment-service-badge,
+  .treatment-customers .treatment-finished-action {
+    min-width: 0; max-width: 100%; white-space: normal; overflow-wrap: anywhere;
+    height: auto; line-height: 1.4; box-sizing: border-box;
+  }
+  .treatment-customers .treatment-service-badge svg,
+  .treatment-customers .treatment-finished-action svg { flex-shrink: 0; }
+  .treatment-customers .treatment-expanded-row > td { padding: 6px !important; }
+  .treatment-customers .treatment-card-list { padding: 0; gap: 6px; }
+  .today-treatments .table-scroll { overflow: visible; }
+  .today-treatments table { display: block; min-width: 0; width: 100%; }
+  .today-treatments thead { display: none; }
+  .today-treatments .today-visit {
+    display: block; min-width: 0; margin: 0 0 8px;
+    border: 1px solid var(--line); border-radius: 10px;
+    background: var(--white); overflow: hidden;
+  }
+  .today-treatments .today-visit tr {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 8px;
+    margin: 0; padding: 8px 10px; border: 0; border-radius: 0; box-shadow: none;
+  }
+  .today-treatments .today-visit .today-treatment-group,
+  .today-treatments .today-visit .today-treatment-standalone { background: var(--sage-light); }
+  .today-treatments .today-visit .today-treatment-child { border-top: 1px solid var(--line); }
+  .today-treatments .today-visit .today-treatment-group td,
+  .today-treatments .today-visit .today-treatment-standalone td,
+  .today-treatments .today-visit .today-treatment-child td { padding: 3px 0; border: 0; box-shadow: none; }
+  .today-treatments .today-visit td {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 4px 8px; width: 100%; min-width: 0;
+    padding: 3px 0; border: 0; background: transparent;
+    box-shadow: none; text-align: left; font-size: 13px; box-sizing: border-box;
+    overflow-wrap: anywhere;
+  }
+  .today-treatments .today-visit td::before {
+    content: attr(data-label); position: static; width: auto;
+    flex: 0 1 auto; font-size: 12px; color: var(--muted); text-align: left;
+  }
+  .today-treatments .today-visit td[data-label="Khách hàng"]::before,
+  .today-treatments .today-visit td[data-label="Dịch vụ"]::before,
+  .today-treatments .today-visit td[colspan]::before { display: none; }
+  .today-treatments .today-visit td[data-label="Khách hàng"] { grid-column: 1 / -1; font-size: 14px; font-weight: 700; }
+  .today-treatments .today-visit td[data-label="Dịch vụ"] { grid-column: 1; }
+  .today-treatments .today-visit td[data-label="Đã làm hôm nay"] { grid-column: 2; grid-row: 1 / span 2; justify-content: flex-end; align-self: center; width: auto; }
+  .today-treatments .today-visit td[data-label="Đã làm hôm nay"]::before { display: none; }
+  .today-treatments .today-visit td[data-label="Nhân viên thực hiện"],
+  .today-treatments .today-visit td[data-label="Chữ ký khách hàng"],
+  .today-treatments .today-visit td[colspan] { grid-column: 1 / -1; }
+  .today-treatments .today-visit .today-treatment-child td:empty { display: none; }
+  .today-treatments .today-visit .today-group-heading { flex-wrap: wrap; gap: 4px 10px; }
+  .today-treatments .today-visit .today-child-service { font-weight: 600; line-height: 1.5; }
+  .today-treatments .today-visit input[type="checkbox"] {
+    width: 18px; height: 18px; min-height: 18px; margin: 7px;
+    accent-color: var(--sage);
+  }
+  .today-treatments .today-visit .text-action,
+  .today-treatments .today-visit .session-followup-button {
+    min-height: 32px; height: auto; padding: 5px 8px; font-size: 12px;
+    white-space: normal; line-height: 1.4;
+  }
+  .today-treatments .today-visit .today-session-signatures {
+    min-width: 0; max-width: 100%; flex-wrap: wrap; justify-content: flex-start;
+  }
+  .today-treatments .today-visit .today-staff-row { padding-top: 0; }
+  .today-treatments .today-staff-actions,
+  .customer-overview .customer-inline-actions { display: flex; flex-wrap: wrap; gap: 6px 8px; }
+  .today-treatments .today-staff-actions { padding: 6px 8px; margin-top: 4px; }
+  .today-treatments .today-staff-actions .field { gap: 4px; }
+  .today-treatments .today-staff-actions > .field,
+  .customer-overview .customer-inline-actions > .field { flex: 1 1 110px; min-width: 0; margin: 0; font-size: 12px; }
+  .today-treatments .today-staff-actions .role-staff-picker,
+  .customer-overview .customer-inline-actions .role-staff-picker {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    flex: 1 1 100%; width: 100%; gap: 6px 8px; overflow: visible;
+  }
+  .today-treatments .today-staff-actions .role-staff-picker > .field,
+  .customer-overview .customer-inline-actions .role-staff-picker > .field {
+    min-width: 0; max-width: none; width: 100%; font-size: 12px;
+  }
+  .today-treatments .today-staff-actions input,
+  .today-treatments .today-staff-actions select,
+  .today-treatments .today-staff-actions .mobile-select-trigger,
+  .customer-overview .customer-inline-actions select,
+  .customer-overview .customer-inline-actions .mobile-select-trigger {
+    box-sizing: border-box; min-width: 0; width: 100%; height: 36px; min-height: 36px; padding: 5px 8px; font-size: 13px;
+  }
+  .today-treatments .today-staff-actions input[type="date"] { font-size: 16px; }
+  .today-treatments .today-staff-actions > .btn { flex: 0 1 auto; min-height: 36px; padding: 6px 14px; font-size: 13px; }
+  .today-treatments .today-staff-actions > .btn.primary { min-height: 38px; }
+
+  .treatment-root-panel.treatment-card-item { border-radius: 10px; }
+  .treatment-root-panel.treatment-card-item .treatment-parent-heading {
+    display: flex; flex-direction: column; align-items: stretch; gap: 6px; padding: 8px 10px;
+  }
+  .treatment-root-panel .treatment-parent-heading-left { flex-wrap: wrap; gap: 4px 8px; }
+  .treatment-root-panel .treatment-parent-heading .treatment-parent-title {
+    flex: 1 1 100% !important; max-width: 100% !important; width: 100% !important;
+    min-height: 32px; white-space: normal; overflow-wrap: anywhere;
+    font-size: 14px; line-height: 1.45; text-align: left;
+  }
+  .treatment-root-panel .treatment-parent-badges { flex-wrap: wrap; }
+  .treatment-root-panel .treatment-parent-actions,
+  .treatment-root-panel .treatment-parent-actions.is-page-actions {
+    display: flex !important; flex: none !important; flex-wrap: wrap;
+    width: 100% !important; gap: 8px !important; margin: 0 !important;
+  }
+  .treatment-root-panel .treatment-parent-actions > .btn,
+  .treatment-root-panel .treatment-parent-actions > .text-action {
+    flex: 0 1 auto; min-height: 32px; height: auto; width: auto !important;
+    padding: 5px 10px; font-size: 12px; line-height: 1.4; white-space: normal !important;
+  }
+  .treatment-root-panel .treatment-parent-actions .treatment-action-execute {
+    order: -1; background: var(--sage); color: var(--white); border-color: var(--sage);
+  }
+  .treatment-root-panel .treatment-parent-actions .treatment-close-action { flex-basis: auto; }
+  .treatment-root-panel .treatment-btn-slot { display: none !important; }
+
+  .treatment-root-panel .treatment-execution-form,
+  .customer-overview .treatment-root-panel .treatment-execution-form {
+    display: block !important; min-width: 0 !important; width: 100% !important;
+    max-width: 100%; padding: 10px !important; overflow: visible !important; box-sizing: border-box;
+    border: 0 !important; border-radius: 8px; margin-top: 8px;
+  }
+  .treatment-root-panel .treatment-execution-form fieldset { min-width: 0; width: 100%; box-sizing: border-box; }
+  .treatment-root-panel .treatment-execution-split,
+  .customer-overview .treatment-root-panel .treatment-execution-split {
+    display: flex !important; flex-direction: column !important; gap: 8px !important;
+  }
+  .treatment-root-panel .treatment-execution-left-col,
+  .treatment-root-panel .treatment-execution-right-col { min-width: 0; width: 100%; box-sizing: border-box; }
+  .treatment-root-panel .treatment-execution-right-col,
+  .customer-overview .treatment-root-panel .treatment-execution-right-col { padding: 8px 0 0 !important; border: 0; border-top: 1px solid var(--line) !important; border-radius: 0; background: transparent; gap: 8px !important; }
+  .treatment-root-panel .treatment-child-execution { margin: 0; padding: 4px 0; border: 0; border-radius: 0; background: transparent; }
+  .treatment-root-panel .treatment-child-execution::before,
+  .treatment-root-panel .treatment-child-execution::after { display: none; }
+  .treatment-root-panel .treatment-child-execution-row,
+  .customer-overview .treatment-root-panel .treatment-child-execution-row {
+    display: grid !important; grid-template-columns: minmax(0, 1fr) auto !important;
+    width: 100% !important; gap: 8px !important;
+  }
+  .treatment-root-panel .treatment-child-label {
+    min-width: 0 !important; min-height: 32px; white-space: normal !important;
+    overflow-wrap: anywhere; font-size: 13px !important; line-height: 1.45;
+  }
+  .treatment-root-panel .treatment-child-label span { white-space: normal !important; }
+  .treatment-root-panel .treatment-child-staff-placeholder { display: none !important; }
+  .treatment-root-panel .treatment-child-label input { width: 18px !important; height: 18px !important; min-height: 18px !important; flex: none; }
+  .treatment-root-panel .treatment-session-count { text-align: right !important; align-self: center; font-size: 12px !important; }
+  .treatment-root-panel .treatment-child-staff-inline { grid-column: 1 / -1; min-width: 0; }
+  .treatment-root-panel .treatment-child-execution .invoice-child-staff,
+  .treatment-root-panel .treatment-single-staff .invoice-child-staff {
+    width: auto !important; max-width: 100% !important; min-height: 32px !important; height: auto !important;
+    padding: 5px 8px !important; font-size: 12px !important; box-sizing: border-box;
+  }
+  .treatment-root-panel .treatment-single-execution-row,
+  .customer-overview .treatment-root-panel .treatment-single-execution-row {
+    display: flex !important; flex-direction: column;
+    min-width: 0 !important; width: 100% !important; gap: 6px;
+    flex-wrap: nowrap !important; align-items: stretch !important;
+  }
+  .treatment-root-panel .treatment-execution-manager-row,
+  .customer-overview .treatment-root-panel .treatment-execution-manager-row {
+    display: grid !important; grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); gap: 6px !important; width: 100%;
+  }
+  .treatment-root-panel .treatment-execution-manager-row .compact-field,
+  .customer-overview .treatment-root-panel .treatment-execution-manager-row .compact-field {
+    width: 100% !important; max-width: none !important; min-width: 0 !important;
+    flex: none !important; font-size: 12px;
+  }
+  .treatment-root-panel .treatment-execution-form input:not([type="checkbox"]),
+  .treatment-root-panel .treatment-execution-form select,
+  .treatment-root-panel .treatment-execution-form .mobile-select-trigger {
+    min-width: 0; max-width: 100%; width: 100%; height: 36px !important; min-height: 36px !important;
+    padding: 5px 6px !important; font-size: 13px !important; box-sizing: border-box;
+  }
+  .treatment-root-panel .treatment-execution-form textarea { width: 100%; min-width: 0; font-size: 16px; box-sizing: border-box; }
+  .treatment-root-panel .treatment-execution-form input[type="date"],
+  .customer-overview .treatment-root-panel .treatment-execution-manager-row .compact-field.date-field input[type="date"] { min-width: 0 !important; font-size: 16px !important; padding: 5px 6px !important; }
+  .treatment-root-panel .treatment-execution-form .btn,
+  .treatment-root-panel .treatment-execution-form .session-followup-button { min-height: 32px; height: auto; padding: 5px 10px; font-size: 12px; white-space: normal; }
+  /* Desktop flex-basis is a width; in a column it would reserve 175px of height. */
+  .treatment-root-panel .treatment-single-execution-row > .treatment-single-staff {
+    flex: none; width: 100%; min-width: 0; max-width: none;
+  }
+  .treatment-root-panel .treatment-single-execution-row > .session-followup-button,
+  .treatment-root-panel .treatment-single-execution-row > .treatment-execution-signature { align-self: flex-start; }
+  .treatment-root-panel .treatment-history-compact-top,
+  .treatment-root-panel .treatment-history-meta,
+  .treatment-root-panel .treatment-history-day-heading,
+  .treatment-root-panel .treatment-history-heading-right,
+  .treatment-root-panel .treatment-history-actions {
+    min-width: 0; max-width: 100%; flex-wrap: wrap;
+  }
+  .treatment-root-panel .treatment-history-meta,
+  .treatment-root-panel .treatment-history-day-heading > strong { flex: 1 1 100%; }
+  .treatment-root-panel .treatment-history-meta strong,
+  .treatment-root-panel .treatment-history-day-heading > strong {
+    min-width: 0; overflow-wrap: break-word; word-break: normal; line-height: 1.5;
+  }
+  .treatment-root-panel .treatment-execution-actions,
+  .treatment-root-panel .treatment-single-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; width: 100%; margin: 12px 0 0; scroll-margin-block: 90px; }
+  .treatment-root-panel .treatment-session-tools { flex-wrap: wrap !important; min-width: 0; max-width: 100%; height: auto !important; gap: 8px !important; }
+  .treatment-root-panel .treatment-signature-state { background: transparent !important; border: 0; border-radius: 0 !important; padding: 0 !important; }
+  .treatment-root-panel .treatment-execution-actions > .btn,
+  .treatment-root-panel .treatment-single-actions > .btn { flex: 0 1 auto; min-height: 36px; }
+  .treatment-root-panel .treatment-execution-actions > .btn.primary,
+  .treatment-root-panel .treatment-single-actions > .btn.primary { min-height: 38px; padding-inline: 14px; }
+  .customer-overview .customer-panel { padding: 10px; }
+  .customer-overview .customer-session-history-bottom .session-followup-button { min-height: 32px; font-size: 12px; }
+  .customer-overview .customer-session-manager-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .customer-overview .customer-session-staff .role-staff-picker { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .customer-overview .customer-session-manager-row .field,
+  .customer-overview .customer-session-staff .field { min-width: 0; font-size: 12px; gap: 4px; }
+  .customer-overview .customer-session-manager-row input,
+  .customer-overview .customer-session-manager-row .mobile-select-trigger,
+  .customer-overview .customer-session-staff .mobile-select-trigger { min-width: 0; width: 100%; min-height: 36px; height: 36px; padding: 5px 6px; box-sizing: border-box; }
+  .customer-overview .customer-session-manager-row .mobile-select-trigger,
+  .customer-overview .customer-session-staff .mobile-select-trigger { font-size: 13px; }
+  .customer-overview .customer-timeline .timeline-purchase-card { padding: 8px 10px; }
+  .customer-overview .customer-session-history { padding-block: 6px; }
+}
+
+@media (max-width: 600px) {
+  .invoice-staff-dialog .invoice-staff-options label,
+  .invoice-staff-dialog footer .btn { min-height: 44px; }
+  .invoice-drawer .invoice-child-staff > span:first-of-type,
+  .treatment-root-panel .invoice-child-staff > span:first-of-type { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .invoice-drawer .invoice-child-staff > svg,
+  .treatment-root-panel .invoice-child-staff > svg,
+  .invoice-child-staff .invoice-staff-count { flex-shrink: 0; }
+}
+
+@media (max-width: 380px) {
+  .dashboard .stat-card { padding: 12px 14px; }
+  .dashboard .stat-icon { width: 32px; height: 32px; margin-bottom: 8px; }
+  .dashboard .stat-grid + .helper-text { margin-top: 8px; }
+  .treatment-root-panel .treatment-execution-manager-row,
+  .customer-overview .treatment-root-panel .treatment-execution-manager-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr) !important; }
+  .today-treatments .today-staff-actions > .field:has(input[type="date"]) { flex-grow: 1.4; flex-basis: 135px; }
+}
+
+@media (max-width: 340px) {
+  .customer-overview .treatment-root-panel .treatment-execution-manager-row { grid-template-columns: minmax(0, 1fr) !important; }
+}

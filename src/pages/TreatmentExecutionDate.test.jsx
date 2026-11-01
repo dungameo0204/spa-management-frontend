@@ -38,7 +38,7 @@ it('dashboard: mỗi buổi một dòng, sửa nhân viên và hoàn tác đúng
   getResource.mockResolvedValue({ ...card, histories })
   const actor = userEvent.setup()
   show(<TodayTreatments />)
-  await screen.findByText('Buổi #31')
+  await screen.findByRole('checkbox', { name: /Buổi #31/ })
   const first = document.querySelector('tr[data-history-id="30"]'), second = document.querySelector('tr[data-history-id="31"]')
   expect(within(first).getByText('Nhân viên Một')).toBeInTheDocument()
   expect(within(first).queryByText('Nhân viên Hai')).not.toBeInTheDocument()
@@ -65,7 +65,7 @@ for (const role of ['STAFF', 'MANAGER']) {
       if (entry === 'detail') {
         await actor.click(await screen.findByRole('button', { name: 'Lan: 1 dịch vụ' }))
         await actor.click(await screen.findByRole('button', { name: 'Chăm sóc da · Xem lịch sử' }))
-        await screen.findByText(/Cơ sở thực hiện:/)
+        await screen.findByText(/CS\s*\d+|Cơ sở/i)
         if (!allowed) expect(screen.queryByRole('button', { name: 'Hoàn tác', exact: true })).not.toBeInTheDocument()
         else await actor.click(screen.getByRole('button', { name: 'Hoàn tác', exact: true }))
       } else {
@@ -119,6 +119,8 @@ for (const entry of ['inline', 'detail', 'dashboard']) {
     expect(date).toHaveValue(today())
     fireEvent.change(date, { target: { value: '2026-09-15' } })
     await actor.click(screen.getByRole('button', { name: 'Xác nhận', exact: true }))
+    const confirmBtn = screen.queryByRole('button', { name: 'Ghi nhận không có chữ ký' })
+    if (confirmBtn) await actor.click(confirmBtn)
     await waitFor(() => expect(executeTreatment).toHaveBeenCalledWith({ treatment_id: 10, branch_id: 2, execution_date: '2026-09-15', staffs: [] }))
   })
 
@@ -128,6 +130,8 @@ for (const entry of ['inline', 'detail', 'dashboard']) {
     await openExecution(entry, actor, false)
     expect(screen.queryByLabelText('Ngày thực hiện')).not.toBeInTheDocument()
     await actor.click(screen.getByRole('button', { name: entry === 'dashboard' ? 'Xác nhận' : 'Xác nhận hôm nay', exact: true }))
+    const confirmBtn = screen.queryByRole('button', { name: 'Ghi nhận không có chữ ký' })
+    if (confirmBtn) await actor.click(confirmBtn)
     await waitFor(() => expect(executeTreatment).toHaveBeenCalledWith({ treatment_id: 10, staffs: [] }))
   })
 }

@@ -7,6 +7,12 @@ const money = v => formatCurrency(v ?? 0)
 const method = v => ({ CASH: 'Tiền mặt', TRANSFER: 'Chuyển khoản', BANK_TRANSFER: 'Chuyển khoản', CARD: 'Thẻ' })[v] || value(v)
 const paper = { K57: '57mm 200mm', K80: '80mm 200mm', A5: 'A5', A4: 'A4' }
 
+function TreatmentSessions({ treatment }) {
+  if (!treatment) return null
+  const sessions = card => card.total_sessions === null ? 'Trọn đời' : card.total_sessions != null ? `${card.total_sessions} buổi` : null
+  return <>{sessions(treatment) && <small>Liệu trình: {sessions(treatment)}</small>}{treatment.children?.map((child, index) => <small key={child.id ?? index}>↳ {child.product_name || child.name || `Dịch vụ #${child.product_id}`}{sessions(child) ? ` · ${sessions(child)}` : ''}</small>)}</>
+}
+
 export default function ReceiptPrint({ receipt, onDone }) {
   useEffect(() => {
     if (!receipt) return
@@ -31,7 +37,7 @@ export default function ReceiptPrint({ receipt, onDone }) {
   const invoiceLines = first.items?.map((item, index) => {
     const base = Number(item.quantity) * Number(item.snapshot_price ?? item.unit_price)
     const discount = Math.max(0, base - lineFinal(item))
-    return <div className="receipt-line" key={item.id || index}><span>{item.snapshot_name || item.product_name || 'Sản phẩm'}<small>{item.quantity} × {money(item.snapshot_price ?? item.unit_price)}</small>{discount > 0 && <small className="receipt-discount">Chiết khấu: -{money(discount)}</small>}</span><strong>{money(lineFinal(item))}</strong></div>
+    return <div className="receipt-line" key={item.id || index}><span>{item.snapshot_name || item.product_name || 'Sản phẩm'}<small>{item.quantity} × {money(item.snapshot_price ?? item.unit_price)}</small><TreatmentSessions treatment={item.treatment} />{discount > 0 && <small className="receipt-discount">Chiết khấu: -{money(discount)}</small>}</span><strong>{money(lineFinal(item))}</strong></div>
   })
   const invoiceDiscount = Math.max(0, (first.items || []).reduce((sum, item) => sum + lineFinal(item), 0) - Number(first.total_amount || 0))
   const invoicePayment = <><div className="receipt-row"><span>Tổng thanh toán</span><strong>{money(first.total_amount)}</strong></div>{invoiceDiscount > 0 && <div className="receipt-row"><span>Chiết khấu hóa đơn</span><strong>-{money(invoiceDiscount)}</strong></div>}<div className="receipt-row"><span>Khách trả</span><strong>{money(first.paid_amount)}</strong></div><div className="receipt-row"><span>Đã dùng ví</span><span>{money(first.wallet_used)}</span></div><div className="receipt-row"><span>Công nợ hóa đơn</span><strong>{money(first.debt_amount)}</strong></div></>
