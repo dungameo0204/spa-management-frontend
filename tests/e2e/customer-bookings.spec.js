@@ -1,6 +1,6 @@
 import { test, expect } from './fixtures'
 
-for (const width of [390, 768, 1024, 1440]) {
+for (const width of [320, 390, 768, 1024, 1440]) {
   test(`lịch đặt responsive ${width}: lọc giờ giữ NULL, tạo/sửa/xóa`, async ({ page }, testInfo) => {
     page.on('pageerror', error => console.error('Browser error:', error.message))
     await page.setViewportSize({ width, height: 1024 })
@@ -51,8 +51,38 @@ for (const width of [390, 768, 1024, 1440]) {
     await expect(cards.nth(1).locator('.booking-card-notes')).toContainText('Ưu đãi khách mới')
     await expect(cards.nth(1).locator('.booking-card-notes')).toContainText('Chuẩn bị hồ sơ')
     await expect(cards.nth(2)).toContainText('Chưa chọn giờ')
+    if (width < 768) {
+      const layout = await cards.nth(0).evaluate(card => ({
+        time: card.querySelector('.booking-card-time').getBoundingClientRect(),
+        customer: card.querySelector('.booking-card-main').getBoundingClientRect(),
+        service: card.querySelector('.booking-card-service').getBoundingClientRect(),
+        meta: card.querySelector('.booking-card-meta').getBoundingClientRect(),
+        notes: getComputedStyle(card.querySelector('.booking-card-notes')).display,
+        divider: getComputedStyle(card.nextElementSibling).borderTopWidth,
+        font: parseFloat(getComputedStyle(card.querySelector('.booking-customer-link')).fontSize),
+      }))
+      expect(layout.customer.top).toBeGreaterThan(layout.time.top)
+      expect(layout.service.top).toBeGreaterThan(layout.customer.top)
+      expect(layout.meta.top).toBeGreaterThan(layout.service.top)
+      expect(layout.notes).toBe('none')
+      expect(parseFloat(layout.divider)).toBeGreaterThanOrEqual(4)
+      expect(layout.font).toBeLessThanOrEqual(13)
+    }
     const quickActions = page.locator('.booking-filter-actions')
     const filterGrid = page.locator('.booking-filter-grid')
+    if (width < 768) {
+      const filterLayout = await filterGrid.evaluate(grid => {
+        const search = grid.querySelector('.booking-search').getBoundingClientRect()
+        const service = grid.querySelector('.picker').getBoundingClientRect()
+        const firstDate = grid.querySelector('.booking-date-field').getBoundingClientRect()
+        return { searchTop: search.top, searchRight: search.right, serviceTop: service.top, serviceLeft: service.left, serviceRight: service.right, inputTop: grid.querySelector('.booking-search input').getBoundingClientRect().top, pickerInputTop: grid.querySelector('.picker input').getBoundingClientRect().top, dateTop: firstDate.top, gridRight: grid.getBoundingClientRect().right }
+      })
+      expect(Math.abs(filterLayout.searchTop - filterLayout.serviceTop)).toBeLessThan(3)
+      expect(Math.abs(filterLayout.inputTop - filterLayout.pickerInputTop)).toBeLessThan(3)
+      expect(filterLayout.searchRight).toBeLessThan(filterLayout.serviceLeft)
+      expect(filterLayout.dateTop).toBeGreaterThan(filterLayout.searchTop)
+      expect(filterLayout.serviceRight).toBeLessThanOrEqual(filterLayout.gridRight)
+    }
     expect((await quickActions.boundingBox()).y).toBeLessThan((await filterGrid.boundingBox()).y)
     await expect(quickActions.getByRole('button', { name: '7 ngày tiếp' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Xóa bộ lọc' })).toBeVisible()
@@ -110,6 +140,20 @@ for (const width of [390, 768, 1024, 1440]) {
     await page.getByRole('combobox', { name: 'Tìm khách hàng đã đăng ký' }).fill('Hoa')
     await page.getByRole('option', { name: /Hoa đã đăng ký/ }).click()
     const dialog = page.getByRole('dialog')
+    if (width < 768) {
+      const pairedRows = await dialog.locator('.booking-form-grid').evaluateAll(grids => grids.map(grid => {
+        const [first, second] = grid.children
+        const a = first.getBoundingClientRect(), b = second.getBoundingClientRect()
+        return { topDifference: Math.abs(a.top - b.top), right: b.right, drawerRight: grid.closest('.drawer').getBoundingClientRect().right }
+      }))
+      expect(pairedRows).toHaveLength(2)
+      for (const row of pairedRows) {
+        expect(row.topDifference).toBeLessThan(3)
+        expect(row.right).toBeLessThanOrEqual(row.drawerRight)
+      }
+      expect(await dialog.getByLabel('Giờ đến (không bắt buộc)', { exact: true }).count()).toBeGreaterThan(0)
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    }
     const consultationFonts = await dialog.locator('.booking-soft-field textarea').evaluateAll(elements => elements.map(element => ({
       actual: getComputedStyle(element).fontFamily,
       expected: getComputedStyle(element.closest('form').querySelector('input')).fontFamily,
@@ -141,7 +185,7 @@ for (const width of [390, 768, 1024, 1440]) {
   })
 }
 
-for (const width of [390, 768, 820, 1024, 1440]) {
+for (const width of [320, 390, 768, 820, 1024, 1440]) {
   test(`quản lý lọc chi nhánh trên thanh trên cùng và chọn chi nhánh khi tạo lịch (${width}px)`, async ({ page }) => {
     await page.setViewportSize({ width, height: 1024 })
     await page.addInitScript(() => localStorage.setItem('xuly.session', JSON.stringify({ token: 'test-token', user: { id: 2, fullname: 'Quản lý', system_role: 'MANAGER' } })))
@@ -207,7 +251,12 @@ for (const width of [390, 768, 820, 1024, 1440]) {
       expect(Math.abs(fields.branchTop - fields.serviceTop)).toBeLessThan(3)
       expect(fields.serviceWidth / fields.branchWidth).toBeGreaterThan(1.8)
       expect(fields.serviceWidth / fields.branchWidth).toBeLessThan(2.2)
-    } else expect(fields.serviceTop).toBeGreaterThan(fields.branchTop)
+    } else {
+      expect(Math.abs(fields.branchTop - fields.serviceTop)).toBeLessThan(3)
+      expect(fields.serviceWidth / fields.branchWidth).toBeGreaterThan(1.8)
+      expect(fields.serviceWidth / fields.branchWidth).toBeLessThan(2.2)
+      expect(await dialog.locator('.booking-form-branch-service').evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true)
+    }
     await branch.selectOption('2')
     await expect(branch).toHaveValue('2')
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)

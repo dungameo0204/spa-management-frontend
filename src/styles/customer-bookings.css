@@ -76,3 +76,40 @@
 .booking-form-branch-service{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:14px;align-items:end;min-width:0}
 .booking-form-branch-service .picker{min-width:0}
 @media(max-width:767px){.booking-form-branch-service{grid-template-columns:minmax(0,1fr)}}
+
+.booking-label-phone{display:none}
+@media(max-width:767px){
+  .booking-filter-grid{align-items:start}
+  .booking-filter-grid .booking-search{grid-column:1;grid-row:1}
+  .booking-filter-grid .picker{grid-column:2;grid-row:1}
+  .booking-filter-grid .picker>label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .booking-drawer .drawer-body{padding:16px 12px}
+  .booking-editor{gap:16px}
+  .booking-editor fieldset{gap:10px}
+  .booking-editor legend{margin-bottom:10px;font-size:13px}
+  .booking-editor .field{gap:5px;font-size:11px}
+  .booking-editor .small-muted{margin:0;font-size:11px}
+  .booking-editor input,.booking-editor select,.booking-editor .mobile-select-trigger{min-width:0}
+  .booking-editor input,.booking-editor select{padding:8px 7px}
+  .booking-editor .mobile-select-trigger{padding:8px 7px;font-size:12px}
+  .booking-editor .mobile-select-trigger>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .booking-form-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .booking-form-branch-service{grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:8px}
+  .booking-form-branch-service select{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+  .booking-form-branch-service .picker input{font-size:14px}
+  .booking-label-desktop{display:none}
+  .booking-label-phone{display:block}
+  .booking-card+.booking-card{border-top:5px solid var(--sage-light)}
+  .booking-card{gap:5px 8px;padding:10px 9px;align-items:start}
+  .booking-card-time{font-size:14px}
+  .booking-unscheduled .booking-card-time{font-size:11px}
+  .booking-customer-link{font-size:13px;white-space:normal;overflow-wrap:anywhere}
+  .booking-phone,.booking-card-meta>span{font-size:11px;white-space:normal;overflow-wrap:anywhere}
+  .booking-card-service>strong{font-size:12px;white-space:normal;overflow-wrap:anywhere}
+  .booking-card-meta{min-width:0;gap:3px;display:grid}
+  .booking-card-notes{font-size:11px;gap:3px;padding-top:6px}
+  .booking-note{font-size:11px;line-height:1.35}
+  .booking-notes-empty{display:none}
+  .booking-card-notes:has(> .booking-notes-empty){display:none}
+  .booking-arrival{font-size:10px;padding:4px 6px}
+}
