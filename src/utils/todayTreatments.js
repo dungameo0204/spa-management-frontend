@@ -4,7 +4,7 @@ export function treatmentCards(root) {
   return [root, ...(root.children || []).flatMap(treatmentCards)]
 }
 
-export function todayTreatmentRows(roots, details, day, branchId) {
+export function todayTreatmentRows(roots, details, day, branchId, includeCreated = true) {
   const matchesBranch = id => !branchId || Number(id) === Number(branchId)
   return roots.flatMap((root, index) => {
     const detail = details[index]
@@ -12,7 +12,7 @@ export function todayTreatmentRows(roots, details, day, branchId) {
     const cards = treatmentCards(card)
     const historiesFor = item => (item.histories || []).filter(history => dateOnly(history.execution_date) === day && matchesBranch(history.branch_id) && !history.deleted_at)
 
-    const wasCreatedToday = dateOnly(card.created_at) === day && (!card.branch_id || matchesBranch(card.branch_id))
+    const wasCreatedToday = includeCreated && dateOnly(card.created_at) === day && (!card.branch_id || matchesBranch(card.branch_id))
     const hasHistoriesToday = cards.some(item => historiesFor(item).length > 0)
     if (!wasCreatedToday && !hasHistoriesToday) return []
 

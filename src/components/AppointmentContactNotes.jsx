@@ -10,7 +10,7 @@ export function contactNoteSummary(appointment) {
 }
 
 export function AppointmentNotePreview({ appointment }) {
-  return <span className="appointment-note-preview"><span><b>Dịch vụ: </b>{appointment.note || '—'}</span><span><b>Ghi chú liên hệ: </b>{contactNoteSummary(appointment) || 'Chưa có'}</span></span>
+  return <span className="appointment-note-preview"><span><b>Dịch vụ: </b>{appointment.note || '—'}</span><span><b>Ghi chú: </b>{contactNoteSummary(appointment) || 'Chưa có'}</span></span>
 }
 
 export default function AppointmentContactNotes({ appointment, user, onChange }) {
@@ -44,21 +44,21 @@ export default function AppointmentContactNotes({ appointment, user, onChange })
       setPending(false)
     }
   }
-  return <section className="appointment-contact-notes" aria-label="Ghi chú liên hệ">
-    <h3>Ghi chú liên hệ</h3>
+  return <section className="appointment-contact-notes" aria-label="Ghi chú">
+    <h3>Ghi chú</h3>
     {error && <p role="alert" className="form-alert">{error}</p>}
     {appointment.contact_notes?.length ? appointment.contact_notes.map(entry => <article key={entry.id} className="contact-note-entry">
       <small>{entry.contact_date || 'Ghi chú cũ'}{entry.created_by ? ` · ${entry.created_by}` : ''}{entry.updated_by ? ` · Sửa bởi ${entry.updated_by}` : ''}</small>
       {edit?.id === entry.id ? <form onSubmit={e => { e.preventDefault(); save('edit', entry.id, edit.content) }} className="form-stack">
-        <label className="field">Sửa nội dung liên hệ<textarea rows={4} value={edit.content} disabled={pending} onChange={e => setEdit({ ...edit, content: e.target.value })} /></label>
+        <label className="field">Sửa nội dung ghi chú<textarea rows={4} value={edit.content} disabled={pending} onChange={e => setEdit({ ...edit, content: e.target.value })} /></label>
         <div className="drawer-actions"><button type="button" className="btn secondary" disabled={pending} onClick={() => setEdit(null)}>Hủy sửa</button><button className="btn primary" disabled={pending || !navigator.onLine}>Lưu ghi chú</button></div>
-      </form> : <><p className="contact-note-text">{entry.content}</p>{writable && <div className="drawer-actions"><button type="button" className="btn secondary" disabled={pending} onClick={() => { setEdit({ id: entry.id, content: entry.content }); setError('') }}>Sửa lần liên hệ #{entry.id}</button><button type="button" className="btn danger" disabled={pending || !navigator.onLine} onClick={() => setRemove(entry.id)}>Xóa lần liên hệ #{entry.id}</button></div>}</>}
-    </article>) : <p className="contact-note-text">{contactNoteSummary(appointment) || 'Chưa có ghi chú liên hệ.'}</p>}
+      </form> : <><p className="contact-note-text">{entry.content}</p>{writable && <div className="drawer-actions"><button type="button" className="btn secondary" disabled={pending} onClick={() => { setEdit({ id: entry.id, content: entry.content }); setError('') }}>Sửa ghi chú #{entry.id}</button><button type="button" className="btn danger" disabled={pending || !navigator.onLine} onClick={() => setRemove(entry.id)}>Xóa ghi chú #{entry.id}</button></div>}</>}
+    </article>) : <p className="contact-note-text">{contactNoteSummary(appointment) || 'Chưa có ghi chú.'}</p>}
     {writable && <form className="contact-note-composer" onSubmit={e => { e.preventDefault(); save('add', null, content) }}>
-      <label htmlFor={`appointment-contact-note-${appointment.id}`}>Nội dung liên hệ mới</label>
-      <textarea id={`appointment-contact-note-${appointment.id}`} rows={4} value={content} disabled={pending} placeholder="Nhập nội dung đã liên hệ với khách..." onChange={e => setContent(e.target.value)} />
-      <div className="contact-note-composer-footer"><p className="helper-text">Ngày liên hệ do hệ thống tự ghi nhận.</p><button className="btn primary" disabled={pending || !navigator.onLine || Boolean(edit)}>{pending ? 'Đang lưu...' : 'Thêm lần liên hệ'}</button></div>
+      <label htmlFor={`appointment-contact-note-${appointment.id}`}>Nội dung ghi chú mới</label>
+      <textarea id={`appointment-contact-note-${appointment.id}`} rows={4} value={content} disabled={pending} placeholder="Nhập ghi chú về khách..." onChange={e => setContent(e.target.value)} />
+      <div className="contact-note-composer-footer"><p className="helper-text">Ngày tạo do hệ thống tự ghi nhận.</p><button className="btn primary" disabled={pending || !navigator.onLine || Boolean(edit)}>{pending ? 'Đang lưu...' : 'Thêm ghi chú'}</button></div>
     </form>}
-    {remove != null && <ConfirmDialog title="Xóa ghi chú liên hệ?" message="Lần liên hệ này sẽ bị xóa và không thể khôi phục." pending={pending} onCancel={() => setRemove(null)} onConfirm={() => save('delete', remove)} />}
+    {remove != null && <ConfirmDialog title="Xóa ghi chú?" message="Ghi chú này sẽ bị xóa và không thể khôi phục." pending={pending} onCancel={() => setRemove(null)} onConfirm={() => save('delete', remove)} />}
   </section>
 }

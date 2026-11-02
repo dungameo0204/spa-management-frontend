@@ -33,12 +33,12 @@ export default function DashboardPage() {
         <p className="muted">Đang tải...</p>
       ) : query.data?.data?.length ? (
         <div className="dashboard-appointment-table-scroll">
-          <table className="dashboard-appointment-table"><thead><tr><th>Khách hàng</th><th>Ngày hẹn</th><th>Dịch vụ</th><th>Ghi chú liên hệ</th><th>Thao tác</th></tr></thead><tbody>{query.data.data.map(a => <tr key={a.id}>
-            <td data-label="Khách hàng"><button type="button" className="dashboard-customer-action" onClick={() => openAppointment(a.id)}><strong>{a.customer_name}</strong><small>{a.phone_number || 'Chưa có số điện thoại'}{a.branch_name ? ` · ${a.branch_name}` : ''}</small></button></td>
-            <td data-label="Ngày hẹn"><span className="time-chip">{formatSpaDate(a.appointment_date)}</span></td>
+          <table className="dashboard-appointment-table"><colgroup><col className="dashboard-col-customer" /><col className="dashboard-col-date" /><col className="dashboard-col-service" /><col className="dashboard-col-contact" /><col className="dashboard-col-actions" /></colgroup><thead><tr><th>Khách hàng</th><th>Ngày hẹn</th><th>Dịch vụ</th><th>Ghi chú</th><th>Thao tác</th></tr></thead><tbody>{query.data.data.map(a => <tr key={a.id}>
+            <td data-label="Khách hàng"><button type="button" className="dashboard-customer-action" onClick={() => openAppointment(a.id)}><strong>{a.customer_name}</strong><small>{a.phone_number || 'Chưa có số điện thoại'}</small></button></td>
+            <td data-label="Ngày hẹn"><div className="dashboard-appointment-date"><span className="time-chip">{formatSpaDate(a.appointment_date)}</span>{manager && a.branch_name && <small>{a.branch_name}</small>}</div></td>
             <td data-label="Dịch vụ"><span className="dashboard-table-note">{a.note || '—'}</span></td>
-            <td data-label="Ghi chú liên hệ"><span className="dashboard-table-note">{contactNoteSummary(a) || 'Chưa có'}</span></td>
-            <td data-label="Thao tác"><div className="dashboard-appointment-actions"><button type="button" className="btn secondary" onClick={() => openAppointment(a.id)}><Plus size={16} /> Thêm liên hệ</button><button type="button" className="btn danger" aria-label={`Xóa lịch hẹn ${a.customer_name} #${a.id}`} onClick={() => setRemove(a.id)}>Xóa</button></div></td>
+            <td data-label="Ghi chú"><span className="dashboard-table-note">{contactNoteSummary(a) || 'Chưa có'}</span></td>
+            <td data-label="Thao tác"><div className="dashboard-appointment-actions"><button type="button" className="btn secondary" onClick={() => openAppointment(a.id)}><Plus size={16} /> Thêm ghi chú</button><button type="button" className="btn danger" aria-label={`Xóa lịch hẹn ${a.customer_name} #${a.id}`} onClick={() => setRemove(a.id)}>Xóa</button></div></td>
           </tr>)}</tbody></table>
         </div>
       ) : (

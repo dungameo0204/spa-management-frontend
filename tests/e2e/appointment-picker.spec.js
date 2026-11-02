@@ -24,7 +24,7 @@ test('chọn khách và dịch vụ trong lịch hẹn giữ tên hiển thị v
   await page.getByRole('combobox', { name: 'Tìm dịch vụ' }).fill('Chăm sóc')
   await page.getByRole('option', { name: 'Chăm sóc da' }).click()
   await expect(page.getByRole('combobox', { name: 'Tìm dịch vụ' })).toHaveValue('Chăm sóc da')
-  await page.getByLabel('Ghi chú liên hệ').fill('Đã gọi xác nhận')
+  await page.getByLabel('Ghi chú').fill('Đã gọi xác nhận')
   await page.getByLabel('Ngày hẹn').fill('2026-10-15')
   await page.getByRole('button', { name: 'Lưu thay đổi' }).click()
   await expect.poll(() => saved?.customer_id).toBe(7)

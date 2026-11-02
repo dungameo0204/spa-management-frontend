@@ -62,7 +62,6 @@
       "icon": "public/icons/icon.ico",
       "signExecutable": false
     },
-    "publish": { "provider": "github", "owner": "dungameo0204", "repo": "spa-management-frontend" },
     "nsis": { "artifactName": "ROSA-Setup-${version}.exe", "oneClick": false, "perMachine": false },
     "portable": {
       "artifactName": "ROSA-${version}-portable.exe"

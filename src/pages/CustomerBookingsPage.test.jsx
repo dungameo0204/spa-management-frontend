@@ -37,10 +37,13 @@ it('chuyển sang ngày tiếp theo từ trạng thái chưa có lịch', async 
   const user = userEvent.setup()
   mount()
   const before = screen.getByLabelText('Từ ngày').value
+  const expected = new Date(`${before}T00:00:00`)
+  expected.setDate(expected.getDate() + 1)
+  const expectedDate = `${expected.getFullYear()}-${String(expected.getMonth() + 1).padStart(2, '0')}-${String(expected.getDate()).padStart(2, '0')}`
   await user.click(await screen.findByRole('button', { name: 'Xem ngày tiếp theo' }))
   await waitFor(() => expect(screen.getByLabelText('Từ ngày').value).not.toBe(before))
-  expect(screen.getByLabelText('Từ ngày')).toHaveValue('2026-11-03')
-  expect(screen.getByLabelText('Đến ngày')).toHaveValue('2026-11-03')
+  expect(screen.getByLabelText('Từ ngày')).toHaveValue(expectedDate)
+  expect(screen.getByLabelText('Đến ngày')).toHaveValue(expectedDate)
 })
 
 it('đặt lọc nhanh phía trên ô lọc và hiện riêng hai loại ghi chú trong bảng', async () => {
@@ -57,6 +60,9 @@ it('đặt lọc nhanh phía trên ô lọc và hiện riêng hai loại ghi ch�
   const heading = screen.getByLabelText('Tiêu đề cột lịch đặt')
   expect(within(heading).getByText('Nhu cầu / ghi chú')).toBeInTheDocument()
   expect(within(heading).getByText('Giờ hẹn')).toBeInTheDocument()
+  expect(within(heading).getByText('Tư vấn')).toBeInTheDocument()
+  expect(within(heading).queryByText('Chi nhánh / tư vấn')).not.toBeInTheDocument()
+  expect(card.querySelector('.booking-card-meta')).not.toHaveTextContent('Chi nhánh #1')
   expect(card.querySelector('.booking-card-notes')).toBeInTheDocument()
   expect(card.querySelector('.booking-card-notes')).toContainElement(within(card).getByText('Nhu cầu / ưu đãi:'))
   expect(card.querySelector('.booking-card-notes')).toContainElement(within(card).getByText('Ghi chú cho nhân viên:'))
@@ -169,4 +175,6 @@ it('MANAGER lọc theo chi nhánh trên cùng nhưng vẫn chọn chi nhánh ti�
   await user.click(screen.getByRole('button', { name: 'Tạo lịch đặt' }))
   expect(await screen.findByLabelText('Chi nhánh tiếp nhận')).toHaveValue('')
   expect(screen.getByLabelText('Chi nhánh tiếp nhận').closest('.booking-form-branch-service')).toContainElement(within(screen.getByRole('dialog')).getByRole('combobox', { name: 'Tìm dịch vụ quan tâm' }))
+  expect(screen.getByLabelText('Tiêu đề cột lịch đặt')).toHaveTextContent('Chi nhánh / tư vấn')
+  expect(screen.getByRole('button', { name: 'Xem lịch Lan' }).closest('.booking-card')).toHaveTextContent('Chi nhánh #1')
 })

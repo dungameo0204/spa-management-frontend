@@ -29,13 +29,13 @@ for (const width of [390, 1440]) test(`contact history across appointments and b
   for (const row of await rows.all()) {
     await expect(row).toContainText('Laser dịch vụ')
     await expect(row).toContainText('Khách cần tư vấn')
-    await expect(row.getByRole('button', { name: /Thêm liên hệ/ })).toBeVisible()
+    await expect(row.getByRole('button', { name: /Thêm ghi chú/ })).toBeVisible()
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
-  await rows.first().getByRole('button', { name: /Thêm liên hệ/ }).click()
-  await page.getByLabel('Nội dung liên hệ mới').fill('Khách xác nhận\nSẽ đến chiều mai')
-  await page.getByRole('button', { name: 'Thêm lần liên hệ' }).click()
-  await expect(page.getByLabel('Nội dung liên hệ mới')).toHaveValue('')
+  await rows.first().getByRole('button', { name: /Thêm ghi chú/ }).click()
+  await page.getByLabel('Nội dung ghi chú mới').fill('Khách xác nhận\nSẽ đến chiều mai')
+  await page.getByRole('button', { name: 'Thêm ghi chú' }).click()
+  await expect(page.getByLabel('Nội dung ghi chú mới')).toHaveValue('')
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
   for (const row of await rows.all()) await expect(row).toContainText('Sẽ đến chiều mai')
   await page.goto('/appointments')
