@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { ArrowUpRight, CalendarDays, UsersRound, ShoppingBag, Sparkles, TrendingUp, Banknote, ReceiptText, Wallet } from 'lucide-react'
+import { ArrowUpRight, CalendarDays, UsersRound, ShoppingBag, Sparkles, TrendingUp, Banknote, ReceiptText, Wallet, Plus, RefreshCw } from 'lucide-react'
 import { useAuth } from '../auth/AuthProvider'
 import { useBranch } from '../components/AppShell'
 import { getRevenue, getAppointmentQueue, getResource, deleteResource } from '../api/resources'
 import FormDrawer from '../components/FormDrawer'
+import AppointmentContactNotes, { contactNoteSummary } from '../components/AppointmentContactNotes'
 import ConfirmDialog from '../components/ConfirmDialog'
 import Pagination from '../components/Pagination'
 import { useState } from 'react'
@@ -22,25 +23,23 @@ export default function DashboardPage() {
   const pending = useQuery({ queryKey: ['dashboard-pending', branchId, pendingPage], queryFn: () => getAppointmentQueue('not-arrived', branchId ? { branchId } : {}, pendingPage) })
   const removal = useMutation({ mutationFn: id => deleteResource('appointments', id), onSuccess: () => { qc.invalidateQueries({ queryKey: ['dashboard-appointments'] }); qc.invalidateQueries({ queryKey: ['dashboard-pending'] }); qc.invalidateQueries({ queryKey: ['appointments'] }); setAppointment(null); setRemove(null); setError('') }, onError: err => { setError(err.message); setRemove(null) } })
   async function openAppointment(id) { setError(''); try { setAppointment(await getResource('appointments', id)) } catch (err) { setError(err.message) } }
+  async function refreshQueues() { setError(''); try { await Promise.all([appointments.refetch(), pending.refetch()]) } catch (err) { setError(err.message) } }
   function queue(query, page, setPage, label) {
     return <div>
-      <h3>{label}</h3>
+      <div className="appointment-queue-heading"><h3>{label}</h3><button type="button" className="icon-btn" aria-label={`Tải lại ${label.toLocaleLowerCase()}`} disabled={query.isFetching} onClick={() => query.refetch()}><RefreshCw size={16} /></button></div>
       {query.isError ? (
         <p className="form-alert">{query.error.message}</p>
       ) : query.isLoading ? (
         <p className="muted">Đang tải...</p>
       ) : query.data?.data?.length ? (
-        <div className="appointment-list">
-          {query.data.data.map(a => (
-            <div className="appointment-row" key={a.id}>
-              <span className="time-chip">{formatSpaDate(a.appointment_date)}</span>
-              <button type="button" className="text-action" onClick={() => openAppointment(a.id)}>
-                <strong>{a.customer_name}</strong>
-                <small>{a.phone_number || a.branch_name || 'Chưa có số điện thoại'}</small>
-              </button>
-              <button type="button" className="btn danger" aria-label={`Xóa lịch hẹn ${a.customer_name} #${a.id}`} onClick={() => setRemove(a.id)}>Xóa</button>
-            </div>
-          ))}
+        <div className="dashboard-appointment-table-scroll">
+          <table className="dashboard-appointment-table"><thead><tr><th>Khách hàng</th><th>Ngày hẹn</th><th>Dịch vụ</th><th>Ghi chú liên hệ</th><th>Thao tác</th></tr></thead><tbody>{query.data.data.map(a => <tr key={a.id}>
+            <td data-label="Khách hàng"><button type="button" className="dashboard-customer-action" onClick={() => openAppointment(a.id)}><strong>{a.customer_name}</strong><small>{a.phone_number || 'Chưa có số điện thoại'}{a.branch_name ? ` · ${a.branch_name}` : ''}</small></button></td>
+            <td data-label="Ngày hẹn"><span className="time-chip">{formatSpaDate(a.appointment_date)}</span></td>
+            <td data-label="Dịch vụ"><span className="dashboard-table-note">{a.note || '—'}</span></td>
+            <td data-label="Ghi chú liên hệ"><span className="dashboard-table-note">{contactNoteSummary(a) || 'Chưa có'}</span></td>
+            <td data-label="Thao tác"><div className="dashboard-appointment-actions"><button type="button" className="btn secondary" onClick={() => openAppointment(a.id)}><Plus size={16} /> Thêm liên hệ</button><button type="button" className="btn danger" aria-label={`Xóa lịch hẹn ${a.customer_name} #${a.id}`} onClick={() => setRemove(a.id)}>Xóa</button></div></td>
+          </tr>)}</tbody></table>
         </div>
       ) : (
         <p className="muted">Không có lịch hẹn.</p>
@@ -67,8 +66,8 @@ export default function DashboardPage() {
     {manager && <><div className="section-heading"><div><span className="eyebrow">BỨC TRANH TỔNG QUAN</span><h2>Hiệu quả trong tháng</h2></div><Link to="/reports">Xem báo cáo <ArrowUpRight size={16} /></Link></div>{report.isError && <p className="form-alert">Không tải được báo cáo: {report.error.message}</p>}<div className="stat-grid">{summary.map(({ icon: Icon, label, value, tone }) => <div className={`stat-card ${tone}`} key={label}><span className="stat-icon"><Icon size={21} /></span><span className="stat-label">{label}</span><strong>{report.isLoading ? 'Đang tải...' : value}</strong></div>)}</div><p className="helper-text">Doanh thu ≠ tiền thực thu; dòng tiền thuần = thực thu − tổng chi, không phải lợi nhuận.</p></>}
      <div className="section-heading"><div><span className="eyebrow">HÓA ĐƠN</span><h2>Hóa đơn & khách hàng</h2></div><Link to="/invoices">Đến bán hàng <ArrowUpRight size={16} /></Link></div><div className="quick-grid"><Link className="quick-card" to="/invoices"><ShoppingBag size={24} /><strong>Tạo hóa đơn</strong><ArrowUpRight size={16} /></Link><Link className="quick-card" to="/customers"><UsersRound size={24} /><strong>Tìm khách hàng</strong><ArrowUpRight size={16} /></Link></div>
       <TodayTreatments />
-      <section className="surface"><div className="surface-heading"><div><span className="eyebrow">CẦN QUAN TÂM</span><h2>Khách cần quan tâm</h2></div><Link to="/appointments">Xem tất cả <ArrowUpRight size={16} /></Link></div>{error && <p className="form-alert">{error}</p>}{queue(appointments, tomorrowPage, setTomorrowPage, 'Lịch hẹn ngày mai')}{queue(pending, pendingPage, setPendingPage, 'Khách chưa đến')}</section>
-      {appointment && <FormDrawer title={`Lịch hẹn #${appointment.id}`} onClose={() => setAppointment(null)}><div className="detail-list">{[['Khách hàng', appointment.customer_name], ['Số điện thoại', appointment.phone_number], ['Cơ sở', appointment.branch_name], ['Ngày hẹn', formatSpaDate(appointment.appointment_date)], ['Trạng thái', appointment.status], ['Ghi chú', appointment.note]].filter(([, value]) => value != null && value !== '').map(([key, value]) => <div key={key}><span>{key}</span><strong>{value}</strong></div>)}</div><div className="drawer-actions"><button className="btn danger" onClick={() => setRemove(appointment.id)}>Xóa lịch hẹn</button></div></FormDrawer>}
+      <section className="surface"><div className="surface-heading"><div><span className="eyebrow">CẦN QUAN TÂM</span><h2>Khách cần quan tâm</h2></div><div className="dashboard-queue-actions"><button type="button" className="icon-btn" aria-label="Tải lại khách cần quan tâm" disabled={appointments.isFetching || pending.isFetching} onClick={refreshQueues}><RefreshCw size={17} /></button><Link to="/appointments">Xem tất cả <ArrowUpRight size={16} /></Link></div></div>{error && <p className="form-alert">{error}</p>}{queue(appointments, tomorrowPage, setTomorrowPage, 'Lịch hẹn ngày mai')}{queue(pending, pendingPage, setPendingPage, 'Khách chưa đến')}</section>
+      {appointment && <FormDrawer title={`Lịch hẹn #${appointment.id}`} onClose={() => setAppointment(null)}><div className="detail-list">{[['Khách hàng', appointment.customer_name], ['Số điện thoại', appointment.phone_number], ['Cơ sở', appointment.branch_name], ['Ngày hẹn', formatSpaDate(appointment.appointment_date)], ['Trạng thái', appointment.status], ['Dịch vụ', appointment.note]].filter(([, value]) => value != null && value !== '').map(([key, value]) => <div key={key}><span>{key}</span><strong className="appointment-service-text">{value}</strong></div>)}</div><AppointmentContactNotes key={appointment.id} appointment={appointment} user={user} onChange={data => setAppointment(current => current?.id === appointment.id ? { ...current, ...data } : current)} /><div className="drawer-actions"><button className="btn danger" onClick={() => setRemove(appointment.id)}>Xóa lịch hẹn</button></div></FormDrawer>}
       {remove && <ConfirmDialog title="Xóa lịch hẹn?" message="Lịch hẹn này sẽ bị xóa khỏi danh sách cần quan tâm." pending={removal.isPending} onCancel={() => setRemove(null)} onConfirm={() => removal.mutate(remove)} />}
     <div className="section-heading"><div><span className="eyebrow">LỐI TẮT</span><h2>Thao tác nhanh</h2></div></div><div className="quick-grid">{[{ to: '/appointments', icon: CalendarDays, label: 'Đặt lịch hẹn', color: 'sage' }, { to: '/customers', icon: UsersRound, label: 'Khách hàng', color: 'rose' }, { to: '/invoices', icon: ShoppingBag, label: 'Bán hàng', color: 'sand' }, { to: '/treatments', icon: Sparkles, label: 'Liệu trình', color: 'cream' }].map(({ to, icon: Icon, label, color }) => <Link key={to} to={to} className="quick-card"><span className={`quick-icon ${color}`}><Icon size={23} /></span><strong>{label}</strong><ArrowUpRight size={18} /></Link>)}</div>
   </div>

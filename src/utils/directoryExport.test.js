@@ -1,9 +1,9 @@
 import { beforeEach, expect, it, vi } from 'vitest'
 import { listResource } from '../api/resources'
-import { directoryExportOptions, inventoryExportRows, loadDirectoryRows } from './directoryExport'
+import { directoryExportOptions, inventoryExportRows, loadDirectoryRows, loadReportRows } from './directoryExport'
 import { createTableWorkbook } from './exportTable'
 
-vi.mock('../api/resources', () => ({ listResource: vi.fn() }))
+vi.mock('../api/resources', () => ({ listResource: vi.fn(), getReportDetails: vi.fn() }))
 beforeEach(() => vi.resetAllMocks())
 
 it('loads every page with identical filters, including an API-capped page size', async () => {
@@ -22,6 +22,14 @@ it('handles an empty directory', async () => {
   listResource.mockResolvedValue({ data: [], totalPages: 0 })
   expect(await loadDirectoryRows('customers')).toEqual([])
   expect(listResource).toHaveBeenCalledTimes(1)
+})
+
+it('loads every consultant-report page with the selected date range and branch', async () => {
+  const { getReportDetails } = await import('../api/resources')
+  getReportDetails.mockImplementation(async (_, filters, page) => ({ data: [{ id: page, branch: filters.branchId }], totalPages: 2 }))
+  const filters = { startDate: '2026-10-01', endDate: '2026-10-31', branchId: 2 }
+  expect(await loadReportRows('consultants', filters)).toEqual([{ id: 1, branch: 2 }, { id: 2, branch: 2 }])
+  expect(getReportDetails.mock.calls).toEqual([1, 2].map(page => ['consultants', filters, page, 100]))
 })
 
 it('flattens stock by branch and keeps zero stock without exposing other branches', () => {
@@ -48,9 +56,17 @@ it('exports product types, treatment flags and prices as the appropriate cell ty
   expect(options.columns.map(col => col.value(row))).toEqual(['Laser', 'Dịch vụ', '', 1000000, 800000, 'Có', 5, null])
 })
 
-it('exports both active and completed treatment cards, preserving card identity', () => {
+it('exports both active and completed treatment cards, preserving execution-filter metadata', () => {
   const options = directoryExportOptions('treatments', [])
-  const rows = [{ id: 1, customer_name: 'Lan', product_name: 'Laser', total_sessions: '5', remaining_sessions: '2', created_at: '2026-10-01' }, { id: 2, remaining_sessions: 0 }]
-  expect(options.columns.map(col => col.value(rows[0]))).toEqual(['1', 'Lan', 'Laser', 5, 2, 'Còn buổi', '01/10/2026'])
+  const rows = [{ id: 1, customer_name: 'Lan', product_name: 'Laser', total_sessions: '5', remaining_sessions: '2', created_at: '2026-10-01', matching_execution_count: '3', latest_matching_execution_date: '2026-10-16' }, { id: 2, remaining_sessions: 0 }]
+  expect(options.columns.map(col => col.value(rows[0]))).toEqual(['1', 'Lan', 'Laser', 5, 2, 'Còn buổi', '01/10/2026', 3, '16/10/2026'])
   expect(options.columns[5].value(rows[1])).toBe('Đã hoàn thành')
+})
+
+it('defines numeric VND cells for transactional, invoice and consultant exports', () => {
+  for (const resource of ['debts', 'wallet', 'expenses', 'imports', 'invoices', 'consultants']) {
+    const moneyColumns = directoryExportOptions(resource, []).columns.filter(column => column.money)
+    expect(moneyColumns.length).toBeGreaterThan(0)
+    expect(moneyColumns.every(column => column.money)).toBe(true)
+  }
 })

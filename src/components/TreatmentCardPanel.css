@@ -22,6 +22,7 @@
 
 /* Badge đã thực hiện buổi hôm nay */
 .today-execution-badge { display: inline-flex; align-items: center; min-height: 20px; padding: 1px 7px; border-radius: 999px; background: #fff0bf; color: #684a08; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.treatment-execution-range-badge { display: inline-flex; align-items: center; min-height: 20px; padding: 1px 7px; border-radius: 999px; background: var(--sage-light); color: var(--sage); font-size: 11px; font-weight: 700; white-space: nowrap; }
 
 /* Các nút hành động được căn thẳng hàng theo từng cột */
 .treatment-parent-actions { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; margin-left: auto; }

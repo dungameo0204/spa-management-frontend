@@ -9,8 +9,8 @@ import RoleStaffPicker from './RoleStaffPicker'
 import ConfirmDialog from './ConfirmDialog'
 import MobileSelect from './MobileSelect'
 import { Pencil } from 'lucide-react'
+import RefreshButton from './RefreshButton'
 import { canFollowUpTreatmentHistory } from '../auth/permissions'
-import { formatSpaDate } from '../utils/format'
 import TreatmentSessionDialog from './TreatmentSessionDialog'
 import { canExecuteCard, todayTreatmentRows, treatmentCards } from '../utils/todayTreatments'
 import TreatmentGroupSignature from './TreatmentGroupSignature'
@@ -108,6 +108,7 @@ export default function TodayTreatments() {
     <div className="surface-heading"><div><span className="eyebrow">KHÁCH LÀM DỊCH VỤ</span><h2>Khách hàng hôm nay</h2></div></div>
     <p className="small-muted">Thẻ tạo hôm nay hoặc có buổi thực hiện hôm nay. Tick để ghi nhận, bấm tên nhân viên để sửa, bỏ tick để hoàn tác.{!manager && ' Nhân viên chỉ được hoàn tác buổi có ngày thực hiện và ngày tạo đều là hôm nay, tại cơ sở của mình.'}</p>
     {message && !selected && <p role={messageType === 'error' ? 'alert' : 'status'} className={messageType === 'error' ? 'form-alert' : 'success-alert'}>{message}</p>}
+    <div className="list-toolbar today-treatments-toolbar"><div /><div className="list-toolbar-actions"><span className="list-count">{blocks.length} lượt khách</span><RefreshButton label="Tải lại khách hàng hôm nay" disabled={query.isFetching || cardDetails.some(detail => detail.isFetching)} onClick={() => query.refetch()} /></div></div>
     {query.isError ? <p className="form-alert">Không tải được thẻ: {query.error.message}</p> : query.isLoading || cardDetails.some(d => d.isLoading) ? <p>Đang tải thẻ...</p> : blocks.length ? <>
       <div className="table-scroll"><table><thead><tr><th>Khách hàng</th><th>Dịch vụ</th><th>Đã làm hôm nay</th><th>Nhân viên thực hiện</th><th>Chữ ký khách hàng</th></tr></thead>
       {visibleBlocks.map(block => (

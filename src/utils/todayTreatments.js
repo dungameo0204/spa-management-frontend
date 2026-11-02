@@ -1,4 +1,4 @@
-import { dateOnly, formatSpaDate } from './format'
+import { dateOnly } from './format'
 
 export function treatmentCards(root) {
   return [root, ...(root.children || []).flatMap(treatmentCards)]

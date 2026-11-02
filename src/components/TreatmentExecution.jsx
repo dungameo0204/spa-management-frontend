@@ -8,7 +8,7 @@ import MobileSelect from './MobileSelect'
 import SignaturePad from './SignaturePad'
 import ConfirmDialog from './ConfirmDialog'
 
-export default function TreatmentExecution({ card, user, branchId, onUpdated, onCancel, initialSelectedIds = [], embedded = false }) {
+export default function TreatmentExecution({ card, user, branchId, onUpdated, onCancel, initialSelectedIds = [] }) {
   const manager = user?.system_role === 'MANAGER', grouped = Boolean(card.children?.length)
   const showDate = Boolean(manager)
   const available = treatmentCards(card).filter(canExecuteCard)

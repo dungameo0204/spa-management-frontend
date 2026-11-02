@@ -19,11 +19,11 @@ export function sessionLabel(card) {
   return card.closed_at ? 'Đã ký kết thúc' : card.remaining_sessions === null ? 'Trọn đời' : `${card.remaining_sessions ?? '—'}/${card.total_sessions ?? '—'} buổi${card.remaining_sessions != null && Number(card.remaining_sessions) === 0 ? ' · Đã hoàn thành' : ''}`
 }
 
-export default function TreatmentCardPanel({ card, branchId, onOpen, showHistory = false, branches, onAssign, onUndo, onUpdated, embedded = false }) {
+export default function TreatmentCardPanel({ card, branchId, onOpen, showHistory = false, branches, onAssign, onUndo, onUpdated, embedded = false, executionFilters }) {
   const { user } = useAuth(), qc = useQueryClient()
   const [historyOpen, setHistoryOpen] = useState(showHistory), [executing, setExecuting] = useState(false), [closing, setClosing] = useState(false), [session, setSession] = useState(null)
   const [selectedIds, setSelectedIds] = useState([])
-  const detail = useQuery({ queryKey: ['treatments', 'card-detail', card.id], queryFn: () => getResource('treatments', card.id), enabled: !embedded })
+  const detail = useQuery({ queryKey: ['treatments', 'card-detail', card.id, executionFilters], queryFn: () => getResource('treatments', card.id, executionFilters), enabled: !embedded })
   const branchesQuery = useQuery({ queryKey: ['branches', 'panel-fallback'], queryFn: () => listResource('branches', {}, 1, 100).then(r => r ?? { data: [] }), enabled: !branches })
   const current = embedded ? card : { ...card, ...detail.data }, grouped = Boolean(current.children?.length)
   const cards = treatmentCards(current)
@@ -39,7 +39,7 @@ export default function TreatmentCardPanel({ card, branchId, onOpen, showHistory
   const branchList = Array.isArray(branches) ? branches : (branches?.data || branchesQuery.data?.data || [])
 
   async function refresh(updated) {
-    if (updated) qc.setQueryData(['treatments', 'card-detail', card.id], updated)
+    if (updated) qc.setQueryData(['treatments', 'card-detail', card.id, executionFilters], updated)
     else if (!embedded) await detail.refetch()
     await onUpdated?.(updated)
   }
@@ -57,6 +57,7 @@ export default function TreatmentCardPanel({ card, branchId, onOpen, showHistory
         </button>
         <div className="treatment-parent-badges">
           {isComplete && <span className="small-muted treatment-completed-badge">{current.closed_at ? 'Đã ký kết thúc' : 'Đã hoàn thành'}</span>}
+          {executionFilters && Number(current.matching_execution_count) > 0 && <span className="treatment-execution-range-badge">{current.matching_execution_count} buổi trong khoảng lọc{current.latest_matching_execution_date ? ` · gần nhất ${formatSpaDate(current.latest_matching_execution_date)}` : ''}</span>}
           {todayExecutions > 0 && <span className="today-execution-badge">Đã thực hiện {todayExecutions} buổi hôm nay</span>}
         </div>
       </div>
@@ -89,7 +90,7 @@ export default function TreatmentCardPanel({ card, branchId, onOpen, showHistory
       </div>
     </div>
     {detail.isError && <p role="alert">{detail.error.message} <button className="text-action" onClick={() => detail.refetch()}>Thử lại</button></p>}
-    {executing && canExecuteThisCard && <TreatmentExecution key={current.id} card={current} user={user} branchId={branchId} initialSelectedIds={selectedIds} embedded={embedded} onUpdated={() => { setSelectedIds([]); setExecuting(false); return refresh() }} onCancel={() => setExecuting(false)} />}
+    {executing && canExecuteThisCard && <TreatmentExecution key={current.id} card={current} user={user} branchId={branchId} initialSelectedIds={selectedIds} onUpdated={() => { setSelectedIds([]); setExecuting(false); return refresh() }} onCancel={() => setExecuting(false)} />}
     {historyOpen && <div className="treatment-history">
       <div className="treatment-history-header">
         <h4>Lịch sử thực hiện <span className="treatment-history-visit-count">{visitCount > 0 ? `· Đã đến làm ${visitCount} lần` : '· Chưa đến làm lần nào'}</span></h4>

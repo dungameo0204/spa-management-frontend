@@ -19,6 +19,30 @@ beforeEach(() => {
 })
 afterEach(cleanup)
 
+it('hiển thị trạng thái trống ngắn gọn khi chưa có lịch', async () => {
+  listCustomerBookings.mockResolvedValue([])
+  const user = userEvent.setup()
+  mount()
+  const heading = await screen.findByRole('heading', { name: 'Chưa có lịch' })
+  const empty = heading.closest('.booking-empty')
+  expect(heading).toBeInTheDocument()
+  expect(screen.queryByText('Chưa có lịch đặt phù hợp')).not.toBeInTheDocument()
+  expect(within(empty).getByText('Không có khách đặt lịch trong ngày này.')).toBeInTheDocument()
+  await user.click(within(empty).getByRole('button', { name: 'Tạo lịch đặt' }))
+  expect(await screen.findByRole('dialog')).toBeInTheDocument()
+})
+
+it('chuyển sang ngày tiếp theo từ trạng thái chưa có lịch', async () => {
+  listCustomerBookings.mockResolvedValue([])
+  const user = userEvent.setup()
+  mount()
+  const before = screen.getByLabelText('Từ ngày').value
+  await user.click(await screen.findByRole('button', { name: 'Xem ngày tiếp theo' }))
+  await waitFor(() => expect(screen.getByLabelText('Từ ngày').value).not.toBe(before))
+  expect(screen.getByLabelText('Từ ngày')).toHaveValue('2026-11-03')
+  expect(screen.getByLabelText('Đến ngày')).toHaveValue('2026-11-03')
+})
+
 it('đặt lọc nhanh phía trên ô lọc và hiện riêng hai loại ghi chú trong bảng', async () => {
   listCustomerBookings.mockResolvedValue([{ ...row, promotion_note: 'Ưu đãi khách mới', note: 'Nhắc khách đến sớm\nChuẩn bị hồ sơ' }])
   mount()

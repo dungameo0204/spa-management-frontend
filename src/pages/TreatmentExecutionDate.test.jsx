@@ -99,7 +99,7 @@ function show(component) {
   render(<QueryClientProvider client={client}><MemoryRouter>{component}</MemoryRouter></QueryClientProvider>)
 }
 
-async function openExecution(entry, actor, manager) {
+async function openExecution(entry, actor, _manager) {
   show(entry === 'dashboard' ? <TodayTreatments /> : <TreatmentsPage />)
   if (entry === 'dashboard') {
     await actor.click(await screen.findByRole('checkbox', { name: 'Đã làm Lan - Chăm sóc da' }))
@@ -107,7 +107,7 @@ async function openExecution(entry, actor, manager) {
     await actor.click(await screen.findByRole('button', { name: 'Lan: 1 dịch vụ' }))
     if (entry === 'detail') await actor.click(await screen.findByRole('button', { name: 'Chăm sóc da · Xem lịch sử' }))
     const scope = entry === 'detail' ? within(screen.getByRole('dialog')) : screen
-    await actor.click(await scope.findByRole('button', { name: manager ? 'Thực hiện' : 'Thực hiện hôm nay', exact: true }))
+    await actor.click(await scope.findByRole('button', { name: 'Thực hiện', exact: true }))
   }
 }
 
@@ -145,4 +145,18 @@ it('sửa nhân viên của buổi đã có không hiển thị hoặc gửi ng�
   await actor.click(screen.getByRole('button', { name: 'Xác nhận', exact: true }))
   await waitFor(() => expect(assignTreatmentStaffs).toHaveBeenCalledWith(30, []))
   expect(executeTreatment).not.toHaveBeenCalled()
+})
+
+it('lọc theo ngày thực hiện gửi đúng query, hiển thị metadata và xóa lọc tải lại toàn bộ', async () => {
+  listResource.mockImplementation(async (resource, _filters) => ({ data: resource === 'treatments' ? [{ ...card, matching_execution_count: 2, latest_matching_execution_date: '2026-10-16' }] : resource === 'branches' ? [{ id: 2, name: 'Cơ sở 2' }] : [], totalPages: 1 }))
+  const actor = userEvent.setup()
+  show(<TreatmentsPage />)
+  await actor.selectOptions(screen.getByRole('combobox'), 'execution')
+  await actor.type(screen.getByLabelText('Từ ngày'), '2026-10-01')
+  await actor.type(screen.getByLabelText('Đến ngày'), '2026-10-31')
+  await waitFor(() => expect(listResource).toHaveBeenCalledWith('treatments', { customerSearch: '', executionStartDate: '2026-10-01', executionEndDate: '2026-10-31' }, 1, 100))
+  await actor.click(screen.getByRole('button', { name: 'Lan: 1 dịch vụ' }))
+  expect(await screen.findByText('2 buổi trong khoảng lọc · gần nhất 16/10/2026')).toBeInTheDocument()
+  await actor.click(screen.getByRole('button', { name: 'Xóa lọc' }))
+  await waitFor(() => expect(listResource).toHaveBeenCalledWith('treatments', { customerSearch: '' }, 1, 100))
 })

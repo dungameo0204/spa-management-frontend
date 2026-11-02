@@ -4,15 +4,17 @@ import userEvent from '@testing-library/user-event'
 import { beforeEach, expect, it, vi } from 'vitest'
 import ResourcePage from './ResourcePage'
 import { createResource, updateResource } from '../api/resources'
+import { addAppointmentContactNote } from '../api/appointmentContactNotes'
 
 vi.mock('../auth/AuthProvider', () => ({ useAuth: () => ({ user: { id: 1, system_role: 'MANAGER', fullname: 'Admin' } }) }))
 vi.mock('../components/AppShell', () => ({ useBranch: () => ({ branchId: null }) }))
 vi.mock('../api/resources', () => ({
-  listResource: vi.fn(async resource => ({ total: 1, page: 1, pageSize: 20, totalPages: 1, data: resource === 'users' ? [{ id: 15, username: 'bs.ly', fullname: 'BS Lý', system_role: 'MANAGER', branch_id: null, branch_name: 'Tổng công ty' }] : resource === 'products' ? [{ id: 3, name: 'Laser', price: 1000000, sale_price: 800000, is_product: 1 }] : [] })),
+  listResource: vi.fn(async resource => ({ total: 1, page: 1, pageSize: 20, totalPages: 1, data: resource === 'users' ? [{ id: 15, username: 'bs.ly', fullname: 'BS Lý', system_role: 'MANAGER', branch_id: null, branch_name: 'Tổng công ty' }] : resource === 'products' ? [{ id: 3, name: 'Laser', price: 1000000, sale_price: 800000, is_product: 1 }] : resource === 'customers' ? [{ id: 7, fullname: 'Khách Hoa', phone_number: '0900000000' }] : resource === 'branches' ? [{ id: 1, name: 'ROSA' }] : [] })),
   getResource: vi.fn(async resource => resource === 'products' ? { id: 3, name: 'Laser', price: 1000000, sale_price: 800000, is_product: 1 } : { id: 15, username: 'bs.ly', fullname: 'BS Lý', system_role: 'MANAGER', branch_id: null }),
   updateResource: vi.fn(async () => ({})),
   createResource: vi.fn(), deleteResource: vi.fn(), restoreResource: vi.fn(), getReportDetails: vi.fn(),
 }))
+vi.mock('../api/appointmentContactNotes', () => ({ addAppointmentContactNote: vi.fn() }))
 
 beforeEach(() => vi.clearAllMocks())
 
@@ -80,4 +82,36 @@ it('sửa giá niêm yết của sản phẩm đang có chiết khấu không t�
   await actor.type(within(form).getByLabelText('Giá niêm yết'), '1200000')
   await actor.click(within(form).getByRole('button', { name: 'Lưu thay đổi' }))
   await waitFor(() => expect(updateResource).toHaveBeenCalledWith('products', 3, expect.objectContaining({ price: 1200000, sale_price: 800000 })))
+})
+
+it('lưu ghi chú liên hệ sau khi tạo lịch hẹn, không gửi nó trong payload lịch hẹn', async () => {
+  const actor = userEvent.setup()
+  createResource.mockResolvedValue({ appointmentId: 9 })
+  render(<QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}><ResourcePage resource="appointments" /></QueryClientProvider>)
+  await actor.click(screen.getByRole('button', { name: 'Thêm mới' }))
+  const form = screen.getByRole('button', { name: 'Lưu thay đổi' }).closest('form')
+  await actor.click(within(form).getByRole('combobox', { name: 'Tìm khách hàng' }))
+  await actor.click(await screen.findByRole('option', { name: /Khách Hoa/ }))
+  await actor.selectOptions(within(form).getByLabelText('Chi nhánh'), '1')
+  await actor.type(within(form).getByLabelText('Ngày hẹn'), '2026-11-03')
+  await actor.type(within(form).getByLabelText('Ghi chú liên hệ'), 'Đã gọi xác nhận')
+  await actor.click(within(form).getByRole('button', { name: 'Lưu thay đổi' }))
+  await waitFor(() => expect(createResource).toHaveBeenCalledWith('appointments', expect.not.objectContaining({ contact_note_draft: expect.anything() })))
+  await waitFor(() => expect(addAppointmentContactNote).toHaveBeenCalledWith(9, 'Đã gọi xác nhận'))
+})
+
+it('giữ cột số điện thoại trên desktop và đặt refresh trong toolbar lịch hẹn', async () => {
+  const actor = userEvent.setup()
+  const { listResource } = await import('../api/resources')
+  listResource.mockImplementation(async resource => ({ total: 1, page: 1, pageSize: 20, totalPages: 1, data: resource === 'appointments' ? [{ id: 11, customer_name: 'Khách Hoa', phone_number: '0900000000', appointment_date: '2026-11-03', status: 'Khách chưa đến', branch_name: 'ROSA' }] : resource === 'customers' ? [{ id: 7, fullname: 'Khách Hoa', phone_number: '0900000000' }] : resource === 'branches' ? [{ id: 1, name: 'ROSA' }] : [] }))
+  render(<QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}><ResourcePage resource="appointments" /></QueryClientProvider>)
+  const table = await screen.findByRole('table')
+  expect(within(table).getAllByRole('columnheader').map(header => header.textContent)).toEqual(expect.arrayContaining(['Số điện thoại']))
+  expect(within(table).getAllByRole('columnheader').map(header => header.textContent)).toEqual(expect.arrayContaining(['Trạng thái / chi nhánh']))
+  expect(within(table).getByText('Khách Hoa')).toBeInTheDocument()
+  expect(within(table).getAllByText('0900000000')).toHaveLength(2)
+  const refresh = screen.getByRole('button', { name: 'Tải lại lịch hẹn' })
+  expect(refresh.parentElement).toHaveClass('list-toolbar-actions')
+  await actor.click(refresh)
+  await waitFor(() => expect(listResource.mock.calls.filter(([resource]) => resource === 'appointments').length).toBeGreaterThan(1))
 })

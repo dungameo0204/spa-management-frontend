@@ -13,9 +13,9 @@ function endpoint(resource) { const path = paths[resource]; if (!path) throw new
 export function listResource(resource, filters = {}, page = 1, pageSize = 20, signal) {
   return request(endpoint(resource), { query: { ...filters, page, pageSize }, signal }).then(result => normalizePagedResponse(result, page, pageSize))
 }
-export function getResource(resource, id) {
+export function getResource(resource, id, filters = {}) {
   if (resource === 'commissions') throw new Error('API chi tiết không khả dụng cho tài nguyên này')
-  return request(`${endpoint(resource)}/${encodeURIComponent(id)}`).then(result => result.data)
+  return request(`${endpoint(resource)}/${encodeURIComponent(id)}`, { query: filters }).then(result => result.data)
 }
 export const getCustomerOverview = id => request(`/api/customers/${encodeURIComponent(id)}/overview`).then(result => result.data)
 const skinPath = (customerId, sessionId) => `/api/customers/${encodeURIComponent(customerId)}/skin-image-sessions${sessionId == null ? '' : `/${encodeURIComponent(sessionId)}`}`

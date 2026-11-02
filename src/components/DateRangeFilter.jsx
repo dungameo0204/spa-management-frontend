@@ -1,4 +1,4 @@
-export default function DateRangeFilter({ startDate, endDate, onChange }) {
+export default function DateRangeFilter({ startDate, endDate, onChange, onClear }) {
   return (
     <div className="report-filters date-range-filter">
       <label className="field">
@@ -20,6 +20,7 @@ export default function DateRangeFilter({ startDate, endDate, onChange }) {
           onChange={e => onChange(startDate, e.target.value)}
         />
       </label>
+      {onClear && (startDate || endDate) && <button type="button" className="btn secondary date-range-clear" onClick={onClear}>Xóa lọc</button>}
     </div>
   )
 }

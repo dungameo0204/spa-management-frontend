@@ -1,13 +1,15 @@
 import { test, expect } from './fixtures'
 
-test('chọn khách trong lịch hẹn giữ tên hiển thị và gửi đúng mã khách', async ({ page }) => {
+test('chọn khách và dịch vụ trong lịch hẹn giữ tên hiển thị và gửi đúng payload', async ({ page }) => {
   let saved
   await page.route('**/api/**', async route => {
     const url = new URL(route.request().url())
     if (!url.pathname.startsWith('/api/')) return route.continue()
     if (url.pathname === '/api/auth/login') return route.fulfill({ json: { data: { token: 'test-token', user: { id: 1, tenant_id: 1, branch_id: 1, fullname: 'Nhân viên', system_role: 'STAFF' } } } })
     if (url.pathname === '/api/customers') return route.fulfill({ json: { total: 1, page: 1, pageSize: 20, totalPages: 1, data: [{ id: 7, fullname: 'Khách Hoa', phone_number: '0900000000' }] } })
-    if (url.pathname === '/api/appointments' && route.request().method() === 'POST') { saved = route.request().postDataJSON(); return route.fulfill({ json: { data: { id: 9 } } }) }
+    if (url.pathname === '/api/products') return route.fulfill({ json: { total: 2, page: 1, pageSize: 20, totalPages: 1, data: [{ id: 3, name: 'Chăm sóc da', is_product: 0 }, { id: 4, name: 'Serum bán lẻ', is_product: 1 }] } })
+    if (url.pathname === '/api/appointments' && route.request().method() === 'POST') { saved = route.request().postDataJSON(); return route.fulfill({ json: { appointmentId: 9 } }) }
+    if (url.pathname === '/api/appointments/9/contact-notes' && route.request().method() === 'POST') return route.fulfill({ status: 201, json: { data: { contact_notes: [], extra_note: route.request().postDataJSON().content } } })
     return route.fulfill({ json: { total: 0, page: 1, pageSize: 20, totalPages: 0, data: [] } })
   })
   await page.goto('/login')
@@ -19,7 +21,13 @@ test('chọn khách trong lịch hẹn giữ tên hiển thị và gửi đúng 
   await page.getByRole('combobox', { name: 'Tìm khách hàng' }).fill('Hoa')
   await page.getByRole('option', { name: /Khách Hoa/ }).click()
   await expect(page.getByRole('combobox', { name: 'Tìm khách hàng' })).toHaveValue('Khách Hoa')
+  await page.getByRole('combobox', { name: 'Tìm dịch vụ' }).fill('Chăm sóc')
+  await page.getByRole('option', { name: 'Chăm sóc da' }).click()
+  await expect(page.getByRole('combobox', { name: 'Tìm dịch vụ' })).toHaveValue('Chăm sóc da')
+  await page.getByLabel('Ghi chú liên hệ').fill('Đã gọi xác nhận')
   await page.getByLabel('Ngày hẹn').fill('2026-10-15')
   await page.getByRole('button', { name: 'Lưu thay đổi' }).click()
   await expect.poll(() => saved?.customer_id).toBe(7)
+  await expect.poll(() => saved?.note).toBe('Chăm sóc da')
+  expect(saved).not.toHaveProperty('contact_note_draft')
 })
