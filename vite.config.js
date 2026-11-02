@@ -11,11 +11,11 @@ export default defineConfig(({ mode }) => {
     define: { __APP_VERSION__: JSON.stringify(version) },
     plugins: [react(), VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/icon.svg', 'icons/apple-touch-icon.png'],
+      includeAssets: ['icons/icon.svg', 'icons/apple-touch-icon.png', 'icons/rosa-logo.jpg'],
       manifest: {
-        name: 'Xuly · Quản lý Spa', short_name: 'Xuly', lang: 'vi',
+        name: 'ROSA · Quản lý Spa', short_name: 'ROSA', lang: 'vi',
         description: 'Không gian quản lý spa của bạn', start_url: '/', scope: '/', display: 'standalone',
-        background_color: '#f7f5f1', theme_color: '#315e50',
+        background_color: '#f3f7fa', theme_color: '#176799',
         icons: [
           { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,jpg,ico}'],
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/^\/api\//],
         runtimeCaching: [{ urlPattern: ({ url }) => url.pathname.startsWith('/api/'), handler: 'NetworkOnly' }],

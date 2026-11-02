@@ -36,18 +36,19 @@ it.each([
   expect(() => bookingPayload({ ...base, ...override })).toThrow(text)
 })
 
-it('sinh mốc giờ 30 phút và đặt khung lọc mặc định theo ca làm việc', () => {
+it('sinh mốc giờ 30 phút và mặc định lọc tất cả giờ', () => {
   expect(arrivalTimeSlots).toHaveLength(34)
   expect(arrivalTimeSlots[0]).toBe('07:00')
   expect(arrivalTimeSlots).toEqual(expect.arrayContaining(['07:30', '23:30']))
   expect(arrivalTimeSlots).not.toContain('06:30')
   expect(defaultBookingFilters(new Date('2026-11-01T00:00:00+07:00'))).toMatchObject({ startDate: '2026-11-01', endDate: '2026-11-01', startTime: '', endTime: '' })
   expect(defaultBookingFilters(new Date('2026-11-01T07:29:00+07:00'))).toMatchObject({ startDate: '2026-11-01', endDate: '2026-11-01', startTime: '', endTime: '' })
-  expect(defaultBookingFilters(new Date('2026-11-01T07:30:00+07:00'))).toMatchObject({ startDate: '2026-11-01', endDate: '2026-11-01', startTime: '07:30', endTime: '09:30' })
-  expect(defaultBookingFilters(new Date('2026-11-01T19:00:00+07:00'))).toMatchObject({ startDate: '2026-11-01', endDate: '2026-11-01', startTime: '19:00', endTime: '21:00' })
-  expect(defaultBookingFilters(new Date('2026-11-01T19:29:00+07:00'))).toMatchObject({ startDate: '2026-11-01', endDate: '2026-11-01', startTime: '19:00', endTime: '21:00' })
+  expect(defaultBookingFilters(new Date('2026-11-01T07:30:00+07:00'))).toMatchObject({ startDate: '2026-11-01', endDate: '2026-11-01', startTime: '', endTime: '' })
+  expect(defaultBookingFilters(new Date('2026-11-01T19:00:00+07:00'))).toMatchObject({ startDate: '2026-11-01', endDate: '2026-11-01', startTime: '', endTime: '' })
+  expect(defaultBookingFilters(new Date('2026-11-01T19:29:00+07:00'))).toMatchObject({ startDate: '2026-11-01', endDate: '2026-11-01', startTime: '', endTime: '' })
   expect(defaultBookingFilters(new Date('2026-11-01T19:30:00+07:00'))).toMatchObject({ startDate: '2026-11-02', endDate: '2026-11-02', startTime: '', endTime: '' })
   expect(defaultBookingFilters(new Date('2026-11-01T23:59:00+07:00'))).toMatchObject({ startDate: '2026-11-02', endDate: '2026-11-02', startTime: '', endTime: '' })
+  expect(defaultBookingFilters(new Date('2026-12-31T19:30:00+07:00'))).toEqual({ search: '', startDate: '2027-01-01', endDate: '2027-01-01', startTime: '', endTime: '', productId: '' })
 })
 
 it('mặc định ngày đến khi tạo lịch chuyển sang ngày mai từ 17:00 giờ spa', () => {

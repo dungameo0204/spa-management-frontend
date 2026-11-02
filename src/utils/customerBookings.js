@@ -26,15 +26,8 @@ export function defaultBookingFilters(now = new Date()) {
   }).formatToParts(now).map(({ type, value }) => [type, value]))
   const currentMinutes = Number(parts.hour) * 60 + Number(parts.minute)
   const currentDay = dateOnly(now)
-  if (currentMinutes < 7 * 60 + 30) return { search: '', startDate: currentDay, endDate: currentDay, startTime: '', endTime: '', productId: '' }
-  if (currentMinutes >= 19 * 60 + 30) {
-    const tomorrow = shiftBookingDay(currentDay, 1)
-    return { search: '', startDate: tomorrow, endDate: tomorrow, startTime: '', endTime: '', productId: '' }
-  }
-  const minutes = Math.floor(currentMinutes / 30) * 30
-  const endMinutes = Math.min(minutes + 120, (23 * 60) + 59)
-  const time = value => `${String(Math.floor(value / 60)).padStart(2, '0')}:${String(value % 60).padStart(2, '0')}`
-  return { search: '', startDate: currentDay, endDate: currentDay, startTime: time(minutes), endTime: time(endMinutes), productId: '' }
+  const day = currentMinutes >= 19 * 60 + 30 ? shiftBookingDay(currentDay, 1) : currentDay
+  return { search: '', startDate: day, endDate: day, startTime: '', endTime: '', productId: '' }
 }
 
 export function compareBookings(a, b) {

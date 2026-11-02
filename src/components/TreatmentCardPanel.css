@@ -25,6 +25,7 @@
 
 /* Các nút hành động được căn thẳng hàng theo từng cột */
 .treatment-parent-actions { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; margin-left: auto; }
+.treatment-history-label-compact { display: none; }
 .treatment-parent-actions.is-page-actions {
   display: grid !important;
   grid-template-columns: 90px 56px 135px !important;

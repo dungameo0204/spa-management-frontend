@@ -13,5 +13,5 @@ export default function ExportTableButton({ options, filename, disabled, label =
     } catch (err) { setError(`Không thể xuất Excel: ${err.message}`) }
     finally { setExporting(false) }
   }
-  return <div><button className="btn secondary" disabled={disabled || exporting} onClick={download}>{exporting ? 'Đang xuất...' : label}</button>{error && <p className="form-alert" role="alert">{error}</p>}</div>
+  return <div><button className="btn secondary export-action" disabled={disabled || exporting} onClick={download}>{exporting ? 'Đang xuất...' : label}</button>{error && <p className="form-alert" role="alert">{error}</p>}</div>
 }

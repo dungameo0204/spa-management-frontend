@@ -1,8 +1,8 @@
 {
   "name": "spa-management-frontend",
   "private": true,
-  "description": "Xuly Spa - Phần mềm quản lý bán hàng, khách hàng và vận hành spa",
-  "author": "Xuly Spa",
+  "description": "ROSA - Phần mềm quản lý bán hàng, khách hàng và vận hành spa",
+  "author": "ROSA",
   "version": "0.1.0",
   "type": "module",
   "main": "desktop/main.cjs",
@@ -47,7 +47,7 @@
   },
   "build": {
     "appId": "vn.xuly.spa.desktop",
-    "productName": "Xuly Spa",
+    "productName": "ROSA",
     "compression": "normal",
     "directories": {
       "output": "release"
@@ -63,9 +63,9 @@
       "signExecutable": false
     },
     "publish": { "provider": "github", "owner": "dungameo0204", "repo": "spa-management-frontend" },
-    "nsis": { "artifactName": "Xuly-Spa-Setup-${version}.exe", "oneClick": false, "perMachine": false },
+    "nsis": { "artifactName": "ROSA-Setup-${version}.exe", "oneClick": false, "perMachine": false },
     "portable": {
-      "artifactName": "Xuly-Spa-${version}-portable.exe"
+      "artifactName": "ROSA-${version}-portable.exe"
     }
   }
 }

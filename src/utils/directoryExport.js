@@ -48,4 +48,4 @@ export function directoryExportOptions(resource, rows, context = []) {
   return { title, columns, rows, context: ['Ngày xuất', today(), ...context] }
 }
 
-export const directoryExportFilename = resource => `Xuly-${directoryExports[resource].filename}-${today()}.xlsx`
+export const directoryExportFilename = resource => `ROSA-${directoryExports[resource].filename}-${today()}.xlsx`

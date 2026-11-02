@@ -1,0 +1,24 @@
+﻿
+> spa-management-frontend@0.1.0 lint
+> eslint src
+
+
+D:\Project\SpaManagement\spa-management-frontend\src\components\CustomerOverview.jsx
+  16:10  error  'canExecuteCard' is defined but never used. Allowed unused vars must match /^[A-Z]/u             no-unused-vars
+  21:10  error  'expanded' is assigned a value but never used. Allowed unused vars must match /^[A-Z]/u          no-unused-vars
+  21:20  error  'setExpanded' is assigned a value but never used. Allowed unused vars must match /^[A-Z]/u       no-unused-vars
+  54:13  error  'todayExecutions' is assigned a value but never used. Allowed unused vars must match /^[A-Z]/u   no-unused-vars
+  55:13  error  'selectedForToday' is assigned a value but never used. Allowed unused vars must match /^[A-Z]/u  no-unused-vars
+
+D:\Project\SpaManagement\spa-management-frontend\src\components\TodayTreatments.jsx
+  13:10  error  'formatSpaDate' is defined but never used. Allowed unused vars must match /^[A-Z]/u  no-unused-vars
+
+D:\Project\SpaManagement\spa-management-frontend\src\components\TreatmentExecution.jsx
+  11:114  error  'embedded' is assigned a value but never used. Allowed unused args must match /^_|^Icon$/u  no-unused-vars
+
+D:\Project\SpaManagement\spa-management-frontend\src\utils\todayTreatments.js
+  1:20  error  'formatSpaDate' is defined but never used. Allowed unused vars must match /^[A-Z]/u  no-unused-vars
+
+Γ£û 8 problems (8 errors, 0 warnings)
+
+塅呉䍟䑏㵅റ

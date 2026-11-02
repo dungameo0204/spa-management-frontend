@@ -1,0 +1,1861 @@
+﻿
+> spa-management-frontend@0.1.0 test
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90mD:/Project/SpaManagement/spa-management-frontend[39m
+
+ [32mΓ£ô[39m src/pages/ResourcePage.test.jsx [2m([22m[2m5 tests[22m[2m)[22m[33m 5441[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m hiß╗ân thß╗ï gi├í ni├¬m yß║┐t tr╞░ß╗¢c gi├í b├ín trong danh s├ích sß║ún phß║⌐m [33m 509[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m sß╗¡a MANAGER kh├┤ng c├│ chi nh├ính v├á gß╗¡i branchId null [33m 1168[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m chuyß╗ân MANAGER sang STAFF vß║½n y├¬u cß║ºu chß╗ìn chi nh├ính [33m 973[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m th├¬m sß║ún phß║⌐m tß╗▒ ─æiß╗ün gi├í b├ín rß╗ôi cho sß╗¡a ri├¬ng v├á hiß╗ân thß╗ï cß║ú hai gi├í [33m 1642[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m sß╗¡a gi├í ni├¬m yß║┐t cß╗ºa sß║ún phß║⌐m ─æang c├│ chiß║┐t khß║Ñu kh├┤ng tß╗▒ ghi ─æ├¿ gi├í b├ín [33m 1143[2mms[22m[39m
+ [32mΓ£ô[39m src/utils/directoryExport.test.js [2m([22m[2m7 tests[22m[2m)[22m[33m 12163[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m writes real customer Excel cells with phone text, numeric money, date and safe text [33m 12146[2mms[22m[39m
+ [32mΓ£ô[39m src/utils/exportReport.test.js [2m([22m[2m4 tests[22m[2m)[22m[33m 12245[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m exports all staff pages into one sheet per employee, including all their branches [33m 12018[2mms[22m[39m
+ [32mΓ£ô[39m src/pages/StaffTransactionDates.test.jsx [2m([22m[2m8 tests[22m[2m)[22m[33m 7624[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m expenses: STAFF tß║ío phiß║┐u vß╗¢i ─æ├║ng quyß╗ün ng├áy v├á payload [33m 1539[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m expenses: STAFF sß╗¡a phiß║┐u vß╗¢i ─æ├║ng quyß╗ün ng├áy v├á payload [33m 764[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m expenses: MANAGER tß║ío phiß║┐u vß╗¢i ─æ├║ng quyß╗ün ng├áy v├á payload [33m 1216[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m expenses: MANAGER sß╗¡a phiß║┐u vß╗¢i ─æ├║ng quyß╗ün ng├áy v├á payload [33m 523[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m imports: STAFF tß║ío phiß║┐u vß╗¢i ─æ├║ng quyß╗ün ng├áy v├á payload [33m 1142[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m imports: STAFF sß╗¡a phiß║┐u vß╗¢i ─æ├║ng quyß╗ün ng├áy v├á payload [33m 553[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m imports: MANAGER tß║ío phiß║┐u vß╗¢i ─æ├║ng quyß╗ün ng├áy v├á payload [33m 1245[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m imports: MANAGER sß╗¡a phiß║┐u vß╗¢i ─æ├║ng quyß╗ün ng├áy v├á payload [33m 611[2mms[22m[39m
+ [32mΓ£ô[39m src/pages/CustomerForm.test.jsx [2m([22m[2m7 tests[22m[2m)[22m[33m 15680[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m creates a customer with multiple skin types, referrals, multiline notes and history [33m 8231[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m loads full profile before editing and sends only the edited basic field [33m 1364[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m supports clearing arrays, resetting unknown and removing optional values on edit [33m 1515[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m keeps the form and entered values when backend rejects duplicate phone/profile code [33m 2646[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m asks before discarding a customer draft and preserves it when cancelled [33m 1406[2mms[22m[39m
+ [32mΓ£ô[39m src/pages/LegacyDebtPayment.test.jsx [2m([22m[2m19 tests[22m[2m)[22m[33m 16564[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m collects only legacy debt with CASH, staff branch from token, refreshes dependent data [33m 1522[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m collects only legacy debt with TRANSFER, staff branch from token, refreshes dependent data [33m 1268[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m collects only legacy debt with CARD, staff branch from token, refreshes dependent data [33m 1240[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m requires a collecting branch for managers and sends that branch [33m 757[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m rejects amounts above legacy debt even when total debt is larger [33m 747[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m blocks saving with missing legacy balance [33m 646[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m blocks saving with zero legacy balance [33m 890[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m does not rebalance inconsistent customer data [33m 513[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m retains the form on backend rejection and refreshes the customer balance [33m 687[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m prevents duplicate submission while the request is pending [33m 764[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m preserves the existing invoice-based API flow [33m 698[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m immediately blocks an empty amount without restoring the default [33m 672[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m immediately blocks an zero amount without restoring the default [33m 808[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m saves the default legacy balance rather than total debt [33m 680[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m defaults for a new customer and on re-entering legacy mode, but preserves edits on refetch [33m 1426[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m prints only the persisted legacy payment after a successful save [33m 929[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m does not print a rejected payment [33m 778[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m reports printing failure without retrying the saved payment [33m 809[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m does not invent a receipt identifier when the saved response omits it [33m 725[2mms[22m[39m
+ [31mΓ¥»[39m src/pages/TreatmentExecutionDate.test.jsx [2m([22m[2m32 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 17602[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m dashboard: mß╗ùi buß╗òi mß╗Öt d├▓ng, sß╗¡a nh├ón vi├¬n v├á ho├án t├íc ─æ├║ng buß╗òi thß╗⌐ hai [33m 1183[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF ho├án t├íc today [33m 1013[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF ho├án t├íc old-created [33m 673[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF ho├án t├íc missing-created [33m 545[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF ho├án t├íc other-branch [33m 348[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF ho├án t├íc cancel [33m 605[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: STAFF ho├án t├íc error [33m 825[2mms[22m[39m
+   [32mΓ£ô[39m dashboard: STAFF ho├án t├íc today[32m 257[2mms[22m[39m
+   [32mΓ£ô[39m dashboard: STAFF ho├án t├íc old-created[32m 79[2mms[22m[39m
+   [32mΓ£ô[39m dashboard: STAFF ho├án t├íc missing-created[32m 63[2mms[22m[39m
+   [32mΓ£ô[39m dashboard: STAFF ho├án t├íc other-branch[32m 94[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m dashboard: STAFF ho├án t├íc cancel [33m 331[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m dashboard: STAFF ho├án t├íc error [33m 407[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc today [33m 554[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc old-created [33m 805[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc missing-created [33m 833[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc other-branch [33m 632[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc cancel [33m 646[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER ho├án t├íc error [33m 1122[2mms[22m[39m
+   [32mΓ£ô[39m dashboard: MANAGER ho├án t├íc today[32m 235[2mms[22m[39m
+   [32mΓ£ô[39m dashboard: MANAGER ho├án t├íc old-created[32m 187[2mms[22m[39m
+   [32mΓ£ô[39m dashboard: MANAGER ho├án t├íc missing-created[32m 220[2mms[22m[39m
+   [32mΓ£ô[39m dashboard: MANAGER ho├án t├íc other-branch[32m 81[2mms[22m[39m
+   [32mΓ£ô[39m dashboard: MANAGER ho├án t├íc cancel[32m 284[2mms[22m[39m
+   [32mΓ£ô[39m dashboard: MANAGER ho├án t├íc error[32m 246[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m inline: MANAGER chß╗ìn ng├áy v├á gß╗¡i execution_date dß║íng YYYY-MM-DD [33m 1015[2mms[22m[39m
+[31m   [31m├ù[31m inline: STAFF giß╗» nguy├¬n giao diß╗çn v├á kh├┤ng gß╗¡i execution_date[39m[33m 1220[2mms[22m[39m
+[31m     ΓåÆ Unable to find role="button" and name "Thß╗▒c hiß╗çn h├┤m nay"
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"page treatments-page"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"page-heading"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"eyebrow"[31m
+          [36m>[31m
+            [0m─Éß╗ÆNG H├ÇNH C├ÖNG KH├üCH H├ÇNG[0m
+          [36m</span>[31m
+          [36m<h1>[31m
+            [0mThß║╗ liß╗çu tr├¼nh[0m
+          [36m</h1>[31m
+          [36m<p>[31m
+            [0mMß╗ùi buß╗òi ch─âm s├│c, mß╗Öt b╞░ß╗¢c gß║ºn h╞ín tß╗¢i sß╗▒ rß║íng rß╗í.[0m
+          [36m</p>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33maria-label[31m=[32m"Thao t├íc liß╗çu tr├¼nh"[31m
+          [33mclass[31m=[32m"page-heading-actions"[31m
+          [33mrole[31m=[32m"group"[31m
+        [36m>[31m
+          [36m<div>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"btn secondary"[31m
+            [36m>[31m
+              [0mXuß║Ñt Excel[0m
+            [36m</button>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"report-filters date-range-filter"[31m
+      [36m>[31m
+        [36m<label[31m
+          [33mclass[31m=[32m"field"[31m
+        [36m>[31m
+          [36m<span>[31m
+            [0mTß╗½ ng├áy[0m
+          [36m</span>[31m
+          [36m<input[31m
+            [33maria-label[31m=[32m"Tß╗½ ng├áy"[31m
+            [33mtype[31m=[32m"date"[31m
+            [33mvalue[31m=[32m""[31m
+          [36m/>[31m
+        [36m</label>[31m
+        [36m<span[31m
+          [33maria-hidden[31m=[32m"true"[31m
+          [33mclass[31m=[32m"date-range-separator"[31m
+        [36m>[31m
+          [0mΓåÆ[0m
+        [36m</span>[31m
+        [36m<label[31m
+          [33mclass[31m=[32m"field"[31m
+        [36m>[31m
+          [36m<span>[31m
+            [0m─Éß║┐n ng├áy[0m
+          [36m</span>[31m
+          [36m<input[31m
+            [33maria-label[31m=[32m"─Éß║┐n ng├áy"[31m
+            [33mtype[31m=[32m"date"[31m
+            [33mvalue[31m=[32m""[31m
+          [36m/>[31m
+        [36m</label>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"list-panel treatment-customers"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"list-toolbar"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"search-box"[31m
+          [36m>[31m
+            [36m<svg[31m
+              [33mclass[31m=[32m"lucide lucide-search"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mheight[31m=[32m"18"[31m
+              [33mstroke[31m=[32m"currentColor"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-linejoin[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+              [33mviewBox[31m=[32m"0 0 24 24"[31m
+              [33mwidth[31m=[32m"18"[31m
+              [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+            [36m>[31m
+              [36m<circle[31m
+                [33mcx[31m=[32m"11"[31m
+                [33mcy[31m=[32m"11"[31m
+                [33mr[31m=[32m"8"[31m
+              [36m/>[31m
+              [36m<path[31m
+                [33md[31m=[32m"m21 21-4.3-4.3"[31m
+              [36m/>[31m
+            [36m</svg>[31m
+            [36m<input[31m
+              [33maria-label[31m=[32m"T├¼m kiß║┐m"[31m
+              [33mplaceholder[31m=[32m"T├¼m kiß║┐m..."[31m
+              [33mvalue[31m=[32m""[31m
+            [36m/>[31m
+          [36m</div>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"list-count"[31m
+          [36m>[31m
+            [0m1[0m
+            [0m kh├ích h├áng[0m
+          [36m</span>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"table-scroll"[31m
+        [36m>[31m
+          [36m<table>[31m
+            [36m<thead>[31m
+              [36m<tr>[31m
+                [36m<th>[31m
+                  [0mKh├ích h├áng[0m
+                [36m</th>[31m
+                [36m<th>[31m
+                  [0mSß╗æ ─æiß╗çn thoß║íi[0m
+                [36m</th>[31m
+                [36m<th>[31m
+                  [0mTiß╗ün nß╗ú[0m
+                [36m</th>[31m
+                [36m<th>[31m
+                  [0mDß╗ïch vß╗Ñ[0m
+                [36m</th>[31m
+                [36m<th>[31m
+                  [0m─É├ú ho├án th├ánh[0m
+                [36m</th>[31m
+              [36m</tr>[31m
+            [36m</thead>[31m
+            [36m<tbody>[31m
+              [36m<tr[31m
+                [33mclass[31m=[32m"clickable"[31m
+              [36m>[31m
+                [36m<td[31m
+                  [33mdata-label[31m=[32m"Kh├ích h├áng"[31m
+                [36m>[31m
+                  [0mLan[0m
+                [36m</td>[31m
+                [36m<td[31m
+                  [33mdata-label[31m=[32m"Sß╗æ ─æiß╗çn thoß║íi"[31m
+                [36m>[31m
+                  [0mΓÇö[0m
+                [36m</td>[31m
+                [36m<td[31m
+                  [33mdata-label[31m=[32m"Tiß╗ün nß╗ú"[31m
+                [36m>[31m
+                  [36m<span>[31m
+                    [0m0┬áΓé½[0m
+                  [36m</span>[31m
+                [36m</td>[31m
+                [36m<td[31m
+                  [33mdata-label[31m=[32m"Dß╗ïch vß╗Ñ"[31m
+                [36m>[31m
+                  [36m<button[31m
+                    [33maria-expanded[31m=[32m"true"[31m
+                    [33maria-label[31m=[32m"Lan: 1 dß╗ïch vß╗Ñ"[31m
+                    [33mclass[31m=[32m"text-action treatment-service-badge"[31m
+                    [33mtype[31m=[32m"button"[31m
+                  [36m>[31m
+                    [0m1[0m
+                    [0m dß╗ïch vß╗Ñ [0m
+                    [36m<svg[31m
+                      [33mclass[31m=[32m"lucide lucide-chevron-up"[31m
+                      [33mfill[31m=[32m"none"[31m
+                      [33mheight[31m=[32m"14"[31m
+                      [33mstroke[31m=[32m"currentColor"[31m
+                      [33mstroke-linecap[31m=[32m"round"[31m
+                      [33mstroke-linejoin[31m=[32m"round"[31m
+                      [33mstroke-width[31m=[32m"2"[31m
+                      [33mviewBox[31m=[32m"0 0 24 24"[31m
+                      [33mwidth[31m=[32m"14"[31m
+                      [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+                    [36m>[31m
+                      [36m<path[31m
+                        [33md[31m=[32m"m18 15-6-6-6 6"[31m
+                      [36m/>[31m
+                    [36m</svg>[31m
+                  [36m</button>[31m
+                [36m</td>[31m
+                [36m<td[31m
+                  [33mdata-label[31m=[32m"─É├ú ho├án th├ánh"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"small-muted"[31m
+                  [36m>[31m
+                    [0mΓÇö[0m
+                  [36m</span>[31m
+                [36m</td>[31m
+              [36m</tr>[31m
+              [36m<tr[31m
+                [33mclass[31m=[32m"treatment-expanded-row"[31m
+              [36m>[31m
+                [36m<td[31m
+                  [33mcolspan[31m=[32m"5"[31m
+                [36m>[31m
+                  [36m<div[31m
+                    [33mclass[31m=[32m"treatment-card-list"[31m
+                  [36m>[31m
+                    [36m<article[31m
+                      [33mclass[31m=[32m"treatment-card-item treatment-root-panel is-single-treatment"[31m
+                    [36m>[31m
+                      [36m<div[31m
+                        [33mclass[31m=[32m"treatment-card-heading treatment-parent-heading"[31m
+                      [36m>[31m
+                        [36m<div[31m
+                          [33mclass[31m=[32m"treatment-parent-heading-left"[31m
+                        [36m>[31m
+                          [36m<button[31m
+                            [33mclass[31m=[32m"text-action treatment-parent-title"[31m
+                            [33mtype[31m=[32m"button"[31m
+                          [36m>[31m
+                            [36m<strong>[31m
+                              [0mCh─âm s├│c da[0m
+                            [36m</strong>[31m
+                            [0m [0m
+                            [36m<span[31m
+                              [33mclass[31m=[32m"small-muted"[31m
+                            [36m>[31m
+                              [0m┬╖ 5/6 buß╗òi[0m
+                            [36m</span>[31m
+                          [36m</button>[31m
+                          [36m<div[31m
+                            [33mclass[31m=[32m"treatment-parent-badges"[31m
+                          [36m/>[31m
+                        [36m</div>[31m
+                        [36m<div[31m
+                          [33mclass[31m=[32m"treatment-parent-actions is-page-actions is-staff-actions"[31m
+                        [36m>[31m
+                          [36m<button[31m
+                            [33mclass[31m=[32m"btn secondary treatment-action-execute"[31m
+                          [36m>[31m
+                            [0mThß╗▒c hiß╗çn[0m
+                          [36m</button>[31m
+                          [36m<button[31m
+                            [33maria-label[31m=[32m"Ch─âm s├│c da ┬╖ Xem lß╗ïch sß╗¡"[31m
+                            [33mclass[31m=[32m"text-action treatment-detail-action"[31m
+                          [36m>[31m
+                            [0mChi tiß║┐t[0m
+                          [36m</button>[31m
+                          [36m<span[31m
+                            [33maria-hidden[31m=[32m"true"[31m
+                            [33mclass[31m=[32m"treatment-btn-slot"[31m
+                          [36m/>[31m
+                        [36m</div>[31m
+                      [36m</div>[31m
+                    [36m</article>[31m
+                  [36m</div>[31m
+                [36m</td>[31m
+              [36m</tr>[31m
+            [36m</tbody>[31m
+          [36m</table>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"page treatments-page"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"page-heading"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"eyebrow"[31m
+          [36m>[31m
+            [0m─Éß╗ÆNG H├ÇNH C├ÖNG KH├üCH H├ÇNG[0m
+          [36m</span>[31m
+          [36m<h1>[31m
+            [0mThß║╗ liß╗çu tr├¼nh[0m
+          [36m</h1>[31m
+          [36m<p>[31m
+            [0mMß╗ùi buß╗òi ch─âm s├│c, mß╗Öt b╞░ß╗¢c gß║ºn h╞ín tß╗¢i sß╗▒ rß║íng rß╗í.[0m
+          [36m</p>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33maria-label[31m=[32m"Thao t├íc liß╗çu tr├¼nh"[31m
+          [33mclass[31m=[32m"page-heading-actions"[31m
+          [33mrole[31m=[32m"group"[31m
+        [36m>[31m
+          [36m<div>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"btn secondary"[31m
+            [36m>[31m
+              [0mXuß║Ñt Excel[0m
+            [36m</button>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"report-filters date-range-filter"[31m
+      [36m>[31m
+        [36m<label[31m
+          [33mclass[31m=[32m"field"[31m
+        [36m>[31m
+          [36m<span>[31m
+            [0mTß╗½ ng├áy[0m
+          [36m</span>[31m
+          [36m<input[31m
+            [33maria-label[31m=[32m"Tß╗½ ng├áy"[31m
+            [33mtype[31m=[32m"date"[31m
+            [33mvalue[31m=[32m""[31m
+          [36m/>[31m
+        [36m</label>[31m
+        [36m<span[31m
+          [33maria-hidden[31m=[32m"true"[31m
+          [33mclass[31m=[32m"date-range-separator"[31m
+        [36m>[31m
+          [0mΓåÆ[0m
+        [36m</span>[31m
+        [36m<label[31m
+          [33mclass[31m=[32m"field"[31m
+        [36m>[31m
+          [36m<span>[31m
+            [0m─Éß║┐n ng├áy[0m
+          [36m</span>[31m
+          [36m<input[31m
+            [33maria-label[31m=[32m"─Éß║┐n ng├áy"[31m
+            [33mtype[31m=[32m"date"[31m
+            [33mvalue[31m=[32m""[31m
+          [36m/>[31m
+        [36m</label>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"list-panel treatment-customers"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"list-toolbar"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"search-box"[31m
+          [36m>[31m
+            [36m<svg[31m
+              [33mclass[31m=[32m"lucide lucide-search"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mheight[31m=[32m"18"[31m
+              [33mstroke[31m=[32m"currentColor"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-linejoin[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+              [33mviewBox[31m=[32m"0 0 24 24"[31m
+              [33mwidth[31m=[32m"18"[31m
+              [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+            [36m>[31m
+              [36m<circle[31m
+                [33mcx[31m=[32m"11"[31m
+                [33mcy[31m=[32m"11"[31m
+                [33mr[31m=[32m"8"[31m
+              [36m/>[31m
+              [36m<path[31m
+                [33md[31m=[32m"m21 21-4.3-4.3"[31m
+              [36m/>[31m
+            [36m</svg>[31m
+            [36m<input[31m
+              [33maria-label[31m=[32m"T├¼m kiß║┐m"[31m
+              [33mplaceholder[31m=[32m"T├¼m kiß║┐m..."[31m
+              [33mvalue[31m=[32m""[31m
+            [36m/>[31m
+          [36m</div>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"list-count"[31m
+          [36m>[31m
+            [0m1[0m
+            [0m kh├ích h├áng[0m
+          [36m</span>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"table-scroll"[31m
+        [36m>[31m
+          [36m<table>[31m
+            [36m<thead>[31m
+              [36m<tr>[31m
+                [36m<th>[31m
+                  [0mKh├ích h├áng[0m
+                [36m</th>[31m
+                [36m<th>[31m
+                  [0mSß╗æ ─æiß╗çn thoß║íi[0m
+                [36m</th>[31m
+                [36m<th>[31m
+                  [0mTiß╗ün nß╗ú[0m
+                [36m</th>[31m
+                [36m<th>[31m
+                  [0mDß╗ïch vß╗Ñ[0m
+                [36m</th>[31m
+                [36m<th>[31m
+                  [0m─É├ú ho├án th├ánh[0m
+                [36m</th>[31m
+              [36m</tr>[31m
+            [36m</thead>[31m
+            [36m<tbody>[31m
+              [36m<tr[31m
+                [33mclass[31m=[32m"clickable"[31m
+              [36m>[31m
+                [36m<td[31m
+                  [33mdata-label[31m=[32m"Kh├ích h├áng"[31m
+                [36m>[31m
+                  [0mLan[0m
+                [36m</td>[31m
+                [36m<td[31m
+                  [33mdata-label[31m=[32m"Sß╗æ ─æiß╗çn thoß║íi"[31m
+                [36m>[31m
+                  [0mΓÇö[0m
+                [36m</td>[31m
+                [36m<td[31m
+                  [33mdata-label[31m=[32m"Tiß╗ün nß╗ú"[31m
+                [36m>[31m
+                  [36m<span>[31m
+                    [0m0┬áΓé½[0m
+                  [36m</span>[31m
+                [36m</td>[31m
+                [36m<td[31m
+                  [33mdata-label[31m=[32m"Dß╗ïch vß╗Ñ"[31m
+                [36m>[31m
+                  [36m<button[31m
+                    [33maria-expanded[31m=[32m"true"[31m
+                    [33maria-label[31m=[32m"Lan: 1 dß╗ïch vß╗Ñ"[31m
+                    [33mclass[31m=[32m"text-action treatment-service-badge"[31m
+                    [33mtype[31m=[32m"button"[31m
+                  [36m>[31m
+                    [0m1[0m
+                    [0m dß╗ïch vß╗Ñ [0m
+                    [36m<svg[31m
+                      [33mclass[31m=[32m"lucide lucide-chevron-up"[31m
+                      [33mfill[31m=[32m"none"[31m
+                      [33mheight[31m=[32m"14"[31m
+                      [33mstroke[31m=[32m"currentColor"[31m
+                      [33mstroke-linecap[31m=[32m"round"[31m
+                      [33mstroke-linejoin[31m=[32m"round"[31m
+                      [33mstroke-width[31m=[32m"2"[31m
+                      [33mviewBox[31m=[32m"0 0 24 24"[31m
+                      [33mwidth[31m=[32m"14"[31m
+                      [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+                    [36m>[31m
+                      [36m<path[31m
+                        [33md[31m=[32m"m18 15-6-6-6 6"[31m
+                      [36m/>[31m
+                    [36m</svg>[31m
+                  [36m</button>[31m
+                [36m</td>[31m
+                [36m<td[31m
+                  [33mdata-label[31m=[32m"─É├ú ho├án th├ánh"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"small-muted"[31m
+                  [36m>[31m
+                    [0mΓÇö[0m
+                  [36m</span>[31m
+                [36m</td>[31m
+              [36m</tr>[31m
+              [36m<tr[31m
+                [33mclass[31m=[32m"treatment-expanded-row"[31m
+              [36m>[31m
+                [36m<td[31m
+                  [33mcolspan[31m=[32m"5"[31m
+                [36m>[31m
+                  [36m<div[31m
+                    [33mclass[31m=[32m"treatment-card-list"[31m
+                  [36m>[31m
+                    [36m<article[31m
+                      [33mclass[31m=[32m"treatment-card-item treatment-root-panel is-single-treatment"[31m
+                    [36m>[31m
+                      [36m<div[31m
+                        [33mclass[31m=[32m"treatment-card-heading treatment-parent-heading"[31m
+                      [36m>[31m
+                        [36m<div[31m
+                          [33mclass[31m=[32m"treatment-parent-heading-left"[31m
+                        [36m>[31m
+                          [36m<button[31m
+                            [33mclass[31m=[32m"text-action treatment-parent-title"[31m
+                            [33mtype[31m=[32m"button"[31m
+                          [36m>[31m
+                            [36m<strong>[31m
+                              [0mCh─âm s├│c da[0m
+                            [36m</strong>[31m
+                            [0m [0m
+                            [36m<span[31m
+                              [33mclass[31m=[32m"small-muted"[31m
+                            [36m>[31m
+                              [0m┬╖ 5/6 buß╗òi[0m
+                            [36m</span>[31m
+                          [36m</button>[31m
+                          [36m<div[31m
+                            [33mclass[31m=[32m"treatment-parent-badges"[31m
+                          [36m/>[31m
+                        [36m</div>[31m
+                        [36m<div[31m
+                          [33mclass[31m=[32m"treatment-parent-actions is-page-actions is-staff-actions"[31m
+                        [36m>[31m
+                          [36m<button[31m
+                            [33mclass[31m=[32m"btn secondary treatment-action-execute"[31m
+                          [36m>[31m
+                            [0mThß╗▒c hiß╗çn[0m
+                          [36m</button>[31m
+                          [36m<button[31m
+                            [33maria-label[31m=[32m"Ch─âm s├│c da ┬╖ Xem lß╗ïch sß╗¡"[31m
+                            [33mclass[31m=[32m"text-action treatment-detail-action"[31m
+                          [36m>[31m
+                            [0mChi tiß║┐t[0m
+                          [36m</button>[31m
+                          [36m<span[31m
+                            [33maria-hidden[31m=[32m"true"[31m
+                            [33mclass[31m=[32m"treatment-btn-slot"[31m
+                          [36m/>[31m
+                        [36m</div>[31m
+                      [36m</div>[31m
+                    [36m</article>[31m
+                  [36m</div>[31m
+                [36m</td>[31m
+              [36m</tr>[31m
+            [36m</tbody>[31m
+          [36m</table>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+   [33m[2mΓ£ô[22m[39m detail: MANAGER chß╗ìn ng├áy v├á gß╗¡i execution_date dß║íng YYYY-MM-DD [33m 951[2mms[22m[39m
+[31m   [31m├ù[31m detail: STAFF giß╗» nguy├¬n giao diß╗çn v├á kh├┤ng gß╗¡i execution_date[39m[33m 1322[2mms[22m[39m
+[31m     ΓåÆ Unable to find role="button" and name "Thß╗▒c hiß╗çn h├┤m nay"
+
+Ignored nodes: comments, script, style
+[36m<section[31m
+  [33maria-label[31m=[32m"Ch─âm s├│c da"[31m
+  [33maria-modal[31m=[32m"true"[31m
+  [33mclass[31m=[32m"drawer "[31m
+  [33mrole[31m=[32m"dialog"[31m
+[36m>[31m
+  [36m<div[31m
+    [33mclass[31m=[32m"drawer-header"[31m
+  [36m>[31m
+    [36m<h2>[31m
+      [0mCh─âm s├│c da[0m
+    [36m</h2>[31m
+    [36m<button[31m
+      [33maria-label[31m=[32m"─É├│ng"[31m
+      [33mclass[31m=[32m"icon-btn"[31m
+    [36m>[31m
+      [36m<svg[31m
+        [33mclass[31m=[32m"lucide lucide-x"[31m
+        [33mfill[31m=[32m"none"[31m
+        [33mheight[31m=[32m"21"[31m
+        [33mstroke[31m=[32m"currentColor"[31m
+        [33mstroke-linecap[31m=[32m"round"[31m
+        [33mstroke-linejoin[31m=[32m"round"[31m
+        [33mstroke-width[31m=[32m"2"[31m
+        [33mviewBox[31m=[32m"0 0 24 24"[31m
+        [33mwidth[31m=[32m"21"[31m
+        [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+      [36m>[31m
+        [36m<path[31m
+          [33md[31m=[32m"M18 6 6 18"[31m
+        [36m/>[31m
+        [36m<path[31m
+          [33md[31m=[32m"m6 6 12 12"[31m
+        [36m/>[31m
+      [36m</svg>[31m
+    [36m</button>[31m
+  [36m</div>[31m
+  [36m<div[31m
+    [33mclass[31m=[32m"drawer-body"[31m
+  [36m>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"detail-list"[31m
+    [36m>[31m
+      [36m<div>[31m
+        [36m<span>[31m
+          [0mKh├ích h├áng[0m
+        [36m</span>[31m
+        [36m<strong>[31m
+          [0mLan[0m
+        [36m</strong>[31m
+      [36m</div>[31m
+      [36m<div>[31m
+        [36m<span>[31m
+          [0mDß╗ïch vß╗Ñ[0m
+        [36m</span>[31m
+        [36m<strong>[31m
+          [0mCh─âm s├│c da[0m
+        [36m</strong>[31m
+      [36m</div>[31m
+      [36m<div>[31m
+        [36m<span>[31m
+          [0mSß╗æ buß╗òi c├▓n lß║íi[0m
+        [36m</span>[31m
+        [36m<strong>[31m
+          [0m5 / 6[0m
+        [36m</strong>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+    [36m<article[31m
+      [33mclass[31m=[32m"treatment-card-item treatment-root-panel is-single-treatment"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"treatment-card-heading treatment-parent-heading"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"treatment-parent-heading-left"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"text-action treatment-parent-title"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<strong>[31m
+              [0mCh─âm s├│c da[0m
+            [36m</strong>[31m
+            [0m [0m
+            [36m<span[31m
+              [33mclass[31m=[32m"small-muted"[31m
+            [36m>[31m
+              [0m┬╖ 5/6 buß╗òi[0m
+            [36m</span>[31m
+          [36m</button>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"treatment-parent-badges"[31m
+          [36m/>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"treatment-parent-actions is-drawer-actions is-staff-actions"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33maria-expanded[31m=[32m"true"[31m
+            [33maria-label[31m=[32m"ß║¿n lß╗ïch sß╗¡"[31m
+            [33mclass[31m=[32m"text-action treatment-history-toggle"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"treatment-history-label-full"[31m
+            [36m>[31m
+              [0mß║¿n lß╗ïch sß╗¡[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33maria-hidden[31m=[32m"true"[31m
+              [33mclass[31m=[32m"treatment-history-label-compact"[31m
+            [36m>[31m
+              [0mLß╗ïch sß╗¡[0m
+            [36m</span>[31m
+          [36m</button>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"btn secondary treatment-action-execute"[31m
+          [36m>[31m
+            [0mThß╗▒c hiß╗çn[0m
+          [36m</button>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"treatment-history"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"treatment-history-header"[31m
+        [36m>[31m
+          [36m<h4>[31m
+            [0mLß╗ïch sß╗¡ thß╗▒c hiß╗çn [0m
+            [36m<span[31m
+              [33mclass[31m=[32m"treatment-history-visit-count"[31m
+            [36m>[31m
+              [0m┬╖ Ch╞░a ─æß║┐n l├ám lß║ºn n├áo[0m
+            [36m</span>[31m
+          [36m</h4>[31m
+        [36m</div>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"muted"[31m
+        [36m>[31m
+          [0mCh╞░a thß╗▒c hiß╗çn buß╗òi n├áo.[0m
+        [36m</p>[31m
+      [36m</div>[31m
+    [36m</article>[31m
+  [36m</div>[31m
+[36m</section>[31m
+
+Ignored nodes: comments, script, style
+[36m<section[31m
+  [33maria-label[31m=[32m"Ch─âm s├│c da"[31m
+  [33maria-modal[31m=[32m"true"[31m
+  [33mclass[31m=[32m"drawer "[31m
+  [33mrole[31m=[32m"dialog"[31m
+[36m>[31m
+  [36m<div[31m
+    [33mclass[31m=[32m"drawer-header"[31m
+  [36m>[31m
+    [36m<h2>[31m
+      [0mCh─âm s├│c da[0m
+    [36m</h2>[31m
+    [36m<button[31m
+      [33maria-label[31m=[32m"─É├│ng"[31m
+      [33mclass[31m=[32m"icon-btn"[31m
+    [36m>[31m
+      [36m<svg[31m
+        [33mclass[31m=[32m"lucide lucide-x"[31m
+        [33mfill[31m=[32m"none"[31m
+        [33mheight[31m=[32m"21"[31m
+        [33mstroke[31m=[32m"currentColor"[31m
+        [33mstroke-linecap[31m=[32m"round"[31m
+        [33mstroke-linejoin[31m=[32m"round"[31m
+        [33mstroke-width[31m=[32m"2"[31m
+        [33mviewBox[31m=[32m"0 0 24 24"[31m
+        [33mwidth[31m=[32m"21"[31m
+        [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+      [36m>[31m
+        [36m<path[31m
+          [33md[31m=[32m"M18 6 6 18"[31m
+        [36m/>[31m
+        [36m<path[31m
+          [33md[31m=[32m"m6 6 12 12"[31m
+        [36m/>[31m
+      [36m</svg>[31m
+    [36m</button>[31m
+  [36m</div>[31m
+  [36m<div[31m
+    [33mclass[31m=[32m"drawer-body"[31m
+  [36m>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"detail-list"[31m
+    [36m>[31m
+      [36m<div>[31m
+        [36m<span>[31m
+          [0mKh├ích h├áng[0m
+        [36m</span>[31m
+        [36m<strong>[31m
+          [0mLan[0m
+        [36m</strong>[31m
+      [36m</div>[31m
+      [36m<div>[31m
+        [36m<span>[31m
+          [0mDß╗ïch vß╗Ñ[0m
+        [36m</span>[31m
+        [36m<strong>[31m
+          [0mCh─âm s├│c da[0m
+        [36m</strong>[31m
+      [36m</div>[31m
+      [36m<div>[31m
+        [36m<span>[31m
+          [0mSß╗æ buß╗òi c├▓n lß║íi[0m
+        [36m</span>[31m
+        [36m<strong>[31m
+          [0m5 / 6[0m
+        [36m</strong>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+    [36m<article[31m
+      [33mclass[31m=[32m"treatment-card-item treatment-root-panel is-single-treatment"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"treatment-card-heading treatment-parent-heading"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"treatment-parent-heading-left"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"text-action treatment-parent-title"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<strong>[31m
+              [0mCh─âm s├│c da[0m
+            [36m</strong>[31m
+            [0m [0m
+            [36m<span[31m
+              [33mclass[31m=[32m"small-muted"[31m
+            [36m>[31m
+              [0m┬╖ 5/6 buß╗òi[0m
+            [36m</span>[31m
+          [36m</button>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"treatment-parent-badges"[31m
+          [36m/>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"treatment-parent-actions is-drawer-actions is-staff-actions"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33maria-expanded[31m=[32m"true"[31m
+            [33maria-label[31m=[32m"ß║¿n lß╗ïch sß╗¡"[31m
+            [33mclass[31m=[32m"text-action treatment-history-toggle"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"treatment-history-label-full"[31m
+            [36m>[31m
+              [0mß║¿n lß╗ïch sß╗¡[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33maria-hidden[31m=[32m"true"[31m
+              [33mclass[31m=[32m"treatment-history-label-compact"[31m
+            [36m>[31m
+              [0mLß╗ïch sß╗¡[0m
+            [36m</span>[31m
+          [36m</button>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"btn secondary treatment-action-execute"[31m
+          [36m>[31m
+            [0mThß╗▒c hiß╗çn[0m
+          [36m</button>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"treatment-history"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"treatment-history-header"[31m
+        [36m>[31m
+          [36m<h4>[31m
+            [0mLß╗ïch sß╗¡ thß╗▒c hiß╗çn [0m
+            [36m<span[31m
+              [33mclass[31m=[32m"treatment-history-visit-count"[31m
+            [36m>[31m
+              [0m┬╖ Ch╞░a ─æß║┐n l├ám lß║ºn n├áo[0m
+            [36m</span>[31m
+          [36m</h4>[31m
+        [36m</div>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"muted"[31m
+        [36m>[31m
+          [0mCh╞░a thß╗▒c hiß╗çn buß╗òi n├áo.[0m
+        [36m</p>[31m
+      [36m</div>[31m
+    [36m</article>[31m
+  [36m</div>[31m
+[36m</section>[31m[39m
+   [32mΓ£ô[39m dashboard: MANAGER chß╗ìn ng├áy v├á gß╗¡i execution_date dß║íng YYYY-MM-DD[32m 265[2mms[22m[39m
+   [32mΓ£ô[39m dashboard: STAFF giß╗» nguy├¬n giao diß╗çn v├á kh├┤ng gß╗¡i execution_date[32m 208[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m sß╗¡a nh├ón vi├¬n cß╗ºa buß╗òi ─æ├ú c├│ kh├┤ng hiß╗ân thß╗ï hoß║╖c gß╗¡i ng├áy thß╗▒c hiß╗çn mß╗¢i [33m 347[2mms[22m[39m
+ [32mΓ£ô[39m src/pages/ProductServiceChildren.test.jsx [2m([22m[2m4 tests[22m[2m)[22m[33m 5240[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m shows child names outside the current page, nests details and saves reordered numeric IDs [33m 1316[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m allows STAFF to clear all links without commissions or deleting services [33m 939[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m creates a service with children, excludes duplicates, self and retail products [33m 1977[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m excludes the edited parent and retains links when API rejects a cycle [33m 1003[2mms[22m[39m
+ [32mΓ£ô[39m src/components/CustomerOverview.test.jsx [2m([22m[2m5 tests[22m[2m)[22m[33m 4576[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m ch╞░a k├╜: phß║úi x├íc nhß║¡n, quay lß║íi giß╗» ghi ch├║ v├á kh├┤ng gß╗¡i API [33m 1852[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m lß╗ùi API giß╗» dß╗» liß╗çu, kho├í gß╗¡i lß║íi ─æß╗â tr├ính trß╗½ tr├╣ng [33m 1360[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m ghi ch├║ v╞░ß╗út giß╗¢i hß║ín UTF-8 kh├┤ng gß╗¡i API [33m 367[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m mß╗ƒ buß╗òi c┼⌐ ─æ├ú k├╜ trong hß╗ô s╞í, sß╗¡a note v├á tß║úi lß║íi overview [33m 852[2mms[22m[39m
+ [32mΓ£ô[39m src/utils/exportTable.test.js [2m([22m[2m1 test[22m[2m)[22m[33m 6017[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m creates numeric Excel cells with currency formatting and protects text cells [33m 6015[2mms[22m[39m
+ [32mΓ£ô[39m src/components/TreatmentCardPanel.test.jsx [2m([22m[2m6 tests[22m[2m)[22m[33m 4686[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m shows child count, finite/lifetime counts and requires a new signature plus explicit close confirmation [33m 1662[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m executes selected children with their own staff and one parent note/signature [33m 1773[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m stops on ambiguous partial failure and prevents accidental re-execution [33m 662[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m keeps selection on children and execution/history controls on the parent without exposing signatures [33m 559[2mms[22m[39m
+ [32mΓ£ô[39m src/components/InvoiceChildStaffPicker.test.jsx [2m([22m[2m2 tests[22m[2m)[22m[33m 3739[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m searches 50 staff without accents, filters roles and retains selections hidden by filters [33m 2254[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m loads all pages and cancellation does not publish draft changes [33m 1481[2mms[22m[39m
+ [32mΓ£ô[39m src/components/TreatmentSessionDialog.test.jsx [2m([22m[2m7 tests[22m[2m)[22m[33m 2593[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m buß╗òi c┼⌐ ─æ├ú k├╜ vß║½n sß╗¡a v├á x├│a ghi ch├║, kh├┤ng cho k├╜ ─æ├¿ [33m 530[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m l╞░u note tr╞░ß╗¢c khi k├╜, kh├│a chß╗» k├╜ nh╞░ng vß║½n cho sß╗¡a note [33m 776[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m lß╗ùi k├╜ giß╗» n├⌐t k├╜ v├á kh├┤ng l╞░u note lß║ºn nß╗»a khi thß╗¡ lß║íi [33m 543[2mms[22m[39m
+ [32mΓ£ô[39m src/components/SignaturePad.test.jsx [2m([22m[2m5 tests[22m[2m)[22m[33m 1948[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m opens a separate dialog, keeps strokes local until confirmed and restores scroll styles [33m 763[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m canceling a replacement keeps the selected signature; clearing publishes null [33m 711[2mms[22m[39m
+ [32mΓ£ô[39m src/components/TreatmentGroupSessionDialog.test.jsx [2m([22m[2m3 tests[22m[2m)[22m[33m 993[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m saves one group note on the representative treatment history only [33m 611[2mms[22m[39m
+ [32mΓ£ô[39m src/pages/CustomerBookingsPage.test.jsx [2m([22m[2m9 tests[22m[2m)[22m[33m 7218[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m ─æß║╖t lß╗ìc nhanh ph├¡a tr├¬n ├┤ lß╗ìc v├á hiß╗çn ri├¬ng hai loß║íi ghi ch├║ trong bß║úng [33m 1252[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m chß╗ìn tß║Ñt cß║ú dß╗ïch vß╗Ñ chß╗ë x├│a lß╗ìc dß╗ïch vß╗Ñ v├á nh├ún hiß╗ân thß╗ï [33m 1694[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m tß╗▒ lß╗ìc 07:00ΓÇô08:00 vß║½n hiß╗çn kh├ích NULL v├á kh├┤ng gß╗ìi API nß║┐u giß╗¥ ─æß║úo ng╞░ß╗úc [33m 554[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m tß║ío kh├ích mß╗¢i kh├┤ng chß╗ìn giß╗¥, kh├│a chi nh├ính STAFF [33m 1521[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m STAFF kh├┤ng c├│ n├║t sß╗¡a/x├│a booking chi nh├ính kh├íc [33m 450[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m sß╗¡a lß╗ïch, giß╗» status backend v├á l╞░u gi├í trß╗ï t╞░ vß║Ñn nguy├¬n VND [33m 515[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m giß╗» giß╗¥ hß║╣n ─æ├ú l╞░u tr╞░ß╗¢c 07:00 khi sß╗¡a lß╗ïch c┼⌐ [33m 448[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m x├│a c├│ x├íc nhß║¡n, lß╗ùi API cho thß╗¡ lß║íi [33m 479[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m MANAGER lß╗ìc theo chi nh├ính tr├¬n c├╣ng nh╞░ng vß║½n chß╗ìn chi nh├ính tiß║┐p nhß║¡n khi tß║ío lß╗ïch [33m 302[2mms[22m[39m
+ [32mΓ£ô[39m src/auth/AuthProvider.test.jsx [2m([22m[2m19 tests[22m[2m)[22m[33m 962[2mms[22m[39m
+ [32mΓ£ô[39m src/pages/DirectoryExport.test.jsx [2m([22m[2m4 tests[22m[2m)[22m[33m 2148[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m exports all pages from the customers directory with the search filter [33m 1024[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m exports all pages from the products directory with the search filter [33m 708[2mms[22m[39m
+ [32mΓ£ô[39m src/components/DebtInvoicePicker.test.jsx [2m([22m[2m2 tests[22m[2m)[22m[33m 910[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m hiß╗ân thß╗ï nh├│m ngh├¼n nh╞░ng callback trß║ú chuß╗ùi tiß╗ün kh├┤ng c├│ dß║Ñu ph├ón c├ích [33m 718[2mms[22m[39m
+ [32mΓ£ô[39m src/pages/DetailNotes.test.jsx [2m([22m[2m7 tests[22m[2m)[22m[33m 1074[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m mß╗ƒ chi tiß║┐t kh├ích h├áng hiß╗ân thß╗ï ghi ch├║ nhiß╗üu d├▓ng tß╗½ hß╗ô s╞í API [33m 816[2mms[22m[39m
+ [32mΓ£ô[39m src/components/InvoiceServiceChildren.test.jsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1056[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m only edits child counts and explicitly toggles lifetime as null [33m 515[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m selects child staff in grouped checkboxes and publishes only on confirmation [33m 525[2mms[22m[39m
+ [32mΓ£ô[39m src/components/ReceiptPrint.test.jsx [2m([22m[2m4 tests[22m[2m)[22m[33m 314[2mms[22m[39m
+ [32mΓ£ô[39m src/components/ExportTableButton.test.jsx [2m([22m[2m4 tests[22m[2m)[22m[33m 615[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m awaits async data, disables repeat clicks and then exports [33m 389[2mms[22m[39m
+ [32mΓ£ô[39m src/components/SearchPicker.test.jsx [2m([22m[2m1 test[22m[2m)[22m[33m 682[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m ─æ├│ng khi bß║Ñm b├¬n ngo├ái v├á chß╗ë hiß╗çn lß╗▒a chß╗ìn tß║Ñt cß║ú khi ─æ╞░ß╗úc y├¬u cß║ºu [33m 679[2mms[22m[39m
+ [32mΓ£ô[39m src/components/TodayTreatments.test.jsx [2m([22m[2m1 test[22m[2m)[22m[33m 749[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m renders old parent as heading, child-specific staff/status and undoes the child history [33m 746[2mms[22m[39m
+ [32mΓ£ô[39m src/api/client.test.js [2m([22m[2m9 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+ [32mΓ£ô[39m src/utils/format.test.js [2m([22m[2m23 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [32mΓ£ô[39m src/utils/invoiceTreatments.test.js [2m([22m[2m21 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32mΓ£ô[39m src/utils/todayTreatments.test.js [2m([22m[2m8 tests[22m[2m)[22m[32m 40[2mms[22m[39m
+ [32mΓ£ô[39m src/utils/invoice.test.js [2m([22m[2m10 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32mΓ£ô[39m src/auth/permissions.test.js [2m([22m[2m16 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32mΓ£ô[39m src/utils/customerBookings.test.js [2m([22m[2m14 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+ [32mΓ£ô[39m src/utils/invoiceServiceGroups.test.js [2m([22m[2m16 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32mΓ£ô[39m src/api/customerBookings.test.js [2m([22m[2m2 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32mΓ£ô[39m src/utils/commissionReport.test.js [2m([22m[2m5 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32mΓ£ô[39m src/utils/customerForm.test.js [2m([22m[2m8 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32mΓ£ô[39m src/utils/validation.test.js [2m([22m[2m7 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32mΓ£ô[39m src/api/legacyDebt.test.js [2m([22m[2m1 test[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32mΓ£ô[39m src/utils/commissionTiers.test.js [2m([22m[2m6 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32mΓ£ô[39m src/utils/invoiceUnsigned.test.js [2m([22m[2m2 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32mΓ£ô[39m src/app/CustomerBookingsNavigation.test.jsx [2m([22m[2m4 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32mΓ£ô[39m src/utils/dailyRevenue.test.js [2m([22m[2m1 test[22m[2m)[22m[32m 4[2mms[22m[39m
+npm.cmd : 
+At line:1 char:1
++ npm.cmd test 2>&1 | Out-File -Encoding utf8 .cline-all-unit.txt; "EXI ...
++ ~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[31mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[39m[1m[41m Failed Tests 2 [49m[22m[31mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[39m
+
+[41m[1m FAIL [22m[49m src/pages/TreatmentExecutionDate.test.jsx[2m > [22minline: STAFF giß╗» nguy├¬n giao 
+diß╗çn v├á kh├┤ng gß╗¡i execution_date
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find role="button" and name "Thß╗▒c hiß╗çn h├┤m nay"
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"page treatments-page"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"page-heading"[39m
+      [36m>[39m
+        [36m<div>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"eyebrow"[39m
+          [36m>[39m
+            [0m─Éß╗ÆNG H├ÇNH C├ÖNG KH├üCH H├ÇNG[0m
+          [36m</span>[39m
+          [36m<h1>[39m
+            [0mThß║╗ liß╗çu tr├¼nh[0m
+          [36m</h1>[39m
+          [36m<p>[39m
+            [0mMß╗ùi buß╗òi ch─âm s├│c, mß╗Öt b╞░ß╗¢c gß║ºn h╞ín tß╗¢i sß╗▒ rß║íng rß╗í.[0m
+          [36m</p>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33maria-label[39m=[32m"Thao t├íc liß╗çu tr├¼nh"[39m
+          [33mclass[39m=[32m"page-heading-actions"[39m
+          [33mrole[39m=[32m"group"[39m
+        [36m>[39m
+          [36m<div>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"btn secondary"[39m
+            [36m>[39m
+              [0mXuß║Ñt Excel[0m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"report-filters date-range-filter"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mclass[39m=[32m"field"[39m
+        [36m>[39m
+          [36m<span>[39m
+            [0mTß╗½ ng├áy[0m
+          [36m</span>[39m
+          [36m<input[39m
+            [33maria-label[39m=[32m"Tß╗½ ng├áy"[39m
+            [33mtype[39m=[32m"date"[39m
+            [33mvalue[39m=[32m""[39m
+          [36m/>[39m
+        [36m</label>[39m
+        [36m<span[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"date-range-separator"[39m
+        [36m>[39m
+          [0mΓåÆ[0m
+        [36m</span>[39m
+        [36m<label[39m
+          [33mclass[39m=[32m"field"[39m
+        [36m>[39m
+          [36m<span>[39m
+            [0m─Éß║┐n ng├áy[0m
+          [36m</span>[39m
+          [36m<input[39m
+            [33maria-label[39m=[32m"─Éß║┐n ng├áy"[39m
+            [33mtype[39m=[32m"date"[39m
+            [33mvalue[39m=[32m""[39m
+          [36m/>[39m
+        [36m</label>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"list-panel treatment-customers"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"list-toolbar"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"search-box"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33mclass[39m=[32m"lucide lucide-search"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"18"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"18"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<circle[39m
+                [33mcx[39m=[32m"11"[39m
+                [33mcy[39m=[32m"11"[39m
+                [33mr[39m=[32m"8"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"m21 21-4.3-4.3"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [36m<input[39m
+              [33maria-label[39m=[32m"T├¼m kiß║┐m"[39m
+              [33mplaceholder[39m=[32m"T├¼m kiß║┐m..."[39m
+              [33mvalue[39m=[32m""[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"list-count"[39m
+          [36m>[39m
+            [0m1[0m
+            [0m kh├ích h├áng[0m
+          [36m</span>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"table-scroll"[39m
+        [36m>[39m
+          [36m<table>[39m
+            [36m<thead>[39m
+              [36m<tr>[39m
+                [36m<th>[39m
+                  [0mKh├ích h├áng[0m
+                [36m</th>[39m
+                [36m<th>[39m
+                  [0mSß╗æ ─æiß╗çn thoß║íi[0m
+                [36m</th>[39m
+                [36m<th>[39m
+                  [0mTiß╗ün nß╗ú[0m
+                [36m</th>[39m
+                [36m<th>[39m
+                  [0mDß╗ïch vß╗Ñ[0m
+                [36m</th>[39m
+                [36m<th>[39m
+                  [0m─É├ú ho├án th├ánh[0m
+                [36m</th>[39m
+              [36m</tr>[39m
+            [36m</thead>[39m
+            [36m<tbody>[39m
+              [36m<tr[39m
+                [33mclass[39m=[32m"clickable"[39m
+              [36m>[39m
+                [36m<td[39m
+                  [33mdata-label[39m=[32m"Kh├ích h├áng"[39m
+                [36m>[39m
+                  [0mLan[0m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mdata-label[39m=[32m"Sß╗æ ─æiß╗çn thoß║íi"[39m
+                [36m>[39m
+                  [0mΓÇö[0m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mdata-label[39m=[32m"Tiß╗ün nß╗ú"[39m
+                [36m>[39m
+                  [36m<span>[39m
+                    [0m0┬áΓé½[0m
+                  [36m</span>[39m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mdata-label[39m=[32m"Dß╗ïch vß╗Ñ"[39m
+                [36m>[39m
+                  [36m<button[39m
+                    [33maria-expanded[39m=[32m"true"[39m
+                    [33maria-label[39m=[32m"Lan: 1 dß╗ïch vß╗Ñ"[39m
+                    [33mclass[39m=[32m"text-action treatment-service-badge"[39m
+                    [33mtype[39m=[32m"button"[39m
+                  [36m>[39m
+                    [0m1[0m
+                    [0m dß╗ïch vß╗Ñ [0m
+                    [36m<svg[39m
+                      [33mclass[39m=[32m"lucide lucide-chevron-up"[39m
+                      [33mfill[39m=[32m"none"[39m
+                      [33mheight[39m=[32m"14"[39m
+                      [33mstroke[39m=[32m"currentColor"[39m
+                      [33mstroke-linecap[39m=[32m"round"[39m
+                      [33mstroke-linejoin[39m=[32m"round"[39m
+                      [33mstroke-width[39m=[32m"2"[39m
+                      [33mviewBox[39m=[32m"0 0 24 24"[39m
+                      [33mwidth[39m=[32m"14"[39m
+                      [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                    [36m>[39m
+                      [36m<path[39m
+                        [33md[39m=[32m"m18 15-6-6-6 6"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</button>[39m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mdata-label[39m=[32m"─É├ú ho├án th├ánh"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"small-muted"[39m
+                  [36m>[39m
+                    [0mΓÇö[0m
+                  [36m</span>[39m
+                [36m</td>[39m
+              [36m</tr>[39m
+              [36m<tr[39m
+                [33mclass[39m=[32m"treatment-expanded-row"[39m
+              [36m>[39m
+                [36m<td[39m
+                  [33mcolspan[39m=[32m"5"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"treatment-card-list"[39m
+                  [36m>[39m
+                    [36m<article[39m
+                      [33mclass[39m=[32m"treatment-card-item treatment-root-panel is-single-treatment"[39m
+                    [36m>[39m
+                      [36m<div[39m
+                        [33mclass[39m=[32m"treatment-card-heading treatment-parent-heading"[39m
+                      [36m>[39m
+                        [36m<div[39m
+                          [33mclass[39m=[32m"treatment-parent-heading-left"[39m
+                        [36m>[39m
+                          [36m<button[39m
+                            [33mclass[39m=[32m"text-action treatment-parent-title"[39m
+                            [33mtype[39m=[32m"button"[39m
+                          [36m>[39m
+                            [36m<strong>[39m
+                              [0mCh─âm s├│c da[0m
+                            [36m</strong>[39m
+                            [0m [0m
+                            [36m<span[39m
+                              [33mclass[39m=[32m"small-muted"[39m
+                            [36m>[39m
+                              [0m┬╖ 5/6 buß╗òi[0m
+                            [36m</span>[39m
+                          [36m</button>[39m
+                          [36m<div[39m
+                            [33mclass[39m=[32m"treatment-parent-badges"[39m
+                          [36m/>[39m
+                        [36m</div>[39m
+                        [36m<div[39m
+                          [33mclass[39m=[32m"treatment-parent-actions is-page-actions is-staff-actions"[39m
+                        [36m>[39m
+                          [36m<button[39m
+                            [33mclass[39m=[32m"btn secondary treatment-action-execute"[39m
+                          [36m>[39m
+                            [0mThß╗▒c hiß╗çn[0m
+                          [36m</button>[39m
+                          [36m<button[39m
+                            [33maria-label[39m=[32m"Ch─âm s├│c da ┬╖ Xem lß╗ïch sß╗¡"[39m
+                            [33mclass[39m=[32m"text-action treatment-detail-action"[39m
+                          [36m>[39m
+                            [0mChi tiß║┐t[0m
+                          [36m</button>[39m
+                          [36m<span[39m
+                            [33maria-hidden[39m=[32m"true"[39m
+                            [33mclass[39m=[32m"treatment-btn-slot"[39m
+                          [36m/>[39m
+                        [36m</div>[39m
+                      [36m</div>[39m
+                    [36m</article>[39m
+                  [36m</div>[39m
+                [36m</td>[39m
+              [36m</tr>[39m
+            [36m</tbody>[39m
+          [36m</table>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"page treatments-page"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"page-heading"[39m
+      [36m>[39m
+        [36m<div>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"eyebrow"[39m
+          [36m>[39m
+            [0m─Éß╗ÆNG H├ÇNH C├ÖNG KH├üCH H├ÇNG[0m
+          [36m</span>[39m
+          [36m<h1>[39m
+            [0mThß║╗ liß╗çu tr├¼nh[0m
+          [36m</h1>[39m
+          [36m<p>[39m
+            [0mMß╗ùi buß╗òi ch─âm s├│c, mß╗Öt b╞░ß╗¢c gß║ºn h╞ín tß╗¢i sß╗▒ rß║íng rß╗í.[0m
+          [36m</p>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33maria-label[39m=[32m"Thao t├íc liß╗çu tr├¼nh"[39m
+          [33mclass[39m=[32m"page-heading-actions"[39m
+          [33mrole[39m=[32m"group"[39m
+        [36m>[39m
+          [36m<div>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"btn secondary"[39m
+            [36m>[39m
+              [0mXuß║Ñt Excel[0m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"report-filters date-range-filter"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mclass[39m=[32m"field"[39m
+        [36m>[39m
+          [36m<span>[39m
+            [0mTß╗½ ng├áy[0m
+          [36m</span>[39m
+          [36m<input[39m
+            [33maria-label[39m=[32m"Tß╗½ ng├áy"[39m
+            [33mtype[39m=[32m"date"[39m
+            [33mvalue[39m=[32m""[39m
+          [36m/>[39m
+        [36m</label>[39m
+        [36m<span[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"date-range-separator"[39m
+        [36m>[39m
+          [0mΓåÆ[0m
+        [36m</span>[39m
+        [36m<label[39m
+          [33mclass[39m=[32m"field"[39m
+        [36m>[39m
+          [36m<span>[39m
+            [0m─Éß║┐n ng├áy[0m
+          [36m</span>[39m
+          [36m<input[39m
+            [33maria-label[39m=[32m"─Éß║┐n ng├áy"[39m
+            [33mtype[39m=[32m"date"[39m
+            [33mvalue[39m=[32m""[39m
+          [36m/>[39m
+        [36m</label>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"list-panel treatment-customers"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"list-toolbar"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"search-box"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33mclass[39m=[32m"lucide lucide-search"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"18"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"18"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<circle[39m
+                [33mcx[39m=[32m"11"[39m
+                [33mcy[39m=[32m"11"[39m
+                [33mr[39m=[32m"8"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"m21 21-4.3-4.3"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [36m<input[39m
+              [33maria-label[39m=[32m"T├¼m kiß║┐m"[39m
+              [33mplaceholder[39m=[32m"T├¼m kiß║┐m..."[39m
+              [33mvalue[39m=[32m""[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"list-count"[39m
+          [36m>[39m
+            [0m1[0m
+            [0m kh├ích h├áng[0m
+          [36m</span>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"table-scroll"[39m
+        [36m>[39m
+          [36m<table>[39m
+            [36m<thead>[39m
+              [36m<tr>[39m
+                [36m<th>[39m
+                  [0mKh├ích h├áng[0m
+                [36m</th>[39m
+                [36m<th>[39m
+                  [0mSß╗æ ─æiß╗çn thoß║íi[0m
+                [36m</th>[39m
+                [36m<th>[39m
+                  [0mTiß╗ün nß╗ú[0m
+                [36m</th>[39m
+                [36m<th>[39m
+                  [0mDß╗ïch vß╗Ñ[0m
+                [36m</th>[39m
+                [36m<th>[39m
+                  [0m─É├ú ho├án th├ánh[0m
+                [36m</th>[39m
+              [36m</tr>[39m
+            [36m</thead>[39m
+            [36m<tbody>[39m
+              [36m<tr[39m
+                [33mclass[39m=[32m"clickable"[39m
+              [36m>[39m
+                [36m<td[39m
+                  [33mdata-label[39m=[32m"Kh├ích h├áng"[39m
+                [36m>[39m
+                  [0mLan[0m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mdata-label[39m=[32m"Sß╗æ ─æiß╗çn thoß║íi"[39m
+                [36m>[39m
+                  [0mΓÇö[0m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mdata-label[39m=[32m"Tiß╗ün nß╗ú"[39m
+                [36m>[39m
+                  [36m<span>[39m
+                    [0m0┬áΓé½[0m
+                  [36m</span>[39m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mdata-label[39m=[32m"Dß╗ïch vß╗Ñ"[39m
+                [36m>[39m
+                  [36m<button[39m
+                    [33maria-expanded[39m=[32m"true"[39m
+                    [33maria-label[39m=[32m"Lan: 1 dß╗ïch vß╗Ñ"[39m
+                    [33mclass[39m=[32m"text-action treatment-service-badge"[39m
+                    [33mtype[39m=[32m"button"[39m
+                  [36m>[39m
+                    [0m1[0m
+                    [0m dß╗ïch vß╗Ñ [0m
+                    [36m<svg[39m
+                      [33mclass[39m=[32m"lucide lucide-chevron-up"[39m
+                      [33mfill[39m=[32m"none"[39m
+                      [33mheight[39m=[32m"14"[39m
+                      [33mstroke[39m=[32m"currentColor"[39m
+                      [33mstroke-linecap[39m=[32m"round"[39m
+                      [33mstroke-linejoin[39m=[32m"round"[39m
+                      [33mstroke-width[39m=[32m"2"[39m
+                      [33mviewBox[39m=[32m"0 0 24 24"[39m
+                      [33mwidth[39m=[32m"14"[39m
+                      [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                    [36m>[39m
+                      [36m<path[39m
+                        [33md[39m=[32m"m18 15-6-6-6 6"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</button>[39m
+                [36m</td>[39m
+                [36m<td[39m
+                  [33mdata-label[39m=[32m"─É├ú ho├án th├ánh"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"small-muted"[39m
+                  [36m>[39m
+                    [0mΓÇö[0m
+                  [36m</span>[39m
+                [36m</td>[39m
+              [36m</tr>[39m
+              [36m<tr[39m
+                [33mclass[39m=[32m"treatment-expanded-row"[39m
+              [36m>[39m
+                [36m<td[39m
+                  [33mcolspan[39m=[32m"5"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"treatment-card-list"[39m
+                  [36m>[39m
+                    [36m<article[39m
+                      [33mclass[39m=[32m"treatment-card-item treatment-root-panel is-single-treatment"[39m
+                    [36m>[39m
+                      [36m<div[39m
+                        [33mclass[39m=[32m"treatment-card-heading treatment-parent-heading"[39m
+                      [36m>[39m
+                        [36m<div[39m
+                          [33mclass[39m=[32m"treatment-parent-heading-left"[39m
+                        [36m>[39m
+                          [36m<button[39m
+                            [33mclass[39m=[32m"text-action treatment-parent-title"[39m
+                            [33mtype[39m=[32m"button"[39m
+                          [36m>[39m
+                            [36m<strong>[39m
+                              [0mCh─âm s├│c da[0m
+                            [36m</strong>[39m
+                            [0m [0m
+                            [36m<span[39m
+                              [33mclass[39m=[32m"small-muted"[39m
+                            [36m>[39m
+                              [0m┬╖ 5/6 buß╗òi[0m
+                            [36m</span>[39m
+                          [36m</button>[39m
+                          [36m<div[39m
+                            [33mclass[39m=[32m"treatment-parent-badges"[39m
+                          [36m/>[39m
+                        [36m</div>[39m
+                        [36m<div[39m
+                          [33mclass[39m=[32m"treatment-parent-actions is-page-actions is-staff-actions"[39m
+                        [36m>[39m
+                          [36m<button[39m
+                            [33mclass[39m=[32m"btn secondary treatment-action-execute"[39m
+                          [36m>[39m
+                            [0mThß╗▒c hiß╗çn[0m
+                          [36m</button>[39m
+                          [36m<button[39m
+                            [33maria-label[39m=[32m"Ch─âm s├│c da ┬╖ Xem lß╗ïch sß╗¡"[39m
+                            [33mclass[39m=[32m"text-action treatment-detail-action"[39m
+                          [36m>[39m
+                            [0mChi tiß║┐t[0m
+                          [36m</button>[39m
+                          [36m<span[39m
+                            [33maria-hidden[39m=[32m"true"[39m
+                            [33mclass[39m=[32m"treatment-btn-slot"[39m
+                          [36m/>[39m
+                        [36m</div>[39m
+                      [36m</div>[39m
+                    [36m</article>[39m
+                  [36m</div>[39m
+                [36m</td>[39m
+              [36m</tr>[39m
+            [36m</tbody>[39m
+          [36m</table>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+[90m [2mΓ¥»[22m waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2mΓ¥»[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2mΓ¥»[22m openExecution src/pages/TreatmentExecutionDate.test.jsx:[2m110:35[22m[39m
+    [90m108| [39m    if (entry === 'detail') await actor.click(await screen.findByRole(ΓÇª
+    [90m109| [39m    const scope = entry === 'detail' ? within(screen.getByRole('dialogΓÇª
+    [90m110| [39m    await actor.click(await scope.findByRole('button', { name: managerΓÇª
+    [90m   | [39m                                  [31m^[39m
+    [90m111| [39m  }
+    [90m112| [39m}
+[90m [2mΓ¥»[22m src/pages/TreatmentExecutionDate.test.jsx:[2m130:5[22m[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/2]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/pages/TreatmentExecutionDate.test.jsx[2m > [22mdetail: STAFF giß╗» nguy├¬n giao 
+diß╗çn v├á kh├┤ng gß╗¡i execution_date
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find role="button" and name "Thß╗▒c hiß╗çn h├┤m nay"
+
+Ignored nodes: comments, script, style
+[36m<section[39m
+  [33maria-label[39m=[32m"Ch─âm s├│c da"[39m
+  [33maria-modal[39m=[32m"true"[39m
+  [33mclass[39m=[32m"drawer "[39m
+  [33mrole[39m=[32m"dialog"[39m
+[36m>[39m
+  [36m<div[39m
+    [33mclass[39m=[32m"drawer-header"[39m
+  [36m>[39m
+    [36m<h2>[39m
+      [0mCh─âm s├│c da[0m
+    [36m</h2>[39m
+    [36m<button[39m
+      [33maria-label[39m=[32m"─É├│ng"[39m
+      [33mclass[39m=[32m"icon-btn"[39m
+    [36m>[39m
+      [36m<svg[39m
+        [33mclass[39m=[32m"lucide lucide-x"[39m
+        [33mfill[39m=[32m"none"[39m
+        [33mheight[39m=[32m"21"[39m
+        [33mstroke[39m=[32m"currentColor"[39m
+        [33mstroke-linecap[39m=[32m"round"[39m
+        [33mstroke-linejoin[39m=[32m"round"[39m
+        [33mstroke-width[39m=[32m"2"[39m
+        [33mviewBox[39m=[32m"0 0 24 24"[39m
+        [33mwidth[39m=[32m"21"[39m
+        [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+      [36m>[39m
+        [36m<path[39m
+          [33md[39m=[32m"M18 6 6 18"[39m
+        [36m/>[39m
+        [36m<path[39m
+          [33md[39m=[32m"m6 6 12 12"[39m
+        [36m/>[39m
+      [36m</svg>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div[39m
+    [33mclass[39m=[32m"drawer-body"[39m
+  [36m>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"detail-list"[39m
+    [36m>[39m
+      [36m<div>[39m
+        [36m<span>[39m
+          [0mKh├ích h├áng[0m
+        [36m</span>[39m
+        [36m<strong>[39m
+          [0mLan[0m
+        [36m</strong>[39m
+      [36m</div>[39m
+      [36m<div>[39m
+        [36m<span>[39m
+          [0mDß╗ïch vß╗Ñ[0m
+        [36m</span>[39m
+        [36m<strong>[39m
+          [0mCh─âm s├│c da[0m
+        [36m</strong>[39m
+      [36m</div>[39m
+      [36m<div>[39m
+        [36m<span>[39m
+          [0mSß╗æ buß╗òi c├▓n lß║íi[0m
+        [36m</span>[39m
+        [36m<strong>[39m
+          [0m5 / 6[0m
+        [36m</strong>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<article[39m
+      [33mclass[39m=[32m"treatment-card-item treatment-root-panel is-single-treatment"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"treatment-card-heading treatment-parent-heading"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"treatment-parent-heading-left"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"text-action treatment-parent-title"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<strong>[39m
+              [0mCh─âm s├│c da[0m
+            [36m</strong>[39m
+            [0m [0m
+            [36m<span[39m
+              [33mclass[39m=[32m"small-muted"[39m
+            [36m>[39m
+              [0m┬╖ 5/6 buß╗òi[0m
+            [36m</span>[39m
+          [36m</button>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"treatment-parent-badges"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"treatment-parent-actions is-drawer-actions is-staff-actions"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-expanded[39m=[32m"true"[39m
+            [33maria-label[39m=[32m"ß║¿n lß╗ïch sß╗¡"[39m
+            [33mclass[39m=[32m"text-action treatment-history-toggle"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"treatment-history-label-full"[39m
+            [36m>[39m
+              [0mß║¿n lß╗ïch sß╗¡[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"treatment-history-label-compact"[39m
+            [36m>[39m
+              [0mLß╗ïch sß╗¡[0m
+            [36m</span>[39m
+          [36m</button>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"btn secondary treatment-action-execute"[39m
+          [36m>[39m
+            [0mThß╗▒c hiß╗çn[0m
+          [36m</button>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"treatment-history"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"treatment-history-header"[39m
+        [36m>[39m
+          [36m<h4>[39m
+            [0mLß╗ïch sß╗¡ thß╗▒c hiß╗çn [0m
+            [36m<span[39m
+              [33mclass[39m=[32m"treatment-history-visit-count"[39m
+            [36m>[39m
+              [0m┬╖ Ch╞░a ─æß║┐n l├ám lß║ºn n├áo[0m
+            [36m</span>[39m
+          [36m</h4>[39m
+        [36m</div>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"muted"[39m
+        [36m>[39m
+          [0mCh╞░a thß╗▒c hiß╗çn buß╗òi n├áo.[0m
+        [36m</p>[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m41 passed[39m[22m[90m (42)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m320 passed[39m[22m[90m (322)[39m
+[2m   Start at [22m 10:47:49
+[2m   Duration [22m 68.19s[2m (transform 5.39s, setup 38.43s, collect 59.57s, tests 133.24s, environment 180.38s, prepare 22.26s)[22m
+
+      [36m</div>[39m
+    [36m</article>[39m
+  [36m</div>[39m
+[36m</section>[39m
+
+Ignored nodes: comments, script, style
+[36m<section[39m
+  [33maria-label[39m=[32m"Ch─âm s├│c da"[39m
+  [33maria-modal[39m=[32m"true"[39m
+  [33mclass[39m=[32m"drawer "[39m
+  [33mrole[39m=[32m"dialog"[39m
+[36m>[39m
+  [36m<div[39m
+    [33mclass[39m=[32m"drawer-header"[39m
+  [36m>[39m
+    [36m<h2>[39m
+      [0mCh─âm s├│c da[0m
+    [36m</h2>[39m
+    [36m<button[39m
+      [33maria-label[39m=[32m"─É├│ng"[39m
+      [33mclass[39m=[32m"icon-btn"[39m
+    [36m>[39m
+      [36m<svg[39m
+        [33mclass[39m=[32m"lucide lucide-x"[39m
+        [33mfill[39m=[32m"none"[39m
+        [33mheight[39m=[32m"21"[39m
+        [33mstroke[39m=[32m"currentColor"[39m
+        [33mstroke-linecap[39m=[32m"round"[39m
+        [33mstroke-linejoin[39m=[32m"round"[39m
+        [33mstroke-width[39m=[32m"2"[39m
+        [33mviewBox[39m=[32m"0 0 24 24"[39m
+        [33mwidth[39m=[32m"21"[39m
+        [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+      [36m>[39m
+        [36m<path[39m
+          [33md[39m=[32m"M18 6 6 18"[39m
+        [36m/>[39m
+        [36m<path[39m
+          [33md[39m=[32m"m6 6 12 12"[39m
+        [36m/>[39m
+      [36m</svg>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div[39m
+    [33mclass[39m=[32m"drawer-body"[39m
+  [36m>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"detail-list"[39m
+    [36m>[39m
+      [36m<div>[39m
+        [36m<span>[39m
+          [0mKh├ích h├áng[0m
+        [36m</span>[39m
+        [36m<strong>[39m
+          [0mLan[0m
+        [36m</strong>[39m
+      [36m</div>[39m
+      [36m<div>[39m
+        [36m<span>[39m
+          [0mDß╗ïch vß╗Ñ[0m
+        [36m</span>[39m
+        [36m<strong>[39m
+          [0mCh─âm s├│c da[0m
+        [36m</strong>[39m
+      [36m</div>[39m
+      [36m<div>[39m
+        [36m<span>[39m
+          [0mSß╗æ buß╗òi c├▓n lß║íi[0m
+        [36m</span>[39m
+        [36m<strong>[39m
+          [0m5 / 6[0m
+        [36m</strong>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<article[39m
+      [33mclass[39m=[32m"treatment-card-item treatment-root-panel is-single-treatment"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"treatment-card-heading treatment-parent-heading"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"treatment-parent-heading-left"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"text-action treatment-parent-title"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<strong>[39m
+              [0mCh─âm s├│c da[0m
+            [36m</strong>[39m
+            [0m [0m
+            [36m<span[39m
+              [33mclass[39m=[32m"small-muted"[39m
+            [36m>[39m
+              [0m┬╖ 5/6 buß╗òi[0m
+            [36m</span>[39m
+          [36m</button>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"treatment-parent-badges"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"treatment-parent-actions is-drawer-actions is-staff-actions"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-expanded[39m=[32m"true"[39m
+            [33maria-label[39m=[32m"ß║¿n lß╗ïch sß╗¡"[39m
+            [33mclass[39m=[32m"text-action treatment-history-toggle"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"treatment-history-label-full"[39m
+            [36m>[39m
+              [0mß║¿n lß╗ïch sß╗¡[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"treatment-history-label-compact"[39m
+            [36m>[39m
+              [0mLß╗ïch sß╗¡[0m
+            [36m</span>[39m
+          [36m</button>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"btn secondary treatment-action-execute"[39m
+          [36m>[39m
+            [0mThß╗▒c hiß╗çn[0m
+          [36m</button>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"treatment-history"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"treatment-history-header"[39m
+        [36m>[39m
+          [36m<h4>[39m
+            [0mLß╗ïch sß╗¡ thß╗▒c hiß╗çn [0m
+            [36m<span[39m
+              [33mclass[39m=[32m"treatment-history-visit-count"[39m
+            [36m>[39m
+              [0m┬╖ Ch╞░a ─æß║┐n l├ám lß║ºn n├áo[0m
+            [36m</span>[39m
+          [36m</h4>[39m
+        [36m</div>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"muted"[39m
+        [36m>[39m
+          [0mCh╞░a thß╗▒c hiß╗çn buß╗òi n├áo.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</article>[39m
+  [36m</div>[39m
+[36m</section>[39m
+[90m [2mΓ¥»[22m waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2mΓ¥»[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2mΓ¥»[22m openExecution src/pages/TreatmentExecutionDate.test.jsx:[2m110:35[22m[39m
+    [90m108| [39m    if (entry === 'detail') await actor.click(await screen.findByRole(ΓÇª
+    [90m109| [39m    const scope = entry === 'detail' ? within(screen.getByRole('dialogΓÇª
+    [90m110| [39m    await actor.click(await scope.findByRole('button', { name: managerΓÇª
+    [90m   | [39m                                  [31m^[39m
+    [90m111| [39m  }
+    [90m112| [39m}
+[90m [2mΓ¥»[22m src/pages/TreatmentExecutionDate.test.jsx:[2m130:5[22m[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[2/2]ΓÄ»[22m[39m
+
+EXIT_CODE=1

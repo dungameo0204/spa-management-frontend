@@ -3,7 +3,9 @@ const path = require('node:path')
 const { startServer } = require('./server.cjs')
 const { startUpdates } = require('./updates.cjs')
 
-app.setName('Xuly Spa')
+app.setName('ROSA')
+// Keep the existing profile (sessions/preferences) across the display-name change.
+app.setPath('userData', path.join(app.getPath('appData'), 'Xuly Spa'))
 app.setAppUserModelId('vn.xuly.spa.desktop')
 let server
 app.whenReady().then(async () => {
@@ -13,8 +15,8 @@ app.whenReady().then(async () => {
     const window = new BrowserWindow({
       icon: path.join(__dirname, '..', 'dist', 'icons', 'icon.ico'),
       width: 1280, height: 850, minWidth: 800, minHeight: 600,
-      title: 'Xuly Spa · Phần mềm quản lý Spa', autoHideMenuBar: true,
-      show: false, backgroundColor: '#f7f5f1',
+      title: 'ROSA · Phần mềm quản lý Spa', autoHideMenuBar: true,
+      show: false, backgroundColor: '#f3f7fa',
       webPreferences: { nodeIntegration: false, contextIsolation: true, sandbox: true },
     })
     window.removeMenu()

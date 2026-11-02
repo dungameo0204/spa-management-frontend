@@ -62,8 +62,9 @@ export default function TreatmentCardPanel({ card, branchId, onOpen, showHistory
       </div>
       <div className={`treatment-parent-actions${hasDetail ? ' is-page-actions' : ' is-drawer-actions'}${user?.system_role === 'MANAGER' ? ' is-manager-actions' : ' is-staff-actions'}`}>
         {!hasDetail && (
-          <button type="button" className="text-action treatment-history-toggle" aria-expanded={historyOpen} onClick={() => setHistoryOpen(!historyOpen)}>
-            {historyOpen ? 'Ẩn lịch sử' : 'Xem lịch sử'}
+          <button type="button" className="text-action treatment-history-toggle" aria-label={historyOpen ? 'Ẩn lịch sử' : 'Xem lịch sử'} aria-expanded={historyOpen} onClick={() => setHistoryOpen(!historyOpen)}>
+            <span className="treatment-history-label-full">{historyOpen ? 'Ẩn lịch sử' : 'Xem lịch sử'}</span>
+            <span className="treatment-history-label-compact" aria-hidden="true">Lịch sử</span>
           </button>
         )}
         {canExecuteThisCard ? (

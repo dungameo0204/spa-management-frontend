@@ -1,0 +1,15 @@
+﻿
+> spa-management-frontend@0.1.0 test
+> vitest run src/utils/customerBookings.test.js
+
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90mD:/Project/SpaManagement/spa-management-frontend[39m
+
+ [32mΓ£ô[39m src/utils/customerBookings.test.js [2m([22m[2m14 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m14 passed[39m[22m[90m (14)[39m
+[2m   Start at [22m 10:46:20
+[2m   Duration [22m 7.01s[2m (transform 97ms, setup 870ms, collect 98ms, tests 23ms, environment 3.82s, prepare 860ms)[22m
+
+塅呉䍟䑏㵅ര

@@ -1,0 +1,6 @@
+﻿ src/components/TreatmentCardPanel.css |  1 +
+ src/components/TreatmentCardPanel.jsx |  5 +++--
+ src/styles/mobile-workflows.css       | 13 +++++++++++++
+ src/utils/customerBookings.js         | 11 ++---------
+ src/utils/customerBookings.test.js    |  9 +++++----
+ 5 files changed, 24 insertions(+), 15 deletions(-)

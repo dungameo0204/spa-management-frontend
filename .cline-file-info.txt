@@ -1,0 +1,8 @@
+﻿
+
+FullName   : D:\Project\SpaManagement\spa-management-frontend\tests\e2e\mobile-workflows.spec.js
+Attributes : Archive
+IsReadOnly : False
+
+
+
