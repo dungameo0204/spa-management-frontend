@@ -44,7 +44,7 @@ export default function TreatmentCardPanel({ card, branchId, onOpen, showHistory
     await onUpdated?.(updated)
   }
 
-  return <article className="treatment-card-item treatment-root-panel">
+  return <article className={`treatment-card-item treatment-root-panel ${grouped ? 'is-grouped-treatment' : 'is-single-treatment'}`}>
     <div className="treatment-card-heading treatment-parent-heading">
       <div className="treatment-parent-heading-left">
         <button
@@ -68,7 +68,7 @@ export default function TreatmentCardPanel({ card, branchId, onOpen, showHistory
         )}
         {canExecuteThisCard ? (
           <button className="btn secondary treatment-action-execute" disabled={!embedded && !detail.isSuccess} onClick={() => setExecuting(!executing)}>
-            {user.system_role === 'MANAGER' ? 'Thực hiện' : 'Thực hiện hôm nay'}{!executing && selectedIds.length > 0 ? ` (${selectedIds.length})` : ''}
+            {'Thực hiện'}{!executing && selectedIds.length > 0 ? ` (${selectedIds.length})` : ''}
           </button>
         ) : hasDetail ? (
           <span className="treatment-btn-slot" aria-hidden="true" />
@@ -79,7 +79,7 @@ export default function TreatmentCardPanel({ card, branchId, onOpen, showHistory
           </button>
         )}
         {canCloseTreatment(current) && !current.parent_treatment_id && ['MANAGER', 'STAFF'].includes(user.system_role) ? (
-          <button className="text-action treatment-close-action" disabled={!embedded && !detail.isSuccess} onClick={() => setClosing(true)}>
+          <button className="text-action treatment-close-action" aria-label="Ký kết thúc liệu trình" disabled={!embedded && !detail.isSuccess} onClick={() => setClosing(true)}>
             Ký kết thúc liệu trình
           </button>
         ) : hasDetail ? (

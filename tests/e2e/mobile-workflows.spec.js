@@ -1,10 +1,11 @@
 import { test, expect } from './fixtures'
 
-async function setup(page, { single = false, completedCount = 0, history = false } = {}) {
+async function setup(page, { single = false, completedCount = 0, history = false, closable = false } = {}) {
   const day = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())
   const child = { id: 11, customer_id: 1, customer_name: 'Khách mobile', product_name: 'Chăm sóc phục hồi chuyên sâu và điều trị da nhạy cảm', branch_id: 1, remaining_sessions: 5, total_sessions: 6, histories: [] }
   const card = { id: 10, customer_id: 1, customer_name: 'Khách mobile', product_name: 'Gói chăm sóc chuyên sâu dành cho khách hàng mobile', branch_id: 1, created_at: day, children: [child], histories: [] }
   if (single) Object.assign(card, { children: [], total_sessions: 10, remaining_sessions: 4 })
+  if (closable) Object.assign(single ? card : child, { total_sessions: null, remaining_sessions: null })
   if (history) {
     const histories = [{ id: 50, execution_date: day, branch_id: 1, branch_name: 'Cơ sở chăm sóc và phục hồi da chuyên sâu', staffs: [], note: 'Theo dõi da' }]
     if (single) card.histories = histories
@@ -30,6 +31,67 @@ async function setup(page, { single = false, completedCount = 0, history = false
                 : []
     return route.fulfill({ json: { data, total: Array.isArray(data) ? data.length : 1, totalPages: 1 } })
   })
+}
+
+for (const width of [320, 360, 390, 430]) {
+  test(`single note and signature share a row above confirmation at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 })
+    await setup(page, { single: true })
+    await page.goto('/treatments')
+    await page.locator('.treatment-service-badge').first().click()
+    const panel = page.locator('.is-single-treatment').first()
+    await panel.getByRole('button', { name: 'Thực hiện', exact: true }).click()
+    const form = panel.locator('.treatment-execution-form')
+    const noteButton = form.getByRole('button', { name: 'Ghi chú', exact: true })
+    const signature = form.getByRole('button', { name: 'Khách hàng ký tên', exact: true })
+    const noteBox = await noteButton.boundingBox()
+    const signatureBox = await signature.boundingBox()
+    expect(Math.abs(noteBox.y + noteBox.height / 2 - signatureBox.y - signatureBox.height / 2)).toBeLessThan(2)
+    await noteButton.click()
+    const note = form.getByRole('textbox', { name: 'Ghi chú buổi thực hiện' })
+    await note.fill('Theo dõi da')
+    const textareaBox = await note.boundingBox()
+    const actionsBox = await form.locator('.treatment-execution-actions').boundingBox()
+    expect(textareaBox.y + textareaBox.height).toBeLessThanOrEqual(actionsBox.y)
+    await form.getByRole('button', { name: 'Ẩn ghi chú', exact: true }).click()
+    await expect(note).toBeHidden()
+    await form.getByRole('button', { name: 'Ghi chú ✓', exact: true }).click()
+    await expect(note).toHaveValue('Theo dõi da')
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    await page.screenshot({ path: `test-results/single-note-signature-${width}.png`, fullPage: true })
+  })
+}
+
+for (const width of [320, 360, 390, 430, 1280]) {
+  for (const single of [false, true]) {
+    test(`closable ${single ? 'single' : 'grouped'} actions fit ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 })
+      await setup(page, { single, closable: true })
+      await page.goto('/treatments')
+      await page.locator('.treatment-service-badge').first().click()
+      const panel = page.locator(`.treatment-root-panel.is-${single ? 'single' : 'grouped'}-treatment`).first()
+      const buttons = panel.locator('.is-page-actions > button')
+      await expect(buttons).toHaveCount(3)
+      const geometry = await buttons.evaluateAll(nodes => nodes.map(node => {
+        const rect = node.getBoundingClientRect()
+        const style = getComputedStyle(node)
+        return { x: rect.x, y: rect.y, right: rect.right, height: rect.height, fontSize: style.fontSize, fits: node.scrollWidth <= node.clientWidth + 1 }
+      }))
+      expect(geometry.every(box => Math.abs(box.y - geometry[0].y) < 2)).toBe(true)
+      expect(geometry[0].right).toBeLessThanOrEqual(geometry[1].x)
+      expect(geometry[1].right).toBeLessThanOrEqual(geometry[2].x)
+      expect(geometry.every(box => box.fits)).toBe(true)
+      if (!single && width < 768) {
+        expect(geometry.every(box => box.height === 30 && box.fontSize === '11px')).toBe(true)
+        expect(geometry[0].right - geometry[0].x).toBeLessThan(85)
+      }
+      await expect(panel.locator('.treatment-close-action')).toHaveText('Ký kết thúc liệu trình')
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+      await page.screenshot({ path: `test-results/closable-${single ? 'single' : 'grouped'}-${width}.png`, fullPage: true })
+      await panel.getByRole('button', { name: 'Ký kết thúc liệu trình', exact: true }).click()
+      await expect(page.getByRole('dialog', { name: 'Ký kết thúc liệu trình', exact: true })).toBeVisible()
+    })
+  }
 }
 
 test('desktop workflow geometry is unchanged by mobile overrides', async ({ page }) => {

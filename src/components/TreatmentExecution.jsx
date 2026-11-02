@@ -112,7 +112,7 @@ export default function TreatmentExecution({ card, user, branchId, onUpdated, on
           </div>
         </div>
       ) : (
-        /* Thẻ đơn (như pnp): Cho hết lên 1 dòng ngang */
+        /* Staff selection precedes the shared note/signature tools. */
         <div className="treatment-single-execution-row">
           {manager && <div className={`treatment-execution-manager-row is-single-manager${showDate ? '' : ' no-date'}`}>
             <label className="field compact-field branch-field"><span>Cơ sở thực hiện</span><MobileSelect aria-label="Cơ sở thực hiện" value={branch} onChange={event => { setBranch(event.target.value); setSelected(current => Object.fromEntries(Object.keys(current).map(id => [id, []]))) }}><option value="">Chọn cơ sở</option>{branches.data?.data?.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</MobileSelect></label>
@@ -123,22 +123,21 @@ export default function TreatmentExecution({ card, user, branchId, onUpdated, on
               <InvoiceChildStaffPicker name={available[0].product_name} selected={selected[available[0].id]} onChange={staffs => setSelected({ [available[0].id]: staffs })} branchId={branch || 'required'} />
             </div>
           )}
-          <button type="button" className={`session-followup-button${note.trim() ? ' has-value' : ''}`} onClick={() => setMetadataOpen(open => !open)}>{metadataOpen ? 'Ẩn ghi chú' : note.trim() ? 'Ghi chú ✓' : 'Ghi chú'}</button>
-          <div className="treatment-execution-signature"><SignaturePad customerName={card.customer_name} productName={card.product_name} disabled={pending || blocked} onChange={setSignature} /></div>
-          <div className="treatment-single-actions">
-            <button type="button" className="btn secondary" disabled={pending} onClick={onCancel}>Đóng</button>
-            <button type="button" className="btn primary" disabled={pending || blocked || !chosen.length || !navigator.onLine} onClick={() => submit()}>{pending ? 'Đang ghi nhận...' : manager ? 'Xác nhận' : 'Xác nhận hôm nay'}</button>
-          </div>
         </div>
       )}
 
+      {!grouped && <div className="treatment-session-tools">
+        <button type="button" className={`session-followup-button${note.trim() ? ' has-value' : ''}`} onClick={() => setMetadataOpen(open => !open)}>{metadataOpen ? 'Ẩn ghi chú' : note.trim() ? 'Ghi chú ✓' : 'Ghi chú'}</button>
+        <span className={`treatment-signature-state${signature ? ' has-value' : ''}`}>{signature ? 'Đã ký ✓' : 'Chưa ký'}</span>
+        <div className="treatment-execution-signature"><SignaturePad customerName={card.customer_name} productName={card.product_name} disabled={pending || blocked} onChange={setSignature} /></div>
+      </div>}
       {!grouped && metadataOpen && (
         <label className="field treatment-execution-note treatment-single-note">Ghi chú buổi thực hiện<textarea rows={2} value={note} onChange={event => setNote(event.target.value)} placeholder="Lưu ý cho lần thực hiện này…" /></label>
       )}
     </fieldset>
 
     {message && <p role="status" className="session-dialog-message">{message}</p>}
-    {grouped && <div className="treatment-execution-actions"><button type="button" className="btn secondary" disabled={pending} onClick={onCancel}>Đóng</button><button type="button" className="btn primary" disabled={pending || blocked || !chosen.length || !navigator.onLine} onClick={() => submit()}>{pending ? 'Đang ghi nhận...' : manager ? 'Xác nhận' : 'Xác nhận hôm nay'}</button></div>}
+    <div className="treatment-execution-actions"><button type="button" className="btn secondary" disabled={pending} onClick={onCancel}>Đóng</button><button type="button" className="btn primary" disabled={pending || blocked || !chosen.length || !navigator.onLine} onClick={() => submit()}>{pending ? 'Đang ghi nhận...' : manager ? 'Xác nhận' : 'Xác nhận hôm nay'}</button></div>
     {confirm && <ConfirmDialog title="Ghi nhận buổi chưa có chữ ký?" message="Bạn có chắc chắn muốn ghi nhận những dịch vụ đã chọn mà không có chữ ký khách hàng? Có thể ký bổ sung sau." cancelLabel="Quay lại ký" confirmLabel="Ghi nhận không có chữ ký" onCancel={() => setConfirm(false)} onConfirm={() => submit(true)} />}
   </div>
 }

@@ -222,6 +222,11 @@
   .treatment-root-panel .treatment-execution-actions,
   .treatment-root-panel .treatment-single-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; width: 100%; margin: 12px 0 0; scroll-margin-block: 90px; }
   .treatment-root-panel .treatment-session-tools { flex-wrap: wrap !important; min-width: 0; max-width: 100%; height: auto !important; gap: 8px !important; }
+  .treatments-page .treatment-root-panel .treatment-session-tools { gap: 5px !important; }
+  .treatments-page .treatment-root-panel .treatment-session-tools > .session-followup-button,
+  .treatments-page .treatment-root-panel .treatment-session-tools .signature-draft-actions .btn {
+    padding: 3px 5px !important; font-size: 11px !important;
+  }
   .treatment-root-panel .treatment-signature-state { background: transparent !important; border: 0; border-radius: 0 !important; padding: 0 !important; }
   .treatment-root-panel .treatment-execution-actions > .btn,
   .treatment-root-panel .treatment-single-actions > .btn { flex: 0 1 auto; min-height: 36px; }
@@ -263,4 +268,134 @@
 
 @media (max-width: 340px) {
   .customer-overview .treatment-root-panel .treatment-execution-manager-row { grid-template-columns: minmax(0, 1fr) !important; }
+}
+
+/* Treatment directory on phones: keep the customer summary and card title easy to scan.
+   Scope these changes to /treatments; the same panels also appear in customer overview. */
+@media (max-width: 767px) {
+  .treatments-page .page-heading { margin-bottom: 12px; }
+  .treatments-page .page-heading p { margin-bottom: 0; }
+  .treatments-page .page-heading-actions { margin-top: 12px; }
+  .treatments-page .page-heading-actions .btn { min-width: 0; min-height: 40px; }
+  .treatments-page .date-range-filter {
+    flex-direction: row !important; align-items: center !important;
+    gap: 8px !important; margin: 0 0 12px !important;
+    padding: 8px !important; width: 100% !important;
+  }
+  .treatments-page .date-range-filter .field {
+    flex: 1 1 0; flex-direction: column !important; align-items: stretch !important;
+    gap: 4px !important; min-width: 0; width: auto !important;
+  }
+  .treatments-page .date-range-filter .field input[type="date"] {
+    flex: none !important; width: 100% !important; min-width: 0 !important;
+    max-width: none !important; font-size: 12px !important; padding-inline: 5px !important;
+  }
+  .treatments-page .treatment-customers .list-toolbar {
+    display: flex; align-items: center; gap: 8px; padding: 10px;
+  }
+  .treatments-page .treatment-customers .search-box { min-width: 0; flex: 1 1 auto; }
+  .treatments-page .treatment-customers .list-count { flex: none; font-size: 11px; }
+  .treatments-page .treatment-customers tr.clickable {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 3px 8px; padding: 7px 10px;
+  }
+  .treatments-page .treatment-customers tr.clickable td[data-label="Khách hàng"] {
+    justify-content: flex-start; gap: 10px; font-size: 15px;
+  }
+  .treatments-page .treatment-customers tr.clickable td[data-label="Khách hàng"]::before { display: none; }
+  .treatments-page .treatment-customers tr.clickable td[data-label="Số điện thoại"],
+  .treatments-page .treatment-customers tr.clickable td[data-label="Tiền nợ"] {
+    display: block; min-width: 0; text-align: left; color: var(--muted);
+  }
+  .treatments-page .treatment-customers tr.clickable td[data-label="Số điện thoại"]::before,
+  .treatments-page .treatment-customers tr.clickable td[data-label="Tiền nợ"]::before {
+    display: inline; margin-right: 5px; font-size: 11px;
+  }
+  .treatments-page .treatment-customers tr.clickable td[data-label="Dịch vụ"],
+  .treatments-page .treatment-customers tr.clickable td[data-label="Đã hoàn thành"] {
+    grid-column: auto; display: flex; flex-direction: column; align-items: stretch; gap: 5px;
+    min-width: 0; overflow: hidden;
+  }
+  .treatments-page .treatment-customers tr.clickable td[data-label="Dịch vụ"]::before,
+  .treatments-page .treatment-customers tr.clickable td[data-label="Đã hoàn thành"]::before { flex-basis: auto; }
+  .treatments-page .treatment-customers .treatment-service-badge,
+  .treatments-page .treatment-customers .treatment-finished-action {
+    justify-content: space-between; width: 100%; min-width: 0; min-height: 32px;
+    padding: 3px 5px; font-size: 10px; text-align: left; word-break: break-word;
+  }
+  .treatments-page .treatment-customers .treatment-service-badge svg,
+  .treatments-page .treatment-customers .treatment-finished-action svg { width: 12px; height: 12px; }
+  .treatments-page .treatment-customers .treatment-expanded-row > td { padding: 8px !important; }
+  .treatments-page .treatment-customers .treatment-card-list { gap: 8px; }
+  .treatments-page .treatment-root-panel .treatment-parent-heading-left { min-width: 0; }
+  .treatments-page .treatment-root-panel .treatment-parent-heading .treatment-parent-title {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 3px;
+    min-height: 0; line-height: 1.45;
+  }
+  .treatments-page .treatment-root-panel .treatment-parent-title .small-muted {
+    display: block; margin: 0; font-size: 12px; font-weight: 500;
+  }
+  .treatments-page .treatment-root-panel .treatment-parent-actions > .btn,
+  .treatments-page .treatment-root-panel .treatment-parent-actions > .text-action {
+    min-height: 32px; padding: 4px 7px; font-size: 11px;
+  }
+  /* Closable cards need three button columns even at 320px. */
+  .treatments-page .treatment-root-panel .treatment-parent-actions.is-page-actions:has(.treatment-close-action) {
+    display: grid !important; grid-template-columns: minmax(0, 1.15fr) minmax(0, .6fr) minmax(0, 1.3fr) !important;
+    width: 100% !important; flex: none !important; gap: 4px !important;
+  }
+  .treatments-page .treatment-root-panel .treatment-parent-actions.is-page-actions:has(.treatment-close-action) > button {
+    width: 100% !important; min-width: 0; min-height: 36px; height: 100%;
+    padding: 3px 4px !important; font-size: 10px !important; line-height: 1.2;
+    white-space: normal !important; overflow-wrap: anywhere;
+  }
+  .treatments-page .treatment-root-panel .treatment-parent-actions.is-page-actions .treatment-close-action {
+    white-space: normal !important; padding: 3px 4px !important; font-size: 10px !important;
+  }
+  .treatments-page .treatment-root-panel.is-single-treatment .today-execution-badge { font-size: 10px; padding: 1px 5px; }
+  .treatments-page .treatment-root-panel.is-single-treatment .treatment-execution-form.is-single-form {
+    padding: 6px 8px !important; margin-top: 4px;
+  }
+  .treatments-page .treatment-root-panel.is-single-treatment .treatment-single-execution-row { gap: 5px !important; }
+  .treatments-page .treatment-root-panel.is-single-treatment .treatment-single-execution-row > .session-followup-button,
+  .treatments-page .treatment-root-panel.is-single-treatment .treatment-single-execution-row .signature-draft-actions .btn {
+    height: 30px !important; min-height: 30px !important; max-height: 30px !important;
+    padding: 0 8px !important; font-size: 11px !important;
+  }
+  .treatments-page .treatment-root-panel.is-single-treatment .treatment-single-actions {
+    margin-top: 4px !important; gap: 5px !important;
+  }
+  .treatments-page .treatment-root-panel.is-single-treatment .treatment-single-actions .btn {
+    height: 32px !important; min-height: 32px !important; max-height: 32px !important;
+    padding: 0 9px !important; font-size: 11px !important;
+  }
+  .treatments-page .treatment-root-panel.is-single-treatment .treatment-history { padding: 6px 8px; }
+  .treatments-page .treatment-root-panel.is-single-treatment .treatment-history-compact-item { padding: 5px 6px; font-size: 11px; }
+  .treatments-page .treatment-root-panel.is-single-treatment .treatment-history-compact-top { gap: 4px; }
+  .treatments-page .treatment-root-panel.is-single-treatment .treatment-history-meta { gap: 4px; }
+  .treatments-page .treatment-root-panel.is-single-treatment .treatment-history-actions { gap: 4px; margin-left: 0; }
+  .treatments-page .treatment-root-panel.is-single-treatment .treatment-history-compact-item .treatment-signature-badge { padding: 1px 5px; font-size: 10px; }
+  .treatments-page .treatment-root-panel.is-single-treatment .treatment-history-actions .btn.compact,
+  .treatments-page .treatment-root-panel.is-single-treatment .treatment-history-actions .session-followup-button.compact {
+    min-height: 28px; padding: 3px 5px; font-size: 10px; white-space: normal;
+  }
+}
+/* Phone treatment directory: compact three-action row for a closable grouped card. */
+@media (max-width: 767px) {
+  .treatments-page .treatment-root-panel.is-grouped-treatment .treatment-parent-actions.is-page-actions:has(.treatment-close-action) {
+    grid-template-columns: max-content max-content minmax(0, 1fr) !important;
+  }
+  .treatments-page .treatment-root-panel.is-grouped-treatment .treatment-parent-actions.is-page-actions:has(.treatment-close-action) > button {
+    min-height: 30px !important;
+    height: 30px !important;
+    padding: 1px 7px !important;
+    font-size: 11px !important;
+    line-height: 1.15 !important;
+    white-space: nowrap !important;
+  }
+  .treatments-page .treatment-root-panel.is-grouped-treatment .treatment-parent-actions.is-page-actions:has(.treatment-close-action) > button.treatment-close-action {
+    padding: 1px 3px !important;
+    font-size: 11px !important;
+    white-space: normal !important;
+  }
 }
