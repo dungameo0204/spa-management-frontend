@@ -47,7 +47,7 @@ for (const width of [1024, 1280, 1440, 1920]) test(`standalone amendment has inl
   await page.getByRole('button', { name: 'Chỉnh sửa', exact: true }).click()
   const line = page.locator('.compact-invoice-line')
   const count = line.getByRole('spinbutton', { name: 'Số buổi liệu trình' })
-  const lifetime = line.getByRole('checkbox', { name: 'Trọn đời', exact: true })
+  const lifetime = line.getByRole('checkbox', { name: 'Không giới hạn', exact: true })
   await expect(count).toHaveValue('5')
   await expectDesktopInvoiceLine(line)
   const a = await lifetime.boundingBox(), b = await count.boundingBox()

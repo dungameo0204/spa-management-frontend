@@ -25,10 +25,9 @@ export function canEditSameDay(record, now = new Date()) {
   const day = dateOnly(date)
   return Boolean(day && day === dateOnly(now))
 }
-export function canUndoTreatmentExecution(user, history, now = new Date()) {
+export function canUndoTreatmentExecution(user, history) {
   if (!history) return false
   if (user?.system_role === 'MANAGER') return true
   return user?.system_role === 'STAFF' && user.branch_id != null && history.branch_id != null &&
-    Number(user.branch_id) === Number(history.branch_id) &&
-    canEditSameDay(history, now) && canEditSameDay({ created_at: history.execution_date }, now)
+    Number(user.branch_id) === Number(history.branch_id)
 }

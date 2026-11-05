@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { canAccess, canEditSameDay, canUndoTreatmentExecution, resolveBranch } from './permissions'
+import { canAccess, canUndoTreatmentExecution, resolveBranch } from './permissions'
 const staff = { system_role: 'STAFF', branch_id: 7 }
 const manager = { system_role: 'MANAGER', branch_id: null }
 describe('phân quyền sản phẩm', () => {
@@ -25,24 +25,13 @@ describe('phân quyền sản phẩm', () => {
 describe('quyền hoàn tác buổi thực hiện', () => {
   const now = new Date('2026-10-28T05:00:00Z')
   const history = { branch_id: 7, execution_date: '2026-10-28 09:00:00', created_at: '2026-10-28 09:01:00' }
-  it('cho nhân viên hoàn tác trong ngày tại cơ sở trong token', () => {
+  it('cho nhân viên hoàn tác tại cơ sở trong token, không giới hạn ngày', () => {
     expect(canUndoTreatmentExecution(staff, history, now)).toBe(true)
-  })
-  it('dùng ngày Việt Nam cho cả ngày tạo và ngày thực hiện tại nửa đêm', () => {
-    const midnight = new Date('2026-10-27T17:00:00Z')
-    const execution = { branch_id: 7, execution_date: '2026-10-28', created_at: '2026-10-27T17:00:00Z' }
-    expect(canEditSameDay(execution, midnight)).toBe(true)
-    expect(canUndoTreatmentExecution(staff, execution, midnight)).toBe(true)
-    expect(canUndoTreatmentExecution(staff, { ...execution, created_at: '2026-10-27T16:59:59Z' }, midnight)).toBe(false)
-    expect(canUndoTreatmentExecution(staff, { ...execution, execution_date: '2026-10-27T16:59:59Z' }, midnight)).toBe(false)
-    expect(canUndoTreatmentExecution(staff, execution, new Date('2026-10-28T17:00:00Z'))).toBe(false)
+    expect(canUndoTreatmentExecution(staff, { branch_id: 7, execution_date: '2020-01-01', created_at: '2020-01-01' }, now)).toBe(true)
   })
   it.each([
     { branch_id: 8 }, { branch_id: null },
-    { execution_date: '2026-10-27 09:00:00' }, { execution_date: '2026-10-29 09:00:00' },
-    { created_at: '2026-10-27 09:00:00' }, { created_at: '2026-10-29 09:00:00' },
-    { created_at: undefined }, { created_at: 'invalid' }, { execution_date: undefined },
-  ])('chặn nhân viên khi lịch sử không đủ điều kiện: %j', changes => {
+  ])('chặn nhân viên khi lịch sử khác hoặc thiếu chi nhánh: %j', changes => {
     expect(canUndoTreatmentExecution(staff, { ...history, ...changes }, now)).toBe(false)
   })
   it('không giới hạn ngày hoặc cơ sở với quản lý', () => {

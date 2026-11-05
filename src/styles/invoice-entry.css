@@ -622,22 +622,23 @@
 
   /* When standalone service has lifetime choice on Row 1 */
   .invoice-drawer .invoice-line-controls .product-entry-row:has(.invoice-lifetime-choice) .product-picker-stack {
-    grid-column: 1 / 5;
+    grid-column: 1 / 4;
   }
   .invoice-drawer .invoice-line-controls .product-entry-row:has(.invoice-lifetime-choice) .invoice-quantity-options {
-    grid-column: 5 / 9;
+    grid-column: 4 / 9;
   }
   .invoice-drawer .invoice-lifetime-choice {
-    font-size: 10px;
-    width: auto;
-    min-width: 0;
-    flex: none;
+    width: 68px;
+    min-width: 68px;
+    flex: 0 0 68px;
   }
   .invoice-drawer .invoice-lifetime-choice span {
     font-size: 10px;
-    height: 12px;
+    height: 24px;
     line-height: 12px;
+    white-space: normal;
   }
+  .invoice-drawer .invoice-line-controls .product-entry-row:has(.invoice-lifetime-choice) .quantity-field { width:64px; min-width:64px; flex:0 0 64px; }
   .invoice-drawer .invoice-lifetime-choice input[type=checkbox] {
     margin: 3px 0;
     width: 15px;

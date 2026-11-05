@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, expect, it, vi } from 'vitest'
 import SearchPicker from './SearchPicker'
 
-vi.mock('../api/resources', () => ({ listResource: vi.fn(async () => ({ data: [{ id: 9, name: 'Chăm sóc da' }], totalPages: 1 })) }))
+vi.mock('../api/resources', () => ({ listResource: vi.fn(async resource => ({ data: resource === 'customers' ? [{ id: 7, fullname: 'Nguyễn An', phone_number: '0901000000', profile_code: 'HS-007' }] : [{ id: 9, name: 'Chăm sóc da' }], totalPages: 1 })) }))
 afterEach(cleanup)
 
 it('đóng khi bấm bên ngoài và chỉ hiện lựa chọn tất cả khi được yêu cầu', async () => {
@@ -28,4 +28,15 @@ it('đóng khi bấm bên ngoài và chỉ hiện lựa chọn tất cả khi đ
   await user.click(filterPicker)
   expect(formPicker).toHaveAttribute('aria-expanded', 'false')
   expect(filterPicker).toHaveAttribute('aria-expanded', 'true')
+})
+
+it('hiển thị mã hồ sơ và hướng dẫn tìm theo mã khi chọn khách hàng', async () => {
+  const user = userEvent.setup()
+  render(<QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
+    <SearchPicker resource="customers" label="Khách hàng" value="" initialLabel="" onChange={vi.fn()} />
+  </QueryClientProvider>)
+  const picker = screen.getByRole('combobox', { name: 'Tìm khách hàng' })
+  expect(picker).toHaveAttribute('placeholder', 'Tìm theo tên, SĐT hoặc mã hồ sơ...')
+  await user.click(picker)
+  expect(await screen.findByRole('option', { name: 'Nguyễn An · 0901000000 · Mã hồ sơ: HS-007' })).toBeInTheDocument()
 })

@@ -3,7 +3,7 @@
   "private": true,
   "description": "ROSA - Phần mềm quản lý bán hàng, khách hàng và vận hành spa",
   "author": "ROSA",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "type": "module",
   "main": "desktop/main.cjs",
   "scripts": {
@@ -62,6 +62,7 @@
       "icon": "public/icons/icon.ico",
       "signExecutable": false
     },
+    "publish": { "provider": "github", "owner": "dungameo0204", "repo": "rosa-release" },
     "nsis": { "artifactName": "ROSA-Setup-${version}.exe", "oneClick": false, "perMachine": false },
     "portable": {
       "artifactName": "ROSA-${version}-portable.exe"

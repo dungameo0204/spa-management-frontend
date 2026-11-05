@@ -7,10 +7,10 @@ import InvoiceChildStaffPicker from './InvoiceChildStaffPicker'
 import MobileSelect from './MobileSelect'
 import SignaturePad from './SignaturePad'
 import ConfirmDialog from './ConfirmDialog'
+import DateInput from './DateInput'
 
 export default function TreatmentExecution({ card, user, branchId, onUpdated, onCancel, initialSelectedIds = [] }) {
   const manager = user?.system_role === 'MANAGER', grouped = Boolean(card.children?.length)
-  const showDate = Boolean(manager)
   const available = treatmentCards(card).filter(canExecuteCard)
 
   const initialSelected = {}
@@ -45,7 +45,8 @@ export default function TreatmentExecution({ card, user, branchId, onUpdated, on
         const payload = {
           treatment_id: item.id,
           staffs: selected[item.id],
-          ...(manager ? { branch_id: Number(branch), execution_date: date } : {}),
+          ...(manager ? { branch_id: Number(branch) } : {}),
+          execution_date: date,
           ...(note.trim() ? (i === 0 ? { note: note.trim() } : {}) : {}),
           ...(signature ? { customer_signature_svg: signature } : {}),
         }
@@ -98,10 +99,10 @@ export default function TreatmentExecution({ card, user, branchId, onUpdated, on
           </div>
           <div className="treatment-execution-right-col">
             <div className="treatment-execution-controls-row">
-              {manager && <div className={`treatment-execution-manager-row${showDate ? '' : ' no-date'}`}>
-                <label className="field compact-field branch-field"><span>Cơ sở thực hiện</span><MobileSelect aria-label="Cơ sở thực hiện" value={branch} onChange={event => { setBranch(event.target.value); setSelected(current => Object.fromEntries(Object.keys(current).map(id => [id, []]))) }}><option value="">Chọn cơ sở</option>{branches.data?.data?.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</MobileSelect></label>
-                {showDate && <label className="field compact-field date-field"><span>Ngày thực hiện</span><input aria-label="Ngày thực hiện" type="date" required value={date} onChange={event => setDate(event.target.value)} /></label>}
-              </div>}
+              <div className={`treatment-execution-manager-row${manager ? '' : ' no-branch'}`}>
+                {manager && <label className="field compact-field branch-field"><span>Cơ sở thực hiện</span><MobileSelect aria-label="Cơ sở thực hiện" value={branch} onChange={event => { setBranch(event.target.value); setSelected(current => Object.fromEntries(Object.keys(current).map(id => [id, []]))) }}><option value="">Chọn cơ sở</option>{branches.data?.data?.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</MobileSelect></label>}
+                <label className="field compact-field date-field"><span>Ngày thực hiện</span><DateInput aria-label="Ngày thực hiện" required value={date} onChange={setDate} /></label>
+              </div>
               <div className="treatment-session-tools">
                 <button type="button" className={`session-followup-button${note.trim() ? ' has-value' : ''}`} onClick={() => setMetadataOpen(open => !open)}>{metadataOpen ? 'Ẩn ghi chú' : note.trim() ? 'Ghi chú ✓' : 'Ghi chú'}</button>
                 <span className={`treatment-signature-state${signature ? ' has-value' : ''}`}>{signature ? 'Đã ký ✓' : 'Chưa ký'}</span>
@@ -114,10 +115,10 @@ export default function TreatmentExecution({ card, user, branchId, onUpdated, on
       ) : (
         /* Staff selection precedes the shared note/signature tools. */
         <div className="treatment-single-execution-row">
-          {manager && <div className={`treatment-execution-manager-row is-single-manager${showDate ? '' : ' no-date'}`}>
-            <label className="field compact-field branch-field"><span>Cơ sở thực hiện</span><MobileSelect aria-label="Cơ sở thực hiện" value={branch} onChange={event => { setBranch(event.target.value); setSelected(current => Object.fromEntries(Object.keys(current).map(id => [id, []]))) }}><option value="">Chọn cơ sở</option>{branches.data?.data?.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</MobileSelect></label>
-            {showDate && <label className="field compact-field date-field"><span>Ngày thực hiện</span><input aria-label="Ngày thực hiện" type="date" required value={date} onChange={event => setDate(event.target.value)} /></label>}
-          </div>}
+          <div className={`treatment-execution-manager-row is-single-manager${manager ? '' : ' no-branch'}`}>
+            {manager && <label className="field compact-field branch-field"><span>Cơ sở thực hiện</span><MobileSelect aria-label="Cơ sở thực hiện" value={branch} onChange={event => { setBranch(event.target.value); setSelected(current => Object.fromEntries(Object.keys(current).map(id => [id, []]))) }}><option value="">Chọn cơ sở</option>{branches.data?.data?.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</MobileSelect></label>}
+            <label className="field compact-field date-field"><span>Ngày thực hiện</span><DateInput aria-label="Ngày thực hiện" required value={date} onChange={setDate} /></label>
+          </div>
           {available[0] && Object.hasOwn(selected, available[0].id) && (
             <div className="treatment-single-staff">
               <InvoiceChildStaffPicker name={available[0].product_name} selected={selected[available[0].id]} onChange={staffs => setSelected({ [available[0].id]: staffs })} branchId={branch || 'required'} />
@@ -137,7 +138,7 @@ export default function TreatmentExecution({ card, user, branchId, onUpdated, on
     </fieldset>
 
     {message && <p role="status" className="session-dialog-message">{message}</p>}
-    <div className="treatment-execution-actions"><button type="button" className="btn secondary" disabled={pending} onClick={onCancel}>Đóng</button><button type="button" className="btn primary" disabled={pending || blocked || !chosen.length || !navigator.onLine} onClick={() => submit()}>{pending ? 'Đang ghi nhận...' : manager ? 'Xác nhận' : 'Xác nhận hôm nay'}</button></div>
+    <div className="treatment-execution-actions"><button type="button" className="btn secondary" disabled={pending} onClick={onCancel}>Đóng</button><button type="button" className="btn primary" disabled={pending || blocked || !chosen.length || !navigator.onLine} onClick={() => submit()}>{pending ? 'Đang ghi nhận...' : 'Xác nhận'}</button></div>
     {confirm && <ConfirmDialog title="Ghi nhận buổi chưa có chữ ký?" message="Bạn có chắc chắn muốn ghi nhận những dịch vụ đã chọn mà không có chữ ký khách hàng? Có thể ký bổ sung sau." cancelLabel="Quay lại ký" confirmLabel="Ghi nhận không có chữ ký" onCancel={() => setConfirm(false)} onConfirm={() => submit(true)} />}
   </div>
 }

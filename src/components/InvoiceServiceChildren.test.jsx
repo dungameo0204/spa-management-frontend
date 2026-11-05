@@ -16,11 +16,11 @@ it('only edits child counts and explicitly toggles lifetime as null', async () =
   const props = { children: [{ product_id: 12, total_sessions: 5 }], queries: [{ data: { id: 12, name: 'Điện di' } }], onChange }
   const { rerender } = render(<InvoiceServiceChildren {...props} />, { wrapper: Wrapper })
   expect(screen.getAllByRole('spinbutton')).toHaveLength(1)
-  await actor.click(screen.getByRole('checkbox', { name: 'Trọn đời Điện di' }))
+  await actor.click(screen.getByRole('checkbox', { name: 'Không giới hạn Điện di' }))
   expect(onChange).toHaveBeenLastCalledWith([{ product_id: 12, total_sessions: null }])
   rerender(<InvoiceServiceChildren {...props} children={[{ product_id: 12, total_sessions: null }]} />)
   expect(screen.queryByRole('spinbutton')).not.toBeInTheDocument()
-  await actor.click(screen.getByRole('checkbox', { name: 'Trọn đời Điện di' }))
+  await actor.click(screen.getByRole('checkbox', { name: 'Không giới hạn Điện di' }))
   expect(onChange).toHaveBeenLastCalledWith([{ product_id: 12, total_sessions: 1 }])
 })
 

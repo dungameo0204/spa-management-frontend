@@ -40,7 +40,7 @@ test('lịch sử khách hiển thị một dòng dịch vụ kèm liệu trình
   await page.getByRole('checkbox', { name: 'Làm hôm nay' }).check()
   await expect(page.getByText('Đang chuẩn bị ghi nhận thêm 1 buổi hôm nay. Kiểm tra lại lịch sử trước khi xác nhận.')).toBeVisible()
   await expect(page.getByRole('checkbox', { name: 'Đang chọn ghi nhận hôm nay' }).locator('..')).toHaveClass(/is-selected/)
-  await page.getByRole('button', { name: 'Xác nhận hôm nay' }).click()
+  await page.getByRole('button', { name: 'Xác nhận', exact: true }).click()
   await expect(page.getByRole('alertdialog')).toContainText('Bạn có chắc chắn muốn ghi nhận buổi mà không có chữ ký khách hàng?')
   await page.getByRole('button', { name: 'Ghi nhận không có chữ ký' }).click()
   await expect(page.getByText('Đã ghi nhận một buổi thực hiện.')).toHaveClass(/success-alert/)

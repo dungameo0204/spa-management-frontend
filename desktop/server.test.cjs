@@ -6,8 +6,8 @@ const path = require('node:path')
 const http = require('node:http')
 const { backendUrl, startServer } = require('./server.cjs')
 
-test('backend mặc định dùng môi trường Rosa local', () => {
-  assert.equal(backendUrl().origin, 'http://127.0.0.1:5002')
+test('backend mặc định dùng API ROSA production public', () => {
+  assert.equal(backendUrl().origin, 'https://api-spa-rosa.infinityhavocx.men')
 })
 
 test('từ chối URL backend không hợp lệ', () => {

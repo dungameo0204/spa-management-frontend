@@ -227,26 +227,17 @@
   box-sizing: border-box !important;
   border: 1px solid var(--line) !important;
 }
-.treatment-execution-manager-row .compact-field input[type="date"] {
+.treatment-execution-manager-row .compact-field .date-input input {
   height: 34px !important;
   min-height: 34px !important;
   max-height: 34px !important;
   line-height: 34px !important;
-  padding: 0 8px !important;
+  padding: 0 36px 0 8px !important;
   font-size: 13px !important;
   white-space: nowrap !important;
   -webkit-appearance: none !important;
   appearance: none !important;
   width: 100% !important;
-}
-.treatment-execution-manager-row .compact-field input[type="date"]::-webkit-date-and-time-value {
-  line-height: normal !important;
-  min-height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  white-space: nowrap !important;
-  display: flex !important;
-  align-items: center !important;
 }
 .treatment-execution-manager-row .compact-field .mobile-select-trigger {
   display: flex !important;
@@ -518,7 +509,7 @@
   max-width: 230px !important;
   flex: 0 0 205px !important;
 }
-.customer-overview .treatment-execution-manager-row .compact-field.date-field input[type="date"] {
+.customer-overview .treatment-execution-manager-row .compact-field.date-field .date-input {
   min-width: 195px !important;
   width: 100% !important;
   white-space: nowrap !important;
@@ -528,15 +519,6 @@
   line-height: normal !important;
   -webkit-appearance: none !important;
   appearance: none !important;
-}
-.customer-overview .treatment-execution-manager-row .compact-field.date-field input[type="date"]::-webkit-date-and-time-value {
-  text-align: left !important;
-  white-space: nowrap !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  min-height: 0 !important;
-  line-height: normal !important;
 }
 .customer-overview .treatment-session-tools {
   display: inline-flex !important;

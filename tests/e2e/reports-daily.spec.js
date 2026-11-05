@@ -10,8 +10,8 @@ for (const width of [1440, 768, 390, 320]) {
       if (!path.startsWith('/api/')) return route.continue()
       if (path === '/api/auth/login') return route.fulfill({ json: { data: { token: 'manager-test', user: { id: 1, tenant_id: 1, branch_id: 1, fullname: 'Quản lý', system_role: 'MANAGER' } } } })
       if (path === '/api/reports/revenue') return route.fulfill({ json: { daily: url.searchParams.get('startDate') === '2026-09-01' ? [] : [
-        { date: '2026-10-01', totalRevenue: 1200000, serviceRevenue: 1000000, productRevenue: 200000, receipts: { invoiceCash: 500000, debtPayments: 100000, walletTopups: 300000, total: 900000, walletUsedExcluded: 400000 }, expenses: { expenseVouchers: 600000, inventoryImports: 800000, total: 1400000 }, netCashFlow: -500000 },
-        { date: '2026-10-02', totalRevenue: 0, serviceRevenue: 0, productRevenue: 0, receipts: { invoiceCash: 0, debtPayments: 0, walletTopups: 0, total: 0, walletUsedExcluded: 0 }, expenses: { expenseVouchers: 0, inventoryImports: 0, total: 0 }, netCashFlow: 0 },
+        { date: '2026-10-01', totalRevenue: 1200000, serviceRevenue: 1000000, productRevenue: 200000, legacyDebtRevenue: 0, receipts: { invoiceCash: 500000, debtPayments: 100000, walletTopups: 300000, total: 900000, walletUsedExcluded: 400000 }, expenses: { expenseVouchers: 600000, inventoryImports: 800000, total: 1400000 }, netCashFlow: -500000 },
+        { date: '2026-10-02', totalRevenue: 0, serviceRevenue: 0, productRevenue: 0, legacyDebtRevenue: 0, receipts: { invoiceCash: 0, debtPayments: 0, walletTopups: 0, total: 0, walletUsedExcluded: 0 }, expenses: { expenseVouchers: 0, inventoryImports: 0, total: 0 }, netCashFlow: 0 },
       ] } })
       return route.fulfill({ json: { data: [], total: 0 } })
     })
@@ -22,11 +22,11 @@ for (const width of [1440, 768, 390, 320]) {
     await page.goto('/reports')
     const table = page.getByRole('table', { name: 'Báo cáo theo ngày', exact: true })
     await expect(table).toBeVisible()
-    await expect(table.getByRole('columnheader')).toHaveCount(13)
+    await expect(table.getByRole('columnheader')).toHaveCount(14)
     const rows = table.locator('tbody tr')
     await expect(rows).toHaveCount(2)
     const cells = rows.first().locator('th, td')
-    const amounts = ['01/10/2026', '1.200.000', '1.000.000', '200.000', '500.000', '100.000', '300.000', '900.000', '400.000', '600.000', '800.000', '1.400.000', '-500.000']
+    const amounts = ['01/10/2026', '1.200.000', '1.000.000', '200.000', '0', '500.000', '100.000', '300.000', '900.000', '400.000', '600.000', '800.000', '1.400.000', '-500.000']
     for (let index = 0; index < amounts.length; index++) await expect(cells.nth(index)).toContainText(amounts[index])
     await expect(rows.nth(1).locator('th')).toHaveText('02/10/2026')
     for (const cell of await rows.nth(1).locator('td').all()) await expect(cell).toHaveText(/0\s*₫/)
@@ -43,12 +43,12 @@ for (const width of [1440, 768, 390, 320]) {
     const downloaded = page.waitForEvent('download')
     await page.getByRole('button', { name: 'Xuất Excel theo ngày', exact: true }).click()
     const download = await downloaded
-    expect(download.suggestedFilename()).toMatch(/^Xuly-doanh-thu-theo-ngay-.*\.xlsx$/)
+    expect(download.suggestedFilename()).toMatch(/^ROSA-doanh-thu-theo-ngay-.*\.xlsx$/)
     const book = new ExcelJS.Workbook()
     await book.xlsx.readFile(await download.path())
-    expect(book.worksheets[0].getRow(5).values.slice(1)).toEqual(['01/10/2026', 1200000, 1000000, 200000, 500000, 100000, 300000, 900000, 400000, 600000, 800000, 1400000, -500000])
-    expect(book.worksheets[0].getRow(6).values.slice(1)).toEqual(['02/10/2026', ...Array(12).fill(0)])
-    await page.getByLabel('Từ ngày', { exact: true }).fill('2026-09-01')
+    expect(book.worksheets[0].getRow(5).values.slice(1)).toEqual(['01/10/2026', 1200000, 1000000, 200000, 0, 500000, 100000, 300000, 900000, 400000, 600000, 800000, 1400000, -500000])
+    expect(book.worksheets[0].getRow(6).values.slice(1)).toEqual(['02/10/2026', ...Array(13).fill(0)])
+    await page.getByLabel('Từ ngày', { exact: true }).fill('01092026')
     await expect(page.getByText('Chưa có dữ liệu theo ngày trong khoảng thời gian đã chọn.')).toBeVisible()
     await expect(table).toHaveCount(0)
     await expect(page.getByRole('button', { name: 'Xuất Excel theo ngày', exact: true })).toBeDisabled()

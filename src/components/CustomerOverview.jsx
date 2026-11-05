@@ -1,22 +1,36 @@
 import DebtAmount from './DebtAmount'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { getCustomerOverview, listResource, undoTreatmentExecution } from '../api/resources'
+import { getCustomerOverview, getResource, listResource, undoTreatmentExecution } from '../api/resources'
 import { formatCurrency, formatSpaDate } from '../utils/format'
 import { useBranch } from './AppShell'
 import { useAuth } from '../auth/AuthProvider'
 import CustomerProfile from './CustomerProfile'
 import SkinImageAlbum from './SkinImageAlbum'
 import TreatmentCardPanel from './TreatmentCardPanel'
+import CustomerRecordPrint from './CustomerRecordPrint'
 import { isTreatmentComplete } from '../utils/todayTreatments'
 import './CustomerOverview.css'
 
 export default function CustomerOverview({ customerId, overview, onOverview }) {
   const { user } = useAuth(), { branchId } = useBranch()
-  const [message, setMessage] = useState(''), [messageType, setMessageType] = useState('success')
+  const [message, setMessage] = useState(''), [messageType, setMessageType] = useState('success'), [printRecord, setPrintRecord] = useState(null), [printing, setPrinting] = useState(false)
   const branches = useQuery({ queryKey: ['branches', 'customer-overview'], queryFn: () => listResource('branches', {}, 1, 100).then(r => r ?? { data: [] }) })
   if (!overview) return <p>Đang tải lịch sử khách hàng...</p>
   const { customer, timeline = [] } = overview
+  async function printCustomerRecord() {
+    if (printing) return
+    setPrinting(true)
+    try {
+      const first = await listResource('treatments', { customerId }, 1, 100)
+      const pages = await Promise.all(Array.from({ length: Math.max(0, first.totalPages - 1) }, (_, index) => listResource('treatments', { customerId }, index + 2, 100)))
+      const cards = [first, ...pages].flatMap(page => page.data || [])
+      const details = await Promise.all(cards.map(card => getResource('treatments', card.id)))
+      setPrintRecord({ customer, timeline, treatments: details })
+    } catch (error) {
+      setMessageType('error'); setMessage(`Không thể chuẩn bị hồ sơ in: ${error.message}`)
+    } finally { setPrinting(false) }
+  }
   return <section className="customer-overview">
     <div className="customer-identity"><strong>{customer.fullname}</strong><span>{customer.phone_number}</span><span>{customer.address || 'Chưa có địa chỉ'}</span><span>Ví: {formatCurrency(customer.wallet_balance)}</span><span>Nợ: <DebtAmount value={customer.total_debt} /></span></div>
     <div className="customer-overview-columns"><div className="customer-timeline customer-panel">
@@ -52,6 +66,6 @@ export default function CustomerOverview({ customerId, overview, onOverview }) {
         />}
       </div></div>
     })}
-    </div><aside className="customer-profile-column"><CustomerProfile customer={customer} /><SkinImageAlbum key={customerId} customerId={customerId} /></aside></div>
+    </div><aside className="customer-profile-column"><CustomerProfile customer={customer} onPrint={printCustomerRecord} printing={printing} /><SkinImageAlbum key={customerId} customerId={customerId} /></aside></div><CustomerRecordPrint record={printRecord} onDone={() => setPrintRecord(null)} />
   </section>
 }

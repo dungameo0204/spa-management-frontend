@@ -7,6 +7,7 @@ import ConfirmDialog from './ConfirmDialog'
 import { ImagePlus, UploadCloud, X } from 'lucide-react'
 import SkinImageViewer from './SkinImageViewer'
 import useDraftGuard from './useDraftGuard'
+import DateInput from './DateInput'
 
 function UploadZone({ onFiles, disabled }) {
   const [dragging, setDragging] = useState(false)
@@ -87,7 +88,7 @@ export default function SkinImageAlbum({ customerId }) {
   const pendingImages = files.map((file, index) => <div className="skin-image-card is-pending" key={`${file.name}-${file.size}-${file.lastModified}`}><ImagePreview file={file} onOpen={() => openPending(index)} /><span className="skin-pending-badge">Chưa lưu</span><button type="button" className="skin-remove-pending" disabled={mutation.isPending} aria-label={`Bỏ ảnh ${index + 1}`} onClick={() => { setViewer(null); setFiles(current => current.filter((_, position) => position !== index)) }}><X size={15} /></button><small className="skin-image-name" title={file.name}>{file.name}</small></div>)
   const editorForm = (inline = false) => <form className={`skin-editor ${inline ? 'is-inline' : ''}`} onSubmit={submit}><fieldset disabled={mutation.isPending}>
     {warning && <p role="alert" className="form-alert">{warning}</p>}
-    {editor.mode !== 'append' && <div className="skin-metadata"><label className="field">Ngày chụp<input type="date" required min="1000-01-01" max={today()} value={editor.date} onChange={event => setEditor({ ...editor, date: event.target.value })} /></label><label className="field">Ghi chú lần chụp<textarea rows={2} placeholder="Trước / sau điều trị, tình trạng da…" value={editor.note} onChange={event => setEditor({ ...editor, note: event.target.value })} /></label></div>}
+    {editor.mode !== 'append' && <div className="skin-metadata"><label className="field">Ngày chụp<DateInput aria-label="Ngày chụp" required min="1000-01-01" max={today()} value={editor.date} onChange={date => setEditor({ ...editor, date })} /></label><label className="field">Ghi chú lần chụp<textarea rows={2} placeholder="Trước / sau điều trị, tình trạng da…" value={editor.note} onChange={event => setEditor({ ...editor, note: event.target.value })} /></label></div>}
     {editor.mode !== 'edit' && <><UploadZone onFiles={selectFiles} disabled={mutation.isPending} />{!inline && files.length > 0 && <div className="skin-image-grid">{pendingImages}</div>}<p className="skin-upload-count" role="status">{files.length ? `${files.length}/10 ảnh mới đang chờ lưu · Chọn tiếp để thêm ảnh` : 'Chọn nhiều lần vẫn giữ các ảnh đã chọn.'}</p></>}
     <div className="skin-actions"><button type="button" className="btn secondary" onClick={cancelEditor}>Hủy nhập ảnh</button><button type="submit" className="btn primary" disabled={!navigator.onLine || (editor.mode !== 'edit' && !files.length)}>{mutation.isPending ? 'Đang lưu…' : 'Lưu album'}</button></div>
   </fieldset></form>

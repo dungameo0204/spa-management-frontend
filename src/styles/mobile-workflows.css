@@ -106,7 +106,7 @@
   .customer-overview .customer-inline-actions .mobile-select-trigger {
     box-sizing: border-box; min-width: 0; width: 100%; height: 36px; min-height: 36px; padding: 5px 8px; font-size: 13px;
   }
-  .today-treatments .today-staff-actions input[type="date"] { font-size: 16px; }
+  .today-treatments .today-staff-actions .date-input input { font-size: 16px; }
   .today-treatments .today-staff-actions > .btn { flex: 0 1 auto; min-height: 36px; padding: 6px 14px; font-size: 13px; }
   .today-treatments .today-staff-actions > .btn.primary { min-height: 38px; }
 
@@ -196,8 +196,8 @@
     padding: 5px 6px !important; font-size: 13px !important; box-sizing: border-box;
   }
   .treatment-root-panel .treatment-execution-form textarea { width: 100%; min-width: 0; font-size: 16px; box-sizing: border-box; }
-  .treatment-root-panel .treatment-execution-form input[type="date"],
-  .customer-overview .treatment-root-panel .treatment-execution-manager-row .compact-field.date-field input[type="date"] { min-width: 0 !important; font-size: 16px !important; padding: 5px 6px !important; }
+  .treatment-root-panel .treatment-execution-form .date-input input,
+  .customer-overview .treatment-root-panel .treatment-execution-manager-row .compact-field.date-field .date-input input { min-width: 0 !important; font-size: 16px !important; padding: 5px 36px 5px 6px !important; }
   .treatment-root-panel .treatment-execution-form .btn,
   .treatment-root-panel .treatment-execution-form .session-followup-button { min-height: 32px; height: auto; padding: 5px 10px; font-size: 12px; white-space: normal; }
   /* Desktop flex-basis is a width; in a column it would reserve 175px of height. */
@@ -276,7 +276,7 @@
   .dashboard .stat-grid + .helper-text { margin-top: 8px; }
   .treatment-root-panel .treatment-execution-manager-row,
   .customer-overview .treatment-root-panel .treatment-execution-manager-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr) !important; }
-  .today-treatments .today-staff-actions > .field:has(input[type="date"]) { flex-grow: 1.4; flex-basis: 135px; }
+  .today-treatments .today-staff-actions > .field:has(.date-input) { flex-grow: 1.4; flex-basis: 135px; }
 }
 
 @media (max-width: 340px) {
@@ -299,10 +299,11 @@
     flex: 1 1 0; flex-direction: column !important; align-items: stretch !important;
     gap: 4px !important; min-width: 0; width: auto !important;
   }
-  .treatments-page .date-range-filter .field input[type="date"] {
+  .treatments-page .date-range-filter .field .date-input {
     flex: none !important; width: 100% !important; min-width: 0 !important;
-    max-width: none !important; font-size: 12px !important; padding-inline: 5px !important;
+    max-width: none !important;
   }
+  .treatments-page .date-range-filter .field .date-input input { font-size: 12px !important; padding-inline: 5px 32px !important; }
   .treatments-page .treatment-customers .list-toolbar {
     display: flex; align-items: center; gap: 8px; padding: 10px;
   }

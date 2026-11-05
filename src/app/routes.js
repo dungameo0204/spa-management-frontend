@@ -1,4 +1,4 @@
-import { LayoutDashboard, CalendarDays, UsersRound, ShoppingBag, Package, ContactRound, ChartNoAxesCombined, Building2, BadgeCheck, UserCog, ReceiptText, Boxes, HandCoins, Wallet, CreditCard, Sparkles, ClipboardList, TrendingUp } from 'lucide-react'
+import { LayoutDashboard, CalendarDays, UsersRound, ShoppingBag, Package, ContactRound, ChartNoAxesCombined, Building2, BadgeCheck, UserCog, ReceiptText, Boxes, HandCoins, CreditCard, Sparkles, ClipboardList, TrendingUp } from 'lucide-react'
 
 export const routes = [
   { path: '/', label: 'Tổng quan', icon: LayoutDashboard, group: 'main' },
@@ -11,7 +11,6 @@ export const routes = [
   { path: '/imports', label: 'Nhập kho', icon: Boxes, group: 'operations' },
   { path: '/inventory', label: 'Tồn kho', icon: Package, group: 'operations', permission: 'inventory.manage' },
   { path: '/expenses', label: 'Phiếu chi', icon: ReceiptText, group: 'operations' },
-  { path: '/wallet', label: 'Ví khách hàng', icon: Wallet, group: 'operations' },
   { path: '/debts', label: 'Thu công nợ', icon: CreditCard, group: 'operations' },
   { path: '/staffs', label: 'Hồ sơ nhân sự', icon: ContactRound, group: 'people' },
   { path: '/commissions', label: 'Công ca', icon: HandCoins, group: 'people', permission: 'commissions.view' },

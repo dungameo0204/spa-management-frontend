@@ -31,7 +31,7 @@ for (const width of [1440, 390, 320, 768, 1024]) {
     expect(layout.fits).toBe(true)
     if (width > 600) { expect(layout.ratio).toBeGreaterThan(0.4); expect(layout.ratio).toBeLessThan(0.55) }
     else expect(layout.stacked).toBe(true)
-    const submit = page.getByRole('button', { name: 'Xác nhận hôm nay' })
+    const submit = page.getByRole('button', { name: 'Xác nhận', exact: true })
     const note = page.getByRole('textbox', { name: /Ghi chú buổi thực hiện/ })
     await note.focus()
     const noteStyle = await note.evaluate(element => {

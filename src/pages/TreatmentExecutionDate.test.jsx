@@ -58,7 +58,7 @@ for (const role of ['STAFF', 'MANAGER']) {
       const history = { id: 30, branch_id: scenario === 'other-branch' ? 3 : 2, execution_date: today(), created_at: scenario === 'old-created' ? '2020-01-01 09:00:00' : scenario === 'missing-created' ? null : `${today()} 09:00:00`, staffs: [] }
       getResource.mockImplementation(async resource => resource === 'treatments' ? { ...card, histories: [history] } : {})
       if (scenario === 'error') undoTreatmentExecution.mockRejectedValue(new Error('Không được hoàn tác buổi này.'))
-      const allowed = role === 'MANAGER' || !['old-created', 'missing-created', 'other-branch'].includes(scenario)
+      const allowed = role === 'MANAGER' || scenario !== 'other-branch'
       const visibleHistory = entry === 'detail' || scenario !== 'other-branch'
       const actor = userEvent.setup()
       show(entry === 'dashboard' ? <TodayTreatments /> : <TreatmentsPage />)
@@ -116,23 +116,24 @@ for (const entry of ['inline', 'detail', 'dashboard']) {
     const actor = userEvent.setup()
     await openExecution(entry, actor, true)
     const date = screen.getByLabelText('Ngày thực hiện')
-    expect(date).toHaveValue(today())
-    fireEvent.change(date, { target: { value: '2026-09-15' } })
+    expect(date).toHaveValue(today().split('-').reverse().join('/'))
+    fireEvent.change(date, { target: { value: '15/09/2026' } })
     await actor.click(screen.getByRole('button', { name: 'Xác nhận', exact: true }))
     const confirmBtn = screen.queryByRole('button', { name: 'Ghi nhận không có chữ ký' })
     if (confirmBtn) await actor.click(confirmBtn)
     await waitFor(() => expect(executeTreatment).toHaveBeenCalledWith({ treatment_id: 10, branch_id: 2, execution_date: '2026-09-15', staffs: [] }))
   })
 
-  it(`${entry}: STAFF giữ nguyên giao diện và không gửi execution_date`, async () => {
+  it(`${entry}: STAFF chọn ngày và gửi execution_date mà không gửi branch_id`, async () => {
     auth.role = 'STAFF'
     const actor = userEvent.setup()
     await openExecution(entry, actor, false)
-    expect(screen.queryByLabelText('Ngày thực hiện')).not.toBeInTheDocument()
-    await actor.click(screen.getByRole('button', { name: entry === 'dashboard' ? 'Xác nhận' : 'Xác nhận hôm nay', exact: true }))
+    const date = screen.getByLabelText('Ngày thực hiện')
+    fireEvent.change(date, { target: { value: '15/09/2026' } })
+    await actor.click(screen.getByRole('button', { name: 'Xác nhận', exact: true }))
     const confirmBtn = screen.queryByRole('button', { name: 'Ghi nhận không có chữ ký' })
     if (confirmBtn) await actor.click(confirmBtn)
-    await waitFor(() => expect(executeTreatment).toHaveBeenCalledWith({ treatment_id: 10, staffs: [] }))
+    await waitFor(() => expect(executeTreatment).toHaveBeenCalledWith({ treatment_id: 10, execution_date: '2026-09-15', staffs: [] }))
   })
 }
 

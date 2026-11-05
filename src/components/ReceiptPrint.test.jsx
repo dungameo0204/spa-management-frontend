@@ -7,7 +7,7 @@ afterEach(cleanup)
 it.each(['A4', 'A5', 'K57', 'K80'])('prints child services, session totals and Vietnam invoice date on %s', size => {
   const record = {
     id: 1, invoice_date: '2026-10-31T17:00:00.000Z', created_at: '2026-10-30',
-    customer_name: 'Khách A', total_amount: 100000, paid_amount: 100000,
+    customer_name: 'Khách A', branch_name: 'ROSA Quận 1', branch_address: '123 Đường Hoa Hồng, Phường Bến Nghé', total_amount: 100000, paid_amount: 100000,
     items: [
       { id: 1, snapshot_name: 'Combo chăm sóc', quantity: 1, snapshot_price: 100000,
         treatment: { children: [
@@ -19,7 +19,12 @@ it.each(['A4', 'A5', 'K57', 'K80'])('prints child services, session totals and V
     ],
   }
   render(<ReceiptPrint receipt={{ type: 'invoices', size, records: [record] }} onDone={vi.fn()} />)
-  expect(screen.getByText('Ngày: 01/11/2026')).toBeTruthy()
+  expect(document.getElementById('receipt-print')).toHaveTextContent('Ngày: 01/11/2026')
+  expect(document.getElementById('receipt-print')).toHaveTextContent('Số hóa đơn: #1')
+  expect(screen.getByAltText('ROSA')).toHaveAttribute('src', '/icons/icon-512.png')
+  expect(document.querySelector('.receipt-head > .receipt-brand')).toHaveTextContent('ROSA Quận 1')
+  expect(document.querySelector('.receipt-head > .receipt-branch-address')).toHaveTextContent('Địa chỉ: 123 Đường Hoa Hồng, Phường Bến Nghé')
+  expect(document.getElementById('receipt-print')).toHaveTextContent('Địa chỉ: 123 Đường Hoa Hồng, Phường Bến Nghé')
   expect(screen.getByText('↳ Phục hồi da · 5 buổi')).toBeTruthy()
   expect(screen.getByText('↳ Chăm sóc định kỳ · Trọn đời')).toBeTruthy()
   expect(screen.getByText('Liệu trình: 10 buổi')).toBeTruthy()

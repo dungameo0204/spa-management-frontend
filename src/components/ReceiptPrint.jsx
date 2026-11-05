@@ -16,12 +16,19 @@ function TreatmentSessions({ treatment }) {
 export default function ReceiptPrint({ receipt, onDone }) {
   useEffect(() => {
     if (!receipt) return
-    let timer
+    let timer, imageTimeout
     const done = () => { clearTimeout(timer); onDone() }
     window.addEventListener('afterprint', done)
-    // Let React commit the receipt before opening the native print dialog.
-    const frame = requestAnimationFrame(() => { timer = setTimeout(done, 30000); window.print() })
-    return () => { cancelAnimationFrame(frame); clearTimeout(timer); window.removeEventListener('afterprint', done) }
+    // Wait for the raster logo: native print previews can snapshot before an image finishes loading.
+    const frame = requestAnimationFrame(() => {
+      const print = () => { clearTimeout(imageTimeout); timer = setTimeout(done, 30000); window.print() }
+      const logo = document.querySelector('#receipt-print .receipt-logo')
+      if (!logo || (logo.complete && logo.naturalWidth > 0)) return print()
+      logo.addEventListener('load', print, { once: true })
+      logo.addEventListener('error', print, { once: true })
+      imageTimeout = setTimeout(print, 2000)
+    })
+    return () => { cancelAnimationFrame(frame); clearTimeout(timer); clearTimeout(imageTimeout); window.removeEventListener('afterprint', done) }
   }, [receipt, onDone])
   if (!receipt) return null
   const { type, records } = receipt
@@ -30,9 +37,13 @@ export default function ReceiptPrint({ receipt, onDone }) {
   const title = type === 'invoices' ? 'HÓA ĐƠN BÁN HÀNG' : type === 'wallet' ? 'PHIẾU NẠP VÍ' : 'PHIẾU THU CÔNG NỢ'
   const date = first.invoice_date || first.payment_date || first.created_at
   const sheetInvoice = type === 'invoices' && !size.startsWith('K')
-  const heading = <><header className="receipt-head"><span className="receipt-mark">✦</span><strong>{value((type === 'debts' && first.collection_branch_name) || first.branch_name)}</strong><small>CHĂM SÓC SẮC ĐẸP · CẢM ƠN QUÝ KHÁCH</small></header>
-    <div className="receipt-title"><h2>{title}</h2><span>{records.length === 1 ? `#${first.id}` : `${records.length} khoản thu`}</span></div>
-    <div className="receipt-meta"><span>Ngày: {formatSpaDate(date)}</span><span>Khách hàng: {value(first.customer_name)}</span>{first.phone_number && <span>Điện thoại: {first.phone_number}</span>}</div></>
+  const documentNumber = records.length === 1 ? `#${first.id}` : `${records.length} khoản thu`
+  const branchName = (type === 'debts' && first.collection_branch_name) || first.branch_name
+  const branchAddress = (type === 'debts' && (first.collection_branch_address || first.collection_branch?.address)) || first.branch_address || first.branch?.address
+  const heading = <><header className="receipt-head"><div className="receipt-brand"><img className="receipt-logo" src="/icons/icon-512.png" alt="ROSA" width="48" height="48" /><strong>{value(branchName)}</strong></div>{branchAddress && <small className="receipt-branch-address">Địa chỉ: {branchAddress}</small>}<small className="receipt-branch-tagline">CHĂM SÓC SẮC ĐẸP · CẢM ƠN QUÝ KHÁCH</small></header>
+    <div className="receipt-title"><h2>{title}</h2></div>
+    <div className="receipt-document-meta"><span>{type === 'invoices' ? 'Số hóa đơn' : type === 'debts' ? 'Số phiếu thu' : 'Số chứng từ'}: <b>{documentNumber}</b></span><span>Ngày: <b>{formatSpaDate(date)}</b></span></div>
+    <div className="receipt-meta receipt-customer"><span>Khách hàng: <b>{value(first.customer_name)}</b></span>{first.phone_number && <span>Điện thoại: {first.phone_number}</span>}</div></>
   const lineFinal = item => Number(item.final_price ?? item.total_price ?? Number(item.quantity) * Number(item.snapshot_price ?? item.unit_price))
   const invoiceLines = first.items?.map((item, index) => {
     const base = Number(item.quantity) * Number(item.snapshot_price ?? item.unit_price)
@@ -47,7 +58,7 @@ export default function ReceiptPrint({ receipt, onDone }) {
     <style media="print">{size.startsWith('K')
       ? `@page { size: ${paper[size]}; margin: 3mm; }`
       : `@page { size: ${paper[size]}; margin: ${sheetInvoice ? '32mm' : '12mm'} 12mm 12mm; } ${sheetInvoice ? '@page :first { margin-top: 12mm; }' : ''}`}</style>
-    {sheetInvoice ? <><table className="receipt-pages"><thead><tr><td>{heading}<div className="receipt-section">SẢN PHẨM / DỊCH VỤ</div></td></tr></thead><tbody>{invoiceLines?.map((line, index) => <tr key={first.items[index].id || index}><td>{line}</td></tr>)}</tbody></table><div className="receipt-summary">{invoicePayment}{paymentNote}{thanks}</div></> : <>{heading}{type === 'invoices' && <><div className="receipt-section">SẢN PHẨM / DỊCH VỤ</div>{invoiceLines}{invoicePayment}</>}
+    {sheetInvoice ? <><table className="receipt-pages"><thead style={{ backgroundColor: '#fff' }}><tr style={{ backgroundColor: '#fff' }}><td style={{ backgroundColor: '#fff' }}>{heading}<div className="receipt-section">SẢN PHẨM / DỊCH VỤ</div></td></tr></thead><tbody>{invoiceLines?.map((line, index) => <tr key={first.items[index].id || index}><td>{line}</td></tr>)}</tbody></table><div className="receipt-summary">{invoicePayment}{paymentNote}{thanks}</div></> : <>{heading}{type === 'invoices' && <><div className="receipt-section">SẢN PHẨM / DỊCH VỤ</div>{invoiceLines}{invoicePayment}</>}
     {type === 'wallet' && <><div className="receipt-row"><span>Số tiền nạp</span><strong>{money(first.paid_amount)}</strong></div><div className="receipt-row"><span>Tiền tặng thêm</span><span>{money(first.bonus_amount)}</span></div><div className="receipt-row receipt-total"><span>TỔNG CỘNG VÀO VÍ</span><strong>{money(first.total_received)}</strong></div></>}
     {type === 'debts' && <><div className="receipt-section">CHI TIẾT THANH TOÁN</div>{records.map(row => <div className="receipt-line" key={row.id}><span>{row.invoice_id != null ? `Hóa đơn #${row.invoice_id}` : 'Thu nợ'}<small>Phiếu thu #{row.id} · {formatSpaDate(row.payment_date)}</small></span><strong>{money(row.amount)}</strong></div>)}<div className="receipt-row receipt-total"><span>TỔNG ĐÃ THU</span><strong>{money(records.reduce((sum, row) => sum + Number(row.amount || 0), 0))}</strong></div></>}
     {paymentNote}{thanks}</>}
