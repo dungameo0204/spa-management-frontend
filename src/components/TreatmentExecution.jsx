@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { executeTreatment, listResource } from '../api/resources'
+import { useQueryClient } from '@tanstack/react-query'
+import { executeTreatment } from '../api/resources'
 import { canExecuteCard, treatmentCards } from '../utils/todayTreatments'
 import { today } from '../utils/format'
 import InvoiceChildStaffPicker from './InvoiceChildStaffPicker'
@@ -8,6 +8,7 @@ import MobileSelect from './MobileSelect'
 import SignaturePad from './SignaturePad'
 import ConfirmDialog from './ConfirmDialog'
 import DateInput from './DateInput'
+import { useBranchCatalog } from '../hooks/useProductCatalog'
 
 export default function TreatmentExecution({ card, user, branchId, onUpdated, onCancel, initialSelectedIds = [] }) {
   const manager = user?.system_role === 'MANAGER', grouped = Boolean(card.children?.length)
@@ -29,7 +30,7 @@ export default function TreatmentExecution({ card, user, branchId, onUpdated, on
   const [note, setNote] = useState(''), [signature, setSignature] = useState(null), [metadataOpen, setMetadataOpen] = useState(false)
   const [pending, setPending] = useState(false), [blocked, setBlocked] = useState(false), [message, setMessage] = useState(''), [confirm, setConfirm] = useState(false)
   const busy = useRef(false), qc = useQueryClient()
-  const branches = useQuery({ queryKey: ['branches', 'treatment-picker'], queryFn: () => listResource('branches', {}, 1, 100).then(r => r ?? { data: [] }),  })
+  const branches = useBranchCatalog()
   const chosen = available.filter(item => Object.hasOwn(selected, item.id))
 
   async function submit(unsigned = false) {
@@ -100,7 +101,7 @@ export default function TreatmentExecution({ card, user, branchId, onUpdated, on
           <div className="treatment-execution-right-col">
             <div className="treatment-execution-controls-row">
               <div className={`treatment-execution-manager-row${manager ? '' : ' no-branch'}`}>
-                {manager && <label className="field compact-field branch-field"><span>Cơ sở thực hiện</span><MobileSelect aria-label="Cơ sở thực hiện" value={branch} onChange={event => { setBranch(event.target.value); setSelected(current => Object.fromEntries(Object.keys(current).map(id => [id, []]))) }}><option value="">Chọn cơ sở</option>{branches.data?.data?.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</MobileSelect></label>}
+                {manager && <label className="field compact-field branch-field"><span>Cơ sở thực hiện</span><MobileSelect aria-label="Cơ sở thực hiện" value={branch} onChange={event => { setBranch(event.target.value); setSelected(current => Object.fromEntries(Object.keys(current).map(id => [id, []]))) }}><option value="">Chọn cơ sở</option>{branches.data?.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</MobileSelect></label>}
                 <label className="field compact-field date-field"><span>Ngày thực hiện</span><DateInput aria-label="Ngày thực hiện" required value={date} onChange={setDate} /></label>
               </div>
               <div className="treatment-session-tools">
@@ -116,7 +117,7 @@ export default function TreatmentExecution({ card, user, branchId, onUpdated, on
         /* Staff selection precedes the shared note/signature tools. */
         <div className="treatment-single-execution-row">
           <div className={`treatment-execution-manager-row is-single-manager${manager ? '' : ' no-branch'}`}>
-            {manager && <label className="field compact-field branch-field"><span>Cơ sở thực hiện</span><MobileSelect aria-label="Cơ sở thực hiện" value={branch} onChange={event => { setBranch(event.target.value); setSelected(current => Object.fromEntries(Object.keys(current).map(id => [id, []]))) }}><option value="">Chọn cơ sở</option>{branches.data?.data?.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</MobileSelect></label>}
+            {manager && <label className="field compact-field branch-field"><span>Cơ sở thực hiện</span><MobileSelect aria-label="Cơ sở thực hiện" value={branch} onChange={event => { setBranch(event.target.value); setSelected(current => Object.fromEntries(Object.keys(current).map(id => [id, []]))) }}><option value="">Chọn cơ sở</option>{branches.data?.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</MobileSelect></label>}
             <label className="field compact-field date-field"><span>Ngày thực hiện</span><DateInput aria-label="Ngày thực hiện" required value={date} onChange={setDate} /></label>
           </div>
           {available[0] && Object.hasOwn(selected, available[0].id) && (

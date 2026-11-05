@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Users, Check, Search, X } from 'lucide-react'
 import { listResource } from '../api/resources'
 import { useAuth } from '../auth/AuthProvider'
+import { useStaffCatalog } from '../hooks/useProductCatalog'
 import useDialogFocus from './useDialogFocus'
 import './InvoiceServiceChildren.css'
 
@@ -22,8 +23,8 @@ export default function InvoiceChildStaffPicker({ name, selected = [], branchId,
   const { user } = useAuth()
   const branch = user.system_role === 'STAFF' ? user.branch_id : branchId
   const roles = useQuery({ queryKey: ['roles', 'invoice-staff-picker'], queryFn: () => listPickerResources('roles') })
-  const people = useQuery({ queryKey: ['staffs', 'invoice-staff-picker', branch], queryFn: () => listPickerResources('staffs', { branchId: branch }), enabled: Boolean(branch) })
-  const available = (people.data?.data || []).filter(person => Number(person.branch_id) === Number(branch))
+  const people = useStaffCatalog({ enabled: Boolean(branch) })
+  const available = (people.data || []).filter(person => Number(person.branch_id) === Number(branch))
   const groups = (roles.data?.data || []).map(role => ({ ...role, people: available.filter(person => Number(person.role_id) === Number(role.id)) })).filter(role => role.people.length)
   const other = available.filter(person => !groups.some(role => Number(role.id) === Number(person.role_id)))
   if (other.length) groups.push({ id: 'other', name: 'Chức vụ khác', people: other })

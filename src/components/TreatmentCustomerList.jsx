@@ -1,11 +1,12 @@
 import { Fragment, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { ChevronDown, ChevronUp, Search } from 'lucide-react'
-import { getResource, listResource } from '../api/resources'
+import { getResource } from '../api/resources'
 import DebtAmount from './DebtAmount'
 import TreatmentCardPanel from './TreatmentCardPanel'
 import Pagination from './Pagination'
 import RefreshButton from './RefreshButton'
+import { useBranchCatalog } from '../hooks/useProductCatalog'
 
 const PAGE_SIZE = 20
 
@@ -16,8 +17,8 @@ function CustomerContact({ id }) {
 
 export default function TreatmentCustomerList({ cards = [], completedCards = [], search, onSearch, loading, error, onRetry, onOpen, branchId, executionFilters, refreshing = false }) {
   const [page, setPage] = useState(1), [expanded, setExpanded] = useState(null)
-  const branchesQuery = useQuery({ queryKey: ['branches', 'treatment-customer-list'], queryFn: () => listResource('branches', {}, 1, 100).then(r => r ?? { data: [] }) })
-  const branches = branchesQuery.data?.data || []
+  const branchesQuery = useBranchCatalog()
+  const branches = branchesQuery.data || []
   const completedIds = new Set(completedCards.map(card => card.id))
   const customers = Array.from([...cards, ...completedCards.filter(card => !cards.some(visible => visible.id === card.id))].reduce((map, card) => {
     const key = card.customer_id ?? `card-${card.id}`

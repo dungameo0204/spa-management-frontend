@@ -1,6 +1,5 @@
 import DebtAmount from './DebtAmount'
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { getCustomerOverview, getResource, listResource, undoTreatmentExecution } from '../api/resources'
 import { formatCurrency, formatSpaDate } from '../utils/format'
 import { useBranch } from './AppShell'
@@ -11,11 +10,12 @@ import TreatmentCardPanel from './TreatmentCardPanel'
 import CustomerRecordPrint from './CustomerRecordPrint'
 import { isTreatmentComplete } from '../utils/todayTreatments'
 import './CustomerOverview.css'
+import { useBranchCatalog } from '../hooks/useProductCatalog'
 
 export default function CustomerOverview({ customerId, overview, onOverview }) {
   const { user } = useAuth(), { branchId } = useBranch()
   const [message, setMessage] = useState(''), [messageType, setMessageType] = useState('success'), [printRecord, setPrintRecord] = useState(null), [printing, setPrinting] = useState(false)
-  const branches = useQuery({ queryKey: ['branches', 'customer-overview'], queryFn: () => listResource('branches', {}, 1, 100).then(r => r ?? { data: [] }) })
+  const branches = useBranchCatalog()
   if (!overview) return <p>Đang tải lịch sử khách hàng...</p>
   const { customer, timeline = [] } = overview
   async function printCustomerRecord() {
@@ -47,7 +47,7 @@ export default function CustomerOverview({ customerId, overview, onOverview }) {
         {treatment && <TreatmentCardPanel
           card={{ ...treatment, customer_name: customer.fullname }}
           branchId={branchId || user.branch_id}
-          branches={branches.data?.data}
+          branches={branches.data}
           embedded
           onUpdated={async () => {
             onOverview(await getCustomerOverview(customerId));

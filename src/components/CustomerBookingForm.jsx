@@ -1,10 +1,9 @@
 import { useRef, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import SearchPicker from './SearchPicker'
 import MobileSelect from './MobileSelect'
 import ConfirmDialog from './ConfirmDialog'
 import useDraftGuard from './useDraftGuard'
-import { listResource } from '../api/resources'
+import { useBranchCatalog } from '../hooks/useProductCatalog'
 import MoneyInput from './MoneyInput'
 import { arrivalTimeSlots, bookingPayload, defaultBookingArrivalDate } from '../utils/customerBookings'
 import { dateOnly } from '../utils/format'
@@ -24,7 +23,7 @@ export default function CustomerBookingForm({ booking, branchId, user, pending, 
   const [productLabel, setProductLabel] = useState(booking?.product_name || '')
   const ref = useRef(null)
   const guard = useDraftGuard(ref, JSON.stringify(form) !== JSON.stringify(initial.current), pending)
-  const branches = useQuery({ queryKey: ['branches', 'booking-form'], queryFn: ({ signal }) => listResource('branches', {}, 1, 100, signal), enabled: manager })
+  const branches = useBranchCatalog({ enabled: manager })
   const set = (key, value) => setForm(current => ({ ...current, [key]: value }))
   function submit(event) {
     event.preventDefault(); setError('')
@@ -42,7 +41,7 @@ export default function CustomerBookingForm({ booking, branchId, user, pending, 
     <fieldset disabled={pending}>
       <legend>2. Lịch hẹn và dịch vụ</legend>
       <div className="booking-form-grid"><label className="field"><span>Ngày đến</span><DateInput aria-label="Ngày đến" required value={form.arrival_date} onChange={value => set('arrival_date', value)} /></label><label className="field booking-time-field"><span className="booking-label-desktop">Giờ đến (không bắt buộc)</span><span className="booking-label-phone" aria-hidden="true">Giờ đến</span><MobileSelect aria-label="Giờ đến (không bắt buộc)" value={form.arrival_time} onChange={event => set('arrival_time', event.target.value)}><option value="">Chưa chọn giờ</option>{form.arrival_time && !arrivalTimeSlots.includes(form.arrival_time) && <option value={form.arrival_time}>{form.arrival_time} (giờ đã lưu)</option>}{arrivalTimeSlots.map(time => <option key={time} value={time}>{time}</option>)}</MobileSelect></label></div>
-      {manager ? <div className="booking-form-branch-service"><label className="field"><span className="booking-label-desktop">Chi nhánh tiếp nhận</span><span className="booking-label-phone" aria-hidden="true">Cơ sở</span><select aria-label="Chi nhánh tiếp nhận" required value={form.branch_id} onChange={event => set('branch_id', event.target.value)}><option value="">Chọn chi nhánh</option>{branches.data?.data?.map(branch => <option key={branch.id} value={branch.id}>{branch.name}</option>)}</select></label><SearchPicker resource="products" label="Dịch vụ quan tâm" value={form.product_id} initialLabel={productLabel} onChange={item => { set('product_id', item?.id || ''); setProductLabel(item?.name || '') }} /></div> : <><p className="small-muted">Chi nhánh tiếp nhận: {booking?.branch_name || `Cơ sở #${user.branch_id}`} (theo tài khoản)</p><SearchPicker resource="products" label="Dịch vụ quan tâm" value={form.product_id} initialLabel={productLabel} onChange={item => { set('product_id', item?.id || ''); setProductLabel(item?.name || '') }} /></>}
+      {manager ? <div className="booking-form-branch-service"><label className="field"><span className="booking-label-desktop">Chi nhánh tiếp nhận</span><span className="booking-label-phone" aria-hidden="true">Cơ sở</span><select aria-label="Chi nhánh tiếp nhận" required value={form.branch_id} onChange={event => set('branch_id', event.target.value)}><option value="">Chọn chi nhánh</option>{branches.data?.map(branch => <option key={branch.id} value={branch.id}>{branch.name}</option>)}</select></label><SearchPicker resource="products" label="Dịch vụ quan tâm" value={form.product_id} initialLabel={productLabel} onChange={item => { set('product_id', item?.id || ''); setProductLabel(item?.name || '') }} /></div> : <><p className="small-muted">Chi nhánh tiếp nhận: {booking?.branch_name || `Cơ sở #${user.branch_id}`} (theo tài khoản)</p><SearchPicker resource="products" label="Dịch vụ quan tâm" value={form.product_id} initialLabel={productLabel} onChange={item => { set('product_id', item?.id || ''); setProductLabel(item?.name || '') }} /></>}
       {branches.isError && <p role="alert" className="form-alert">{branches.error.message} <button type="button" onClick={() => branches.refetch()}>Thử lại</button></p>}
     </fieldset>
     <fieldset disabled={pending}><legend>3. Thông tin tư vấn</legend>

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { getResource, listResource } from '../api/resources'
+import { getResource } from '../api/resources'
 import { useAuth } from '../auth/AuthProvider'
 import { canCloseTreatment, canExecuteCard, isTreatmentComplete, treatmentCards, treatmentHistoryGroups } from '../utils/todayTreatments'
 import { dateOnly, formatSpaDate, today } from '../utils/format'
@@ -10,6 +10,7 @@ import TreatmentGroupedHistory from './TreatmentGroupedHistory'
 import TreatmentHistoryList from './TreatmentHistoryList'
 import TreatmentSessionDialog from './TreatmentSessionDialog'
 import './TreatmentCardPanel.css'
+import { useBranchCatalog } from '../hooks/useProductCatalog'
 
 export function sessionBaseLabel(card) {
   return card.closed_at ? 'Đã ký kết thúc' : card.remaining_sessions === null ? 'Trọn đời' : `${card.remaining_sessions ?? '—'}/${card.total_sessions ?? '—'} buổi`
@@ -24,7 +25,7 @@ export default function TreatmentCardPanel({ card, branchId, onOpen, showHistory
   const [historyOpen, setHistoryOpen] = useState(showHistory), [executing, setExecuting] = useState(false), [closing, setClosing] = useState(false), [session, setSession] = useState(null)
   const [selectedIds, setSelectedIds] = useState([])
   const detail = useQuery({ queryKey: ['treatments', 'card-detail', card.id, executionFilters], queryFn: () => getResource('treatments', card.id, executionFilters), enabled: !embedded })
-  const branchesQuery = useQuery({ queryKey: ['branches', 'panel-fallback'], queryFn: () => listResource('branches', {}, 1, 100).then(r => r ?? { data: [] }), enabled: !branches })
+  const branchesQuery = useBranchCatalog({ enabled: !branches })
   const current = embedded ? card : { ...card, ...detail.data }, grouped = Boolean(current.children?.length)
   const cards = treatmentCards(current)
   const activeChildren = current.children?.filter(c => !c.closed_at && (c.remaining_sessions === null || Number(c.remaining_sessions) > 0)) || []
@@ -36,7 +37,7 @@ export default function TreatmentCardPanel({ card, branchId, onOpen, showHistory
   const todayExecutions = grouped
     ? treatmentHistoryGroups(current).filter(group => group.day === today()).length
     : (current.histories?.filter(h => dateOnly(h.execution_date) === today()).length || 0)
-  const branchList = Array.isArray(branches) ? branches : (branches?.data || branchesQuery.data?.data || [])
+  const branchList = Array.isArray(branches) ? branches : (branches?.data || branchesQuery.data || [])
 
   async function refresh(updated) {
     if (updated) qc.setQueryData(['treatments', 'card-detail', card.id, executionFilters], updated)

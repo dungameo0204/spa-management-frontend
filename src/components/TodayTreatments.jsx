@@ -17,6 +17,7 @@ import TreatmentGroupSignature from './TreatmentGroupSignature'
 import Pagination from './Pagination'
 import './TodayTreatments.css'
 import DateInput from './DateInput'
+import { useBranchCatalog, useStaffCatalog } from '../hooks/useProductCatalog'
 
 export default function TodayTreatments() {
   const { branchId } = useBranch(), { user } = useAuth(), qc = useQueryClient()
@@ -35,8 +36,9 @@ export default function TodayTreatments() {
     return [...new Map([...createdCards.data, ...executedCards.data].map(card => [card.id, card])).values()]
   } })
   const staffBranch = manager ? (selected ? executionBranch : branchId) : branchId
-  const employees = useQuery({ queryKey: ['staffs', 'today', staffBranch], queryFn: () => listResource('staffs', staffBranch ? { branchId: staffBranch } : {}, 1, 100), enabled: !manager || Boolean(staffBranch) })
-  const branches = useQuery({ queryKey: ['branches', 'dashboard-treatment'], queryFn: () => listResource('branches', {}, 1, 100), enabled: manager })
+  const staffCatalog = useStaffCatalog({ enabled: !manager || Boolean(staffBranch) })
+  const employees = { ...staffCatalog, data: (staffCatalog.data || []).filter(staff => !staffBranch || Number(staff.branch_id) === Number(staffBranch)) }
+  const branches = useBranchCatalog({ enabled: manager })
   const roles = useQuery({ queryKey: ['roles', 'staff-picker'], queryFn: () => listResource('roles', {}, 1, 100) })
   function staffSummary(history) {
     return (history.staffs || []).map(staff => {
@@ -110,7 +112,6 @@ export default function TodayTreatments() {
     if (manager && !selected.historyId && !executionDate) return setMessage('Chọn ngày thực hiện.')
     if (employees.isLoading || (manager && !employees.data)) return setMessage('Đang tải danh sách nhân viên. Vui lòng chờ trước khi xác nhận.')
     if (employees.isError) return setMessage(`Không tải được danh sách nhân viên: ${employees.error.message}`)
-    if (employees.data?.totalPages > 1) return setMessage('Danh sách nhân viên vượt 100 người. Vui lòng kiểm tra phạm vi danh sách trước khi gán.')
     setMessage('')
     mutation.mutate({ ...selected, assigned: staffs, branch: executionBranch, execution_date: executionDate })
   }
@@ -159,7 +160,7 @@ export default function TodayTreatments() {
                 </td>
               </tr>
               {active && <tr className="today-staff-row"><td colSpan={5}><div className="treatment-actions today-staff-actions">
-                {manager && !selected.historyId && <label className="field">Cơ sở thực hiện<MobileSelect aria-label="Cơ sở thực hiện" value={executionBranch} onChange={e => { setExecutionBranch(e.target.value); setStaffs([]); setMessage('') }}><option value="">Chọn cơ sở</option>{branches.data?.data?.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}</MobileSelect></label>}
+                {manager && !selected.historyId && <label className="field">Cơ sở thực hiện<MobileSelect aria-label="Cơ sở thực hiện" value={executionBranch} onChange={e => { setExecutionBranch(e.target.value); setStaffs([]); setMessage('') }}><option value="">Chọn cơ sở</option>{branches.data?.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}</MobileSelect></label>}
                 {!selected.historyId && <label className="field">Ngày thực hiện<DateInput aria-label="Ngày thực hiện" required value={executionDate} onChange={setExecutionDate} /></label>}
                 <RoleStaffPicker selected={staffs} onChange={setStaffs} branchId={staffBranch || 'required'} /><button type="button" className="btn primary" disabled={mutation.isPending || !navigator.onLine} onClick={save}>{mutation.isPending ? 'Đang lưu...' : 'Xác nhận'}</button><button type="button" className="btn secondary" onClick={() => { setSelected(null); setMessage('') }}>Hủy</button>
               </div>{branches.isError && manager && !selected.historyId && <p className="form-alert">Không tải được cơ sở: {branches.error.message}</p>}{message && <p role="alert" className="form-alert">{message}</p>}</td></tr>}
