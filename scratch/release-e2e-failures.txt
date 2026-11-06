@@ -1,0 +1,889 @@
+appointment-contact-notes.spec.js:3 contact history across appointments and both dashboard queues (390px)
+Error: locator.click: Error: strict mode violation: getByRole('button', { name: 'Th├¬m ghi ch├║' }) resolved to 3 elements:
+    1) <button type="button" class="btn secondary">ΓÇª</button> aka getByRole('button', { name: 'Th├¬m ghi ch├║' }).first()
+    2) <button type="button" class="btn secondary">ΓÇª</button> aka getByRole('button', { name: 'Th├¬m ghi ch├║' }).nth(1)
+    3) <button class="btn primary">Th├¬m ghi ch├║</button> aka getByRole('dialog', { name: 'Lß╗ïch hß║╣n #' }).getByRole('button', { name: 'Th├¬m ghi ch├║' })
+
+Call log:
+  - waiting for getByRole('button', { name: 'Th├¬m ghi ch├║' })
+
+
+appointment-contact-notes.spec.js:3 contact history across appointments and both dashboard queues (1440px)
+Error: locator.click: Error: strict mode violation: getByRole('button', { name: 'Th├¬m ghi ch├║' }) resolved to 3 elements:
+    1) <button type="button" class="btn secondary">ΓÇª</button> aka getByRole('button', { name: 'Th├¬m ghi ch├║' }).first()
+    2) <button type="button" class="btn secondary">ΓÇª</button> aka getByRole('button', { name: 'Th├¬m ghi ch├║' }).nth(1)
+    3) <button class="btn primary">Th├¬m ghi ch├║</button> aka getByRole('dialog', { name: 'Lß╗ïch hß║╣n #' }).getByRole('button', { name: 'Th├¬m ghi ch├║' })
+
+Call log:
+  - waiting for getByRole('button', { name: 'Th├¬m ghi ch├║' })
+
+
+commission-report.spec.js:7 b├ío c├ío mß╗⌐c c├┤ng ca tß╗½ng nh├ón vi├¬n /commissions 1440px
+Error: expect(received).toMatch(expected)
+
+Expected pattern: /^Xuly-cong-ca-3-2-.*\.xlsx$/
+Received string:  "ROSA-cong-ca-3-2-2026-11-01-2026-11-06.xlsx"
+
+commission-report.spec.js:7 b├ío c├ío mß╗⌐c c├┤ng ca tß╗½ng nh├ón vi├¬n /commissions 390px
+Error: expect(received).toMatch(expected)
+
+Expected pattern: /^Xuly-cong-ca-3-2-.*\.xlsx$/
+Received string:  "ROSA-cong-ca-3-2-2026-11-01-2026-11-06.xlsx"
+
+commission-report.spec.js:7 b├ío c├ío mß╗⌐c c├┤ng ca tß╗½ng nh├ón vi├¬n /reports 1440px
+Test timeout of 30000ms exceeded.
+
+commission-report.spec.js:7 b├ío c├ío mß╗⌐c c├┤ng ca tß╗½ng nh├ón vi├¬n /reports 390px
+Test timeout of 30000ms exceeded.
+
+commission-tiers.spec.js:57 tß║ío thß║╗ lß║Ñy gi├í catalog, cho sß╗¡a gi├í v├á gß╗¡i ─æ├║ng ID, sß╗æ ─æ╞ín vß╗ï
+Test timeout of 30000ms exceeded.
+
+commission-tiers.spec.js:75 tß║ío thß║╗ c┼⌐ tß╗òng 10, c├▓n 0 buß╗òi v├á kh├┤ng ghi ─æ├¿ sß╗æ nhß║¡p ri├¬ng
+Test timeout of 30000ms exceeded.
+
+commission-tiers.spec.js:75 tß║ío thß║╗ c┼⌐ tß╗òng 10, c├▓n 4 buß╗òi v├á kh├┤ng ghi ─æ├¿ sß╗æ nhß║¡p ri├¬ng
+Test timeout of 30000ms exceeded.
+
+commission-tiers.spec.js:99 tß║ío dß╗ïch vß╗Ñ mß╗Öt mß╗⌐c mß║╖c ─æß╗ïnh, th├¬m hai bß║¡c v├á chß║╖n khoß║úng hß╗ƒ/chß╗ông
+Error: expect(locator).toContainText(expected) failed
+
+Locator: getByRole('alert')
+Expected substring: "trß╗æng"
+Error: strict mode violation: getByRole('alert') resolved to 2 elements:
+    1) <div role="alert" tabindex="-1" class="form-alert alert-attention">C├íc khoß║úng gi├í cß╗ºa c├╣ng chß╗⌐c vß╗Ñ bß╗ï chß╗ông lß║Ñn.</div> aka getByText('C├íc khoß║úng gi├í cß╗ºa c├╣ng chß╗⌐c vß╗Ñ bß╗ï chß╗ông lß║Ñn.')
+    2) <p role="alert" tabindex="-1" class="form-alert alert-attention">C├íc khoß║úng gi├í cß╗ºa c├╣ng chß╗⌐c vß╗Ñ bß╗ï trß╗æng, cß║ºn nß╗æiΓÇª</p> aka getByText('C├íc khoß║úng gi├í cß╗ºa c├╣ng chß╗⌐c vß╗Ñ bß╗ï trß╗æng, cß║ºn nß╗æi tiß║┐p nh
+
+customer-birth-date.spec.js:3 tß║ío nhanh kh├ích trong h├│a ─æ╞ín c┼⌐ng gß╗¡i ng├áy sinh
+Error: locator.fill: Error: Malformed value
+Call log:
+  - waiting for getByRole('dialog', { name: 'Tß║ío kh├ích h├áng', exact: true }).getByLabel('Ng├áy sinh', { exact: true })
+    - locator resolved to <input value="" type="date" min="1000-01-01" max="2026-11-06"/>
+    - fill("21/08/1995")
+  - attempting fill action
+    - waiting for element to be visible, enabled and editable
+
+
+customer-birth-date.spec.js:30 ng├áy sinh trong th├¬m/sß╗¡a kh├ích, kh├┤ng hiß╗çn ß╗ƒ danh s├ích v├á tß╗òng quan; vß║½n t├¼m v├á x├│a ─æ╞░ß╗úc
+Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 3
+Received: 2
+
+Call Log:
+- Timeout 5000ms exceeded while waiting on the predicate
+
+customer-overview-merged.spec.js:3 lß╗ïch sß╗¡ kh├ích hiß╗ân thß╗ï mß╗Öt d├▓ng dß╗ïch vß╗Ñ k├¿m liß╗çu tr├¼nh v├á th├┤ng b├ío th├ánh c├┤ng m├áu xanh
+Error: expect(locator).toContainText(expected) failed
+
+Locator: locator('.customer-overview .timeline-row').first()
+Expected substring: "c├▓n 1/2 buß╗òi"
+Received string:    "10/10/2026Dß╗ïch vß╗Ñ ─æ├ú muatß║⌐y nß╗æt ruß╗ôiH├│a ─æ╞ín #49 ┬╖ 5 ├ù 50.000┬áΓé½Th├ánh tiß╗ün250.000┬áΓé½tß║⌐y nß╗æt ruß╗ôi ┬╖ 1/2 buß╗òiXem lß╗ïch sß╗¡Lß╗ïch sß╗¡Thß╗▒c hiß╗çn"
+Timeout: 5000ms
+
+Call log:
+  - Expect "toContainText" locator('.customer-overview .timeline-row').first() with timeout 5000ms
+  - waiting for locator('.customer-overview .timeline-row').first()
+    14 ├ù locator resolved to <div class="timeline-row">ΓÇª</div>
+       - unexpected value "10/10/20
+
+customer-overview-merged.spec.js:49 tick L├ám h├┤m nay thß║│ng cß╗Öt khi d├▓ng kh├íc c├│ nh├ún ─æ├ú thß╗▒c hiß╗çn
+Error: expect(locator).toHaveCount(expected) failed
+
+Locator:  locator('.customer-overview .treatment-control-bar')
+Expected: 2
+Received: 0
+Timeout:  5000ms
+
+Call log:
+  - Expect "toHaveCount" locator('.customer-overview .treatment-control-bar') with timeout 5000ms
+  - waiting for locator('.customer-overview .treatment-control-bar')
+    14 ├ù locator resolved to 0 elements
+       - unexpected value "0"
+
+
+customer-overview-merged.spec.js:89 chi tiß║┐t kh├ích giß╗» c╞í sß╗ƒ, bß╗æn vai tr├▓ v├á x├íc nhß║¡n trong panel responsive
+Test timeout of 30000ms exceeded.
+
+desktop-select.spec.js:3 desktop: chß╗ìn nh├ón vi├¬n h├│a ─æ╞ín bß║▒ng menu nß╗òi, b├án ph├¡m v├á kh├┤ng bß╗ï cß║»t trong ng─ân k├⌐o
+Error: expect(locator).toBeVisible() failed
+
+Locator: locator('.invoice-item-actions').getByRole('button', { name: 'Nh├ón vi├¬n thß╗▒c hiß╗çn - BS t├│c' })
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeVisible" locator('.invoice-item-actions').getByRole('button', { name: 'Nh├ón vi├¬n thß╗▒c hiß╗çn - BS t├│c' }) with timeout 5000ms
+  - waiting for locator('.invoice-item-actions').getByRole('button', { name: 'Nh├ón vi├¬n thß╗▒c hiß╗çn - BS t├│c' })
+
+
+directory-export.spec.js:7 customers: downloads a readable workbook containing all pages
+Error: expect(received).toMatch(expected)
+
+Expected pattern: /^Xuly-.*\.xlsx$/
+Received string:  "ROSA-khach-hang-2026-11-06.xlsx"
+
+directory-export.spec.js:7 products: downloads a readable workbook containing all pages
+Error: expect(received).toMatch(expected)
+
+Expected pattern: /^Xuly-.*\.xlsx$/
+Received string:  "ROSA-san-pham-dich-vu-2026-11-06.xlsx"
+
+directory-export.spec.js:7 inventory: downloads a readable workbook containing all pages
+Error: expect(received).toMatch(expected)
+
+Expected pattern: /^Xuly-.*\.xlsx$/
+Received string:  "ROSA-ton-kho-2026-11-06.xlsx"
+
+directory-export.spec.js:7 treatments: downloads a readable workbook containing all pages
+Error: expect(received).toMatch(expected)
+
+Expected pattern: /^Xuly-.*\.xlsx$/
+Received string:  "ROSA-lieu-trinh-2026-11-06.xlsx"
+
+invoice-date-repair.spec.js:3 manager edits the Vietnam invoice day without shifting it through UTC
+Error: expect(locator).toHaveValue(expected) failed
+
+Locator:  getByLabel('Ng├áy h├│a ─æ╞ín', { exact: true })
+Expected: "2026-10-31"
+Received: "31/10/2026"
+Timeout:  5000ms
+
+Call log:
+  - Expect "toHaveValue" getByLabel('Ng├áy h├│a ─æ╞ín', { exact: true }) with timeout 5000ms
+  - waiting for getByLabel('Ng├áy h├│a ─æ╞ín', { exact: true })
+    13 ├ù locator resolved to <input id="_r_4_" type="text" max="2026-11-06" autocomplete="off" value="31/10/2026" inputmode="numeric" aria-expanded="false" aria-haspopup="dialog" aria-label="Ng├áy h├│a ─æ╞ín"/>
+       - unexpected value "31/10/2026"
+
+
+invoice-duplicate-services.spec.js:42 POST hai d├▓ng tr├╣ng d├╣ng mapping ─æß║úo thß╗⌐ tß╗▒ v├á vß║½n ß╗ƒ form tß║ío
+Error: expect(locator).toContainText(expected) failed
+
+Locator: getByRole('status')
+Expected substring: "─É├ú l╞░u h├│a ─æ╞ín #78 th├ánh c├┤ng"
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toContainText" getByRole('status') with timeout 5000ms
+  - waiting for getByRole('status')
+
+
+invoice-duplicate-services.spec.js:93 lß╗ùi execute sau POST vß║½n giß╗» form v├á kh├┤ng cho tß║ío lß║íi h├│a ─æ╞ín
+Error: expect(locator).toContainText(expected) failed
+
+Locator: getByRole('alert')
+Expected substring: "H├│a ─æ╞ín #78 ─æ├ú l╞░u"
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toContainText" getByRole('alert') with timeout 5000ms
+  - waiting for getByRole('alert')
+
+
+invoice-flow.spec.js:3 tr├¬n ─æiß╗çn thoß║íi ├┤ t├¼m sß║ún phß║⌐m h├│a ─æ╞ín hiß╗çn danh s├ích v├á d├▓ng nhß║¡p kh├┤ng tr├án ngang
+Error: expect(received).toEqual(expected) // deep equality
+
+- Expected  - 1
++ Received  + 1
+
+  Object {
+    "inputsSideBySide": true,
+    "optionFits": true,
+    "pageFits": true,
+-   "productBeforeInputs": true,
++   "productBeforeInputs": false,
+    "totalBelow": true,
+  }
+
+invoice-flow.spec.js:60 h├│a ─æ╞ín dß╗ïch vß╗Ñ ─æ├ú l├ám: l╞░u h├│a ─æ╞ín, trß╗½ buß╗òi v├á g├ín nh├ón vi├¬n theo vai tr├▓
+Error: expect(locator).toBeVisible() failed
+
+Locator: getByRole('combobox', { name: 'Nh├ón vi├¬n thß╗▒c hiß╗çn - Kß╗╣ thuß║¡t vi├¬n' })
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeVisible" getByRole('combobox', { name: 'Nh├ón vi├¬n thß╗▒c hiß╗çn - Kß╗╣ thuß║¡t vi├¬n' }) with timeout 5000ms
+  - waiting for getByRole('combobox', { name: 'Nh├ón vi├¬n thß╗▒c hiß╗çn - Kß╗╣ thuß║¡t vi├¬n' })
+
+
+invoice-flow.spec.js:172 bß╗æn vai tr├▓ thß╗▒c hiß╗çn tr├¬n mß╗Öt h├áng v├á T╞░ vß║Ñn s├ít th├╣ng r├íc
+Error: expect(locator).toHaveCount(expected) failed
+
+Locator:  locator('.compact-invoice-line').first().locator('.role-staff-picker .field')
+Expected: 4
+Received: 0
+Timeout:  5000ms
+
+Call log:
+  - Expect "toHaveCount" locator('.compact-invoice-line').first().locator('.role-staff-picker .field') with timeout 5000ms
+  - waiting for locator('.compact-invoice-line').first().locator('.role-staff-picker .field')
+    14 ├ù locator resolved to 0 elements
+       - unexpected value "0"
+
+
+invoice-flow.spec.js:235 tick Ch╞░a l├ám ß║⌐n bß╗Ö chß╗ìn nh├ón vi├¬n v├á kh├┤ng ghi nhß║¡n buß╗òi
+Error: expect(locator).toBeVisible() failed
+
+Locator: getByRole('combobox', { name: 'Nh├ón vi├¬n thß╗▒c hiß╗çn - Kß╗╣ thuß║¡t vi├¬n' })
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeVisible" getByRole('combobox', { name: 'Nh├ón vi├¬n thß╗▒c hiß╗çn - Kß╗╣ thuß║¡t vi├¬n' }) with timeout 5000ms
+  - waiting for getByRole('combobox', { name: 'Nh├ón vi├¬n thß╗▒c hiß╗çn - Kß╗╣ thuß║¡t vi├¬n' })
+
+
+invoice-flow.spec.js:268 h├│a ─æ╞ín t├¼m kh├ích/dß╗ïch vß╗Ñ, ─æß╗ông bß╗Ö chiß║┐t khß║Ñu v├á trß║ú v├¡ kh├┤ng tß║ío nß╗ú
+Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 1
+Received: 0
+
+Call Log:
+- Timeout 5000ms exceeded while waiting on the predicate
+
+invoice-flow.spec.js:325 quß║ún l├╜ chß╗ìn ng├áy h├│a ─æ╞ín qu├í khß╗⌐ khi tß║ío, ─æß╗â trß╗æng th├¼ m├íy chß╗º lß║Ñy thß╗¥i ─æiß╗âm hiß╗çn tß║íi
+Error: expect(locator).toHaveValue(expected) failed
+
+Locator:  getByLabel('Ng├áy h├│a ─æ╞ín', { exact: true })
+Expected: ""
+Received: "06/11/2026"
+Timeout:  5000ms
+
+Call log:
+  - Expect "toHaveValue" getByLabel('Ng├áy h├│a ─æ╞ín', { exact: true }) with timeout 5000ms
+  - waiting for getByLabel('Ng├áy h├│a ─æ╞ín', { exact: true })
+    14 ├ù locator resolved to <input id="_r_4_" type="text" max="2026-11-06" autocomplete="off" value="06/11/2026" inputmode="numeric" aria-expanded="false" aria-haspopup="dialog" aria-label="Ng├áy h├│a ─æ╞ín"/>
+       - unexpected value "06/11/2026"
+
+
+invoice-flow.spec.js:367 tiß╗ün t╞░ vß║Ñn mß╗Öt ng╞░ß╗¥i tß╗▒ bß║▒ng gi├í sau giß║úm, hai ng╞░ß╗¥i c├│ ├┤ chia ri├¬ng
+Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 1
+Received: 0
+
+Call Log:
+- Timeout 5000ms exceeded while waiting on the predicate
+
+invoice-wallet-partial.spec.js:4 v├¡ nhß║¡p mß╗Öt phß║ºn, giß╗» bß║úng sau POST/PUT v├á li├¬n kß║┐t ─æ├║ng kh├ích (1920px)
+Test timeout of 30000ms exceeded.
+
+invoice-wallet-partial.spec.js:4 v├¡ nhß║¡p mß╗Öt phß║ºn, giß╗» bß║úng sau POST/PUT v├á li├¬n kß║┐t ─æ├║ng kh├ích (1440px)
+Test timeout of 30000ms exceeded.
+
+invoice-wallet-partial.spec.js:4 v├¡ nhß║¡p mß╗Öt phß║ºn, giß╗» bß║úng sau POST/PUT v├á li├¬n kß║┐t ─æ├║ng kh├ích (1100px)
+Test timeout of 30000ms exceeded.
+
+invoice-wallet-partial.spec.js:4 v├¡ nhß║¡p mß╗Öt phß║ºn, giß╗» bß║úng sau POST/PUT v├á li├¬n kß║┐t ─æ├║ng kh├ích (768px)
+Test timeout of 30000ms exceeded.
+
+invoice-wallet-partial.spec.js:4 v├¡ nhß║¡p mß╗Öt phß║ºn, giß╗» bß║úng sau POST/PUT v├á li├¬n kß║┐t ─æ├║ng kh├ích (390px)
+Test timeout of 30000ms exceeded.
+
+invoice-wallet-partial.spec.js:4 v├¡ nhß║¡p mß╗Öt phß║ºn, giß╗» bß║úng sau POST/PUT v├á li├¬n kß║┐t ─æ├║ng kh├ích (320px)
+Test timeout of 30000ms exceeded.
+
+list-refresh.spec.js:36 h├│a ─æ╞ín lß╗ìc ng├áy v├á t├¬n, tß║úi lß║íi sau khi x├│a
+Error: locator.fill: Error: strict mode violation: getByLabel('Tß╗½ ng├áy') resolved to 2 elements:
+    1) <input id="_r_0_" type="text" autocomplete="off" value="dd/mm/yyyy" inputmode="numeric" aria-label="Tß╗½ ng├áy" aria-expanded="false" aria-haspopup="dialog"/> aka getByRole('textbox', { name: 'Tß╗½ ng├áy' })
+    2) <button type="button" class="date-input-toggle" aria-label="Mß╗ƒ lß╗ïch Tß╗½ ng├áy">ΓÇª</button> aka getByRole('button', { name: 'Mß╗ƒ lß╗ïch Tß╗½ ng├áy' })
+
+Call log:
+  - waiting for getByLabel('Tß╗½ ng├áy')
+
+
+mobile-select.spec.js:5 h├│a ─æ╞ín: nh├ón vi├¬n gß╗ìn v├á menu ─æiß╗çn thoß║íi cß╗ºa ß╗⌐ng dß╗Ñng
+Error: expect(locator).toBeVisible() failed
+
+Locator: locator('.invoice-item-actions .role-staff-picker').getByRole('button', { name: 'Nh├ón vi├¬n thß╗▒c hiß╗çn - KTV mß║╖t' })
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeVisible" locator('.invoice-item-actions .role-staff-picker').getByRole('button', { name: 'Nh├ón vi├¬n thß╗▒c hiß╗çn - KTV mß║╖t' }) with timeout 5000ms
+  - waiting for locator('.invoice-item-actions .role-staff-picker').getByRole('button', { name: 'Nh├ón vi├¬n thß╗▒c hiß╗çn - KTV mß║╖t' })
+
+
+mobile-workflows.spec.js:208 single execution collapses without blank space at 360px
+Error: [{"className":"date-input","width":195},{"className":"","width":175},{"className":"date-input-toggle","width":35},{"className":{},"width":17},{"className":{},"width":0},{"className":{},"width":0},{"className":{},"width":12.75},{"className":{},"width":12.75},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125}]
+
+expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: false
+
+mobile-workflows.spec.js:287 customer overview uses compact embedded execution at 360px
+Error: [{"className":"date-input","width":195},{"className":"","width":175},{"className":"date-input-toggle","width":35},{"className":{},"width":17},{"className":{},"width":0},{"className":{},"width":0},{"className":{},"width":12.75},{"className":{},"width":12.75},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125}]
+
+expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: false
+
+mobile-workflows.spec.js:208 single execution collapses without blank space at 390px
+Error: [{"className":"date-input","width":195},{"className":"","width":175},{"className":"date-input-toggle","width":35},{"className":{},"width":17},{"className":{},"width":0},{"className":{},"width":0},{"className":{},"width":12.75},{"className":{},"width":12.75},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125}]
+
+expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: false
+
+mobile-workflows.spec.js:287 customer overview uses compact embedded execution at 390px
+Error: [{"className":"date-input","width":195},{"className":"","width":175},{"className":"date-input-toggle","width":35},{"className":{},"width":17},{"className":{},"width":0},{"className":{},"width":0},{"className":{},"width":12.75},{"className":{},"width":12.75},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125},{"className":{},"width":0.007080078125}]
+
+expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: false
+
+mobile-workflows.spec.js:208 single execution collapses without blank space at 430px
+Error: [{"className":"date-input","width":195},{"className":"","width":175},{"className":"date-input-toggle","width":35},{"className":{},"width":17}]
+
+expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: false
+
+mobile-workflows.spec.js:287 customer overview uses compact embedded execution at 430px
+Error: [{"className":"date-input","width":195},{"className":"","width":175},{"className":"date-input-toggle","width":35},{"className":{},"width":17}]
+
+expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: false
+
+product-service-children.spec.js:39 nested service display and STAFF editing fit 1280px
+Error: expect(locator).toBeVisible() failed
+
+Locator: getByRole('dialog').getByRole('option', { name: '─Éß║»p mß║╖t nß║í phß╗Ñc hß╗ôi' })
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeVisible" getByRole('dialog').getByRole('option', { name: '─Éß║»p mß║╖t nß║í phß╗Ñc hß╗ôi' }) with timeout 5000ms
+  - waiting for getByRole('dialog').getByRole('option', { name: '─Éß║»p mß║╖t nß║í phß╗Ñc hß╗ôi' })
+
+
+product-service-children.spec.js:39 nested service display and STAFF editing fit 390px
+Error: expect(locator).toBeVisible() failed
+
+Locator: getByRole('dialog').getByRole('option', { name: '─Éß║»p mß║╖t nß║í phß╗Ñc hß╗ôi' })
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeVisible" getByRole('dialog').getByRole('option', { name: '─Éß║»p mß║╖t nß║í phß╗Ñc hß╗ôi' }) with timeout 5000ms
+  - waiting for getByRole('dialog').getByRole('option', { name: '─Éß║»p mß║╖t nß║í phß╗Ñc hß╗ôi' })
+
+
+product-service-children.spec.js:75 creates child links and hides the editor for retail products
+Test timeout of 30000ms exceeded.
+
+reports.spec.js:3 chi tiß║┐t phiß║┐u chi trong b├ío c├ío hiß╗ân thß╗ï tß╗½ng khoß║ún chi, kh├┤ng hiß╗ân thß╗ï th├┤ng tin giß║úm gi├í
+Error: expect(locator).toBeVisible() failed
+
+Locator: getByRole('dialog', { name: 'Chi tiß║┐t chß╗⌐ng tß╗½' }).getByRole('region', { name: 'C├íc khoß║ún chi' })
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeVisible" getByRole('dialog', { name: 'Chi tiß║┐t chß╗⌐ng tß╗½' }).getByRole('region', { name: 'C├íc khoß║ún chi' }) with timeout 5000ms
+  - waiting for getByRole('dialog', { name: 'Chi tiß║┐t chß╗⌐ng tß╗½' }).getByRole('region', { name: 'C├íc khoß║ún chi' })
+
+
+reports.spec.js:97 tß╗òng chß╗⌐ng tß╗½ to├án kß╗│ v├á c├┤ng ca theo nh├ón vi├¬n kh├┤ng phß╗Ñ thuß╗Öc trang dß╗» liß╗çu
+Error: expect(locator).toBeVisible() failed
+
+Locator: getByText(/Tß╗òng h├│a ─æ╞ín to├án kß╗│/)
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeVisible" getByText(/Tß╗òng h├│a ─æ╞ín to├án kß╗│/) with timeout 5000ms
+  - waiting for getByText(/Tß╗òng h├│a ─æ╞ín to├án kß╗│/)
+
+
+rosa-customer-album.spec.js:5 Rosa profile and authenticated album CRUD 1440px
+Error: expect(received).toBeLessThan(expected)
+
+Expected: < 1.15
+Received:   1.5555694422746447
+
+rosa-customer-album.spec.js:5 Rosa profile and authenticated album CRUD 1024px
+Error: expect(received).toEqual(expected) // deep equality
+
+- Expected  - 1
++ Received  + 1
+
+  Object {
+    "fits": true,
+-   "sideBySide": true,
++   "sideBySide": false,
+  }
+
+rosa-customer-album.spec.js:5 Rosa profile and authenticated album CRUD 768px
+Error: expect(locator).toHaveCount(expected) failed
+
+Locator:  getByRole('region', { name: 'Album ß║únh da' }).locator('.skin-session')
+Expected: 1
+Received: 0
+Timeout:  5000ms
+
+Call log:
+  - Expect "toHaveCount" getByRole('region', { name: 'Album ß║únh da' }).locator('.skin-session') with timeout 5000ms
+  - waiting for getByRole('region', { name: 'Album ß║únh da' }).locator('.skin-session')
+    14 ├ù locator resolved to 0 elements
+       - unexpected value "0"
+
+
+rosa-customer-album.spec.js:5 Rosa profile and authenticated album CRUD 390px
+Error: expect(locator).toHaveCount(expected) failed
+
+Locator:  getByRole('region', { name: 'Album ß║únh da' }).locator('.skin-session')
+Expected: 1
+Received: 0
+Timeout:  5000ms
+
+Call log:
+  - Expect "toHaveCount" getByRole('region', { name: 'Album ß║únh da' }).locator('.skin-session') with timeout 5000ms
+  - waiting for getByRole('region', { name: 'Album ß║únh da' }).locator('.skin-session')
+    14 ├ù locator resolved to 0 elements
+       - unexpected value "0"
+
+
+rosa-customer-form.spec.js:4 Rosa customer create/edit at 1440px
+Error: locator.fill: Error: strict mode violation: getByRole('dialog').getByLabel('Ng├áy lß║¡p hß╗ô s╞í') resolved to 2 elements:
+    1) <input id="_r_0_" type="text" min="1000-01-01" max="2026-11-06" autocomplete="off" value="dd/mm/yyyy" inputmode="numeric" aria-expanded="false" aria-haspopup="dialog" aria-label="Ng├áy lß║¡p hß╗ô s╞í"/> aka getByRole('textbox', { name: 'Ng├áy lß║¡p hß╗ô s╞í' })
+    2) <button type="button" class="date-input-toggle" aria-label="Mß╗ƒ lß╗ïch Ng├áy lß║¡p hß╗ô s╞í">ΓÇª</button> aka getByRole('button', { name: 'Mß╗ƒ lß╗ïch Ng├áy lß║¡p hß╗ô s╞í' })
+
+Call log:
+  - waiting for getByRole('dialog').getByLabel('Ng├áy lß
+
+rosa-customer-form.spec.js:4 Rosa customer create/edit at 1024px
+Error: locator.fill: Error: strict mode violation: getByRole('dialog').getByLabel('Ng├áy lß║¡p hß╗ô s╞í') resolved to 2 elements:
+    1) <input id="_r_0_" type="text" min="1000-01-01" max="2026-11-06" autocomplete="off" value="dd/mm/yyyy" inputmode="numeric" aria-expanded="false" aria-haspopup="dialog" aria-label="Ng├áy lß║¡p hß╗ô s╞í"/> aka getByRole('textbox', { name: 'Ng├áy lß║¡p hß╗ô s╞í' })
+    2) <button type="button" class="date-input-toggle" aria-label="Mß╗ƒ lß╗ïch Ng├áy lß║¡p hß╗ô s╞í">ΓÇª</button> aka getByRole('button', { name: 'Mß╗ƒ lß╗ïch Ng├áy lß║¡p hß╗ô s╞í' })
+
+Call log:
+  - waiting for getByRole('dialog').getByLabel('Ng├áy lß
+
+rosa-customer-form.spec.js:4 Rosa customer create/edit at 768px
+Error: locator.fill: Error: strict mode violation: getByRole('dialog').getByLabel('Ng├áy lß║¡p hß╗ô s╞í') resolved to 2 elements:
+    1) <input id="_r_0_" type="text" min="1000-01-01" max="2026-11-06" autocomplete="off" value="dd/mm/yyyy" inputmode="numeric" aria-expanded="false" aria-haspopup="dialog" aria-label="Ng├áy lß║¡p hß╗ô s╞í"/> aka getByRole('textbox', { name: 'Ng├áy lß║¡p hß╗ô s╞í' })
+    2) <button type="button" class="date-input-toggle" aria-label="Mß╗ƒ lß╗ïch Ng├áy lß║¡p hß╗ô s╞í">ΓÇª</button> aka getByRole('button', { name: 'Mß╗ƒ lß╗ïch Ng├áy lß║¡p hß╗ô s╞í' })
+
+Call log:
+  - waiting for getByRole('dialog').getByLabel('Ng├áy lß
+
+rosa-customer-form.spec.js:4 Rosa customer create/edit at 390px
+Error: locator.fill: Error: strict mode violation: getByRole('dialog').getByLabel('Ng├áy lß║¡p hß╗ô s╞í') resolved to 2 elements:
+    1) <input id="_r_0_" type="text" min="1000-01-01" max="2026-11-06" autocomplete="off" value="dd/mm/yyyy" inputmode="numeric" aria-expanded="false" aria-haspopup="dialog" aria-label="Ng├áy lß║¡p hß╗ô s╞í"/> aka getByRole('textbox', { name: 'Ng├áy lß║¡p hß╗ô s╞í' })
+    2) <button type="button" class="date-input-toggle" aria-label="Mß╗ƒ lß╗ïch Ng├áy lß║¡p hß╗ô s╞í">ΓÇª</button> aka getByRole('button', { name: 'Mß╗ƒ lß╗ïch Ng├áy lß║¡p hß╗ô s╞í' })
+
+Call log:
+  - waiting for getByRole('dialog').getByLabel('Ng├áy lß
+
+rosa-session-followup.spec.js:5 ghi ch├║ sau k├╜ v├á k├╜ bß╗ò sung ─æ├║ng buß╗òi, kh├┤ng tß║ío execution - desktop
+Error: expect(locator).toHaveCount(expected) failed
+
+Locator:  locator('tr[data-history-id="77"]')
+Expected: 1
+Received: 0
+Timeout:  5000ms
+
+Call log:
+  - Expect "toHaveCount" locator('tr[data-history-id="77"]') with timeout 5000ms
+  - waiting for locator('tr[data-history-id="77"]')
+    14 ├ù locator resolved to 0 elements
+       - unexpected value "0"
+
+
+rosa-session-followup.spec.js:5 ghi ch├║ sau k├╜ v├á k├╜ bß╗ò sung ─æ├║ng buß╗òi, kh├┤ng tß║ío execution - mobile
+Error: expect(locator).toHaveCount(expected) failed
+
+Locator:  locator('tr[data-history-id="77"]')
+Expected: 1
+Received: 0
+Timeout:  5000ms
+
+Call log:
+  - Expect "toHaveCount" locator('tr[data-history-id="77"]') with timeout 5000ms
+  - waiting for locator('tr[data-history-id="77"]')
+    14 ├ù locator resolved to 0 elements
+       - unexpected value "0"
+
+
+rosa-session-signature.spec.js:4 ghi ch├║, k├╜ lß║íi, cß║únh b├ío bß╗Å k├╜ v├á phß╗Ñc hß╗ôi lß╗ùi 1440px
+Test timeout of 30000ms exceeded.
+
+rosa-session-signature.spec.js:4 ghi ch├║, k├╜ lß║íi, cß║únh b├ío bß╗Å k├╜ v├á phß╗Ñc hß╗ôi lß╗ùi 390px
+Test timeout of 30000ms exceeded.
+
+rosa-session-signature.spec.js:4 ghi ch├║, k├╜ lß║íi, cß║únh b├ío bß╗Å k├╜ v├á phß╗Ñc hß╗ôi lß╗ùi 320px
+Test timeout of 30000ms exceeded.
+
+rosa-session-signature.spec.js:4 ghi ch├║, k├╜ lß║íi, cß║únh b├ío bß╗Å k├╜ v├á phß╗Ñc hß╗ôi lß╗ùi 768px
+Test timeout of 30000ms exceeded.
+
+rosa-session-signature.spec.js:4 ghi ch├║, k├╜ lß║íi, cß║únh b├ío bß╗Å k├╜ v├á phß╗Ñc hß╗ôi lß╗ùi 1024px
+Test timeout of 30000ms exceeded.
+
+today-group-signature.spec.js:3 parent signs once for performed children; pending children have no signature action
+Error: expect(locator).toHaveCount(expected) failed
+
+Locator:  getByRole('textbox')
+Expected: 1
+Received: 2
+Timeout:  5000ms
+
+Call log:
+  - Expect "toHaveCount" getByRole('textbox') with timeout 5000ms
+  - waiting for getByRole('textbox')
+    14 ├ù locator resolved to 2 elements
+       - unexpected value "2"
+
+
+treatment-completed.spec.js:4 cß╗Öt ─É├ú ho├án th├ánh cß║ính Dß╗ïch vß╗Ñ ß╗ƒ m├án 1440px
+Error: expect(locator).toHaveText(expected) failed
+
+Locator: locator('.treatment-card-item .treatment-sessions')
+Expected: "C├▓n 2/3 buß╗òi"
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toHaveText" locator('.treatment-card-item .treatment-sessions') with timeout 5000ms
+  - waiting for locator('.treatment-card-item .treatment-sessions')
+
+
+treatment-completed.spec.js:4 cß╗Öt ─É├ú ho├án th├ánh cß║ính Dß╗ïch vß╗Ñ ß╗ƒ m├án 390px
+Error: expect(locator).toHaveText(expected) failed
+
+Locator: locator('.treatment-card-item .treatment-sessions')
+Expected: "C├▓n 2/3 buß╗òi"
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toHaveText" locator('.treatment-card-item .treatment-sessions') with timeout 5000ms
+  - waiting for locator('.treatment-card-item .treatment-sessions')
+
+
+treatment-completed.spec.js:48 c─ân thß║│ng cß╗Öt sß╗æ buß╗òi giß╗»a thß║╗ c├▓n buß╗òi v├á vß╗½a hß║┐t buß╗òi ß╗ƒ m├án 1920px
+Test timeout of 30000ms exceeded.
+
+treatment-completed.spec.js:48 c─ân thß║│ng cß╗Öt sß╗æ buß╗òi giß╗»a thß║╗ c├▓n buß╗òi v├á vß╗½a hß║┐t buß╗òi ß╗ƒ m├án 1440px
+Test timeout of 30000ms exceeded.
+
+treatment-completed.spec.js:48 c─ân thß║│ng cß╗Öt sß╗æ buß╗òi giß╗»a thß║╗ c├▓n buß╗òi v├á vß╗½a hß║┐t buß╗òi ß╗ƒ m├án 1366px
+Test timeout of 30000ms exceeded.
+
+treatment-completed.spec.js:48 c─ân thß║│ng cß╗Öt sß╗æ buß╗òi giß╗»a thß║╗ c├▓n buß╗òi v├á vß╗½a hß║┐t buß╗òi ß╗ƒ m├án 1280px
+Test timeout of 30000ms exceeded.
+
+treatment-completed.spec.js:48 c─ân thß║│ng cß╗Öt sß╗æ buß╗òi giß╗»a thß║╗ c├▓n buß╗òi v├á vß╗½a hß║┐t buß╗òi ß╗ƒ m├án 1100px
+Test timeout of 30000ms exceeded.
+
+treatment-completed.spec.js:48 c─ân thß║│ng cß╗Öt sß╗æ buß╗òi giß╗»a thß║╗ c├▓n buß╗òi v├á vß╗½a hß║┐t buß╗òi ß╗ƒ m├án 768px
+Test timeout of 30000ms exceeded.
+
+treatment-completed.spec.js:48 c─ân thß║│ng cß╗Öt sß╗æ buß╗òi giß╗»a thß║╗ c├▓n buß╗òi v├á vß╗½a hß║┐t buß╗òi ß╗ƒ m├án 390px
+Test timeout of 30000ms exceeded.
+
+treatment-completed.spec.js:48 c─ân thß║│ng cß╗Öt sß╗æ buß╗òi giß╗»a thß║╗ c├▓n buß╗òi v├á vß╗½a hß║┐t buß╗òi ß╗ƒ m├án 320px
+Test timeout of 30000ms exceeded.
+
+treatment-customers.spec.js:3 lß╗ìc thß║╗ theo ng├áy thß╗▒c hiß╗çn gß╗¡i query backend, hiß╗ân thß╗ï metadata v├á x├│a lß╗ìc
+Error: locator.fill: Error: strict mode violation: getByLabel('Tß╗½ ng├áy') resolved to 2 elements:
+    1) <input id="_r_2_" type="text" autocomplete="off" value="dd/mm/yyyy" inputmode="numeric" aria-label="Tß╗½ ng├áy" aria-expanded="false" aria-haspopup="dialog"/> aka getByRole('textbox', { name: 'Tß╗½ ng├áy' })
+    2) <button type="button" class="date-input-toggle" aria-label="Mß╗ƒ lß╗ïch Tß╗½ ng├áy">ΓÇª</button> aka getByRole('button', { name: 'Mß╗ƒ lß╗ïch Tß╗½ ng├áy' })
+
+Call log:
+  - waiting for getByLabel('Tß╗½ ng├áy')
+
+
+treatment-customers.spec.js:29 trang liß╗çu tr├¼nh: ├┤ nh├ón vi├¬n gß╗ìn hai cß╗Öt v├á chß╗ìn bß║▒ng menu ri├¬ng tr├¬n ─æiß╗çn thoß║íi
+Test timeout of 30000ms exceeded.
+
+treatment-customers.spec.js:78 form thß╗▒c hiß╗çn trong chi tiß║┐t thß║╗ gß╗ìn tr├¬n desktop v├á kh├┤ng tr├án tr├¬n ─æiß╗çn thoß║íi
+Test timeout of 30000ms exceeded.
+
+treatment-customers.spec.js:159 dark mode giß╗» m├áu chß╗» v├á nß╗ün dß╗à ─æß╗ìc tr├¬n desktop v├á mobile
+Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: "rgb(48, 58, 52)"
+Received: "rgb(23, 44, 60)"
+
+Call Log:
+- Timeout 5000ms exceeded while waiting on the predicate
+
+treatment-customers.spec.js:211 gß╗Öp liß╗çu tr├¼nh theo kh├ích qua nhiß╗üu trang API, thß╗▒c hiß╗çn/g├ín c├┤ng v├á xem lß╗ïch sß╗¡
+Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 1
+Received: 0
+
+treatment-customers.spec.js:305 buß╗òi cuß╗æi vß║½n hiß╗çn ─æß║┐n hß║┐t ng├áy, xß║┐p sau thß║╗ c├▓n buß╗òi v├á kh├┤ng thß╗â thß╗▒c hiß╗çn th├¬m
+Error: expect(locator).toContainText(expected) failed
+
+Locator: locator('.treatment-customers tbody tr:not(.treatment-expanded-row)').first()
+Expected substring: "Kh├ích B"
+Received string:    "Kh├ích AΓÇöΓÇö1 dß╗ïch vß╗Ñ ΓÇö"
+Timeout: 5000ms
+
+Call log:
+  - Expect "toContainText" locator('.treatment-customers tbody tr:not(.treatment-expanded-row)').first() with timeout 5000ms
+  - waiting for locator('.treatment-customers tbody tr:not(.treatment-expanded-row)').first()
+    14 ├ù locator resolved to <tr class="clickable">ΓÇª</tr>
+       - unexpected value "Kh├ích AΓÇöΓÇö1 dß╗ïch vß╗Ñ ΓÇö"
+
+
+treatment-customers.spec.js:346 STAFF chß╗ë chß╗ìn ─æ╞░ß╗úc nh├ón vi├¬n ß╗ƒ c╞í sß╗ƒ t├ái khoß║ún khi g├ín lß╗ïch sß╗¡ liß╗çu tr├¼nh
+Error: expect(locator).toContainText(expected) failed
+
+Locator: locator('.drawer .line-item').first()
+Expected substring: "C╞í sß╗ƒ thß╗▒c hiß╗çn: C╞í sß╗ƒ #1"
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toContainText" locator('.drawer .line-item').first() with timeout 5000ms
+  - waiting for locator('.drawer .line-item').first()
+
+
+treatment-dashboard-sessions.spec.js:5 hai buß╗òi c├╣ng thß║╗ c├│ d├▓ng v├á thao t├íc ri├¬ng 1440px
+Error: expect(locator).toContainText(expected) failed
+
+Locator: locator('tr[data-history-id="77"]')
+Expected substring: "Nh├ón vi├¬n Mß╗Öt"
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toContainText" locator('tr[data-history-id="77"]') with timeout 5000ms
+  - waiting for locator('tr[data-history-id="77"]')
+
+
+treatment-dashboard-sessions.spec.js:5 hai buß╗òi c├╣ng thß║╗ c├│ d├▓ng v├á thao t├íc ri├¬ng 390px
+Error: expect(locator).toContainText(expected) failed
+
+Locator: locator('tr[data-history-id="77"]')
+Expected substring: "Nh├ón vi├¬n Mß╗Öt"
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toContainText" locator('tr[data-history-id="77"]') with timeout 5000ms
+  - waiting for locator('tr[data-history-id="77"]')
+
+
+treatment-dashboard.spec.js:4 tick buß╗òi h├┤m nay rß╗ôi g├ín nh├ón vi├¬n qua hai API
+Error: expect(received).toEqual(expected) // deep equality
+
+- Expected  - 0
++ Received  + 1
+
+@@ -1,8 +1,9 @@
+  Array [
+    Object {
+      "body": Object {
++       "execution_date": "2026-11-06",
+        "staffs": Array [],
+        "treatment_id": 10,
+      },
+      "path": "/api/treatments/execute",
+    },
+
+treatment-dashboard.spec.js:28 quß║ún l├╜ chß╗ìn c╞í sß╗ƒ ngay ß╗ƒ d├▓ng tr╞░ß╗¢c khi x├íc nhß║¡n buß╗òi thß╗▒c hiß╗çn
+Error: expect(received).toEqual(expected) // deep equality
+
+- Expected  - 1
++ Received  + 1
+
+  Object {
+    "compact": true,
+    "fits": true,
+-   "sameLine": true,
++   "sameLine": false,
+  }
+
+treatment-dashboard.spec.js:80 thß║╗ c┼⌐ ─æ├ú l├ám h├┤m nay hiß╗çn tr├¬n tß╗òng quan, sß╗¡a nh├ón vi├¬n v├á ho├án t├íc bß║▒ng DELETE
+Error: expect(locator).toBeChecked() failed
+
+Locator: getByRole('checkbox', { name: /─É├ú l├ám Kh├ích A/ })
+Expected: checked
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeChecked" getByRole('checkbox', { name: /─É├ú l├ám Kh├ích A/ }) with timeout 5000ms
+  - waiting for getByRole('checkbox', { name: /─É├ú l├ám Kh├ích A/ })
+
+
+treatment-dashboard.spec.js:111 ho├án t├íc tß╗òng quan: old
+Error: expect(locator).toBeChecked() failed
+
+Locator:  getByRole('checkbox', { name: /─É├ú l├ám Kh├ích Undo/ })
+Expected: checked
+Received: unchecked
+Timeout:  5000ms
+
+Call log:
+  - Expect "toBeChecked" getByRole('checkbox', { name: /─É├ú l├ám Kh├ích Undo/ }) with timeout 5000ms
+  - waiting for getByRole('checkbox', { name: /─É├ú l├ám Kh├ích Undo/ })
+    12 ├ù locator resolved to <input disabled type="checkbox" aria-label="─É├ú l├ám Kh├ích Undo - Da"/>
+       - unexpected value "unchecked"
+
+
+treatment-dashboard.spec.js:111 ho├án t├íc tß╗òng quan: missing
+Error: expect(locator).toBeChecked() failed
+
+Locator:  getByRole('checkbox', { name: /─É├ú l├ám Kh├ích Undo/ })
+Expected: checked
+Received: unchecked
+Timeout:  5000ms
+
+Call log:
+  - Expect "toBeChecked" getByRole('checkbox', { name: /─É├ú l├ám Kh├ích Undo/ }) with timeout 5000ms
+  - waiting for getByRole('checkbox', { name: /─É├ú l├ám Kh├ích Undo/ })
+    14 ├ù locator resolved to <input disabled type="checkbox" aria-label="─É├ú l├ám Kh├ích Undo - Da"/>
+       - unexpected value "unchecked"
+
+
+treatment-dashboard.spec.js:111 ho├án t├íc tß╗òng quan: cancel
+Error: expect(locator).toBeChecked() failed
+
+Locator:  getByRole('checkbox', { name: /─É├ú l├ám Kh├ích Undo/ })
+Expected: checked
+Received: unchecked
+Timeout:  5000ms
+
+Call log:
+  - Expect "toBeChecked" getByRole('checkbox', { name: /─É├ú l├ám Kh├ích Undo/ }) with timeout 5000ms
+  - waiting for getByRole('checkbox', { name: /─É├ú l├ám Kh├ích Undo/ })
+    14 ├ù locator resolved to <input disabled type="checkbox" aria-label="─É├ú l├ám Kh├ích Undo - Da"/>
+       - unexpected value "unchecked"
+
+
+treatment-dashboard.spec.js:111 ho├án t├íc tß╗òng quan: error
+Error: expect(locator).toBeChecked() failed
+
+Locator:  getByRole('checkbox', { name: /─É├ú l├ám Kh├ích Undo/ })
+Expected: checked
+Received: unchecked
+Timeout:  5000ms
+
+Call log:
+  - Expect "toBeChecked" getByRole('checkbox', { name: /─É├ú l├ám Kh├ích Undo/ }) with timeout 5000ms
+  - waiting for getByRole('checkbox', { name: /─É├ú l├ám Kh├ích Undo/ })
+    14 ├ù locator resolved to <input disabled type="checkbox" aria-label="─É├ú l├ám Kh├ích Undo - Da"/>
+       - unexpected value "unchecked"
+
+
+treatment-dashboard.spec.js:111 ho├án t├íc tß╗òng quan: manager
+Error: expect(locator).toBeChecked() failed
+
+Locator:  getByRole('checkbox', { name: /─É├ú l├ám Kh├ích Undo/ })
+Expected: checked
+Received: unchecked
+Timeout:  5000ms
+
+Call log:
+  - Expect "toBeChecked" getByRole('checkbox', { name: /─É├ú l├ám Kh├ích Undo/ }) with timeout 5000ms
+  - waiting for getByRole('checkbox', { name: /─É├ú l├ám Kh├ích Undo/ })
+    14 ├ù locator resolved to <input disabled type="checkbox" aria-label="─É├ú l├ám Kh├ích Undo - Da"/>
+       - unexpected value "unchecked"
+
+
+treatment-parent-closure.spec.js:4 treatment parent execution and mandatory signed closure (desktop)
+Test timeout of 30000ms exceeded.
+
+treatment-parent-closure.spec.js:4 treatment parent execution and mandatory signed closure (mobile)
+Test timeout of 30000ms exceeded.
+
+vietnam-timezone.spec.js:7 lß╗ìc ─æ├║ng buß╗òi v├á cho ho├án t├íc c├╣ng ng├áy Viß╗çt Nam
+Error: expect(locator).toBeVisible() failed
+
+Locator: locator('tr[data-history-id="77"]')
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeVisible" locator('tr[data-history-id="77"]') with timeout 5000ms
+  - waiting for locator('tr[data-history-id="77"]')
+
+
+vietnam-timezone.spec.js:39 thß║╗ mß╗¢i tß╗½ timestamp UTC hiß╗ân thß╗ï v├á gß╗¡i ng├áy Viß╗çt Nam kh├┤ng ─æß╗òi
+Error: expect(locator).toHaveValue(expected) failed
+
+Locator: getByLabel('Ng├áy thß╗▒c hiß╗çn')
+Expected: "2026-10-28"
+Error: strict mode violation: getByLabel('Ng├áy thß╗▒c hiß╗çn') resolved to 2 elements:
+    1) <input id="_r_3_" required="" type="text" autocomplete="off" value="28/10/2026" inputmode="numeric" aria-expanded="false" aria-haspopup="dialog" aria-label="Ng├áy thß╗▒c hiß╗çn"/> aka getByRole('textbox', { name: 'Ng├áy thß╗▒c hiß╗çn' })
+    2) <button type="button" class="date-input-toggle" aria-label="Mß╗ƒ lß╗ïch Ng├áy thß╗▒c hiß╗çn">ΓÇª</button> aka getByRole('button', { name: 'Mß╗ƒ lß╗ïch Ng├áy thß╗▒c hiß╗çn' })
+
+Call log:
+  - E
+
+vietnam-timezone.spec.js:7 lß╗ìc ─æ├║ng buß╗òi v├á cho ho├án t├íc c├╣ng ng├áy Viß╗çt Nam
+Error: expect(locator).toBeVisible() failed
+
+Locator: locator('tr[data-history-id="77"]')
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeVisible" locator('tr[data-history-id="77"]') with timeout 5000ms
+  - waiting for locator('tr[data-history-id="77"]')
+
+
+vietnam-timezone.spec.js:39 thß║╗ mß╗¢i tß╗½ timestamp UTC hiß╗ân thß╗ï v├á gß╗¡i ng├áy Viß╗çt Nam kh├┤ng ─æß╗òi
+Error: expect(locator).toHaveValue(expected) failed
+
+Locator: getByLabel('Ng├áy thß╗▒c hiß╗çn')
+Expected: "2026-10-28"
+Error: strict mode violation: getByLabel('Ng├áy thß╗▒c hiß╗çn') resolved to 2 elements:
+    1) <input id="_r_3_" required="" type="text" autocomplete="off" value="28/10/2026" inputmode="numeric" aria-expanded="false" aria-haspopup="dialog" aria-label="Ng├áy thß╗▒c hiß╗çn"/> aka getByRole('textbox', { name: 'Ng├áy thß╗▒c hiß╗çn' })
+    2) <button type="button" class="date-input-toggle" aria-label="Mß╗ƒ lß╗ïch Ng├áy thß╗▒c hiß╗çn">ΓÇª</button> aka getByRole('button', { name: 'Mß╗ƒ lß╗ïch Ng├áy thß╗▒c hiß╗çn' })
+
+Call log:
+  - E
+
+vietnam-timezone.spec.js:7 lß╗ìc ─æ├║ng buß╗òi v├á cho ho├án t├íc c├╣ng ng├áy Viß╗çt Nam
+Error: expect(locator).toBeVisible() failed
+
+Locator: locator('tr[data-history-id="77"]')
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeVisible" locator('tr[data-history-id="77"]') with timeout 5000ms
+  - waiting for locator('tr[data-history-id="77"]')
+
+
+vietnam-timezone.spec.js:39 thß║╗ mß╗¢i tß╗½ timestamp UTC hiß╗ân thß╗ï v├á gß╗¡i ng├áy Viß╗çt Nam kh├┤ng ─æß╗òi
+Error: expect(locator).toHaveValue(expected) failed
+
+Locator: getByLabel('Ng├áy thß╗▒c hiß╗çn')
+Expected: "2026-10-28"
+Error: strict mode violation: getByLabel('Ng├áy thß╗▒c hiß╗çn') resolved to 2 elements:
+    1) <input id="_r_3_" required="" type="text" autocomplete="off" value="28/10/2026" inputmode="numeric" aria-expanded="false" aria-haspopup="dialog" aria-label="Ng├áy thß╗▒c hiß╗çn"/> aka getByRole('textbox', { name: 'Ng├áy thß╗▒c hiß╗çn' })
+    2) <button type="button" class="date-input-toggle" aria-label="Mß╗ƒ lß╗ïch Ng├áy thß╗▒c hiß╗çn">ΓÇª</button> aka getByRole('button', { name: 'Mß╗ƒ lß╗ïch Ng├áy thß╗▒c hiß╗çn' })
+
+Call log:
+  - E
