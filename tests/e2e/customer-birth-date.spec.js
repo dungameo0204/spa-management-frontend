@@ -20,7 +20,7 @@ test('tạo nhanh khách trong hóa đơn cũng gửi ngày sinh', async ({ page
   await page.getByRole('button', { name: /Tạo khách “Khách mới”/ }).click()
   const dialog = page.getByRole('dialog', { name: 'Tạo khách hàng', exact: true })
   await dialog.getByLabel('Số điện thoại', { exact: true }).fill('0901234567')
-  await dialog.getByLabel('Ngày sinh', { exact: true }).fill('21/08/1995')
+  await dialog.getByLabel('Ngày sinh', { exact: true }).fill('1995-08-21')
   await dialog.getByRole('button', { name: 'Lưu khách hàng' }).click()
   await expect.poll(() => writes.length).toBe(1)
   expect(writes[0].date_of_birth).toBe('1995-08-21')

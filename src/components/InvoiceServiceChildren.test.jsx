@@ -33,7 +33,7 @@ it('selects child staff in grouped checkboxes and publishes only on confirmation
   expect(screen.queryByRole('checkbox', { name: 'Khác cơ sở' })).not.toBeInTheDocument()
   expect(onChange).not.toHaveBeenCalled()
   await actor.click(screen.getByRole('button', { name: 'Xong' }))
-  expect(listResource).toHaveBeenCalledWith('staffs', { branchId: 1 }, 1, 100)
+  expect(listResource).toHaveBeenCalledWith('staffs', {}, 1, 100, expect.any(AbortSignal))
   expect(onChange).toHaveBeenLastCalledWith([{ product_id: 12, total_sessions: 5, performStaffs: [{ staff_id: 2 }], performNow: true, staffBranchId: 1 }])
 })
 

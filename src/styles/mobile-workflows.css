@@ -1,3 +1,12 @@
+@media (max-width: 767px) {
+  .treatment-root-panel .treatment-execution-form .date-input,
+  .customer-overview .treatment-root-panel .treatment-execution-manager-row .compact-field.date-field .date-input {
+    width: 100%; min-width: 0 !important; max-width: 100%; flex: 1 1 0; padding: 0 !important;
+  }
+  .treatment-root-panel .treatment-execution-form .date-input input {
+    width: 0; flex: 1 1 0;
+  }
+}
 /* Shared mobile presentation only. Keep desktop geometry and business handlers intact.
    Some legacy compact controls use !important; scoped overrides below intentionally
    take precedence only inside the four customer/treatment workflows. */

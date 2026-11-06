@@ -24,7 +24,7 @@ async function setup(page, role = 'MANAGER') {
       return route.fulfill({ json: { message: 'Đã lưu' } })
     }
     if (path.startsWith('/api/products/')) return route.fulfill({ json: { data: [parent, ...children].find(item => item.id === Number(path.split('/').pop())) } })
-    if (path === '/api/products') return route.fulfill({ json: { data: url.searchParams.get('is_product') === '0' ? [parent, ...children, { id: 30, name: 'Serum bán lẻ', is_product: 1 }] : [parent], total: 1, totalPages: 1 } })
+    if (path === '/api/products') return route.fulfill({ json: { data: url.searchParams.get('pageSize') === '100' || url.searchParams.get('is_product') === '0' ? [parent, ...children, { id: 30, name: 'Serum bán lẻ', is_product: 1 }] : [parent], total: 1, totalPages: 1 } })
     return route.fulfill({ json: { data: [], total: 0 } })
   })
   await page.goto('/login')

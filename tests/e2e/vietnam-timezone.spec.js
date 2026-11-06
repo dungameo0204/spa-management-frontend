@@ -54,7 +54,7 @@ for (const timezoneId of ['UTC', 'America/Los_Angeles', 'Asia/Ho_Chi_Minh']) {
       })
       await page.goto('/')
       await page.getByRole('checkbox', { name: /Đã làm Khách mới/ }).check()
-      await expect(page.getByLabel('Ngày thực hiện')).toHaveValue('2026-10-28')
+      await expect(page.getByLabel('Ngày thực hiện', { exact: true })).toHaveValue('28/10/2026')
       await page.getByRole('combobox', { name: 'Cơ sở thực hiện', exact: true }).selectOption('1')
       await page.getByRole('button', { name: 'Xác nhận', exact: true }).click()
       await expect.poll(() => writes).toEqual([{ treatment_id: 10, branch_id: 1, execution_date: '2026-10-28', staffs: [] }])

@@ -76,15 +76,15 @@ function TreatmentSheet({ customer, cards }) {
   </section>
 }
 
-export default function CustomerRecordPrint({ record, onDone }) {
+export default function CustomerRecordPrint({ record, onDone, mode = 'print' }) {
   useEffect(() => {
-    if (!record) return
+    if (!record || mode !== 'print') return
     let timer
     const done = () => { clearTimeout(timer); onDone() }
     window.addEventListener('afterprint', done)
     const frame = requestAnimationFrame(() => { timer = setTimeout(done, 30000); window.print() })
     return () => { cancelAnimationFrame(frame); clearTimeout(timer); window.removeEventListener('afterprint', done) }
-  }, [record, onDone])
+  }, [record, onDone, mode])
   if (!record) return null
   const { customer, timeline = [], treatments } = record
   const referral = optionLabel(customer.referral_sources, referralSources)
@@ -92,7 +92,8 @@ export default function CustomerRecordPrint({ record, onDone }) {
   const purchases = purchasedItems(timeline)
   const services = purchases.filter(item => !Number(item.is_product))
   const products = purchases.filter(item => Number(item.is_product))
-  return createPortal(<div id="customer-record-print" className="customer-record-print" aria-label="Hồ sơ khách hàng in">
+  const id = mode === 'share' ? 'customer-record-share' : 'customer-record-print'
+  return createPortal(<div id={id} className={`customer-record-print${mode === 'share' ? ' is-share' : ''}`} aria-label={mode === 'share' ? 'Hồ sơ khách hàng để chia sẻ' : 'Hồ sơ khách hàng in'}>
     <style media="print">{'@page { size: A4 portrait; margin: var(--customer-record-page-margin-top, 12mm) var(--customer-record-page-margin-right, 11mm) var(--customer-record-page-margin-bottom, 15mm) var(--customer-record-page-margin-left, 11mm); }'}</style>
     <section className="customer-record-page customer-record-cover">
       <header><img className="customer-record-mark" src="/icons/icon.svg" alt="ROSA" width="60" height="60" /><div><strong>HỒ SƠ KHÁCH HÀNG</strong><small>THEO DÕI VÀ CHĂM SÓC KHÁCH HÀNG</small></div></header>

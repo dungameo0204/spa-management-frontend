@@ -59,7 +59,7 @@ it('executes selected children with their own staff and one parent note/signatur
   await actor.click(within(form).getByRole('button', { name: 'Nhân viên làm Laser' }))
   await actor.click(within(form).getByRole('button', { name: 'Nhân viên làm Massage' }))
   await actor.click(within(form).getByRole('button', { name: 'Ghi chú' }))
-  await actor.type(within(form).getByRole('textbox'), 'Ghi chú chung')
+  await actor.type(within(form).getByPlaceholderText('Lưu ý cho lần thực hiện này…'), 'Ghi chú chung')
   await actor.click(screen.getByText('Ký mới'))
   await actor.click(screen.getByRole('button', { name: 'Xác nhận' }))
   await waitFor(() => expect(executeTreatment).toHaveBeenCalledTimes(2))

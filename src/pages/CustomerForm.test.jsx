@@ -41,7 +41,7 @@ it('creates a customer with multiple skin types, referrals, multiline notes and 
   const form = await createForm(actor)
   await actor.type(form.getByLabelText('Mã hồ sơ'), 'ROSA-123')
   await actor.selectOptions(form.getByLabelText('Giới tính'), 'FEMALE')
-  fireEvent.change(form.getByLabelText('Ngày lập hồ sơ'), { target: { value: '2026-10-27' } })
+  fireEvent.change(form.getByLabelText('Ngày lập hồ sơ'), { target: { value: '27/10/2026' } })
   await actor.click(form.getByLabelText('Da khô'))
   await actor.click(form.getByLabelText('Da nhạy cảm, tổn thương'))
   await actor.click(form.getByLabelText('TikTok'))

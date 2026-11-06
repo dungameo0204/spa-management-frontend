@@ -29,7 +29,7 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 1024, height: 76
     await dialog.getByLabel('Số điện thoại', { exact: true }).fill('0901234567')
     expect(await dialog.getByLabel('Họ tên', { exact: true }).evaluate(element => element.getBoundingClientRect().height)).toBeLessThanOrEqual(44)
     await dialog.getByLabel('Mã hồ sơ').fill('ROSA-3')
-    await dialog.getByLabel('Ngày lập hồ sơ').fill('2026-10-27')
+    await dialog.getByLabel('Ngày lập hồ sơ', { exact: true }).fill('27/10/2026')
     await dialog.getByLabel('Da khô', { exact: true }).check()
     await dialog.getByLabel('Da lão hóa').check()
     await dialog.getByLabel('Facebook').check()

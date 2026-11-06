@@ -82,5 +82,5 @@ test('parent signs once for performed children; pending children have no signatu
   await expect(table.locator('.today-treatment-group')).toContainText('Đã ký')
   await groupButton.click()
   await expect(page.getByRole('textbox', { name:'Ghi chú buổi thực hiện' })).toHaveValue('làm lần 1')
-  await expect(page.getByRole('textbox')).toHaveCount(1)
+  await expect(page.getByRole('dialog', { name: 'Ghi chú và chữ ký nhóm dịch vụ' }).getByRole('textbox')).toHaveCount(1)
 })

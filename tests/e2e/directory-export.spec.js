@@ -38,7 +38,7 @@ for (const resource of ['customers', 'products', 'inventory', 'treatments']) {
     const downloadPromise = page.waitForEvent('download')
     await button.click()
     const download = await downloadPromise
-    expect(download.suggestedFilename()).toMatch(/^Xuly-.*\.xlsx$/)
+    expect(download.suggestedFilename()).toMatch(/^ROSA-.*\.xlsx$/)
     const book = new ExcelJS.Workbook()
     await book.xlsx.readFile(await download.path())
     const sheet = book.worksheets[0]

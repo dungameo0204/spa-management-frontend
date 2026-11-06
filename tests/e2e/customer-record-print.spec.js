@@ -1,6 +1,8 @@
 import { test, expect } from './fixtures'
+import { readFile } from 'node:fs/promises'
+import sharp from 'sharp'
 
-test('in hồ sơ khách tạo đủ bìa, khai thác tiền sử và phiếu điều trị A4', async ({ page }) => {
+test.beforeEach(async ({ page }) => {
   page.on('pageerror', error => console.log(`PAGE_ERROR: ${error.message}`))
   page.on('console', message => { if (message.type() === 'error') console.log(`CONSOLE_ERROR: ${message.text()}`) })
   await page.addInitScript(() => {
@@ -16,6 +18,9 @@ test('in hồ sơ khách tạo đủ bìa, khai thác tiền sử và phiếu đ
     const data = path === '/api/customers' ? [customer] : path === '/api/customers/17/overview' ? { customer, timeline } : path === '/api/treatments' || path === '/api/treatments/36' ? path === '/api/treatments' ? [treatment] : treatment : []
     return route.fulfill({ json: { data, total: Array.isArray(data) ? data.length : 1, totalPages: 1 } })
   })
+})
+
+test('in hồ sơ khách tạo đủ bìa, khai thác tiền sử và phiếu điều trị A4', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 950 })
   await page.goto('/customers')
   await page.screenshot({ path: 'test-results/customer-record-list.png', fullPage: true })
@@ -39,4 +44,79 @@ test('in hồ sơ khách tạo đủ bìa, khai thác tiền sử và phiếu đ
   await page.emulateMedia({ media: 'print' })
   await expect(page.locator('.customer-record-page')).toHaveCount(3)
   await page.screenshot({ path: 'test-results/customer-record-print.png', fullPage: true })
+})
+
+test('chia sẻ tạo PNG thật với theme OKLCH, không lóe hồ sơ hoặc gọi in', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'share', { configurable: true, value: undefined })
+    window.__shareInViewport = false
+    window.__shareObserved = false
+    const inspect = () => {
+      const root = document.querySelector('#customer-record-share')
+      if (root) {
+        window.__shareObserved = true
+        const bounds = root.getBoundingClientRect()
+        if (bounds.right > 0 && bounds.left < innerWidth && bounds.bottom > 0 && bounds.top < innerHeight) window.__shareInViewport = true
+      }
+    }
+    new MutationObserver(inspect).observe(document, { childList: true, subtree: true })
+  })
+  const errors = []
+  page.on('pageerror', error => errors.push(error.message))
+  const downloads = []
+  page.on('download', download => downloads.push(download))
+  await page.goto('/customers')
+  await page.getByRole('button', { name: 'Xem Khách hồ sơ', exact: true }).click()
+  await page.addStyleTag({ content: 'html,body{background:oklch(95% .03 250);color:oklch(25% .05 250)}' })
+  await page.getByRole('button', { name: 'Chia sẻ', exact: true }).click()
+  const dialog = page.getByRole('dialog', { name: 'Chia sẻ hồ sơ khách hàng' })
+  await expect(dialog).toBeVisible({ timeout: 30000 })
+  await expect(dialog.locator('img')).toHaveCount(3)
+  expect(downloads).toHaveLength(0)
+  await dialog.getByRole('button', { name: 'Tải tất cả ảnh' }).click()
+  await expect.poll(() => downloads.length).toBe(3)
+  for (const [index, download] of downloads.entries()) {
+    expect(download.suggestedFilename()).toBe(`ho-so-khach-ho-so-trang-${index + 1}.png`)
+    const png = await readFile(await download.path())
+    const image = sharp(png)
+    const metadata = await image.metadata()
+    expect(metadata.format).toBe('png')
+    expect(metadata.width).toBeGreaterThanOrEqual(1587)
+    expect(metadata.height).toBeGreaterThanOrEqual(2245)
+    const stats = await image.stats()
+    expect(stats.channels.some(channel => channel.stdev > 5)).toBe(true)
+  }
+  expect(await page.evaluate(() => window.__shareObserved)).toBe(true)
+  expect(await page.evaluate(() => window.__shareInViewport)).toBe(false)
+  expect(await page.evaluate(() => window.__customerRecordPrinted)).not.toBe(true)
+  await expect(page.locator('#customer-record-share')).toHaveCount(0)
+  await dialog.getByRole('button', { name: 'Đóng', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Chia sẻ', exact: true })).toBeEnabled()
+  expect(errors).toEqual([])
+})
+
+test('PNG giữ đủ hai đầu chữ ký SVG có viewBox lệch và không có kích thước', async ({ page }) => {
+  await page.route('**/api/treatments/36', route => route.fulfill({ json: { data: {
+    id: 36, total_sessions: 10, product_name: 'Kiểm tra chữ ký', histories: [{
+      id: 1, execution_date: '2026-11-05',
+      customer_signature_svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="100 40 400 80" fill="none" stroke-width="6"><path stroke="black" d="M 110 100 L 180 50 L 260 100 L 340 50 L 410 100 L 490 50"/><path stroke="red" d="M 110 50 L 110 100"/><path stroke="blue" d="M 490 50 L 490 100"/></svg>',
+    }],
+  } } }))
+  await page.goto('/customers')
+  await page.getByRole('button', { name: 'Xem Khách hồ sơ', exact: true }).click()
+  await page.getByRole('button', { name: 'Chia sẻ', exact: true }).click()
+  const dialog = page.getByRole('dialog', { name: 'Chia sẻ hồ sơ khách hàng' })
+  await expect(dialog).toBeVisible({ timeout: 30000 })
+  const downloaded = page.waitForEvent('download')
+  await dialog.getByRole('button', { name: 'Tải trang 3', exact: true }).click()
+  const png = await readFile(await (await downloaded).path())
+  const { data } = await sharp(png).removeAlpha().raw().toBuffer({ resolveWithObject: true })
+  let red = 0, blue = 0
+  for (let i = 0; i < data.length; i += 3) {
+    if (data[i] > 180 && data[i + 1] < 80 && data[i + 2] < 80) red++
+    if (data[i] < 80 && data[i + 1] < 80 && data[i + 2] > 180) blue++
+  }
+  expect(red).toBeGreaterThan(30)
+  expect(blue).toBeGreaterThan(30)
+  await page.screenshot({ path: 'test-results/customer-record-share-preview.png', fullPage: true })
 })

@@ -75,9 +75,13 @@ export default function DateInput({ value, onChange, birthDate = false, min, max
   useEffect(() => { if (!focused.current) { const next = partsFromIso(value); partsRef.current = next; setParts(next) } if (value && validIso(value)) setMonth(new Date(`${value}T12:00:00`)) }, [value])
   useEffect(() => { const close = event => { if (!wrapper.current?.contains(event.target) && !calendar.current?.contains(event.target)) setOpen(false) }; document.addEventListener('pointerdown', close); return () => document.removeEventListener('pointerdown', close) }, [])
   useEffect(() => { if (!open) return; positionPopup(); window.addEventListener('resize', positionPopup); window.addEventListener('scroll', positionPopup, true); return () => { window.removeEventListener('resize', positionPopup); window.removeEventListener('scroll', positionPopup, true) } }, [open])
-  useEffect(() => { input.current?.setCustomValidity(!iso || (min && iso < min) || (max && iso > max) ? 'Vui lòng nhập ngày hợp lệ.' : '') }, [iso, min, max])
+  const hasInput = parts.some(Boolean)
+  useEffect(() => { input.current?.setCustomValidity((required || hasInput) && (!iso || (min && iso < min) || (max && iso > max)) ? 'Vui lòng nhập ngày hợp lệ.' : '') }, [iso, min, max, required, hasInput])
   const days = useMemo(() => { const first = monthStart(month), offset = (first.getDay() + 6) % 7, count = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate(); return Array.from({ length: offset + count }, (_, index) => index < offset ? null : index - offset + 1) }, [month])
   function keyDown(event) {
+    if ((event.key === 'Backspace' || event.key === 'Delete') && input.current.selectionStart === 0 && input.current.selectionEnd === input.current.value.length) {
+      event.preventDefault(); apply(Array(8).fill('')); place(0); return
+    }
     const index = activeIndex.current
     if (/^\d$/.test(event.key)) { event.preventDefault(); const next = [...partsRef.current]; next[index] = event.key; apply(next); place(index + 1); return }
     if (event.key === '/') { event.preventDefault(); place(index < 2 ? 2 : index < 4 ? 4 : 7); return }
@@ -87,6 +91,10 @@ export default function DateInput({ value, onChange, birthDate = false, min, max
     if (event.key === 'ArrowRight') { event.preventDefault(); place(Math.min(7, index + 1)) }
   }
   function change(event) {
+    if (isoPattern.test(event.target.value) && validIso(event.target.value)) {
+      apply(partsFromIso(event.target.value))
+      return
+    }
     const digits = event.target.value.replace(/\D/g, '').slice(0, 8)
     const next = Array(8).fill('')
     if (birthDate && digits.length <= 4) digits.split('').forEach((digit, index) => { next[index + 4] = digit })

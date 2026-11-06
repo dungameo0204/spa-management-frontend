@@ -1,0 +1,10 @@
+.customer-record-share-layer{position:fixed;inset:0;z-index:1200;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px}
+.customer-record-share-dialog{width:min(1100px,100%);max-height:90dvh;overflow:auto;background:var(--surface,#fff);color:var(--text,#172033);border-radius:14px;padding:20px;box-shadow:0 16px 48px rgba(0,0,0,.25)}
+.customer-record-share-dialog header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.customer-record-share-dialog h2{margin:0;font-size:1.2rem}
+.customer-record-share-actions{display:flex;flex-wrap:wrap;gap:8px}
+.customer-record-share-previews{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:16px;margin-top:16px}
+.customer-record-share-previews figure{min-width:0;margin:0}
+.customer-record-share-previews img{display:block;width:100%;height:auto;border:1px solid #ccd3dd;background:#fff}
+.customer-record-share-previews figcaption{font-weight:600;margin:8px 0}
+@media print{.customer-record-share-layer{display:none!important}}

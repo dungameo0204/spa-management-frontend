@@ -171,7 +171,8 @@ it('prints only the persisted legacy payment after a successful save', async () 
   expect(document.getElementById('receipt-print')).toHaveTextContent('Thu nợ')
   expect(document.getElementById('receipt-print')).not.toHaveTextContent(/Nợ cũ|không có hóa đơn/)
   expect(document.getElementById('receipt-print')).toHaveTextContent('200.000')
-  await waitFor(() => expect(window.print).toHaveBeenCalledTimes(1))
+  fireEvent.load(document.querySelector('#receipt-print .receipt-logo'))
+  await waitFor(() => expect(window.print).toHaveBeenCalledTimes(1), { timeout: 3000 })
 })
 
 it('does not print a rejected payment', async () => {

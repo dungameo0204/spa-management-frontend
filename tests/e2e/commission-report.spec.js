@@ -47,7 +47,7 @@ for (const path of ['/commissions', '/reports']) {
       const downloaded = page.waitForEvent('download')
       await drawer.getByRole('button', { name: 'Xuất Excel', exact: true }).click()
       const download = await downloaded
-      expect(download.suggestedFilename()).toMatch(/^Xuly-cong-ca-3-2-.*\.xlsx$/)
+      expect(download.suggestedFilename()).toMatch(/^ROSA-cong-ca-3-2-.*\.xlsx$/)
       const book = new ExcelJS.Workbook()
       await book.xlsx.readFile(await download.path())
       const sheet = book.worksheets[0]
@@ -60,7 +60,7 @@ for (const path of ['/commissions', '/reports']) {
       const allDownloaded = page.waitForEvent('download')
       await page.getByRole('button', { name: 'Xuất Excel công ca toàn bộ nhân viên', exact: true }).click()
       const allDownload = await allDownloaded
-      expect(allDownload.suggestedFilename()).toMatch(/^Xuly-cong-ca-tat-ca-nhan-vien-.*\.xlsx$/)
+      expect(allDownload.suggestedFilename()).toMatch(/^ROSA-cong-ca-tat-ca-nhan-vien-.*\.xlsx$/)
       const allBook = new ExcelJS.Workbook()
       await allBook.xlsx.readFile(await allDownload.path())
       expect(allBook.getWorksheet('Công ca theo mức tiền')).toBeUndefined()

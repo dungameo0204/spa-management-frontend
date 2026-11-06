@@ -1,9 +1,9 @@
 import { Fragment, useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useBranch } from './AppShell'
 import { useAuth } from '../auth/AuthProvider'
 import { canUndoTreatmentExecution } from '../auth/permissions'
-import { assignTreatmentStaffs, executeTreatment, listResource, undoTreatmentExecution } from '../api/resources'
+import { assignTreatmentStaffs, executeTreatment, getResource, listResource, undoTreatmentExecution } from '../api/resources'
 import { formatSpaDate, today } from '../utils/format'
 import RoleStaffPicker from './RoleStaffPicker'
 import ConfirmDialog from './ConfirmDialog'
@@ -47,7 +47,15 @@ export default function TodayTreatments() {
     }).join(' · ')
   }
   const allCards = query.data || []
-  const cardDetails = allCards.map(data => ({ data }))
+  // The list endpoint includes child cards but not their execution histories.
+  // Only skip detail requests when histories are explicitly present on every card.
+  const cardDetails = useQueries({ queries: allCards.map(card => ({
+    queryKey: ['dashboard-treatments', 'detail', card.id, viewDate],
+    queryFn: () => getResource('treatments', card.id),
+    enabled: treatmentCards(card).some(item => !Array.isArray(item.histories)),
+    initialData: treatmentCards(card).every(item => Array.isArray(item.histories)) ? card : undefined,
+  })) })
+  const detailError = cardDetails.find(detail => detail.isError)?.error
   const rows = todayTreatmentRows(allCards, cardDetails, viewDate, branchId, viewingToday)
 
   // Gom các dòng theo khối lượt thực hiện (block) để không bao giờ bị cắt đôi giữa 2 trang
@@ -107,6 +115,7 @@ export default function TodayTreatments() {
     setMessage('')
   }
   function save() {
+    if (cardDetails.some(detail => detail.isFetching) || detailError) return setMessage('Chưa tải đầy đủ lịch sử thực hiện. Vui lòng tải lại trước khi xác nhận.')
     if (!selected.historyId && !canExecuteCard(selected.card)) return setMessage('Thẻ đã hết buổi hoặc đã đóng.')
     if (manager && !selected.historyId && !Number(executionBranch)) return setMessage('Chọn cơ sở thực hiện ngay tại dòng này trước khi xác nhận.')
     if (manager && !selected.historyId && !executionDate) return setMessage('Chọn ngày thực hiện.')
@@ -119,7 +128,8 @@ export default function TodayTreatments() {
     <div className="surface-heading today-treatments-heading"><div><span className="eyebrow">KHÁCH LÀM DỊCH VỤ</span><h2>{viewingToday ? 'Khách hàng hôm nay' : `Khách hàng ngày ${formatSpaDate(viewDate)}`}</h2></div><div className="today-date-picker" aria-label="Chọn ngày xem khách hàng"><button type="button" className="icon-btn" aria-label="Ngày trước" onClick={() => changeViewDate(-1)}><ChevronLeft size={20} /></button><label className="today-date-input"><span>Ngày xem</span><DateInput aria-label="Ngày xem" max={todayDate} value={viewDate} onChange={selectViewDate} /></label><button type="button" className="btn secondary today-button" disabled={viewingToday} onClick={() => selectViewDate(todayDate)}>Hôm nay</button><button type="button" className="icon-btn" aria-label="Ngày tiếp theo" disabled={viewingToday} onClick={() => changeViewDate(1)}><ChevronRight size={20} /></button></div></div>
     <p className="small-muted">{viewingToday ? <>Thẻ tạo hôm nay hoặc có buổi thực hiện hôm nay. Tick để ghi nhận, bấm tên nhân viên để sửa, bỏ tick để hoàn tác.{!manager && ' Nhân viên chỉ được hoàn tác buổi có ngày thực hiện và ngày tạo đều là hôm nay, tại cơ sở của mình.'}</> : manager ? <>Đang xem các buổi đã thực hiện ngày {formatSpaDate(viewDate)}. Quản lý vẫn có thể ghi nhận, gán lại nhân viên hoặc hoàn tác tại ngày này.</> : <>Đang xem các buổi đã thực hiện ngày {formatSpaDate(viewDate)}. Nhân viên có thể gán lại nhân viên thực hiện, nhưng không thể ghi nhận hoặc hoàn tác từ màn này.</>}</p>
     {message && !selected && <p role={messageType === 'error' ? 'alert' : 'status'} className={messageType === 'error' ? 'form-alert' : 'success-alert'}>{message}</p>}
-    <div className="list-toolbar today-treatments-toolbar"><div /><div className="list-toolbar-actions"><span className="list-count">{blocks.length} lượt khách</span><RefreshButton label="Tải lại danh sách khách hàng" disabled={query.isFetching || cardDetails.some(detail => detail.isFetching)} onClick={() => query.refetch()} /></div></div>
+    <div className="list-toolbar today-treatments-toolbar"><div /><div className="list-toolbar-actions"><span className="list-count">{blocks.length} lượt khách</span><RefreshButton label="Tải lại danh sách khách hàng" disabled={query.isFetching || cardDetails.some(detail => detail.isFetching)} onClick={() => qc.invalidateQueries({ queryKey: ['dashboard-treatments'] })} /></div></div>
+    {detailError && <p role="alert" className="form-alert">Không tải được lịch sử thực hiện: {detailError.message}</p>}
     {query.isError ? <p className="form-alert">Không tải được thẻ: {query.error.message}</p> : query.isLoading ? <p>Đang tải thẻ...</p> : blocks.length ? <>
       <div className="table-scroll"><table><thead><tr><th>Khách hàng</th><th>Dịch vụ</th><th>{viewingToday ? 'Đã làm hôm nay' : 'Đã thực hiện'}</th><th>Nhân viên thực hiện</th><th>Chữ ký khách hàng</th></tr></thead>
       {visibleBlocks.map(block => (

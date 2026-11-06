@@ -3,7 +3,7 @@
   "private": true,
   "description": "ROSA - Phần mềm quản lý bán hàng, khách hàng và vận hành spa",
   "author": "ROSA",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "type": "module",
   "main": "desktop/main.cjs",
   "scripts": {
@@ -24,6 +24,7 @@
     "@tanstack/react-query": "^5.0.0",
     "electron-updater": "^6.8.9",
     "exceljs": "^4.4.0",
+    "html2canvas": "^1.4.1",
     "lucide-react": "^0.468.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -62,8 +63,16 @@
       "icon": "public/icons/icon.ico",
       "signExecutable": false
     },
-    "publish": { "provider": "github", "owner": "dungameo0204", "repo": "rosa-release" },
-    "nsis": { "artifactName": "ROSA-Setup-${version}.exe", "oneClick": false, "perMachine": false },
+    "publish": {
+      "provider": "github",
+      "owner": "dungameo0204",
+      "repo": "rosa-release"
+    },
+    "nsis": {
+      "artifactName": "ROSA-Setup-${version}.exe",
+      "oneClick": false,
+      "perMachine": false
+    },
     "portable": {
       "artifactName": "ROSA-${version}-portable.exe"
     }

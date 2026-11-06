@@ -31,7 +31,7 @@ for (const resource of ['expenses', 'imports']) {
         const dateKey = resource === 'expenses' ? 'expense_date' : 'import_date'
         const dateLabel = resource === 'expenses' ? 'Ngày chi' : 'Ngày nhập'
         const record = { id: 15, import_code: 'NK-15', note: 'Phiếu kiểm thử', branch_id: 2, created_at: today(), [dateKey]: '2026-09-10', items: resource === 'expenses' ? [{ expense_type: 'Vật tư', amount: 1000 }] : [{ id: 1, product_id: 3, product_name: 'Kem', quantity: 1, unit_price: 1000 }] }
-        listResource.mockImplementation(async name => ({ data: name === resource ? [record] : name === 'branches' ? [{ id: 2, name: 'Cơ sở 2' }] : name === 'products' ? [{ id: 3, name: 'Kem' }] : [], totalPages: 1, total: 1, page: 1, pageSize: 20 }))
+        listResource.mockImplementation(async name => ({ data: name === resource ? [record] : name === 'branches' ? [{ id: 2, name: 'Cơ sở 2' }] : name === 'products' ? [{ id: 3, name: 'Kem', is_product: 1 }] : [], totalPages: 1, total: 1, page: 1, pageSize: 20 }))
         getResource.mockResolvedValue(record)
         const actor = userEvent.setup()
         const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })

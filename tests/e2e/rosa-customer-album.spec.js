@@ -47,14 +47,14 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 1024, height: 76
       const left = element.querySelector('.customer-timeline').getBoundingClientRect(), right = element.querySelector('.customer-profile-column').getBoundingClientRect()
       return { sideBySide: Math.abs(left.top - right.top) < 2, fits: element.scrollWidth <= element.clientWidth + 1 && document.documentElement.scrollWidth <= innerWidth }
     })
-    expect(layout).toEqual({ sideBySide: viewport.width >= 900, fits: true })
-    if (viewport.width >= 900) {
+    expect(layout).toEqual({ sideBySide: viewport.width > 1100, fits: true })
+    if (viewport.width > 1100) {
       const ratio = await page.locator('.customer-overview-columns').evaluate(element => element.children[0].getBoundingClientRect().width / element.children[1].getBoundingClientRect().width)
       expect(ratio).toBeGreaterThanOrEqual(1)
-      expect(ratio).toBeLessThan(1.15)
+      expect(ratio).toBeCloseTo(1.4 / 0.9, 1)
     }
     await album.getByRole('button', { name: 'Thêm lần chụp' }).click()
-    await album.getByLabel('Ngày chụp', { exact: true }).fill('2026-10-27')
+    await album.getByLabel('Ngày chụp', { exact: true }).fill('27/10/2026')
     await album.getByLabel('Ghi chú lần chụp').fill('Trước điều trị')
     await album.locator('input[type=file]').setInputFiles({ name: 'bad.gif', mimeType: 'image/gif', buffer: png })
     await expect(album.getByRole('alert')).toContainText('JPEG, PNG hoặc WebP')

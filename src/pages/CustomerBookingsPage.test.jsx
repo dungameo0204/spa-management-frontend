@@ -3,6 +3,7 @@ import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-li
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import CustomerBookingsPage from './CustomerBookingsPage'
+import { dateInputDisplay, dateInputValue } from '../components/DateInput'
 import { createCustomerBooking, deleteCustomerBooking, getCustomerBooking, listCustomerBookings, updateCustomerBooking } from '../api/customerBookings'
 
 const actor = vi.hoisted(() => ({ user: { system_role: 'STAFF', branch_id: 1 }, branchId: 1 }))
@@ -37,13 +38,13 @@ it('chuyển sang ngày tiếp theo từ trạng thái chưa có lịch', async 
   const user = userEvent.setup()
   mount()
   const before = screen.getByLabelText('Từ ngày').value
-  const expected = new Date(`${before}T00:00:00`)
+  const expected = new Date(`${dateInputValue(before)}T00:00:00`)
   expected.setDate(expected.getDate() + 1)
   const expectedDate = `${expected.getFullYear()}-${String(expected.getMonth() + 1).padStart(2, '0')}-${String(expected.getDate()).padStart(2, '0')}`
   await user.click(await screen.findByRole('button', { name: 'Xem ngày tiếp theo' }))
   await waitFor(() => expect(screen.getByLabelText('Từ ngày').value).not.toBe(before))
-  expect(screen.getByLabelText('Từ ngày')).toHaveValue(expectedDate)
-  expect(screen.getByLabelText('Đến ngày')).toHaveValue(expectedDate)
+  expect(screen.getByLabelText('Từ ngày')).toHaveValue(dateInputDisplay(expectedDate))
+  expect(screen.getByLabelText('Đến ngày')).toHaveValue(dateInputDisplay(expectedDate))
 })
 
 it('đặt lọc nhanh phía trên ô lọc và hiện riêng hai loại ghi chú trong bảng', async () => {

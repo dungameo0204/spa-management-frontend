@@ -14,7 +14,7 @@ const children = [{ id: 12, name: 'Chăm sóc da cơ bản', is_product: 0 }, { 
 beforeEach(() => {
   vi.resetAllMocks()
   auth.role = 'MANAGER'
-  listResource.mockImplementation(async (resource, filters) => ({ data: resource !== 'products' ? [] : filters.is_product === 0 ? [parent, ...children, { id: 30, name: 'Serum', is_product: 1 }] : [parent], total: 1, totalPages: 1 }))
+  listResource.mockImplementation(async (resource, filters) => ({ data: resource !== 'products' ? [] : !('search' in filters) || filters.is_product === 0 ? [parent, ...children, { id: 30, name: 'Serum', is_product: 1 }] : [parent], total: 1, totalPages: 1 }))
   getResource.mockImplementation(async (_, id) => [parent, ...children].find(item => item.id === Number(id)))
   createResource.mockResolvedValue({})
   updateResource.mockResolvedValue({})

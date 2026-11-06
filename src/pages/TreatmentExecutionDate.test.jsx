@@ -30,12 +30,22 @@ beforeEach(() => {
 })
 afterEach(cleanup)
 
+it('dashboard loads detail histories when the list endpoint omits them', async () => {
+  const history = { id: 30, branch_id: 2, execution_date: today(), staffs: [] }
+  listResource.mockImplementation(async resource => ({ data: resource === 'treatments' ? [card] : [], totalPages: 1 }))
+  getResource.mockResolvedValue({ ...card, histories: [history] })
+  show(<TodayTreatments />)
+  expect(await screen.findByRole('checkbox', { name: 'Đã làm Lan - Chăm sóc da' })).toBeChecked()
+  expect(getResource).toHaveBeenCalledWith('treatments', 10)
+})
+
 it('dashboard: mỗi buổi một dòng, sửa nhân viên và hoàn tác đúng buổi thứ hai', async () => {
   const histories = [
     { id: 30, branch_id: 2, execution_date: today(), created_at: today(), staffs: [{ staff_id: 1, staff_name: 'Nhân viên Một' }] },
     { id: 31, branch_id: 2, execution_date: today(), created_at: today(), staffs: [{ staff_id: 2, staff_name: 'Nhân viên Hai' }] },
   ]
   getResource.mockResolvedValue({ ...card, histories })
+  listResource.mockImplementation(async resource => ({ data: resource === 'treatments' ? [{ ...card, histories }] : [], totalPages: 1 }))
   const actor = userEvent.setup()
   show(<TodayTreatments />)
   await screen.findByRole('checkbox', { name: /Buổi #31/ })
@@ -57,6 +67,7 @@ for (const role of ['STAFF', 'MANAGER']) {
       auth.role = role
       const history = { id: 30, branch_id: scenario === 'other-branch' ? 3 : 2, execution_date: today(), created_at: scenario === 'old-created' ? '2020-01-01 09:00:00' : scenario === 'missing-created' ? null : `${today()} 09:00:00`, staffs: [] }
       getResource.mockImplementation(async resource => resource === 'treatments' ? { ...card, histories: [history] } : {})
+      listResource.mockImplementation(async resource => ({ data: resource === 'treatments' ? [{ ...card, created_at: today(), histories: [history] }] : [], totalPages: 1 }))
       if (scenario === 'error') undoTreatmentExecution.mockRejectedValue(new Error('Không được hoàn tác buổi này.'))
       const allowed = role === 'MANAGER' || scenario !== 'other-branch'
       const visibleHistory = entry === 'detail' || scenario !== 'other-branch'
@@ -139,6 +150,7 @@ for (const entry of ['inline', 'detail', 'dashboard']) {
 
 it('sửa nhân viên của buổi đã có không hiển thị hoặc gửi ngày thực hiện mới', async () => {
   getResource.mockImplementation(async resource => resource === 'treatments' ? { ...card, histories: [{ id: 30, branch_id: 2, execution_date: today(), staffs: [] }] } : {})
+  listResource.mockImplementation(async resource => ({ data: resource === 'treatments' ? [{ ...card, histories: [{ id: 30, branch_id: 2, execution_date: today(), staffs: [] }] }] : [], totalPages: 1 }))
   const actor = userEvent.setup()
   show(<TodayTreatments />)
   await actor.click(await screen.findByRole('button', { name: 'Sửa nhân viên Lan - Chăm sóc da' }))
@@ -153,8 +165,8 @@ it('lọc theo ngày thực hiện gửi đúng query, hiển thị metadata và
   const actor = userEvent.setup()
   show(<TreatmentsPage />)
   await actor.selectOptions(screen.getByRole('combobox'), 'execution')
-  await actor.type(screen.getByLabelText('Từ ngày'), '2026-10-01')
-  await actor.type(screen.getByLabelText('Đến ngày'), '2026-10-31')
+  await actor.type(screen.getByLabelText('Từ ngày'), '01102026')
+  await actor.type(screen.getByLabelText('Đến ngày'), '31102026')
   await waitFor(() => expect(listResource).toHaveBeenCalledWith('treatments', { customerSearch: '', executionStartDate: '2026-10-01', executionEndDate: '2026-10-31' }, 1, 100))
   await actor.click(screen.getByRole('button', { name: 'Lan: 1 dịch vụ' }))
   expect(await screen.findByText('2 buổi trong khoảng lọc · gần nhất 16/10/2026')).toBeInTheDocument()

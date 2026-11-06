@@ -43,7 +43,7 @@ it('loads all pages and cancellation does not publish draft changes', async () =
   const actor = userEvent.setup(), onChange = show(vi.fn(), [{ staff_id:50 }])
   await actor.click(screen.getByRole('button', { name:'Nhân viên làm pnp' }))
   await screen.findByRole('checkbox', { name:'Đặng Thị Hồng' })
-  expect(listResource).toHaveBeenCalledWith('staffs', { branchId:1 }, 2, 100)
+  expect(listResource).toHaveBeenCalledWith('staffs', {}, 2, 100, expect.any(AbortSignal))
   await actor.click(screen.getByRole('button', { name:'Bỏ chọn Đặng Thị Hồng' }))
   await actor.click(screen.getByRole('button', { name:'Hủy', exact:true }))
   expect(onChange).not.toHaveBeenCalled()
