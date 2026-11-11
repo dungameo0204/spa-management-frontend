@@ -1,0 +1,142 @@
+import { useRef, useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { executeTreatment } from '../api/resources'
+import { canExecuteCard, treatmentCards } from '../utils/todayTreatments'
+import { today } from '../utils/format'
+import InvoiceChildStaffPicker from './InvoiceChildStaffPicker'
+import MobileSelect from './MobileSelect'
+import ConfirmDialog from './ConfirmDialog'
+import DateInput from './DateInput'
+import { useBranchCatalog } from '../hooks/useProductCatalog'
+
+export default function TreatmentExecution({ card, user, branchId, onUpdated, onCancel, initialSelectedIds = [] }) {
+  const manager = user?.system_role === 'MANAGER', grouped = Boolean(card.children?.length)
+  const available = treatmentCards(card).filter(canExecuteCard)
+
+  const initialSelected = {}
+  if (grouped) {
+    if (initialSelectedIds?.length > 0) {
+      initialSelectedIds.forEach(id => {
+        if (available.some(item => item.id === id)) initialSelected[id] = []
+      })
+    }
+  } else if (available[0]) {
+    initialSelected[available[0].id] = []
+  }
+
+  const [selected, setSelected] = useState(initialSelected)
+  const [branch, setBranch] = useState(branchId || user?.branch_id || ''), [date, setDate] = useState(today())
+  const [note, setNote] = useState(''), [metadataOpen, setMetadataOpen] = useState(false)
+  const [pending, setPending] = useState(false), [blocked, setBlocked] = useState(false), [message, setMessage] = useState('')
+  const busy = useRef(false), qc = useQueryClient()
+  const branches = useBranchCatalog()
+  const chosen = available.filter(item => Object.hasOwn(selected, item.id))
+
+  async function submit() {
+    if (busy.current || blocked || !navigator.onLine) return
+    if (!chosen.length || !branch || !date) { setMessage('Chọn dịch vụ, cơ sở và ngày thực hiện.'); return }
+    if (new TextEncoder().encode(note).length > 65535) { setMessage('Ghi chú tối đa 65535 byte UTF-8.'); return }
+    busy.current = true; setPending(true); setMessage('')
+    try {
+      const payload = grouped
+        ? {
+            treatment_id: card.id,
+            children: chosen.map(item => ({ treatment_id: item.id, staffs: selected[item.id] || [] })),
+            ...(manager ? { branch_id: Number(branch) } : {}),
+            execution_date: date,
+            ...(note.trim() ? { note: note.trim() } : {}),
+          }
+        : {
+            treatment_id: chosen[0].id,
+            staffs: selected[chosen[0].id] || [],
+            ...(manager ? { branch_id: Number(branch) } : {}),
+            execution_date: date,
+            ...(note.trim() ? { note: note.trim() } : {}),
+          }
+      await executeTreatment(payload)
+      setBlocked(true)
+      await onUpdated?.()
+      onCancel?.()
+    } catch (error) {
+      setBlocked(true)
+      setMessage(`${error.message}. Dừng gửi để tránh trừ buổi trùng. Kiểm tra lịch sử trước khi mở lại.`)
+    } finally {
+      await Promise.allSettled(['treatments', 'dashboard-treatments', 'appointments'].map(key => qc.invalidateQueries({ queryKey: [key] })))
+      busy.current = false; setPending(false)
+    }
+  }
+
+  return <div className={`treatment-execution-form ${grouped ? 'is-grouped-form' : 'is-single-form'}`}>
+    <fieldset disabled={pending || blocked}>
+      {grouped ? (
+        <div className="treatment-execution-split">
+          <div className="treatment-execution-left-col">
+            {available.map(item => <div className="treatment-child-execution is-child" key={item.id}>
+              <div className="treatment-child-execution-row">
+                <label className="treatment-child-label">
+                  <input
+                    aria-label={item.product_name}
+                    type="checkbox"
+                    checked={Object.hasOwn(selected, item.id)}
+                    onChange={event => setSelected(current => {
+                      const next = { ...current };
+                      if (event.target.checked) next[item.id] = [];
+                      else delete next[item.id];
+                      return next;
+                    })}
+                  />
+                  <span className="treatment-child-name">{item.product_name}</span>
+                </label>
+                <span className="treatment-session-count">{item.remaining_sessions === null ? 'Trọn đời' : `${item.remaining_sessions}/${item.total_sessions} buổi`}</span>
+                {Object.hasOwn(selected, item.id) ? (
+                  <div className="treatment-child-staff-inline">
+                    <InvoiceChildStaffPicker name={item.product_name} selected={selected[item.id]} onChange={staffs => setSelected(current => ({ ...current, [item.id]: staffs }))} branchId={branch || 'required'} />
+                  </div>
+                ) : (
+                  <span className="treatment-child-staff-placeholder" aria-hidden="true" />
+                )}
+              </div>
+            </div>)}
+          </div>
+          <div className="treatment-execution-right-col">
+            <div className="treatment-execution-controls-row">
+              <div className={`treatment-execution-manager-row${manager ? '' : ' no-branch'}`}>
+                {manager && <label className="field compact-field branch-field"><span>Cơ sở thực hiện</span><MobileSelect aria-label="Cơ sở thực hiện" value={branch} onChange={event => { setBranch(event.target.value); setSelected(current => Object.fromEntries(Object.keys(current).map(id => [id, []]))) }}><option value="">Chọn cơ sở</option>{branches.data?.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</MobileSelect></label>}
+                <label className="field compact-field date-field"><span>Ngày thực hiện</span><DateInput aria-label="Ngày thực hiện" required value={date} onChange={setDate} /></label>
+              </div>
+              <div className="treatment-session-tools">
+                <button type="button" className={`session-followup-button${note.trim() ? ' has-value' : ''}`} onClick={() => setMetadataOpen(open => !open)}>{metadataOpen ? 'Ẩn ghi chú' : note.trim() ? 'Ghi chú ✓' : 'Ghi chú'}</button>
+              </div>
+            </div>
+            {metadataOpen && <label className="field treatment-execution-note">Ghi chú buổi thực hiện<textarea rows={2} value={note} onChange={event => setNote(event.target.value)} placeholder="Lưu ý cho lần thực hiện này…" /></label>}
+          </div>
+        </div>
+      ) : (
+        /* Staff selection precedes the shared note/signature tools. */
+        <div className="treatment-single-execution-row">
+          <div className={`treatment-execution-manager-row is-single-manager${manager ? '' : ' no-branch'}`}>
+            {manager && <label className="field compact-field branch-field"><span>Cơ sở thực hiện</span><MobileSelect aria-label="Cơ sở thực hiện" value={branch} onChange={event => { setBranch(event.target.value); setSelected(current => Object.fromEntries(Object.keys(current).map(id => [id, []]))) }}><option value="">Chọn cơ sở</option>{branches.data?.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</MobileSelect></label>}
+            <label className="field compact-field date-field"><span>Ngày thực hiện</span><DateInput aria-label="Ngày thực hiện" required value={date} onChange={setDate} /></label>
+          </div>
+          {available[0] && Object.hasOwn(selected, available[0].id) && (
+            <div className="treatment-single-staff">
+              <InvoiceChildStaffPicker name={available[0].product_name} selected={selected[available[0].id]} onChange={staffs => setSelected({ [available[0].id]: staffs })} branchId={branch || 'required'} />
+            </div>
+          )}
+          <div className="treatment-single-actions"><button type="button" className="btn secondary" disabled={pending} onClick={onCancel}>Đóng</button><button type="button" className="btn primary" disabled={pending || blocked || !chosen.length || !navigator.onLine} onClick={() => submit()}>{pending ? 'Đang ghi nhận...' : 'Xác nhận'}</button></div>
+        </div>
+      )}
+
+      {!grouped && <div className="treatment-session-tools">
+        <button type="button" className={`session-followup-button${note.trim() ? ' has-value' : ''}`} onClick={() => setMetadataOpen(open => !open)}>{metadataOpen ? 'Ẩn ghi chú' : note.trim() ? 'Ghi chú ✓' : 'Ghi chú'}</button>
+      </div>}
+      {!grouped && metadataOpen && (
+        <label className="field treatment-execution-note treatment-single-note">Ghi chú buổi thực hiện<textarea rows={2} value={note} onChange={event => setNote(event.target.value)} placeholder="Lưu ý cho lần thực hiện này…" /></label>
+      )}
+    </fieldset>
+
+    {message && <p role="status" className="session-dialog-message">{message}</p>}
+    {grouped && <div className="treatment-execution-actions"><button type="button" className="btn secondary" disabled={pending} onClick={onCancel}>Đóng</button><button type="button" className="btn primary" disabled={pending || blocked || !chosen.length || !navigator.onLine} onClick={() => submit()}>{pending ? 'Đang ghi nhận...' : 'Xác nhận'}</button></div>}
+    
+  </div>
+}

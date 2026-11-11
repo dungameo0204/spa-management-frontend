@@ -1,0 +1,105 @@
+/* Invoice geometry, loaded after the legacy entry rules. */
+.drawer.invoice-drawer .invoice-line-note-actions { display: contents; }
+.drawer.invoice-drawer .compact-invoice-line { border-radius: 8px; }
+.drawer.invoice-drawer .invoice-line-controls .line-total span { text-transform: none; font-weight: 700; }
+.drawer.invoice-drawer .invoice-line-controls .invoice-line-execution-actions > .invoice-session-actions { align-self: flex-start; margin: 0; padding: 0; height: 30px; }
+.drawer.invoice-drawer .invoice-line-controls .invoice-line-top-actions > button {
+  position: static;
+  transform: none;
+  align-self: center;
+  height: 30px;
+  min-height: 30px;
+  margin: 0;
+}
+
+.drawer.invoice-drawer .invoice-line-controls .product-entry-scroll,
+.drawer.invoice-drawer .invoice-line-controls .product-entry-row { overflow: visible; }
+.drawer.invoice-drawer .compact-invoice-line:has(.picker-options) { z-index: 1100; overflow: visible; }
+.drawer.invoice-drawer .compact-invoice-line .picker-options { position: absolute; z-index: 1200; }
+.drawer.invoice-drawer .invoice-line-note-actions > .invoice-session-actions {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  justify-self: end;
+}
+@media (min-width: 851px) {
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row,
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row:has(.invoice-lifetime-choice) {
+    grid-template-columns: minmax(150px, 1fr) 110px 92px 52px 92px 104px auto;
+  }
+  .drawer.invoice-drawer .invoice-line-controls .invoice-line-top-actions { grid-column: 7; grid-row: 1; margin-top: 18px; }
+}
+@media (min-width: 1200px) {
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row,
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row:has(.invoice-lifetime-choice) {
+    grid-template-columns: 180px 110px 92px 52px 92px 104px minmax(0, 1fr) auto;
+  }
+  .drawer.invoice-drawer .invoice-line-controls .product-picker-stack { max-width: 180px; }
+  .drawer.invoice-drawer .invoice-line-controls .invoice-line-top-actions { grid-column: 8; }
+  .drawer.invoice-drawer .invoice-line-controls .invoice-line-execution-actions { grid-column: 7; grid-row: 1; justify-content: flex-start; margin: 18px 0 0; flex-wrap: wrap; }
+  .drawer.invoice-drawer .invoice-line-note-actions > .invoice-session-actions { grid-column: 7; grid-row: 1; margin-top: 18px; }
+  .drawer.invoice-drawer .invoice-quantity-options { display: flex; }
+  .drawer.invoice-drawer .invoice-lifetime-choice { width: 54px; min-width: 54px; height: auto; padding: 0; gap: 3px; }
+}
+@media (min-width: 601px) and (max-width: 850px) {
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row,
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row:has(.invoice-lifetime-choice) { grid-template-columns: minmax(100px, 1fr) 104px 84px 48px 84px 94px; gap: 4px; }
+  .drawer.invoice-drawer .invoice-line-controls .invoice-quantity-options { width: 104px; min-width: 0; max-width: 104px; gap: 4px; }
+  .drawer.invoice-drawer .invoice-lifetime-choice { width: 52px; min-width: 52px; height: auto; padding: 0; }
+  .drawer.invoice-drawer .invoice-line-controls .invoice-line-actions-row { display: flex; flex-wrap: wrap; }
+  .drawer.invoice-drawer .invoice-line-controls .invoice-line-execution-actions,
+  .drawer.invoice-drawer .invoice-line-controls .invoice-line-top-actions { margin: 0; width: auto; }
+}
+@media (max-width: 600px) {
+  .drawer.invoice-drawer .invoice-header-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .drawer.invoice-drawer .invoice-header-fields > .picker { grid-column: 1 / -1; }
+  .drawer.invoice-drawer .invoice-header-fields > .field,
+  .drawer.invoice-drawer .invoice-date-field .date-input { min-width: 0; width: 100%; max-width: 100%; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row,
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row:has(.invoice-lifetime-choice) { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px 6px; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row > .product-picker-stack { grid-column: 1 / 7; padding: 0; max-width: none; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row > .invoice-quantity-options { grid-column: 7 / 9; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row:has(.invoice-lifetime-choice) > .product-picker-stack { grid-column: 1 / 6; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row:has(.invoice-lifetime-choice) > .invoice-quantity-options { grid-column: 6 / 10; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row:has(.invoice-lifetime-choice) .quantity-field { width: auto; min-width: 0; flex: 1; }
+  .drawer.invoice-drawer .invoice-lifetime-choice { flex: 0 0 46px; width: 46px; min-width: 0; height: auto; padding: 0; gap: 3px; }
+  .drawer.invoice-drawer .invoice-lifetime-choice span { height: 13px; line-height: 13px; white-space: nowrap; font-size: 9px; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row > .money-field:first-of-type { grid-column: 9 / 13; grid-row: 1; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row:has(.invoice-lifetime-choice) > .money-field:first-of-type { grid-column: 10 / 13; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row > .percent-field { grid-column: 1 / 4; grid-row: 2; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row > .money-field:last-of-type { grid-column: 4 / 8; grid-row: 2; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row > .line-total { grid-column: 8 / 13; grid-row: 2; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; padding: 0; background: none; border: 0; gap: 3px; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row > .line-total > span { height: 13px; line-height: 13px; padding: 0; margin: 0; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row > .line-total > strong { margin-top: 0; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row > .field,
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row > .line-total { width: 100%; min-width: 0; max-width: none; margin: 0; align-self: start; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row > .invoice-quantity-options { width: 100%; min-width: 0; max-width: none; align-self: start; }
+  .drawer.invoice-drawer .invoice-line-controls .invoice-quantity-options .quantity-field { width: 100%; min-width: 0; max-width: none; }
+  .drawer.invoice-drawer .invoice-line-controls .invoice-lifetime-placeholder { display: none; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row .field,
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row label.field,
+  .drawer.invoice-drawer .invoice-line-controls .product-picker-stack .picker > label,
+  .drawer.invoice-drawer .invoice-line-controls .line-total span { line-height: 13px !important; font-size: 10px !important; gap: 3px; margin: 0; }
+  .drawer.invoice-drawer .invoice-line-controls .line-total strong { display: flex; align-items: center; justify-content: flex-end; height: 30px; border: 1px solid var(--line); border-radius: 6px; background: var(--sage-light); }
+  .drawer.invoice-drawer .invoice-line-controls .invoice-line-actions-row { grid-column: 1 / -1; grid-row: 3; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px; width: 100%; min-width: 0; }
+  .drawer.invoice-drawer .invoice-line-controls .invoice-line-execution-actions { display: contents; }
+  .drawer.invoice-drawer .invoice-line-controls .invoice-line-execution-actions:empty { display: none; }
+  .drawer.invoice-drawer .invoice-line-controls .invoice-line-execution-actions .execution-controls { grid-column: 1 / -1; grid-row: 1; display: flex; justify-content: flex-end; min-width: 0; max-width: 100%; flex-wrap: wrap; }
+  .drawer.invoice-drawer .invoice-line-execution-actions > .invoice-session-actions { grid-column: 1; grid-row: 2; justify-self: end; margin: 0; }
+  .drawer.invoice-drawer .invoice-line-note-actions { grid-column: 2; grid-row: 2; display: flex; align-items: center; justify-content: flex-end; gap: 5px; min-width: 0; }
+  .drawer.invoice-drawer .invoice-line-note-actions > .invoice-session-actions { margin: 0; }
+  .drawer.invoice-drawer .invoice-line-controls .invoice-line-top-actions { flex: none; width: auto; margin: 0; padding: 0; align-self: center; border: 0; }
+  .drawer.invoice-drawer .invoice-line-note-actions button { height: 30px; min-height: 30px; align-self: center; }
+}
+@media (max-width: 360px) {
+  .drawer.invoice-drawer .invoice-line-controls .product-picker-stack .picker > label { min-height: 26px; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row > .money-field:first-of-type,
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row .quantity-field { padding-top: 13px; }
+  .drawer.invoice-drawer .invoice-line-controls .invoice-lifetime-choice { padding-top: 13px; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row:has(.invoice-lifetime-choice) > .product-picker-stack { grid-column: 1 / 5; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row:has(.invoice-lifetime-choice) > .invoice-quantity-options { grid-column: 5 / 9; gap: 3px; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row:has(.invoice-lifetime-choice) > .money-field:first-of-type { grid-column: 9 / 13; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row .quantity-field { display: grid; grid-template-rows: 26px 30px; align-items: end; padding-top: 0; white-space: normal; font-size: 9px !important; }
+  .drawer.invoice-drawer .invoice-line-controls .product-entry-row input:not([type=checkbox]) { padding-inline: 4px; font-size: 11px; }
+  .drawer.invoice-drawer .invoice-line-controls .invoice-lifetime-choice { flex-basis: 40px; width: 40px; }
+  .drawer.invoice-drawer .invoice-line-controls .invoice-lifetime-choice span { font-size: 8px; }
+}

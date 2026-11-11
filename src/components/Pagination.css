@@ -1,62 +1,56 @@
-/* Phân trang hiện đại cao cấp toàn hệ thống */
 .app-pagination {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 14px 18px;
-  border-top: 1px solid var(--line);
+  padding: 16px 20px;
   background: var(--white);
+  border-top: 1px solid var(--line);
   flex-wrap: wrap;
 }
 
 .app-pagination-info {
   font-size: 13px;
   color: var(--muted);
-  display: flex;
-  align-items: center;
-  gap: 4px;
 }
 
 .app-pagination-info strong {
   color: var(--ink);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .app-pagination-controls {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-left: auto;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .app-page-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 34px;
-  padding: 0 12px;
+  padding: 7px 12px;
   border: 1px solid var(--line);
-  border-radius: 8px;
   background: var(--white);
   color: var(--ink);
+  border-radius: 9px;
   font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all .18s ease;
+  font-weight: 600;
+  transition: all 0.18s ease;
+  min-height: 36px;
 }
 
 .app-page-btn:hover:not(:disabled) {
-  background: var(--cream);
+  background: var(--sage-light);
   border-color: var(--sage);
   color: var(--sage);
 }
 
 .app-page-btn:disabled {
-  opacity: 0.38;
+  opacity: 0.45;
   cursor: not-allowed;
-  background: var(--white);
-  color: var(--muted);
   border-color: var(--line);
 }
 
@@ -67,58 +61,54 @@
 }
 
 .app-page-num {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 34px;
-  height: 34px;
+  min-width: 36px;
+  height: 36px;
   padding: 0 8px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--white);
+  display: grid;
+  place-items: center;
+  border: 1px solid transparent;
+  background: transparent;
   color: var(--ink);
+  border-radius: 9px;
   font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all .18s ease;
+  font-weight: 600;
+  transition: all 0.18s ease;
 }
 
 .app-page-num:hover:not(.is-active) {
-  background: var(--cream);
-  border-color: var(--sage);
+  background: var(--sage-light);
   color: var(--sage);
 }
 
 .app-page-num.is-active {
   background: var(--sage);
-  border-color: var(--sage);
-  color: #ffffff;
+  color: #fff;
   font-weight: 700;
   box-shadow: 0 2px 6px rgba(49, 94, 80, 0.25);
-  cursor: default;
 }
 
 .app-page-ellipsis {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 34px;
+  min-width: 28px;
+  text-align: center;
   color: var(--muted);
   font-size: 13px;
 }
 
-@media (max-width: 600px) {
+.app-pagination button { cursor: pointer; flex: none; }
+.app-pagination button:focus-visible { outline: 2px solid var(--sage); outline-offset: 3px; }
+.app-pagination-compact { padding: 10px 4px; gap: 8px; justify-content: center; }
+.app-pagination-compact .app-pagination-info { width: 100%; text-align: center; }
+.app-pagination-compact .app-page-numbers { display: none; }
+.picker .picker-options .app-pagination button { width: auto; text-align: center; }
+
+@media (max-width: 640px) {
   .app-pagination {
     flex-direction: column;
     align-items: center;
     gap: 12px;
   }
-  .app-pagination-controls {
-    margin-left: 0;
-    width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
+  .app-page-numbers {
+    display: none;
   }
 }
 

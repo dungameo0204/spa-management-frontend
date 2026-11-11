@@ -3,7 +3,7 @@
   "private": true,
   "description": "Xuly Spa - Phần mềm quản lý bán hàng, khách hàng và vận hành spa",
   "author": "Xuly Spa",
-  "version": "0.1.4",
+  "version": "1.0.6",
   "type": "module",
   "main": "desktop/main.cjs",
   "scripts": {
@@ -62,8 +62,16 @@
       "icon": "public/icons/icon.ico",
       "signExecutable": false
     },
-    "publish": { "provider": "github", "owner": "dungameo0204", "repo": "spa-management-frontend" },
-    "nsis": { "artifactName": "Xuly-Spa-Setup-${version}.exe", "oneClick": false, "perMachine": false },
+    "publish": {
+      "provider": "github",
+      "owner": "dungameo0204",
+      "repo": "spa-management-frontend"
+    },
+    "nsis": {
+      "artifactName": "Xuly-Spa-Setup-${version}.exe",
+      "oneClick": false,
+      "perMachine": false
+    },
     "portable": {
       "artifactName": "Xuly-Spa-${version}-portable.exe"
     }

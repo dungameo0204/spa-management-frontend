@@ -1,3 +1,4 @@
+import Pagination from './Pagination'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getRemainingDebt, listResource } from '../api/resources'
@@ -19,7 +20,7 @@ export default function DebtInvoicePicker({ customer, selected, onChange, amount
       </div>)}
       {!balances.data?.some(({ debt }) => Number(debt.remainingDebtAmount) > 0) && <p className="small-muted">Không còn hóa đơn có thể thu nợ trong kết quả tìm kiếm.</p>}
     </div>}
-    {invoices.data?.totalPages > 1 && <div className="picker-pages"><button type="button" disabled={page === 1} onClick={() => setPage(page - 1)}>Trước</button><span>Trang {page} / {invoices.data.totalPages}</span><button type="button" disabled={page >= invoices.data.totalPages} onClick={() => setPage(page + 1)}>Sau</button></div>}
+    <Pagination page={page} totalPages={invoices.data?.totalPages || 1} totalItems={invoices.data?.total} pageSize={invoices.data?.pageSize || 100} onChange={setPage} label="hóa đơn" compact />
     <p className="report-total" role="status" aria-label="Tổng tiền thu của khách"><span>Tổng tiền thu của khách</span><strong>{formatCurrency(totalCollected)}</strong></p>
   </>
 }

@@ -24,7 +24,7 @@ export default function AppShell() {
   const { data: branches } = useQuery({ queryKey: ['branches', 'selector'], queryFn: () => listResource('branches', {}, 1, 100), enabled: manager })
   const branch = resolveBranch(user, selected)
   const links = routes.filter(item => !item.permission || canAccess(user, item.permission))
-  const active = routes.find(item => item.path === location.pathname)
+  const active = routes.find(item => item.path === (location.pathname === '/customer-bookings' ? '/bookings' : location.pathname))
   const selectBranch = value => { setSelected(String(value)); sessionStorage.setItem('xuly.branch', String(value)); setBranchMenuOpen(false) }
   useEffect(() => {
     if (!branchMenuOpen) return

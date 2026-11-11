@@ -1,0 +1,390 @@
+
+> spa-management-frontend@0.1.4 dev
+> vite --host 0.0.0.0 --host 127.0.0.1 --port 4174
+
+
+  [32m[1mVITE[22m v6.4.4[39m  [2mready in [0m[1m343[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m4174[22m/[39m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
+[2m8:19:23 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/InvoicesPage.jsx[22m
+[2m8:19:23 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/InvoiceServiceChildren.css[22m
+[2m8:19:23 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/InvoicesPage.jsx[22m
+[2m8:19:23 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/global.css[22m
+[2m8:19:23 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TodayTreatments.jsx[22m
+[2m8:34:43 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TreatmentCustomerList.jsx[22m
+[2m8:35:16 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TreatmentCustomerList.jsx[22m
+[2m8:46:29 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TreatmentCustomerList.jsx[22m
+[2m8:46:29 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TodayTreatments.jsx[22m
+[2m8:46:29 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/CustomerOverview.jsx[22m
+[2m8:46:30 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/InvoiceServiceChildren.jsx[22m
+[2m8:46:30 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/InvoiceServiceChildren.css[22m
+[2m8:46:30 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/InvoicesPage.jsx[22m
+[2m8:46:30 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-entry.css[22m
+[2m8:46:30 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-lines.css[22m
+[2m8:47:11 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TreatmentHistoryList.jsx[22m
+[2m8:47:11 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/DateInput.jsx[22m
+[2m8:47:11 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/DateInput.css[22m
+[2m8:47:11 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TodayTreatments.jsx[22m
+[2m8:51:45 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TodayTreatments.jsx[22m
+[2m8:55:42 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/InvoicesPage.jsx[22m
+[2m8:55:42 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TreatmentHistoryList.jsx[22m
+[2m8:59:02 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/auth/RequireAuth.jsx, /src/pages/CustomerBookingsPage.jsx, /src/components/AppShell.jsx, /src/pages/TransactionPage.jsx, /src/pages/TreatmentsPage.jsx, /src/pages/ResourcePage.jsx, /src/pages/InvoicesPage.jsx, /src/components/TreatmentHistoryList.jsx, /src/components/TodayTreatments.jsx[22m
+[2m9:04:55 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/auth/AuthProvider.jsx, /src/pages/InventoryPage.jsx, /src/pages/ConsultantsPage.jsx, /src/components/AppShell.jsx, /src/pages/ReportsPage.jsx, /src/pages/DashboardPage.jsx, /src/pages/TransactionPage.jsx, /src/pages/TreatmentsPage.jsx, /src/pages/ResourcePage.jsx, /src/pages/InvoicesPage.jsx, /src/components/InvoiceChildStaffPicker.jsx, /src/components/RoleStaffPicker.jsx, /src/components/StaffEarnings.jsx, /src/components/CustomerBookingForm.jsx, /src/components/ProductServiceChildren.jsx, /src/components/CustomerOverview.jsx, /src/components/TreatmentCustomerList.jsx, /src/components/DebtInvoicePicker.jsx, /src/components/SearchPicker.jsx, /src/components/TodayTreatments.jsx, /src/components/CommissionReport.jsx[22m
+[2m9:33:06 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/CustomerOverview.jsx[22m
+[2m9:33:06 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TreatmentCustomerList.jsx[22m
+[2m9:33:44 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/InvoiceServiceChildren.jsx[22m
+[2m9:33:44 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/InvoicesPage.jsx[22m
+[2m9:34:33 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/InvoicesPage.jsx[22m
+[2m9:35:34 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-entry.css[22m
+[2m9:35:34 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/InvoiceServiceChildren.css[22m
+[2m9:37:07 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TodayTreatments.jsx[22m
+[2m9:38:00 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/CustomerOverview.jsx[22m
+[2m9:38:53 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-entry.css[22m
+[2m9:54:46 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-entry.css[22m
+[2m9:54:46 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TreatmentCustomerList.jsx[22m
+[2m9:54:46 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TodayTreatments.jsx[22m
+[2m10:04:50 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-entry.css[22m
+[2m10:06:43 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/InvoicesPage.jsx[22m
+[2m10:12:53 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/InvoicesPage.jsx[22m
+[2m10:13:02 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-entry.css[22m
+[2m10:23:38 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/auth/AuthProvider.jsx, /src/pages/InventoryPage.jsx, /src/pages/ConsultantsPage.jsx, /src/components/AppShell.jsx, /src/pages/ReportsPage.jsx, /src/pages/DashboardPage.jsx, /src/pages/TransactionPage.jsx, /src/pages/TreatmentsPage.jsx, /src/pages/ResourcePage.jsx, /src/pages/InvoicesPage.jsx, /src/components/InvoiceChildStaffPicker.jsx, /src/components/RoleStaffPicker.jsx, /src/components/StaffEarnings.jsx, /src/components/CustomerBookingForm.jsx, /src/components/ProductServiceChildren.jsx, /src/components/CustomerOverview.jsx, /src/components/TreatmentCustomerList.jsx, /src/components/DebtInvoicePicker.jsx, /src/components/SearchPicker.jsx, /src/components/TodayTreatments.jsx, /src/components/CommissionReport.jsx[22m
+[2m10:23:38 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/CustomerOverview.jsx[22m
+[2m10:23:38 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/InvoicesPage.jsx[22m
+[2m10:23:38 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/InvoicesPage.jsx[22m
+[2m10:23:38 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TodayTreatments.jsx[22m
+[2m10:23:51 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/TransactionPage.jsx, /src/pages/InvoicesPage.jsx[22m
+[2m10:25:04 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-entry.css[22m
+[2m10:25:36 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-entry.css[22m
+[2m10:36:38 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/InvoicesPage.jsx[22m
+[2m10:36:38 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/InvoiceServiceChildren.jsx[22m
+[2m10:37:39 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-entry.css[22m
+[2m10:49:05 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TreatmentExecution.jsx[22m
+[2m10:50:52 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-entry.css[22m
+[2m10:57:45 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-entry.css[22m
+[2m10:58:17 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-entry.css[22m
+[2m10:59:03 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/InvoicesPage.jsx[22m
+[2m11:01:40 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TreatmentGroupSessionDialog.jsx[22m
+[2m11:01:40 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TodayTreatments.jsx[22m
+[2m11:01:40 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TreatmentGroupedHistory.jsx[22m
+[2m11:05:22 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-entry.css[22m
+[2m11:08:19 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-entry.css[22m
+[2m11:09:45 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-entry.css[22m
+[2m11:10:05 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-entry.css[22m
+[2m11:12:30 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/InvoicesPage.jsx[22m
+[2m11:12:57 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-entry.css[22m
+[2m11:13:08 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: D:\Project\SpaManagement\spa-management-frontend\src\pages\InvoicesPage.jsx: Expected corresponding JSX closing tag for <div>. (85:4)
+
+[0m [90m 83 |[39m     [33m<[39m[33mlabel[39m className[33m=[39m[32m"choice-row"[39m[33m>[39m[33m<[39m[33minput[39m type[33m=[39m[32m"checkbox"[39m checked[33m=[39m{printAfterSave} onChange[33m=[39m{e [33m=>[39m setPrintAfterSave(e[33m.[39mtarget[33m.[39mchecked)} [33m/[39m[33m>[39m [33mIn[39m hóa đơn sau khi lưu[33m<[39m[33m/[39m[33mlabel[39m[33m>[39m
+ [90m 84 |[39m     {printAfterSave [33m&&[39m [33m<[39m[33mReceiptSizePicker[39m value[33m=[39m{receiptSize} onChange[33m=[39m{setReceiptSize} [33m/[39m[33m>[39m}
+[31m[1m>[22m[39m[90m 85 |[39m     [33m<[39m[33m/[39m[33mfieldset[39m[33m>[39m[33m<[39m[33mdiv[39m className[33m=[39m[32m"drawer-actions"[39m[33m>[39m[33m<[39m[33mbutton[39m className[33m=[39m[32m"btn secondary"[39m type[33m=[39m[32m"button"[39m onClick[33m=[39m{() [33m=>[39m setSelected([36mnull[39m)}[33m>[39m{savedInvoiceId [33m?[39m [32m'Đóng'[39m [33m:[39m [32m'Hủy'[39m}[33m<[39m[33m/[39m[33mbutton[39m[33m>[39m{savedInvoiceId [33m?[39m [33m<[39m[33m>[39m[33m<[39m[33mbutton[39m type[33m=[39m[32m"button"[39m className[33m=[39m[32m"btn secondary"[39m onClick[33m=[39m{[36masync[39m () [33m=>[39m { [36mconst[39m detail [33m=[39m [36mawait[39m open({ id[33m:[39m savedInvoiceId })[33m;[39m [36mif[39m (detail) setEditing([36mtrue[39m) }}[33m>[39m[33mChỉnh[39m sửa[33m<[39m[33m/[39m[33mbutton[39m[33m>[39m[33m<[39m[33mbutton[39m type[33m=[39m[32m"button"[39m className[33m=[39m[32m"btn primary"[39m onClick[33m=[39m{begin}[33m>[39m[33mTạo[39m hóa đơn mới[33m<[39m[35m/button></[39m[33m>[39m [33m:[39m [33m<[39m[33mbutton[39m className[33m=[39m[32m"btn primary"[39m disabled[33m=[39m{mutation[33m.[39misPending [33m||[39m saving [33m||[39m childrenUnavailable [33m||[39m [33m![39mnavigator[33m.[39monLine}[33m>[39m{mutation[33m.[39misPending [33m||[39m saving [33m?[39m [32m'Đang lưu...'[39m [33m:[39m [32m'Lưu hóa đơn'[39m}[33m<[39m[33m/[39m[33mbutton[39m[33m>[39m}[33m<[39m[33m/[39m[33mdiv[39m[33m>[39m
+ [90m    |[39m     [31m[1m^[22m[39m
+ [90m 86 |[39m     {form[33m.[39mcustomer_id [33m&&[39m [33m<[39m[33mnav[39m className[33m=[39m[32m"invoice-customer-links"[39m aria[33m-[39mlabel[33m=[39m[32m"Thao tác khách hàng"[39m[33m>[39m[33m<[39m[33mLink[39m className[33m=[39m[32m"btn secondary"[39m to[33m=[39m{[32m`/debts?customerId=${encodeURIComponent(form.customer_id)}`[39m}[33m>[39m[33mThu[39m nợ khách hàng[33m<[39m[33m/[39m[33mLink[39m[33m>[39m[33m<[39m[33mLink[39m className[33m=[39m[32m"btn secondary"[39m to[33m=[39m{[32m`/treatments?customerId=${encodeURIComponent(form.customer_id)}&customerSearch=${encodeURIComponent(form.customer_name || "")}`[39m}[33m>[39m[33mXem[39m liệu trình khách hàng[33m<[39m[33m/[39m[33mLink[39m[33m>[39m[33m<[39m[33m/[39m[33mnav[39m[33m>[39m}
+ [90m 87 |[39m   [33m<[39m[33m/[39m[33mform[39m[33m>[39m }
+ [90m 88 |[39m   [36mconst[39m columns [33m=[39m [ { key[33m:[39m [32m'customer_name'[39m[33m,[39m label[33m:[39m [32m'Khách hàng'[39m }[33m,[39m { key[33m:[39m [32m'invoice_date'[39m[33m,[39m label[33m:[39m [32m'Ngày bán'[39m[33m,[39m render[33m:[39m r [33m=>[39m formatSpaDate(r[33m.[39minvoice_date) }[33m,[39m { key[33m:[39m [32m'total_amount'[39m[33m,[39m label[33m:[39m [32m'Thành tiền'[39m[33m,[39m render[33m:[39m r [33m=>[39m [33m<[39m[33mstrong[39m[33m>[39m{formatCurrency(r[33m.[39mtotal_amount)}[33m<[39m[35m/strong> }, { key: 'debt_amount', label: 'Công nợ', render: r => <DebtAmount value={r.debt_amount} /[39m[33m>[39m }[33m,[39m { key[33m:[39m [32m'branch_name'[39m[33m,[39m label[33m:[39m [32m'Cơ sở'[39m }][0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mD:/Project/SpaManagement/spa-management-frontend/src/pages/InvoicesPage.jsx[39m:85:4
+[33m  83 |      <label className="choice-row"><input type="checkbox" checked={printAfterSave} onChange={e => setPrintAfterSave(e.target.checked)} /> In hóa đơn sau khi lưu</label>
+  84 |      {printAfterSave && <ReceiptSizePicker value={receiptSize} onChange={setReceiptSize} />}
+  85 |      </fieldset><div className="drawer-actions"><button className="btn secondary" type="button" onClick={() => setSelected(null)}>{savedInvoiceId ? 'Đóng' : 'Hủy'}</button>{savedInvoiceId ? <><button type="button" className="btn secondary" onClick={async () => { const detail = await open({ id: savedInvoiceId }); if (detail) setEditing(true) }}>Chỉnh sửa</button><button type="button" className="btn primary" onClick={begin}>Tạo hóa đơn mới</button></> : <button className="btn primary" disabled={mutation.isPending || saving || childrenUnavailable || !navigator.onLine}>{mutation.isPending || saving ? 'Đang lưu...' : 'Lưu hóa đơn'}</button>}</div>
+     |       ^
+  86 |      {form.customer_id && <nav className="invoice-customer-links" aria-label="Thao tác khách hàng"><Link className="btn secondary" to={`/debts?customerId=${encodeURIComponent(form.customer_id)}`}>Thu nợ khách hàng</Link><Link className="btn secondary" to={`/treatments?customerId=${encodeURIComponent(form.customer_id)}&customerSearch=${encodeURIComponent(form.customer_name || "")}`}>Xem liệu trình khách hàng</Link></nav>}
+  87 |    </form> }[39m
+[2m11:13:09 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: D:\Project\SpaManagement\spa-management-frontend\src\pages\InvoicesPage.jsx: Expected corresponding JSX closing tag for <div>. (85:4)
+
+[0m [90m 83 |[31m     [33m<[31m[33mlabel[31m className[33m=[31m[32m"choice-row"[31m[33m>[31m[33m<[31m[33minput[31m type[33m=[31m[32m"checkbox"[31m checked[33m=[31m{printAfterSave} onChange[33m=[31m{e [33m=>[31m setPrintAfterSave(e[33m.[31mtarget[33m.[31mchecked)} [33m/[31m[33m>[31m [33mIn[31m hóa đơn sau khi lưu[33m<[31m[33m/[31m[33mlabel[31m[33m>[31m
+ [90m 84 |[31m     {printAfterSave [33m&&[31m [33m<[31m[33mReceiptSizePicker[31m value[33m=[31m{receiptSize} onChange[33m=[31m{setReceiptSize} [33m/[31m[33m>[31m}
+[31m[1m>[22m[31m[90m 85 |[31m     [33m<[31m[33m/[31m[33mfieldset[31m[33m>[31m[33m<[31m[33mdiv[31m className[33m=[31m[32m"drawer-actions"[31m[33m>[31m[33m<[31m[33mbutton[31m className[33m=[31m[32m"btn secondary"[31m type[33m=[31m[32m"button"[31m onClick[33m=[31m{() [33m=>[31m setSelected([36mnull[31m)}[33m>[31m{savedInvoiceId [33m?[31m [32m'Đóng'[31m [33m:[31m [32m'Hủy'[31m}[33m<[31m[33m/[31m[33mbutton[31m[33m>[31m{savedInvoiceId [33m?[31m [33m<[31m[33m>[31m[33m<[31m[33mbutton[31m type[33m=[31m[32m"button"[31m className[33m=[31m[32m"btn secondary"[31m onClick[33m=[31m{[36masync[31m () [33m=>[31m { [36mconst[31m detail [33m=[31m [36mawait[31m open({ id[33m:[31m savedInvoiceId })[33m;[31m [36mif[31m (detail) setEditing([36mtrue[31m) }}[33m>[31m[33mChỉnh[31m sửa[33m<[31m[33m/[31m[33mbutton[31m[33m>[31m[33m<[31m[33mbutton[31m type[33m=[31m[32m"button"[31m className[33m=[31m[32m"btn primary"[31m onClick[33m=[31m{begin}[33m>[31m[33mTạo[31m hóa đơn mới[33m<[31m[35m/button></[31m[33m>[31m [33m:[31m [33m<[31m[33mbutton[31m className[33m=[31m[32m"btn primary"[31m disabled[33m=[31m{mutation[33m.[31misPending [33m||[31m saving [33m||[31m childrenUnavailable [33m||[31m [33m![31mnavigator[33m.[31monLine}[33m>[31m{mutation[33m.[31misPending [33m||[31m saving [33m?[31m [32m'Đang lưu...'[31m [33m:[31m [32m'Lưu hóa đơn'[31m}[33m<[31m[33m/[31m[33mbutton[31m[33m>[31m}[33m<[31m[33m/[31m[33mdiv[31m[33m>[31m
+ [90m    |[31m     [31m[1m^[22m[31m
+ [90m 86 |[31m     {form[33m.[31mcustomer_id [33m&&[31m [33m<[31m[33mnav[31m className[33m=[31m[32m"invoice-customer-links"[31m aria[33m-[31mlabel[33m=[31m[32m"Thao tác khách hàng"[31m[33m>[31m[33m<[31m[33mLink[31m className[33m=[31m[32m"btn secondary"[31m to[33m=[31m{[32m`/debts?customerId=${encodeURIComponent(form.customer_id)}`[31m}[33m>[31m[33mThu[31m nợ khách hàng[33m<[31m[33m/[31m[33mLink[31m[33m>[31m[33m<[31m[33mLink[31m className[33m=[31m[32m"btn secondary"[31m to[33m=[31m{[32m`/treatments?customerId=${encodeURIComponent(form.customer_id)}&customerSearch=${encodeURIComponent(form.customer_name || "")}`[31m}[33m>[31m[33mXem[31m liệu trình khách hàng[33m<[31m[33m/[31m[33mLink[31m[33m>[31m[33m<[31m[33m/[31m[33mnav[31m[33m>[31m}
+ [90m 87 |[31m   [33m<[31m[33m/[31m[33mform[31m[33m>[31m }
+ [90m 88 |[31m   [36mconst[31m columns [33m=[31m [ { key[33m:[31m [32m'customer_name'[31m[33m,[31m label[33m:[31m [32m'Khách hàng'[31m }[33m,[31m { key[33m:[31m [32m'invoice_date'[31m[33m,[31m label[33m:[31m [32m'Ngày bán'[31m[33m,[31m render[33m:[31m r [33m=>[31m formatSpaDate(r[33m.[31minvoice_date) }[33m,[31m { key[33m:[31m [32m'total_amount'[31m[33m,[31m label[33m:[31m [32m'Thành tiền'[31m[33m,[31m render[33m:[31m r [33m=>[31m [33m<[31m[33mstrong[31m[33m>[31m{formatCurrency(r[33m.[31mtotal_amount)}[33m<[31m[35m/strong> }, { key: 'debt_amount', label: 'Công nợ', render: r => <DebtAmount value={r.debt_amount} /[31m[33m>[31m }[33m,[31m { key[33m:[31m [32m'branch_name'[31m[33m,[31m label[33m:[31m [32m'Cơ sở'[31m }][0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mD:/Project/SpaManagement/spa-management-frontend/src/pages/InvoicesPage.jsx[39m:85:4
+[33m  83 |      <label className="choice-row"><input type="checkbox" checked={printAfterSave} onChange={e => setPrintAfterSave(e.target.checked)} /> In hóa đơn sau khi lưu</label>
+  84 |      {printAfterSave && <ReceiptSizePicker value={receiptSize} onChange={setReceiptSize} />}
+  85 |      </fieldset><div className="drawer-actions"><button className="btn secondary" type="button" onClick={() => setSelected(null)}>{savedInvoiceId ? 'Đóng' : 'Hủy'}</button>{savedInvoiceId ? <><button type="button" className="btn secondary" onClick={async () => { const detail = await open({ id: savedInvoiceId }); if (detail) setEditing(true) }}>Chỉnh sửa</button><button type="button" className="btn primary" onClick={begin}>Tạo hóa đơn mới</button></> : <button className="btn primary" disabled={mutation.isPending || saving || childrenUnavailable || !navigator.onLine}>{mutation.isPending || saving ? 'Đang lưu...' : 'Lưu hóa đơn'}</button>}</div>
+     |       ^
+  86 |      {form.customer_id && <nav className="invoice-customer-links" aria-label="Thao tác khách hàng"><Link className="btn secondary" to={`/debts?customerId=${encodeURIComponent(form.customer_id)}`}>Thu nợ khách hàng</Link><Link className="btn secondary" to={`/treatments?customerId=${encodeURIComponent(form.customer_id)}&customerSearch=${encodeURIComponent(form.customer_name || "")}`}>Xem liệu trình khách hàng</Link></nav>}
+  87 |    </form> }[39m
+      at constructor (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:369:19)
+      at JSXParserMixin.raise (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:6622:19)
+      at JSXParserMixin.jsxParseElementAt (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4745:16)
+      at JSXParserMixin.jsxParseElement (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4767:17)
+      at JSXParserMixin.parseExprAtom (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4777:19)
+      at JSXParserMixin.parseExprSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11107:23)
+      at JSXParserMixin.parseUpdate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11092:21)
+      at JSXParserMixin.parseMaybeUnary (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11072:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10925:61)
+      at JSXParserMixin.parseExprOps (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10930:23)
+      at JSXParserMixin.parseMaybeConditional (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10907:23)
+      at JSXParserMixin.parseMaybeAssign (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10857:21)
+      at JSXParserMixin.parseFunctionBody (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12127:24)
+      at JSXParserMixin.parseArrowExpression (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12109:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11718:12)
+      at JSXParserMixin.parseExprAtom (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11362:23)
+      at JSXParserMixin.parseExprAtom (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4782:20)
+      at JSXParserMixin.parseExprSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11107:23)
+      at JSXParserMixin.parseUpdate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11092:21)
+      at JSXParserMixin.parseMaybeUnary (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11072:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10925:61)
+      at JSXParserMixin.parseExprOps (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10930:23)
+      at JSXParserMixin.parseMaybeConditional (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10907:23)
+      at JSXParserMixin.parseMaybeAssign (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10857:21)
+      at D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10826:39
+      at JSXParserMixin.allowInAnd (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12460:12)
+      at JSXParserMixin.parseMaybeAssignAllowIn (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10826:17)
+      at JSXParserMixin.parseMaybeAssignAllowInOrVoidPattern (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12527:17)
+      at JSXParserMixin.parseExprListItem (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12209:18)
+      at JSXParserMixin.parseCallExpressionArguments (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11283:22)
+      at JSXParserMixin.parseCoverCallAndAsyncArrowHead (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11217:29)
+      at JSXParserMixin.parseSubscript (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11146:19)
+      at JSXParserMixin.parseSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11120:19)
+      at JSXParserMixin.parseExprSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11111:17)
+      at JSXParserMixin.parseUpdate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11092:21)
+      at JSXParserMixin.parseMaybeUnary (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11072:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10925:61)
+      at JSXParserMixin.parseExprOps (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10930:23)
+      at JSXParserMixin.parseMaybeConditional (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10907:23)
+      at JSXParserMixin.parseMaybeAssign (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10857:21)
+      at JSXParserMixin.parseExpressionBase (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10810:23)
+      at D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10806:39
+      at JSXParserMixin.allowInAnd (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12460:12)
+      at JSXParserMixin.parseExpression (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10806:17)
+      at JSXParserMixin.jsxParseExpressionContainer (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4650:31)
+      at JSXParserMixin.jsxParseElementAt (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4729:36)
+      at JSXParserMixin.jsxParseElementAt (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4716:32)
+      at JSXParserMixin.jsxParseElement (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4767:17)
+      at JSXParserMixin.parseExprAtom (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4777:19)
+      at JSXParserMixin.parseExprSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11107:23)
+[2m11:13:41 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: D:\Project\SpaManagement\spa-management-frontend\src\pages\InvoicesPage.jsx: Expected corresponding JSX closing tag for <div>. (85:4)
+
+[0m [90m 83 |[31m     [33m<[31m[33mlabel[31m className[33m=[31m[32m"choice-row"[31m[33m>[31m[33m<[31m[33minput[31m type[33m=[31m[32m"checkbox"[31m checked[33m=[31m{printAfterSave} onChange[33m=[31m{e [33m=>[31m setPrintAfterSave(e[33m.[31mtarget[33m.[31mchecked)} [33m/[31m[33m>[31m [33mIn[31m hóa đơn sau khi lưu[33m<[31m[33m/[31m[33mlabel[31m[33m>[31m
+ [90m 84 |[31m     {printAfterSave [33m&&[31m [33m<[31m[33mReceiptSizePicker[31m value[33m=[31m{receiptSize} onChange[33m=[31m{setReceiptSize} [33m/[31m[33m>[31m}
+[31m[1m>[22m[31m[90m 85 |[31m     [33m<[31m[33m/[31m[33mfieldset[31m[33m>[31m[33m<[31m[33mdiv[31m className[33m=[31m[32m"drawer-actions"[31m[33m>[31m[33m<[31m[33mbutton[31m className[33m=[31m[32m"btn secondary"[31m type[33m=[31m[32m"button"[31m onClick[33m=[31m{() [33m=>[31m setSelected([36mnull[31m)}[33m>[31m{savedInvoiceId [33m?[31m [32m'Đóng'[31m [33m:[31m [32m'Hủy'[31m}[33m<[31m[33m/[31m[33mbutton[31m[33m>[31m{savedInvoiceId [33m?[31m [33m<[31m[33m>[31m[33m<[31m[33mbutton[31m type[33m=[31m[32m"button"[31m className[33m=[31m[32m"btn secondary"[31m onClick[33m=[31m{[36masync[31m () [33m=>[31m { [36mconst[31m detail [33m=[31m [36mawait[31m open({ id[33m:[31m savedInvoiceId })[33m;[31m [36mif[31m (detail) setEditing([36mtrue[31m) }}[33m>[31m[33mChỉnh[31m sửa[33m<[31m[33m/[31m[33mbutton[31m[33m>[31m[33m<[31m[33mbutton[31m type[33m=[31m[32m"button"[31m className[33m=[31m[32m"btn primary"[31m onClick[33m=[31m{begin}[33m>[31m[33mTạo[31m hóa đơn mới[33m<[31m[35m/button></[31m[33m>[31m [33m:[31m [33m<[31m[33mbutton[31m className[33m=[31m[32m"btn primary"[31m disabled[33m=[31m{mutation[33m.[31misPending [33m||[31m saving [33m||[31m childrenUnavailable [33m||[31m [33m![31mnavigator[33m.[31monLine}[33m>[31m{mutation[33m.[31misPending [33m||[31m saving [33m?[31m [32m'Đang lưu...'[31m [33m:[31m [32m'Lưu hóa đơn'[31m}[33m<[31m[33m/[31m[33mbutton[31m[33m>[31m}[33m<[31m[33m/[31m[33mdiv[31m[33m>[31m
+ [90m    |[31m     [31m[1m^[22m[31m
+ [90m 86 |[31m     {form[33m.[31mcustomer_id [33m&&[31m [33m<[31m[33mnav[31m className[33m=[31m[32m"invoice-customer-links"[31m aria[33m-[31mlabel[33m=[31m[32m"Thao tác khách hàng"[31m[33m>[31m[33m<[31m[33mLink[31m className[33m=[31m[32m"btn secondary"[31m to[33m=[31m{[32m`/debts?customerId=${encodeURIComponent(form.customer_id)}`[31m}[33m>[31m[33mThu[31m nợ khách hàng[33m<[31m[33m/[31m[33mLink[31m[33m>[31m[33m<[31m[33mLink[31m className[33m=[31m[32m"btn secondary"[31m to[33m=[31m{[32m`/treatments?customerId=${encodeURIComponent(form.customer_id)}&customerSearch=${encodeURIComponent(form.customer_name || "")}`[31m}[33m>[31m[33mXem[31m liệu trình khách hàng[33m<[31m[33m/[31m[33mLink[31m[33m>[31m[33m<[31m[33m/[31m[33mnav[31m[33m>[31m}
+ [90m 87 |[31m   [33m<[31m[33m/[31m[33mform[31m[33m>[31m }
+ [90m 88 |[31m   [36mconst[31m columns [33m=[31m [ { key[33m:[31m [32m'customer_name'[31m[33m,[31m label[33m:[31m [32m'Khách hàng'[31m }[33m,[31m { key[33m:[31m [32m'invoice_date'[31m[33m,[31m label[33m:[31m [32m'Ngày bán'[31m[33m,[31m render[33m:[31m r [33m=>[31m formatSpaDate(r[33m.[31minvoice_date) }[33m,[31m { key[33m:[31m [32m'total_amount'[31m[33m,[31m label[33m:[31m [32m'Thành tiền'[31m[33m,[31m render[33m:[31m r [33m=>[31m [33m<[31m[33mstrong[31m[33m>[31m{formatCurrency(r[33m.[31mtotal_amount)}[33m<[31m[35m/strong> }, { key: 'debt_amount', label: 'Công nợ', render: r => <DebtAmount value={r.debt_amount} /[31m[33m>[31m }[33m,[31m { key[33m:[31m [32m'branch_name'[31m[33m,[31m label[33m:[31m [32m'Cơ sở'[31m }][0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mD:/Project/SpaManagement/spa-management-frontend/src/pages/InvoicesPage.jsx[39m:85:4
+[33m  83 |      <label className="choice-row"><input type="checkbox" checked={printAfterSave} onChange={e => setPrintAfterSave(e.target.checked)} /> In hóa đơn sau khi lưu</label>
+  84 |      {printAfterSave && <ReceiptSizePicker value={receiptSize} onChange={setReceiptSize} />}
+  85 |      </fieldset><div className="drawer-actions"><button className="btn secondary" type="button" onClick={() => setSelected(null)}>{savedInvoiceId ? 'Đóng' : 'Hủy'}</button>{savedInvoiceId ? <><button type="button" className="btn secondary" onClick={async () => { const detail = await open({ id: savedInvoiceId }); if (detail) setEditing(true) }}>Chỉnh sửa</button><button type="button" className="btn primary" onClick={begin}>Tạo hóa đơn mới</button></> : <button className="btn primary" disabled={mutation.isPending || saving || childrenUnavailable || !navigator.onLine}>{mutation.isPending || saving ? 'Đang lưu...' : 'Lưu hóa đơn'}</button>}</div>
+     |       ^
+  86 |      {form.customer_id && <nav className="invoice-customer-links" aria-label="Thao tác khách hàng"><Link className="btn secondary" to={`/debts?customerId=${encodeURIComponent(form.customer_id)}`}>Thu nợ khách hàng</Link><Link className="btn secondary" to={`/treatments?customerId=${encodeURIComponent(form.customer_id)}&customerSearch=${encodeURIComponent(form.customer_name || "")}`}>Xem liệu trình khách hàng</Link></nav>}
+  87 |    </form> }[39m
+      at constructor (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:369:19)
+      at JSXParserMixin.raise (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:6622:19)
+      at JSXParserMixin.jsxParseElementAt (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4745:16)
+      at JSXParserMixin.jsxParseElement (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4767:17)
+      at JSXParserMixin.parseExprAtom (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4777:19)
+      at JSXParserMixin.parseExprSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11107:23)
+      at JSXParserMixin.parseUpdate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11092:21)
+      at JSXParserMixin.parseMaybeUnary (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11072:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10925:61)
+      at JSXParserMixin.parseExprOps (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10930:23)
+      at JSXParserMixin.parseMaybeConditional (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10907:23)
+      at JSXParserMixin.parseMaybeAssign (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10857:21)
+      at JSXParserMixin.parseFunctionBody (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12127:24)
+      at JSXParserMixin.parseArrowExpression (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12109:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11718:12)
+      at JSXParserMixin.parseExprAtom (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11362:23)
+      at JSXParserMixin.parseExprAtom (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4782:20)
+      at JSXParserMixin.parseExprSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11107:23)
+      at JSXParserMixin.parseUpdate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11092:21)
+      at JSXParserMixin.parseMaybeUnary (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11072:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10925:61)
+      at JSXParserMixin.parseExprOps (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10930:23)
+      at JSXParserMixin.parseMaybeConditional (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10907:23)
+      at JSXParserMixin.parseMaybeAssign (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10857:21)
+      at D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10826:39
+      at JSXParserMixin.allowInAnd (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12460:12)
+      at JSXParserMixin.parseMaybeAssignAllowIn (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10826:17)
+      at JSXParserMixin.parseMaybeAssignAllowInOrVoidPattern (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12527:17)
+      at JSXParserMixin.parseExprListItem (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12209:18)
+      at JSXParserMixin.parseCallExpressionArguments (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11283:22)
+      at JSXParserMixin.parseCoverCallAndAsyncArrowHead (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11217:29)
+      at JSXParserMixin.parseSubscript (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11146:19)
+      at JSXParserMixin.parseSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11120:19)
+      at JSXParserMixin.parseExprSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11111:17)
+      at JSXParserMixin.parseUpdate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11092:21)
+      at JSXParserMixin.parseMaybeUnary (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11072:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10925:61)
+      at JSXParserMixin.parseExprOps (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10930:23)
+      at JSXParserMixin.parseMaybeConditional (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10907:23)
+      at JSXParserMixin.parseMaybeAssign (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10857:21)
+      at JSXParserMixin.parseExpressionBase (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10810:23)
+      at D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10806:39
+      at JSXParserMixin.allowInAnd (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12460:12)
+      at JSXParserMixin.parseExpression (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10806:17)
+      at JSXParserMixin.jsxParseExpressionContainer (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4650:31)
+      at JSXParserMixin.jsxParseElementAt (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4729:36)
+      at JSXParserMixin.jsxParseElementAt (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4716:32)
+      at JSXParserMixin.jsxParseElement (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4767:17)
+      at JSXParserMixin.parseExprAtom (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4777:19)
+      at JSXParserMixin.parseExprSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11107:23)
+[2m11:14:12 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: D:\Project\SpaManagement\spa-management-frontend\src\pages\InvoicesPage.jsx: Expected corresponding JSX closing tag for <div>. (85:4)
+
+[0m [90m 83 |[31m     [33m<[31m[33mlabel[31m className[33m=[31m[32m"choice-row"[31m[33m>[31m[33m<[31m[33minput[31m type[33m=[31m[32m"checkbox"[31m checked[33m=[31m{printAfterSave} onChange[33m=[31m{e [33m=>[31m setPrintAfterSave(e[33m.[31mtarget[33m.[31mchecked)} [33m/[31m[33m>[31m [33mIn[31m hóa đơn sau khi lưu[33m<[31m[33m/[31m[33mlabel[31m[33m>[31m
+ [90m 84 |[31m     {printAfterSave [33m&&[31m [33m<[31m[33mReceiptSizePicker[31m value[33m=[31m{receiptSize} onChange[33m=[31m{setReceiptSize} [33m/[31m[33m>[31m}
+[31m[1m>[22m[31m[90m 85 |[31m     [33m<[31m[33m/[31m[33mfieldset[31m[33m>[31m[33m<[31m[33mdiv[31m className[33m=[31m[32m"drawer-actions"[31m[33m>[31m[33m<[31m[33mbutton[31m className[33m=[31m[32m"btn secondary"[31m type[33m=[31m[32m"button"[31m onClick[33m=[31m{() [33m=>[31m setSelected([36mnull[31m)}[33m>[31m{savedInvoiceId [33m?[31m [32m'Đóng'[31m [33m:[31m [32m'Hủy'[31m}[33m<[31m[33m/[31m[33mbutton[31m[33m>[31m{savedInvoiceId [33m?[31m [33m<[31m[33m>[31m[33m<[31m[33mbutton[31m type[33m=[31m[32m"button"[31m className[33m=[31m[32m"btn secondary"[31m onClick[33m=[31m{[36masync[31m () [33m=>[31m { [36mconst[31m detail [33m=[31m [36mawait[31m open({ id[33m:[31m savedInvoiceId })[33m;[31m [36mif[31m (detail) setEditing([36mtrue[31m) }}[33m>[31m[33mChỉnh[31m sửa[33m<[31m[33m/[31m[33mbutton[31m[33m>[31m[33m<[31m[33mbutton[31m type[33m=[31m[32m"button"[31m className[33m=[31m[32m"btn primary"[31m onClick[33m=[31m{begin}[33m>[31m[33mTạo[31m hóa đơn mới[33m<[31m[35m/button></[31m[33m>[31m [33m:[31m [33m<[31m[33mbutton[31m className[33m=[31m[32m"btn primary"[31m disabled[33m=[31m{mutation[33m.[31misPending [33m||[31m saving [33m||[31m childrenUnavailable [33m||[31m [33m![31mnavigator[33m.[31monLine}[33m>[31m{mutation[33m.[31misPending [33m||[31m saving [33m?[31m [32m'Đang lưu...'[31m [33m:[31m [32m'Lưu hóa đơn'[31m}[33m<[31m[33m/[31m[33mbutton[31m[33m>[31m}[33m<[31m[33m/[31m[33mdiv[31m[33m>[31m
+ [90m    |[31m     [31m[1m^[22m[31m
+ [90m 86 |[31m     {form[33m.[31mcustomer_id [33m&&[31m [33m<[31m[33mnav[31m className[33m=[31m[32m"invoice-customer-links"[31m aria[33m-[31mlabel[33m=[31m[32m"Thao tác khách hàng"[31m[33m>[31m[33m<[31m[33mLink[31m className[33m=[31m[32m"btn secondary"[31m to[33m=[31m{[32m`/debts?customerId=${encodeURIComponent(form.customer_id)}`[31m}[33m>[31m[33mThu[31m nợ khách hàng[33m<[31m[33m/[31m[33mLink[31m[33m>[31m[33m<[31m[33mLink[31m className[33m=[31m[32m"btn secondary"[31m to[33m=[31m{[32m`/treatments?customerId=${encodeURIComponent(form.customer_id)}&customerSearch=${encodeURIComponent(form.customer_name || "")}`[31m}[33m>[31m[33mXem[31m liệu trình khách hàng[33m<[31m[33m/[31m[33mLink[31m[33m>[31m[33m<[31m[33m/[31m[33mnav[31m[33m>[31m}
+ [90m 87 |[31m   [33m<[31m[33m/[31m[33mform[31m[33m>[31m }
+ [90m 88 |[31m   [36mconst[31m columns [33m=[31m [ { key[33m:[31m [32m'customer_name'[31m[33m,[31m label[33m:[31m [32m'Khách hàng'[31m }[33m,[31m { key[33m:[31m [32m'invoice_date'[31m[33m,[31m label[33m:[31m [32m'Ngày bán'[31m[33m,[31m render[33m:[31m r [33m=>[31m formatSpaDate(r[33m.[31minvoice_date) }[33m,[31m { key[33m:[31m [32m'total_amount'[31m[33m,[31m label[33m:[31m [32m'Thành tiền'[31m[33m,[31m render[33m:[31m r [33m=>[31m [33m<[31m[33mstrong[31m[33m>[31m{formatCurrency(r[33m.[31mtotal_amount)}[33m<[31m[35m/strong> }, { key: 'debt_amount', label: 'Công nợ', render: r => <DebtAmount value={r.debt_amount} /[31m[33m>[31m }[33m,[31m { key[33m:[31m [32m'branch_name'[31m[33m,[31m label[33m:[31m [32m'Cơ sở'[31m }][0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mD:/Project/SpaManagement/spa-management-frontend/src/pages/InvoicesPage.jsx[39m:85:4
+[33m  83 |      <label className="choice-row"><input type="checkbox" checked={printAfterSave} onChange={e => setPrintAfterSave(e.target.checked)} /> In hóa đơn sau khi lưu</label>
+  84 |      {printAfterSave && <ReceiptSizePicker value={receiptSize} onChange={setReceiptSize} />}
+  85 |      </fieldset><div className="drawer-actions"><button className="btn secondary" type="button" onClick={() => setSelected(null)}>{savedInvoiceId ? 'Đóng' : 'Hủy'}</button>{savedInvoiceId ? <><button type="button" className="btn secondary" onClick={async () => { const detail = await open({ id: savedInvoiceId }); if (detail) setEditing(true) }}>Chỉnh sửa</button><button type="button" className="btn primary" onClick={begin}>Tạo hóa đơn mới</button></> : <button className="btn primary" disabled={mutation.isPending || saving || childrenUnavailable || !navigator.onLine}>{mutation.isPending || saving ? 'Đang lưu...' : 'Lưu hóa đơn'}</button>}</div>
+     |       ^
+  86 |      {form.customer_id && <nav className="invoice-customer-links" aria-label="Thao tác khách hàng"><Link className="btn secondary" to={`/debts?customerId=${encodeURIComponent(form.customer_id)}`}>Thu nợ khách hàng</Link><Link className="btn secondary" to={`/treatments?customerId=${encodeURIComponent(form.customer_id)}&customerSearch=${encodeURIComponent(form.customer_name || "")}`}>Xem liệu trình khách hàng</Link></nav>}
+  87 |    </form> }[39m
+      at constructor (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:369:19)
+      at JSXParserMixin.raise (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:6622:19)
+      at JSXParserMixin.jsxParseElementAt (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4745:16)
+      at JSXParserMixin.jsxParseElement (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4767:17)
+      at JSXParserMixin.parseExprAtom (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4777:19)
+      at JSXParserMixin.parseExprSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11107:23)
+      at JSXParserMixin.parseUpdate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11092:21)
+      at JSXParserMixin.parseMaybeUnary (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11072:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10925:61)
+      at JSXParserMixin.parseExprOps (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10930:23)
+      at JSXParserMixin.parseMaybeConditional (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10907:23)
+      at JSXParserMixin.parseMaybeAssign (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10857:21)
+      at JSXParserMixin.parseFunctionBody (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12127:24)
+      at JSXParserMixin.parseArrowExpression (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12109:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11718:12)
+      at JSXParserMixin.parseExprAtom (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11362:23)
+      at JSXParserMixin.parseExprAtom (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4782:20)
+      at JSXParserMixin.parseExprSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11107:23)
+      at JSXParserMixin.parseUpdate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11092:21)
+      at JSXParserMixin.parseMaybeUnary (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11072:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10925:61)
+      at JSXParserMixin.parseExprOps (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10930:23)
+      at JSXParserMixin.parseMaybeConditional (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10907:23)
+      at JSXParserMixin.parseMaybeAssign (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10857:21)
+      at D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10826:39
+      at JSXParserMixin.allowInAnd (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12460:12)
+      at JSXParserMixin.parseMaybeAssignAllowIn (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10826:17)
+      at JSXParserMixin.parseMaybeAssignAllowInOrVoidPattern (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12527:17)
+      at JSXParserMixin.parseExprListItem (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12209:18)
+      at JSXParserMixin.parseCallExpressionArguments (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11283:22)
+      at JSXParserMixin.parseCoverCallAndAsyncArrowHead (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11217:29)
+      at JSXParserMixin.parseSubscript (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11146:19)
+      at JSXParserMixin.parseSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11120:19)
+      at JSXParserMixin.parseExprSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11111:17)
+      at JSXParserMixin.parseUpdate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11092:21)
+      at JSXParserMixin.parseMaybeUnary (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11072:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10925:61)
+      at JSXParserMixin.parseExprOps (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10930:23)
+      at JSXParserMixin.parseMaybeConditional (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10907:23)
+      at JSXParserMixin.parseMaybeAssign (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10857:21)
+      at JSXParserMixin.parseExpressionBase (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10810:23)
+      at D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10806:39
+      at JSXParserMixin.allowInAnd (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12460:12)
+      at JSXParserMixin.parseExpression (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10806:17)
+      at JSXParserMixin.jsxParseExpressionContainer (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4650:31)
+      at JSXParserMixin.jsxParseElementAt (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4729:36)
+      at JSXParserMixin.jsxParseElementAt (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4716:32)
+      at JSXParserMixin.jsxParseElement (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4767:17)
+      at JSXParserMixin.parseExprAtom (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4777:19)
+      at JSXParserMixin.parseExprSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11107:23)
+[2m11:14:42 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: D:\Project\SpaManagement\spa-management-frontend\src\pages\InvoicesPage.jsx: Expected corresponding JSX closing tag for <div>. (85:4)
+
+[0m [90m 83 |[31m     [33m<[31m[33mlabel[31m className[33m=[31m[32m"choice-row"[31m[33m>[31m[33m<[31m[33minput[31m type[33m=[31m[32m"checkbox"[31m checked[33m=[31m{printAfterSave} onChange[33m=[31m{e [33m=>[31m setPrintAfterSave(e[33m.[31mtarget[33m.[31mchecked)} [33m/[31m[33m>[31m [33mIn[31m hóa đơn sau khi lưu[33m<[31m[33m/[31m[33mlabel[31m[33m>[31m
+ [90m 84 |[31m     {printAfterSave [33m&&[31m [33m<[31m[33mReceiptSizePicker[31m value[33m=[31m{receiptSize} onChange[33m=[31m{setReceiptSize} [33m/[31m[33m>[31m}
+[31m[1m>[22m[31m[90m 85 |[31m     [33m<[31m[33m/[31m[33mfieldset[31m[33m>[31m[33m<[31m[33mdiv[31m className[33m=[31m[32m"drawer-actions"[31m[33m>[31m[33m<[31m[33mbutton[31m className[33m=[31m[32m"btn secondary"[31m type[33m=[31m[32m"button"[31m onClick[33m=[31m{() [33m=>[31m setSelected([36mnull[31m)}[33m>[31m{savedInvoiceId [33m?[31m [32m'Đóng'[31m [33m:[31m [32m'Hủy'[31m}[33m<[31m[33m/[31m[33mbutton[31m[33m>[31m{savedInvoiceId [33m?[31m [33m<[31m[33m>[31m[33m<[31m[33mbutton[31m type[33m=[31m[32m"button"[31m className[33m=[31m[32m"btn secondary"[31m onClick[33m=[31m{[36masync[31m () [33m=>[31m { [36mconst[31m detail [33m=[31m [36mawait[31m open({ id[33m:[31m savedInvoiceId })[33m;[31m [36mif[31m (detail) setEditing([36mtrue[31m) }}[33m>[31m[33mChỉnh[31m sửa[33m<[31m[33m/[31m[33mbutton[31m[33m>[31m[33m<[31m[33mbutton[31m type[33m=[31m[32m"button"[31m className[33m=[31m[32m"btn primary"[31m onClick[33m=[31m{begin}[33m>[31m[33mTạo[31m hóa đơn mới[33m<[31m[35m/button></[31m[33m>[31m [33m:[31m [33m<[31m[33mbutton[31m className[33m=[31m[32m"btn primary"[31m disabled[33m=[31m{mutation[33m.[31misPending [33m||[31m saving [33m||[31m childrenUnavailable [33m||[31m [33m![31mnavigator[33m.[31monLine}[33m>[31m{mutation[33m.[31misPending [33m||[31m saving [33m?[31m [32m'Đang lưu...'[31m [33m:[31m [32m'Lưu hóa đơn'[31m}[33m<[31m[33m/[31m[33mbutton[31m[33m>[31m}[33m<[31m[33m/[31m[33mdiv[31m[33m>[31m
+ [90m    |[31m     [31m[1m^[22m[31m
+ [90m 86 |[31m     {form[33m.[31mcustomer_id [33m&&[31m [33m<[31m[33mnav[31m className[33m=[31m[32m"invoice-customer-links"[31m aria[33m-[31mlabel[33m=[31m[32m"Thao tác khách hàng"[31m[33m>[31m[33m<[31m[33mLink[31m className[33m=[31m[32m"btn secondary"[31m to[33m=[31m{[32m`/debts?customerId=${encodeURIComponent(form.customer_id)}`[31m}[33m>[31m[33mThu[31m nợ khách hàng[33m<[31m[33m/[31m[33mLink[31m[33m>[31m[33m<[31m[33mLink[31m className[33m=[31m[32m"btn secondary"[31m to[33m=[31m{[32m`/treatments?customerId=${encodeURIComponent(form.customer_id)}&customerSearch=${encodeURIComponent(form.customer_name || "")}`[31m}[33m>[31m[33mXem[31m liệu trình khách hàng[33m<[31m[33m/[31m[33mLink[31m[33m>[31m[33m<[31m[33m/[31m[33mnav[31m[33m>[31m}
+ [90m 87 |[31m   [33m<[31m[33m/[31m[33mform[31m[33m>[31m }
+ [90m 88 |[31m   [36mconst[31m columns [33m=[31m [ { key[33m:[31m [32m'customer_name'[31m[33m,[31m label[33m:[31m [32m'Khách hàng'[31m }[33m,[31m { key[33m:[31m [32m'invoice_date'[31m[33m,[31m label[33m:[31m [32m'Ngày bán'[31m[33m,[31m render[33m:[31m r [33m=>[31m formatSpaDate(r[33m.[31minvoice_date) }[33m,[31m { key[33m:[31m [32m'total_amount'[31m[33m,[31m label[33m:[31m [32m'Thành tiền'[31m[33m,[31m render[33m:[31m r [33m=>[31m [33m<[31m[33mstrong[31m[33m>[31m{formatCurrency(r[33m.[31mtotal_amount)}[33m<[31m[35m/strong> }, { key: 'debt_amount', label: 'Công nợ', render: r => <DebtAmount value={r.debt_amount} /[31m[33m>[31m }[33m,[31m { key[33m:[31m [32m'branch_name'[31m[33m,[31m label[33m:[31m [32m'Cơ sở'[31m }][0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mD:/Project/SpaManagement/spa-management-frontend/src/pages/InvoicesPage.jsx[39m:85:4
+[33m  83 |      <label className="choice-row"><input type="checkbox" checked={printAfterSave} onChange={e => setPrintAfterSave(e.target.checked)} /> In hóa đơn sau khi lưu</label>
+  84 |      {printAfterSave && <ReceiptSizePicker value={receiptSize} onChange={setReceiptSize} />}
+  85 |      </fieldset><div className="drawer-actions"><button className="btn secondary" type="button" onClick={() => setSelected(null)}>{savedInvoiceId ? 'Đóng' : 'Hủy'}</button>{savedInvoiceId ? <><button type="button" className="btn secondary" onClick={async () => { const detail = await open({ id: savedInvoiceId }); if (detail) setEditing(true) }}>Chỉnh sửa</button><button type="button" className="btn primary" onClick={begin}>Tạo hóa đơn mới</button></> : <button className="btn primary" disabled={mutation.isPending || saving || childrenUnavailable || !navigator.onLine}>{mutation.isPending || saving ? 'Đang lưu...' : 'Lưu hóa đơn'}</button>}</div>
+     |       ^
+  86 |      {form.customer_id && <nav className="invoice-customer-links" aria-label="Thao tác khách hàng"><Link className="btn secondary" to={`/debts?customerId=${encodeURIComponent(form.customer_id)}`}>Thu nợ khách hàng</Link><Link className="btn secondary" to={`/treatments?customerId=${encodeURIComponent(form.customer_id)}&customerSearch=${encodeURIComponent(form.customer_name || "")}`}>Xem liệu trình khách hàng</Link></nav>}
+  87 |    </form> }[39m
+      at constructor (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:369:19)
+      at JSXParserMixin.raise (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:6622:19)
+      at JSXParserMixin.jsxParseElementAt (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4745:16)
+      at JSXParserMixin.jsxParseElement (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4767:17)
+      at JSXParserMixin.parseExprAtom (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4777:19)
+      at JSXParserMixin.parseExprSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11107:23)
+      at JSXParserMixin.parseUpdate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11092:21)
+      at JSXParserMixin.parseMaybeUnary (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11072:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10925:61)
+      at JSXParserMixin.parseExprOps (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10930:23)
+      at JSXParserMixin.parseMaybeConditional (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10907:23)
+      at JSXParserMixin.parseMaybeAssign (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10857:21)
+      at JSXParserMixin.parseFunctionBody (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12127:24)
+      at JSXParserMixin.parseArrowExpression (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12109:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11718:12)
+      at JSXParserMixin.parseExprAtom (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11362:23)
+      at JSXParserMixin.parseExprAtom (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4782:20)
+      at JSXParserMixin.parseExprSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11107:23)
+      at JSXParserMixin.parseUpdate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11092:21)
+      at JSXParserMixin.parseMaybeUnary (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11072:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10925:61)
+      at JSXParserMixin.parseExprOps (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10930:23)
+      at JSXParserMixin.parseMaybeConditional (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10907:23)
+      at JSXParserMixin.parseMaybeAssign (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10857:21)
+      at D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10826:39
+      at JSXParserMixin.allowInAnd (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12460:12)
+      at JSXParserMixin.parseMaybeAssignAllowIn (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10826:17)
+      at JSXParserMixin.parseMaybeAssignAllowInOrVoidPattern (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12527:17)
+      at JSXParserMixin.parseExprListItem (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12209:18)
+      at JSXParserMixin.parseCallExpressionArguments (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11283:22)
+      at JSXParserMixin.parseCoverCallAndAsyncArrowHead (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11217:29)
+      at JSXParserMixin.parseSubscript (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11146:19)
+      at JSXParserMixin.parseSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11120:19)
+      at JSXParserMixin.parseExprSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11111:17)
+      at JSXParserMixin.parseUpdate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11092:21)
+      at JSXParserMixin.parseMaybeUnary (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11072:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10925:61)
+      at JSXParserMixin.parseExprOps (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10930:23)
+      at JSXParserMixin.parseMaybeConditional (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10907:23)
+      at JSXParserMixin.parseMaybeAssign (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10857:21)
+      at JSXParserMixin.parseExpressionBase (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10810:23)
+      at D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10806:39
+      at JSXParserMixin.allowInAnd (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:12460:12)
+      at JSXParserMixin.parseExpression (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:10806:17)
+      at JSXParserMixin.jsxParseExpressionContainer (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4650:31)
+      at JSXParserMixin.jsxParseElementAt (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4729:36)
+      at JSXParserMixin.jsxParseElementAt (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4716:32)
+      at JSXParserMixin.jsxParseElement (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4767:17)
+      at JSXParserMixin.parseExprAtom (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:4777:19)
+      at JSXParserMixin.parseExprSubscripts (D:\Project\SpaManagement\spa-management-frontend\node_modules\@babel\parser\lib\index.js:11107:23)
+[2m11:15:49 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/InvoicesPage.jsx[22m
+[2m11:19:11 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/CustomerOverview.jsx, /src/components/TodayTreatments.jsx, /src/components/TreatmentCardPanel.jsx, /src/components/TreatmentExecution.jsx, /src/components/TreatmentGroupedHistory.jsx[22m
+[2m11:19:39 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/auth/AuthProvider.jsx, /src/pages/InventoryPage.jsx, /src/pages/ConsultantsPage.jsx, /src/components/AppShell.jsx, /src/pages/ReportsPage.jsx, /src/pages/DashboardPage.jsx, /src/pages/TransactionPage.jsx, /src/pages/TreatmentsPage.jsx, /src/pages/ResourcePage.jsx, /src/pages/InvoicesPage.jsx, /src/components/InvoiceChildStaffPicker.jsx, /src/components/CustomerOverview.jsx, /src/components/TreatmentCustomerList.jsx, /src/components/TodayTreatments.jsx, /src/components/TreatmentCardPanel.jsx, /src/components/TreatmentExecution.jsx, /src/components/RoleStaffPicker.jsx, /src/components/StaffEarnings.jsx, /src/components/CustomerBookingForm.jsx, /src/components/ProductServiceChildren.jsx, /src/components/DebtInvoicePicker.jsx, /src/components/SearchPicker.jsx, /src/components/CommissionReport.jsx, /src/components/TreatmentSessionDialog.jsx, /src/components/TreatmentGroupSessionDialog.jsx, /src/components/TreatmentCloseDialog.jsx[22m
+[2m11:19:39 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TodayTreatments.jsx[22m
+[2m11:19:39 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TreatmentGroupSessionDialog.jsx[22m
+[2m11:19:39 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TreatmentExecution.jsx[22m
+[2m11:19:55 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TreatmentGroupedHistory.jsx[22m
+[2m11:19:55 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TodayTreatments.jsx[22m
+[2m11:20:12 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TodayTreatments.jsx[22m
+[2m11:20:12 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/CustomerOverview.jsx, /src/components/TodayTreatments.jsx, /src/components/TreatmentCardPanel.jsx, /src/components/TreatmentExecution.jsx, /src/components/TreatmentGroupedHistory.jsx[22m
+[2m11:22:38 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-entry.css[22m
+[2m11:23:42 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/InvoicesPage.jsx[22m
+[2m11:25:10 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/InvoicesPage.jsx[22m
+[2m11:25:32 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-responsive.css[22m
+[2m11:25:32 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/TreatmentSessionDialog.jsx[22m
+[2m11:26:08 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-responsive.css[22m
+[2m11:27:10 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-responsive.css[22m
+[2m11:35:48 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/CustomerOverview.jsx, /src/components/TodayTreatments.jsx, /src/components/TreatmentCardPanel.jsx, /src/components/TreatmentExecution.jsx, /src/components/TreatmentGroupedHistory.jsx[22m
+[2m11:36:56 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/InvoiceServiceChildren.jsx[22m
+[2m11:37:49 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-responsive.css[22m
+[2m11:38:51 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-responsive.css[22m
+[2m11:39:37 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-responsive.css[22m
+[2m11:40:09 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-responsive.css[22m
+[2m11:40:52 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-responsive.css[22m
+[2m11:41:04 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-responsive.css[22m
+[2m11:41:28 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-responsive.css[22m
+[2m11:42:19 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-responsive.css[22m
+[2m11:43:12 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-responsive.css[22m
+[2m11:43:30 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/invoice-responsive.css[22m
+^CTerminate batch job (Y/N)? 

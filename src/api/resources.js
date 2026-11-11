@@ -13,11 +13,27 @@ function endpoint(resource) { const path = paths[resource]; if (!path) throw new
 export function listResource(resource, filters = {}, page = 1, pageSize = 20, signal) {
   return request(endpoint(resource), { query: { ...filters, page, pageSize }, signal }).then(result => normalizePagedResponse(result, page, pageSize))
 }
-export function getResource(resource, id) {
+export function getResource(resource, id, query) {
   if (resource === 'commissions') throw new Error('API chi tiết không khả dụng cho tài nguyên này')
-  return request(`${endpoint(resource)}/${encodeURIComponent(id)}`).then(result => result.data)
+  return request(`${endpoint(resource)}/${encodeURIComponent(id)}`, { query }).then(result => result.data)
+}
+export async function listAllResource(resource, filters = {}, signal) {
+  const first = await listResource(resource, filters, 1, 100, signal)
+  const data = [...first.data]
+  for (let page = 2; page <= first.totalPages; page += 1) {
+    const next = await listResource(resource, filters, page, 100, signal)
+    data.push(...next.data)
+  }
+  return data
 }
 export const getCustomerOverview = id => request(`/api/customers/${encodeURIComponent(id)}/overview`).then(result => result.data)
+const skinPath = (customerId, sessionId) => `/api/customers/${encodeURIComponent(customerId)}/skin-image-sessions${sessionId == null ? '' : `/${encodeURIComponent(sessionId)}`}`
+export const listSkinSessions = (customerId, page = 1) => request(skinPath(customerId), { query: { page, pageSize: 10 } }).then(result => normalizePagedResponse(result, page, 10))
+export const saveSkinSession = (customerId, sessionId, body) => request(skinPath(customerId, sessionId), { method: sessionId == null ? 'POST' : 'PUT', body })
+export const appendSkinImages = (customerId, sessionId, body) => request(`${skinPath(customerId, sessionId)}/images`, { method: 'POST', body })
+export const deleteSkinSession = (customerId, sessionId) => request(skinPath(customerId, sessionId), { method: 'DELETE' })
+export const deleteSkinImage = (customerId, sessionId, imageId) => request(`${skinPath(customerId, sessionId)}/images/${encodeURIComponent(imageId)}`, { method: 'DELETE' })
+export const getSkinImage = (customerId, sessionId, imageId, signal) => request(`${skinPath(customerId, sessionId)}/images/${encodeURIComponent(imageId)}/file`, { signal, responseType: 'blob' })
 export function createResource(resource, body) {
   if (readonly.has(resource)) throw new Error('Tài nguyên chỉ đọc')
   return request(resource === 'users' ? '/api/users/create' : endpoint(resource), { method: 'POST', body })
@@ -45,5 +61,9 @@ export const getProductRevenue = (range, page = 1, pageSize = 20) => request('/a
 export const getProductInvoices = (id, range, page = 1, pageSize = 20) => request(`/api/reports/products/${encodeURIComponent(id)}/invoices`, { query: { ...range, page, pageSize } }).then(r => normalizePagedResponse(r, page, pageSize))
 export const getAppointmentQueue = (kind, filters = {}, page = 1) => request(`/api/appointments/${kind}`, { query: { ...filters, page, pageSize: 20 } }).then(r => normalizePagedResponse(r, page))
 export const executeTreatment = body => request('/api/treatments/execute', { method: 'POST', body })
+export const updateGroupedTreatmentExecution = (parentHistoryId, body) => request(`/api/treatments/execute/${encodeURIComponent(parentHistoryId)}`, { method: 'PUT', body })
 export const assignTreatmentStaffs = (id, staffs) => request(`/api/treatments/execute/${id}/staffs`, { method: 'PUT', body: { staffs } })
 export const undoTreatmentExecution = id => request(`/api/treatments/execute/${id}`, { method: 'DELETE' })
+export const updateTreatmentHistoryNote = (id, note) => request(`/api/treatments/execute/${encodeURIComponent(id)}/note`, { method: 'PUT', body: { note } })
+export const updateTreatmentGroupNote = (id, note) => request(`/api/treatments/${encodeURIComponent(id)}/note`, { method: 'PUT', body: { note } })
+export const closeTreatment = (id, closure_note) => request(`/api/treatments/${encodeURIComponent(id)}/close`, { method: 'POST', body: { closure_note: closure_note || null } })

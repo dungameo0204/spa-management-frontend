@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import './Pagination.css'
 
@@ -8,7 +9,8 @@ export function getPageNumbers(current, total) {
   return [1, '...', current - 1, current, current + 1, '...', total]
 }
 
-export default function Pagination({ page = 1, totalPages = 1, totalItems, pageSize, onChange, label = 'mục', className = '' }) {
+export default function Pagination({ page = 1, totalPages = 1, totalItems, pageSize, onChange, label = 'mục', className = '', compact = false }) {
+  const navRef = useRef(null)
   if (totalPages <= 1 && (!totalItems || (pageSize && totalItems <= pageSize))) return null
 
   const current = Math.min(Math.max(1, page), Math.max(1, totalPages))
@@ -21,8 +23,17 @@ export default function Pagination({ page = 1, totalPages = 1, totalItems, pageS
     endItem = Math.min(current * pageSize, totalItems)
   }
 
+  function changePage(next) {
+    if (next === current) return
+    onChange(next)
+    if (!compact) {
+      const container = navRef.current?.closest('.section-card, .list-panel, .surface, .staff-group, .page, main')
+      container?.scrollIntoView?.({ behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' })
+    }
+  }
+
   return (
-    <nav className={`app-pagination ${className}`.trim()} aria-label="Phân trang">
+    <nav ref={navRef} className={`app-pagination${compact ? ' app-pagination-compact' : ''} ${className}`.trim()} aria-label="Phân trang">
       <div className="app-pagination-info">
         {startItem && endItem ? (
           <>Hiển thị <strong>{startItem} - {endItem}</strong> trong <strong>{totalItems}</strong> {label}</>
@@ -35,7 +46,7 @@ export default function Pagination({ page = 1, totalPages = 1, totalItems, pageS
           type="button"
           className="app-page-btn app-page-prev"
           disabled={current <= 1}
-          onClick={() => onChange(current - 1)}
+          onClick={() => changePage(current - 1)}
           aria-label="Trang trước"
         >
           <ChevronLeft size={16} />
@@ -50,7 +61,7 @@ export default function Pagination({ page = 1, totalPages = 1, totalItems, pageS
                 key={`page-${p}`}
                 type="button"
                 className={`app-page-num${p === current ? ' is-active' : ''}`}
-                onClick={() => onChange(p)}
+                onClick={() => changePage(p)}
                 aria-current={p === current ? 'page' : undefined}
                 aria-label={`Trang ${p}`}
               >
@@ -63,7 +74,7 @@ export default function Pagination({ page = 1, totalPages = 1, totalItems, pageS
           type="button"
           className="app-page-btn app-page-next"
           disabled={current >= pages}
-          onClick={() => onChange(current + 1)}
+          onClick={() => changePage(current + 1)}
           aria-label="Trang sau"
         >
           <span>Sau</span>

@@ -15,6 +15,12 @@ vi.mock('../components/RoleStaffPicker', () => ({ default: () => <div>Chọn nh�
 vi.mock('../api/resources', () => ({
   executeTreatment: vi.fn(), assignTreatmentStaffs: vi.fn(), undoTreatmentExecution: vi.fn(),
   createResource: vi.fn(), getResource: vi.fn(), listResource: vi.fn(),
+  listAllResource: vi.fn(async (resource, filters) => {
+    const first = await listResource(resource, filters, 1, 100)
+    const data = [...first.data]
+    for (let page = 2; page <= first.totalPages; page += 1) data.push(...(await listResource(resource, filters, page, 100)).data)
+    return data
+  }),
 }))
 
 const card = { id: 10, customer_id: 20, customer_name: 'Lan', product_name: 'Chăm sóc da', remaining_sessions: 5, total_sessions: 6, branch_id: 2 }
@@ -35,6 +41,7 @@ it('dashboard: mỗi buổi một dòng, sửa nhân viên và hoàn tác đúng
     { id: 30, branch_id: 2, execution_date: today(), created_at: today(), staffs: [{ staff_id: 1, staff_name: 'Nhân viên Một' }] },
     { id: 31, branch_id: 2, execution_date: today(), created_at: today(), staffs: [{ staff_id: 2, staff_name: 'Nhân viên Hai' }] },
   ]
+  mockListHistories(histories)
   getResource.mockResolvedValue({ ...card, histories })
   const actor = userEvent.setup()
   show(<TodayTreatments />)
@@ -56,6 +63,7 @@ for (const role of ['STAFF', 'MANAGER']) {
     it(`${entry}: ${role} hoàn tác ${scenario}`, async () => {
       auth.role = role
       const history = { id: 30, branch_id: scenario === 'other-branch' ? 3 : 2, execution_date: today(), created_at: scenario === 'old-created' ? '2020-01-01 09:00:00' : scenario === 'missing-created' ? null : `${today()} 09:00:00`, staffs: [] }
+      mockListHistories([history])
       getResource.mockImplementation(async resource => resource === 'treatments' ? { ...card, histories: [history] } : {})
       if (scenario === 'error') undoTreatmentExecution.mockRejectedValue(new Error('Không được hoàn tác buổi này.'))
       const allowed = role === 'MANAGER' || !['old-created', 'missing-created', 'other-branch'].includes(scenario)
@@ -99,6 +107,14 @@ function show(component) {
   render(<QueryClientProvider client={client}><MemoryRouter>{component}</MemoryRouter></QueryClientProvider>)
 }
 
+// The dashboard consumes histories embedded in the list response, not detail GETs.
+function mockListHistories(histories) {
+  listResource.mockImplementation(async resource => ({
+    data: resource === 'treatments' ? [{ ...card, created_at: today(), histories }] : resource === 'branches' ? [{ id: 2, name: 'Cơ sở 2' }] : [],
+    totalPages: 1,
+  }))
+}
+
 async function openExecution(entry, actor, manager) {
   show(entry === 'dashboard' ? <TodayTreatments /> : <TreatmentsPage />)
   if (entry === 'dashboard') {
@@ -133,6 +149,7 @@ for (const entry of ['inline', 'detail', 'dashboard']) {
 }
 
 it('sửa nhân viên của buổi đã có không hiển thị hoặc gửi ngày thực hiện mới', async () => {
+  mockListHistories([{ id: 30, branch_id: 2, execution_date: today(), staffs: [] }])
   getResource.mockImplementation(async resource => resource === 'treatments' ? { ...card, histories: [{ id: 30, branch_id: 2, execution_date: today(), staffs: [] }] } : {})
   const actor = userEvent.setup()
   show(<TodayTreatments />)

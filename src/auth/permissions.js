@@ -6,11 +6,14 @@ export const permissions = {
   'branches.manage': managers, 'roles.manage': managers, 'products.view': everyone,
   'products.manage': everyone, 'reports.view': managers, 'users.manage': managers,
   'treatments.create': managers, 'staffs.manage': everyone, 'customers.manage': everyone,
-  'appointments.manage': everyone, 'invoices.manage': everyone, 'inventory.manage': everyone,
+  'appointments.manage': everyone, 'bookings.manage': everyone, 'invoices.manage': everyone, 'inventory.manage': everyone,
   'expenses.manage': everyone, 'wallet.manage': everyone, 'debts.manage': everyone,
   'treatments.execute': everyone, 'bookings.view': everyone, 'commissions.view': managers, 'consultants.view': managers,
 }
 export function canAccess(user, permission) { return Boolean(user && permissions[permission]?.includes(user.system_role)) }
+export function canFollowUpTreatmentHistory(user, history, now = new Date()) {
+  return Boolean(history?.id && !history.deleted_at && canUndoTreatmentExecution(user, history, now))
+}
 export function resolveBranch(user, selected) {
   if (user?.system_role === 'STAFF') return { branchId: user.branch_id, locked: true }
   return { branchId: selected ? Number(selected) : null, locked: false }
@@ -27,4 +30,8 @@ export function canUndoTreatmentExecution(user, history, now = new Date()) {
   return user?.system_role === 'STAFF' && user.branch_id != null && history.branch_id != null &&
     Number(user.branch_id) === Number(history.branch_id) &&
     canEditSameDay(history, now) && canEditSameDay({ created_at: history.execution_date }, now)
+}
+export function canAssignTreatmentStaffs(user, history) {
+  return Boolean(history && (user?.system_role === 'MANAGER' ||
+    (user?.system_role === 'STAFF' && user.branch_id != null && history.branch_id != null && Number(user.branch_id) === Number(history.branch_id))))
 }

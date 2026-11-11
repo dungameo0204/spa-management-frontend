@@ -20,18 +20,18 @@
 - STAFF bị giới hạn theo branch; MANAGER chọn branch qua `resolveBranch`. Không chỉ khóa UI—giữ payload đúng backend contract.
 - Ngày dùng helpers `src/utils/format.js`; tiền/validation dùng helpers hiện có.
 - SVG chữ ký render bằng `<img data:image/svg+xml...>`, không `dangerouslySetInnerHTML`.
-- `treatments.note`, `treatment_history.note`, `closure_note` là ba khái niệm khác nhau. Không dùng note của treatment làm note của buổi.
+- `treatments.note`, `treatment_history.note`, `closure_note` là ba khái niệm khác nhau. Ghi chú chung của nhóm dùng `treatments.note` ở thẻ cha, không copy vào history con.
 
 ## Treatment groups — trạng thái Rosa hiện tại
 - Root có `children`; root không execute. Execute từng child bằng `POST /api/treatments/execute`.
 - Note/chữ ký buổi thuộc `treatment_history`: payload creation nhận `note`, `customer_signature_svg`; follow-up dùng `PUT /api/treatments/execute/:historyId/note` và `POST .../:historyId/sign`.
-- Khi thực hiện nhiều child cùng một lần trong `TreatmentExecution`, note chỉ gắn history của child đầu tiên đã chọn (không copy note); chữ ký gắn mỗi history. Lịch sử nhóm chỉ **gom hiển thị**, không có parent history riêng.
-- `TreatmentGroupedHistory` hiển thị date/branch + note/signature ở hàng cha; child rows chỉ `dịch vụ — nhân viên`. Dialog nhóm chọn history đang có note, hoặc history đầu tiên, làm representative để sửa note.
+- Mỗi history ID là một lần thực hiện độc lập. Không gom history theo thời gian, ngày hoặc cơ sở; API hiện không cung cấp quan hệ giữa history cha/con.
+- `TreatmentGroupedHistory` và hàng cha Hôm nay hiển thị `history.note` của đúng một ID; dialog chỉ gọi `PUT /api/treatments/execute/:historyId/note`. Không dùng note thẻ cha cho lịch sử. Xuly không render/gửi chữ ký. Hóa đơn vẫn giữ metadata tạo thẻ trong `items[].treatment.note`.
 - Kết thúc cả liệu trình là flow riêng: `closeTreatment`, `closure_note`, `closure_signature_svg`.
 
-## Working state (2026-10-30)
+## Working state (2026-11-07)
 - Nhánh hiện tại: `rosa`; có thay đổi **chưa commit** về compact treatment card/history và tests. Đọc `git status --short` trước khi sửa hoặc revert.
-- Vừa hoàn tất chuyển ghi chú nhóm từ `treatments.note` sang `treatment_history.note`; helper `updateTreatmentGroupNote` đã bị xóa. Không khôi phục endpoint đó nếu chưa có thay đổi backend rõ ràng.
+- Form Thực hiện khởi tạo ghi chú trống, không copy note thẻ cha. Note nhập mới gửi cùng payload tạo từng history được chọn; không gọi endpoint note cha. Sửa ghi chú sau đó luôn chỉ cập nhật một history ID. Danh sách hôm nay tải đủ trang và detail gửi bộ lọc ngày thực hiện.
 - Các file trọng tâm thay đổi: `TreatmentExecution`, `TreatmentCardPanel`, `TreatmentGroupedHistory`, `TreatmentGroupSessionDialog`, `todayTreatments`, CSS và test/E2E tương ứng.
 
 ## Lệnh kiểm tra

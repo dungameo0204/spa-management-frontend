@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { canAccess, canEditSameDay, canUndoTreatmentExecution, resolveBranch } from './permissions'
+import { canAccess, canAssignTreatmentStaffs, canEditSameDay, canFollowUpTreatmentHistory, canUndoTreatmentExecution, resolveBranch } from './permissions'
 const staff = { system_role: 'STAFF', branch_id: 7 }
 const manager = { system_role: 'MANAGER', branch_id: null }
 describe('phân quyền sản phẩm', () => {
@@ -53,5 +53,25 @@ describe('quyền hoàn tác buổi thực hiện', () => {
     expect(canUndoTreatmentExecution({ system_role: 'STAFF' }, history, now)).toBe(false)
     expect(canUndoTreatmentExecution(staff, null, now)).toBe(false)
     expect(canUndoTreatmentExecution({ system_role: 'OTHER' }, history, now)).toBe(false)
+  })
+})
+
+describe('quyền gán nhân viên buổi thực hiện', () => {
+  it('cho STAFF cùng cơ sở chỉnh nhân viên của lịch sử cũ nhưng không hoàn tác lịch sử đó', () => {
+    const old = { branch_id: 7, execution_date: '2026-10-01', created_at: '2026-10-01' }
+    expect(canAssignTreatmentStaffs(staff, old)).toBe(true)
+    expect(canUndoTreatmentExecution(staff, old, new Date('2026-11-07T05:00:00Z'))).toBe(false)
+  })
+  it('chặn STAFF khác cơ sở và cho MANAGER', () => {
+    expect(canAssignTreatmentStaffs(staff, { branch_id: 8 })).toBe(false)
+    expect(canAssignTreatmentStaffs(manager, { branch_id: 8 })).toBe(true)
+  })
+  it('chỉ cho STAFF sửa ghi chú lịch sử trong ngày, nhưng MANAGER sửa được lịch sử cũ', () => {
+    const old = { id: 1, branch_id: 7, execution_date: '2026-10-01', created_at: '2026-10-01' }
+    const current = { id: 2, branch_id: 7, execution_date: '2026-10-28 09:00:00', created_at: '2026-10-28 09:01:00' }
+    const now = new Date('2026-10-28T05:00:00Z')
+    expect(canFollowUpTreatmentHistory(staff, old, now)).toBe(false)
+    expect(canFollowUpTreatmentHistory(staff, current, now)).toBe(true)
+    expect(canFollowUpTreatmentHistory(manager, old, now)).toBe(true)
   })
 })

@@ -1,0 +1,84 @@
+/* Compact invoice controls; floating menus never resize the line. */
+.invoice-drawer .compact-invoice-line {
+  display:block;
+  padding:10px;
+}
+.invoice-drawer .form-stack { min-width:0; grid-template-columns:minmax(0,1fr); }
+.invoice-line-scroll { min-width:0; max-width:100%; }
+
+@media(min-width:701px) {
+  .drawer.invoice-drawer:not(:has(>.drawer-body>.detail-list)) { width:min(98vw,1180px); }
+  .invoice-drawer .invoice-line-scroll { overflow:visible; }
+  .invoice-drawer .invoice-line-controls { display:flex; align-items:end; gap:6px; width:100%; min-width:0; }
+  .invoice-drawer .invoice-line-controls .invoice-item-main { flex:0 1 602px; min-width:0; }
+  .invoice-drawer .invoice-line-controls .invoice-item-main:has(.invoice-lifetime-choice) { flex-basis:658px; }
+  .invoice-drawer .invoice-line-controls .product-entry-scroll { overflow:visible; padding:0; }
+  .invoice-drawer .invoice-line-controls .product-entry-row {
+    display:grid;
+    grid-template-columns:minmax(90px,200px) 48px 88px 48px 88px 100px;
+    align-items:end;
+    gap:6px;
+    width:100%;
+    min-width:0;
+  }
+  .invoice-drawer .invoice-line-controls .product-entry-row:has(.invoice-lifetime-choice) {
+    grid-template-columns:minmax(90px,200px) 104px 88px 48px 88px 100px;
+  }
+  .invoice-drawer .invoice-line-controls .product-picker-stack { width:auto; min-width:0; max-width:200px; }
+  .invoice-drawer .invoice-line-controls .product-entry-row input { min-width:0; width:100%; padding:5px; font-size:12px; }
+  .invoice-drawer .invoice-line-controls .quantity-field { min-width:0; }
+  .invoice-drawer .invoice-line-controls .invoice-quantity-options { gap:5px; }
+  .invoice-drawer .invoice-line-controls .line-total strong { font-size:12px; padding:5px; white-space:nowrap; width:100%; box-sizing:border-box; }
+  .invoice-drawer .invoice-line-controls .product-entry-row>.field { width:auto; min-width:0; white-space:nowrap; }
+  .invoice-drawer .invoice-line-controls .line-total { align-self:end; justify-self:stretch; width:100%; margin:0; }
+  .invoice-drawer .invoice-line-controls .invoice-item-actions {
+    display:flex; flex:1 0 416px; align-items:end; align-self:end; flex-wrap:nowrap;
+    width:auto; gap:5px; padding:0; margin:0; border:0;
+  }
+  .invoice-drawer .invoice-line-controls .invoice-item-actions .execution-controls {
+    flex:none; align-items:end; width:auto; max-width:none; gap:6px;
+  }
+  .invoice-drawer .invoice-line-controls .execution-toggle {
+    align-self:end; justify-content:space-between; height:47px; min-height:47px;
+    min-width:45px; padding-bottom:8px; box-sizing:border-box; white-space:nowrap;
+  }
+  .invoice-drawer .invoice-line-controls .role-staff-picker {
+    flex:none; width:auto; min-width:0; flex-wrap:nowrap; align-items:end; overflow:visible;
+  }
+  .invoice-drawer .invoice-line-controls .role-staff-picker>.field {
+    flex:0 0 100px; width:100px; min-width:100px; max-width:100px; overflow:visible;
+  }
+  .invoice-drawer .invoice-line-controls .invoice-item-actions>.line-delete,
+  .invoice-drawer .invoice-line-controls .invoice-item-actions>.consultant-picker {
+    position:static; transform:none; flex:none; align-self:end; height:32px; min-height:32px; margin:0;
+  }
+  .invoice-drawer .invoice-line-controls .invoice-session-actions { flex:none; align-items:center; height:32px; }
+  .invoice-drawer .invoice-line-controls .invoice-session-actions button { height:32px; }
+  .invoice-drawer .invoice-line-controls .execution-controls>.invoice-child-staff { width:120px; flex:none; height:32px; }
+  .invoice-drawer .invoice-line-controls .invoice-item-actions>.consultant-picker { margin-left:auto; padding:3px 6px; font-size:11px; }
+  .invoice-drawer .invoice-line-controls .invoice-item-actions>.line-delete { width:28px; padding:3px; }
+  .invoice-drawer .invoice-line-controls .invoice-session-actions button { padding:3px 4px; font-size:11px; }
+}
+
+.invoice-drawer .invoice-line-controls .picker-options { position:absolute; top:calc(100% + 6px); left:0; width:max(100%,240px); max-width:calc(100vw - 48px); box-sizing:border-box; z-index:35; }
+.invoice-drawer .invoice-lifetime-choice { flex-direction:column; align-items:center; justify-content:space-between; height:47px; min-height:47px; padding-bottom:8px; box-sizing:border-box; gap:0; }
+@media(min-width:701px) and (max-width:1100px) {
+  .invoice-drawer .invoice-line-controls .product-entry-row { grid-template-columns:minmax(80px,1fr) 40px 78px 43px 78px 90px; gap:4px; }
+  .invoice-drawer .invoice-line-controls .product-entry-row:has(.invoice-lifetime-choice) { grid-template-columns:minmax(80px,1fr) 93px 78px 43px 78px 90px; }
+  .invoice-drawer .invoice-line-controls .invoice-item-actions { flex-basis:360px; width:360px; gap:3px; }
+  .invoice-drawer .invoice-line-controls .execution-controls>.invoice-child-staff { width:88px; }
+  .invoice-drawer .invoice-line-controls .invoice-session-actions button { padding:3px; font-size:10px; gap:2px; }
+}
+
+@media(max-width:700px) {
+  .invoice-drawer .invoice-line-controls { display:grid; gap:12px; min-width:0; }
+  .invoice-drawer .invoice-line-controls .invoice-item-main { grid-column:1; }
+  .invoice-drawer .invoice-line-controls .product-entry-row { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .invoice-drawer .invoice-line-controls .invoice-item-actions { display:flex; position:static; grid-column:1; width:100%; padding:0; margin:0; flex-wrap:wrap; gap:6px; }
+  .invoice-drawer .invoice-line-controls .invoice-item-actions>.consultant-picker,
+  .invoice-drawer .invoice-line-controls .invoice-item-actions>.line-delete { position:static; transform:none; margin:0; height:32px; min-height:32px; }
+  .invoice-drawer .invoice-line-controls .invoice-item-actions>.consultant-picker { margin-left:auto; }
+  .invoice-drawer .invoice-line-controls .invoice-item-actions>.consultant-picker { order:3; }
+  .invoice-drawer .invoice-line-controls .invoice-item-actions>.line-delete { order:4; }
+  .invoice-drawer .invoice-line-controls .invoice-quantity-options { grid-column:1/-1; max-width:230px; }
+}

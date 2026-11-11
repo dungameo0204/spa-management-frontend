@@ -18,6 +18,10 @@ export const directoryExports = {
     title: 'Tồn kho', filename: 'ton-kho',
     columns: [text('name', 'Sản phẩm'), text('branch_name', 'Cơ sở'), number('quantity', 'Tồn kho'), text('unit', 'Đơn vị')],
   },
+  invoices: {
+    title: 'Hóa đơn', filename: 'hoa-don',
+    columns: [text('id', 'Mã hóa đơn'), text('customer_name', 'Khách hàng'), date('invoice_date', 'Ngày bán'), text('branch_name', 'Cơ sở'), number('total_amount', 'Thành tiền', true), number('paid_amount', 'Khách thanh toán', true), number('wallet_used', 'Ví đã sử dụng', true), number('debt_amount', 'Công nợ', true), text('payment_method', 'Phương thức thanh toán'), text('note', 'Ghi chú')],
+  },
   treatments: {
     title: 'Thẻ liệu trình', filename: 'lieu-trinh',
     columns: [text('id', 'Mã thẻ'), text('customer_name', 'Khách hàng'), text('product_name', 'Dịch vụ'), number('total_sessions', 'Tổng số buổi'), number('remaining_sessions', 'Số buổi còn lại'), { label: 'Trạng thái', value: row => Number(row.remaining_sessions) > 0 ? 'Còn buổi' : 'Đã hoàn thành' }, date('created_at', 'Ngày tạo')],

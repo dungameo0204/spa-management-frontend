@@ -26,6 +26,17 @@ describe('ghi nhận dịch vụ bằng mapping response tạo hóa đơn', () =
     expect(assignTreatmentStaffs).toHaveBeenCalledWith(77, [{ staff_id: 2 }])
   })
 
+  it('sends the execution note to the standalone history only when performing now', async () => {
+    await recordInvoiceSessions(12, [{ ...line, sessionNote: 'Khách hơi đỏ da sau laser' }], 1, mappings)
+    expect(executeTreatment).toHaveBeenCalledWith({ treatment_id: 41, branch_id: 1, staffs: [], note: 'Khách hơi đỏ da sau laser' })
+  })
+
+  it('sends one grouped execution payload with the parent-visit note', async () => {
+    getResource.mockResolvedValue({ histories: [], children: [{ id: 101, product_id: 3, remaining_sessions: null }] })
+    await recordInvoiceSessions(12, [{ product_id: 20, product_name: 'Gói điều trị', is_product: 0, sessionNote: 'Ghi chú lần đến', serviceChildren: [{ product_id: 3, performNow: true, performStaffs: [{ staff_id: 2 }] }] }], 1, [{ request_index: 0, invoice_item_id: 31, treatment_id: 41 }])
+    expect(executeTreatment).toHaveBeenCalledWith({ treatment_id: 41, branch_id: 1, note: 'Ghi chú lần đến', children: [{ treatment_id: 101, staffs: [{ staff_id: 2 }] }] })
+  })
+
   it('hai dòng giống hệt nhau dùng request_index dù mapping đảo thứ tự', async () => {
     await recordInvoiceSessions(12, [line, line], 1, [{ request_index: 1, invoice_item_id: 32, treatment_id: 42 }, ...mappings])
     expect(executeTreatment.mock.calls.map(([body]) => body.treatment_id)).toEqual([41, 42])
