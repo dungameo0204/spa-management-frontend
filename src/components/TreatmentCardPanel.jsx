@@ -13,11 +13,17 @@ import './TreatmentCardPanel.css'
 import { useBranchCatalog } from '../hooks/useProductCatalog'
 
 export function sessionBaseLabel(card) {
-  return card.closed_at ? 'Đã ký kết thúc' : card.remaining_sessions === null ? 'Trọn đời' : `${card.remaining_sessions ?? '—'}/${card.total_sessions ?? '—'} buổi`
+  const completed = Number(card.total_sessions) - Number(card.remaining_sessions)
+  return card.closed_at ? 'Đã ký kết thúc' : card.remaining_sessions === null ? 'Không giới hạn' : `${Number.isFinite(completed) ? completed : '—'}/${card.total_sessions ?? '—'} buổi`
 }
 
 export function sessionLabel(card) {
-  return card.closed_at ? 'Đã ký kết thúc' : card.remaining_sessions === null ? 'Trọn đời' : `${card.remaining_sessions ?? '—'}/${card.total_sessions ?? '—'} buổi${card.remaining_sessions != null && Number(card.remaining_sessions) === 0 ? ' · Đã hoàn thành' : ''}`
+  const completed = Number(card.total_sessions) - Number(card.remaining_sessions)
+  return card.closed_at ? 'Đã ký kết thúc' : card.remaining_sessions === null ? 'Không giới hạn' : `${Number.isFinite(completed) ? completed : '—'}/${card.total_sessions ?? '—'} buổi${card.remaining_sessions != null && Number(card.remaining_sessions) === 0 ? ' · Đã hoàn thành' : ''}`
+}
+
+export function childTreatmentLabel(card) {
+  return `${(card.children || []).length} liệu trình con`
 }
 
 export default function TreatmentCardPanel({ card, branchId, onOpen, showHistory = false, branches, onAssign, onUndo, onUpdated, embedded = false, executionFilters }) {
@@ -28,8 +34,6 @@ export default function TreatmentCardPanel({ card, branchId, onOpen, showHistory
   const branchesQuery = useBranchCatalog({ enabled: !branches })
   const current = embedded ? card : { ...card, ...detail.data }, grouped = Boolean(current.children?.length)
   const cards = treatmentCards(current)
-  const activeChildren = current.children?.filter(c => !c.closed_at && (c.remaining_sessions === null || Number(c.remaining_sessions) > 0)) || []
-  const childCount = activeChildren.length > 0 ? activeChildren.length : (current.children?.length || 0)
   const isComplete = isTreatmentComplete(current)
   const canExecuteThisCard = !current.closed_at && cards.some(canExecuteCard)
   const hasDetail = Boolean(onOpen && !showHistory)
@@ -54,7 +58,7 @@ export default function TreatmentCardPanel({ card, branchId, onOpen, showHistory
           disabled={!canExecuteThisCard}
           onClick={() => canExecuteThisCard && setExecuting(!executing)}
         >
-          <strong>{current.product_name}</strong> <span className="small-muted">{grouped ? `· ${childCount} liệu trình con` : `· ${sessionBaseLabel(current)}`}</span>
+          <strong>{current.product_name}</strong> <span className="small-muted">{grouped ? `· ${childTreatmentLabel(current)}` : `· ${sessionBaseLabel(current)}`}</span>
         </button>
         <div className="treatment-parent-badges">
           {isComplete && <span className="small-muted treatment-completed-badge">{current.closed_at ? 'Đã ký kết thúc' : 'Đã hoàn thành'}</span>}

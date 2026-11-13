@@ -25,10 +25,12 @@ describe('Rosa customer form payload', () => {
 })
 
 describe('Rosa customer form validation', () => {
-  it('requires a name and phone without imposing undocumented phone formats', () => {
+  it('requires a name and a digits-only phone number', () => {
     expect(validateCustomerForm(basic, currentDate)).toBe('')
     expect(validateCustomerForm({ ...basic, fullname: '  ' }, currentDate)).toMatch(/họ tên/)
     expect(validateCustomerForm({ ...basic, phone_number: '' }, currentDate)).toMatch(/số điện thoại/)
+    expect(validateCustomerForm({ ...basic, phone_number: '0901 234 567' }, currentDate)).toMatch(/chữ số/)
+    expect(validateCustomerForm({ ...basic, phone_number: '0901abc' }, currentDate)).toMatch(/chữ số/)
   })
   it('validates calendar dates without UTC conversion', () => {
     for (const profile_date of [undefined, null, '', '1000-01-01', '2000-02-29', currentDate]) expect(validateCustomerForm({ ...basic, profile_date }, currentDate)).toBe('')

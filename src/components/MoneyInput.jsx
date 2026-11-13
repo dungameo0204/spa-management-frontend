@@ -1,10 +1,17 @@
+import { useRef } from 'react'
 import { parseMoneyInput } from '../utils/format'
 
-export default function MoneyInput({ value, onChange, ...props }) {
-  const formatted = value === '' || value == null ? '' : Number(value).toLocaleString('vi-VN', { maximumFractionDigits: 0 })
-  return <input {...props} type="text" inputMode="numeric" value={formatted} onChange={event => {
-    const raw = event.target.value.replace(/[\s.]/g, '')
-    if (raw === '') onChange('')
-    else if (parseMoneyInput(raw) !== null) onChange(raw)
-  }} />
+const digits = value => String(value ?? '').replace(/[^0-9]/g, '')
+
+export default function MoneyInput({ value, onChange, onBlur, onFocus, ...props }) {
+  const composing = useRef(false)
+  const rawValue = value === '' || value == null ? '' : digits(value)
+  const display = rawValue ? Number(rawValue).toLocaleString('vi-VN', { maximumFractionDigits: 0 }) : ''
+  function change(event) {
+    if (composing.current || event.nativeEvent?.isComposing) return
+    const next = digits(event.target.value)
+    if (next === '') onChange('')
+    else if (parseMoneyInput(next) !== null) onChange(next)
+  }
+  return <input {...props} type="text" inputMode="numeric" value={display} onFocus={onFocus} onBlur={onBlur} onCompositionStart={() => { composing.current = true }} onCompositionEnd={event => { composing.current = false; change(event) }} onChange={change} />
 }

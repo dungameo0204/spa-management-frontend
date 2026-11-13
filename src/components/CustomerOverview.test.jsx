@@ -47,7 +47,7 @@ it('lỗi API giữ dữ liệu, khoá gửi lại để tránh trừ trùng', a
   await actor.type(screen.getByPlaceholderText('Lưu ý cho lần thực hiện này…'), 'Ghi chú còn nguyên')
   await actor.click(screen.getByRole('button', { name: /Xác nhận/i }))
   await actor.click(screen.getByRole('button', { name: 'Ghi nhận không có chữ ký' }))
-  expect(await screen.findByRole('status')).toHaveTextContent('Lỗi mạng')
+  expect(await screen.findByRole('alert')).toHaveTextContent('Lỗi mạng')
   expect(screen.getByPlaceholderText('Lưu ý cho lần thực hiện này…')).toHaveValue('Ghi chú còn nguyên')
   expect(screen.getByRole('button', { name: /Xác nhận/i })).toBeDisabled()
   expect(executeTreatment).toHaveBeenCalledTimes(1)
@@ -57,7 +57,7 @@ it('ghi chú vượt giới hạn UTF-8 không gửi API', async () => {
   const actor = await open()
   fireEvent.change(screen.getByPlaceholderText('Lưu ý cho lần thực hiện này…'), { target: { value: 'đ'.repeat(32768) } })
   await actor.click(screen.getByRole('button', { name: /Xác nhận/i }))
-  expect(screen.getByRole('status')).toHaveTextContent('65535 byte UTF-8')
+  expect(screen.getByRole('alert')).toHaveTextContent('65535 byte UTF-8')
   expect(executeTreatment).not.toHaveBeenCalled()
 })
 

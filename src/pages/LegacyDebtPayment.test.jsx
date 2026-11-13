@@ -6,6 +6,7 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import TransactionPage from './TransactionPage'
 import { createLegacyDebtPayment, createResource, getRemainingDebt, getResource, listResource } from '../api/resources'
 import { loadReceipt } from '../utils/printReceipt'
+import { today } from '../utils/format'
 
 const context = vi.hoisted(() => ({ role: 'STAFF', branch: 2 }))
 vi.mock('../auth/AuthProvider', () => ({ useAuth: () => ({ user: { system_role: context.role, branch_id: 2 } }) }))
@@ -46,12 +47,15 @@ for (const method of ['CASH', 'TRANSFER', 'CARD']) {
     expect(getResource).toHaveBeenCalledWith('customers', 123)
     expect(screen.getByText(/Nợ cũ có thể thu: 500\.000/)).toBeInTheDocument()
     expect(screen.queryByLabelText('Cơ sở thu')).not.toBeInTheDocument()
+    expect(screen.getByLabelText('Ngày thu nợ')).toHaveValue(today().split('-').reverse().join('/'))
+    fireEvent.change(screen.getByLabelText('Ngày thu nợ'), { target: { value: '01/11/2026' } })
     expect(screen.getByLabelText('In phiếu sau khi lưu')).not.toBeChecked()
     expect(screen.getByLabelText('Số tiền thu')).toHaveValue('500.000')
     fireEvent.change(screen.getByLabelText('Số tiền thu'), { target: { value: '200000' } })
+    expect(screen.getByRole('status', { name: 'Khách còn nợ sau thu' })).toHaveTextContent('1.300.000')
     await actor.selectOptions(screen.getByLabelText('Phương thức thanh toán'), method)
     await actor.click(screen.getByRole('button', { name: 'Lưu thay đổi' }))
-    await waitFor(() => expect(createLegacyDebtPayment).toHaveBeenCalledExactlyOnceWith({ customer_id: 123, amount: 200000, payment_method: method }))
+    await waitFor(() => expect(createLegacyDebtPayment).toHaveBeenCalledExactlyOnceWith({ customer_id: 123, amount: 200000, payment_method: method, payment_date: '2026-11-01 00:00:00' }))
     expect(createResource).not.toHaveBeenCalled()
     for (const key of ['customers', 'picker', 'reports', 'overview']) expect(invalidate).toHaveBeenCalledWith({ queryKey: [key] }, { throwOnError: true })
     expect(invalidate).toHaveBeenCalledWith(expect.objectContaining({ queryKey: ['debts'] }))
@@ -140,7 +144,7 @@ for (const amount of ['', '0']) {
 it('saves the default legacy balance rather than total debt', async () => {
   const { actor } = await openForm()
   await actor.click(screen.getByRole('button', { name: 'Lưu thay đổi' }))
-  await waitFor(() => expect(createLegacyDebtPayment).toHaveBeenCalledExactlyOnceWith({ customer_id: 123, amount: 500000, payment_method: 'CASH' }))
+  await waitFor(() => expect(createLegacyDebtPayment).toHaveBeenCalledExactlyOnceWith({ customer_id: 123, amount: 500000, payment_method: 'CASH', payment_date: `${today()} 00:00:00` }))
 })
 
 it('defaults for a new customer and on re-entering legacy mode, but preserves edits on refetch', async () => {

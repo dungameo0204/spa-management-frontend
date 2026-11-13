@@ -7,9 +7,8 @@ vi.mock('./TreatmentGroupSessionDialog', () => ({ default: () => null }))
 const card = { product_name: 'Liệu trình chữa nám' }
 const user = { system_role: 'MANAGER' }
 
-test('shows a simple signed label when only some sessions in a group are signed', () => {
-  render(<TreatmentGroupSignature card={card} user={user} sessions={[
-    { history: { id: 1, customer_signature_svg: '<svg />' } },
+test('shows the parent signature state without checking child histories', () => {
+  render(<TreatmentGroupSignature card={card} user={user} history={{ id: 1, customer_signature_svg: '<svg />' }} sessions={[
     { history: { id: 2 } },
   ]} />)
 

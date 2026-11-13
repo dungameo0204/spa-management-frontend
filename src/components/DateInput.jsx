@@ -58,14 +58,16 @@ export function dateInputValue(text, birthDate = false) {
 
 function monthStart(date) { return new Date(date.getFullYear(), date.getMonth(), 1) }
 function monthLabel(date) { return new Intl.DateTimeFormat('vi-VN', { month: 'long', year: 'numeric' }).format(date) }
+function localIsoDate(date = new Date()) { return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}` }
 
 export default function DateInput({ value, onChange, birthDate = false, min, max, required = false, disabled = false, 'aria-label': ariaLabel, className = '', id, ...props }) {
   const generatedId = useId(), inputId = id || generatedId
   const [parts, setParts] = useState(() => partsFromIso(value)), [open, setOpen] = useState(false)
   const [month, setMonth] = useState(() => value && validIso(value) ? new Date(`${value}T12:00:00`) : new Date())
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 })
-  const wrapper = useRef(null), input = useRef(null), calendar = useRef(null), focused = useRef(false), partsRef = useRef(parts), activeIndex = useRef(0)
+  const wrapper = useRef(null), input = useRef(null), calendar = useRef(null), focused = useRef(false), composing = useRef(false), partsRef = useRef(parts), activeIndex = useRef(0)
   const iso = toIso(parts, birthDate), display = mask(parts)
+  const todayIso = localIsoDate()
   const withinLimits = next => (!min || next >= min) && (!max || next <= max)
   const selectionIndex = position => slots.findIndex(slot => slot >= position)
   function place(index) { const next = Math.max(0, Math.min(index, 7)), position = slots[next]; activeIndex.current = next; requestAnimationFrame(() => input.current?.setSelectionRange(position, position + 1)) }
@@ -79,6 +81,7 @@ export default function DateInput({ value, onChange, birthDate = false, min, max
   useEffect(() => { input.current?.setCustomValidity((required || hasInput) && (!iso || (min && iso < min) || (max && iso > max)) ? 'Vui lòng nhập ngày hợp lệ.' : '') }, [iso, min, max, required, hasInput])
   const days = useMemo(() => { const first = monthStart(month), offset = (first.getDay() + 6) % 7, count = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate(); return Array.from({ length: offset + count }, (_, index) => index < offset ? null : index - offset + 1) }, [month])
   function keyDown(event) {
+    if (composing.current || event.isComposing || event.ctrlKey || event.metaKey || event.altKey) return
     if ((event.key === 'Backspace' || event.key === 'Delete') && input.current.selectionStart === 0 && input.current.selectionEnd === input.current.value.length) {
       event.preventDefault(); apply(Array(8).fill('')); place(0); return
     }
@@ -91,6 +94,7 @@ export default function DateInput({ value, onChange, birthDate = false, min, max
     if (event.key === 'ArrowRight') { event.preventDefault(); place(Math.min(7, index + 1)) }
   }
   function change(event) {
+    if (composing.current || event.nativeEvent?.isComposing) return
     if (isoPattern.test(event.target.value) && validIso(event.target.value)) {
       apply(partsFromIso(event.target.value))
       return
@@ -103,6 +107,6 @@ export default function DateInput({ value, onChange, birthDate = false, min, max
   }
   function paste(event) { event.preventDefault(); const digits = event.clipboardData.getData('text').replace(/\D/g, '').slice(0, 8); const start = Math.max(0, cursor()); const next = [...partsRef.current]; digits.split('').forEach((digit, index) => { if (start + index < 8) next[start + index] = digit }); apply(next); place(Math.min(7, start + digits.length)) }
   function choose(day) { const next = `${month.getFullYear()}-${pad(month.getMonth() + 1)}-${pad(day)}`; if (!withinLimits(next)) return; apply(partsFromIso(next)); setOpen(false); input.current?.focus(); place(7) }
-  const calendarPopup = open && createPortal(<div ref={calendar} className="date-input-calendar" style={popupPosition} role="dialog" aria-label={`Lịch ${ariaLabel || ''}`.trim()}><div className="date-input-calendar-head"><button type="button" aria-label="Tháng trước" onClick={() => setMonth(current => new Date(current.getFullYear(), current.getMonth() - 1, 1))}><ChevronLeft size={16} /></button><strong>{monthLabel(month)}</strong><button type="button" aria-label="Tháng sau" onClick={() => setMonth(current => new Date(current.getFullYear(), current.getMonth() + 1, 1))}><ChevronRight size={16} /></button></div><div className="date-input-weekdays">{['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map(day => <span key={day}>{day}</span>)}</div><div className="date-input-days">{days.map((day, index) => day == null ? <span key={`empty-${index}`} /> : (() => { const next = `${month.getFullYear()}-${pad(month.getMonth() + 1)}-${pad(day)}`; return <button key={next} type="button" disabled={!withinLimits(next)} className={next === value ? 'is-selected' : ''} onClick={() => choose(day)}>{day}</button> })())}</div></div>, document.body)
-  return <><span ref={wrapper} className={`date-input ${className}`.trim()}><input {...props} ref={input} id={inputId} type="text" inputMode="numeric" autoComplete="off" min={min} max={max} aria-label={ariaLabel} aria-haspopup="dialog" aria-expanded={open} required={required} disabled={disabled} value={display} onFocus={() => { focused.current = true; place(cursor()) }} onBlur={() => { focused.current = false }} onClick={() => place(cursor())} onKeyDown={keyDown} onPaste={paste} onChange={change} /><button type="button" className="date-input-toggle" aria-label={`Mở lịch ${ariaLabel || ''}`.trim()} disabled={disabled} onClick={() => { positionPopup(); setOpen(current => !current) }}><CalendarDays size={17} /></button></span>{calendarPopup}</>
+  const calendarPopup = open && createPortal(<div ref={calendar} className="date-input-calendar" style={popupPosition} role="dialog" aria-label={`Lịch ${ariaLabel || ''}`.trim()}><div className="date-input-calendar-head"><button type="button" aria-label="Tháng trước" onClick={() => setMonth(current => new Date(current.getFullYear(), current.getMonth() - 1, 1))}><ChevronLeft size={16} /></button><strong>{monthLabel(month)}</strong><button type="button" aria-label="Tháng sau" onClick={() => setMonth(current => new Date(current.getFullYear(), current.getMonth() + 1, 1))}><ChevronRight size={16} /></button></div><div className="date-input-weekdays">{['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map(day => <span key={day}>{day}</span>)}</div><div className="date-input-days">{days.map((day, index) => day == null ? <span key={`empty-${index}`} /> : (() => { const next = `${month.getFullYear()}-${pad(month.getMonth() + 1)}-${pad(day)}`; const classes = [next === todayIso && 'is-today', next === value && 'is-selected'].filter(Boolean).join(' '); return <button key={next} type="button" disabled={!withinLimits(next)} className={classes} onClick={() => choose(day)}>{day}</button> })())}</div></div>, document.body)
+  return <><span ref={wrapper} className={`date-input ${className}`.trim()}><input {...props} ref={input} id={inputId} type="text" inputMode="numeric" autoComplete="off" min={min} max={max} aria-label={ariaLabel} aria-haspopup="dialog" aria-expanded={open} required={required} disabled={disabled} value={display} onFocus={() => { focused.current = true; place(cursor()) }} onBlur={() => { focused.current = false }} onClick={() => place(cursor())} onKeyDown={keyDown} onPaste={paste} onCompositionStart={() => { composing.current = true }} onCompositionEnd={event => { composing.current = false; change(event) }} onChange={change} /><button type="button" className="date-input-toggle" aria-label={`Mở lịch ${ariaLabel || ''}`.trim()} disabled={disabled} onClick={() => { positionPopup(); setOpen(current => !current) }}><CalendarDays size={17} /></button></span>{calendarPopup}</>
 }

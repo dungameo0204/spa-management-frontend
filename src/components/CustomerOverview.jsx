@@ -1,6 +1,6 @@
 import DebtAmount from './DebtAmount'
 import { useState } from 'react'
-import { getCustomerOverview, getResource, listResource, undoTreatmentExecution } from '../api/resources'
+import { getCustomerOverview, getResource, listResource, undoTreatmentExecution, updateGroupedTreatmentExecution } from '../api/resources'
 import { formatCurrency, formatSpaDate } from '../utils/format'
 import { useBranch } from './AppShell'
 import { useAuth } from '../auth/AuthProvider'
@@ -20,16 +20,19 @@ export default function CustomerOverview({ customerId, overview, onOverview }) {
   const products = useProductCatalog()
   if (!overview) return <p>Đang tải lịch sử khách hàng...</p>
   const { customer, timeline = [] } = overview
+  const loadAll = async (resource, filters) => {
+    const first = await listResource(resource, filters, 1, 100)
+    const pages = await Promise.all(Array.from({ length: Math.max(0, first.totalPages - 1) }, (_, index) => listResource(resource, filters, index + 2, 100)))
+    return [first, ...pages].flatMap(page => page.data || [])
+  }
   async function loadCustomerRecord(action) {
     if (printing || sharing) return
     const setBusy = action === 'print' ? setPrinting : setSharing
     setBusy(true)
     try {
-      const first = await listResource('treatments', { customerId }, 1, 100)
-      const pages = await Promise.all(Array.from({ length: Math.max(0, first.totalPages - 1) }, (_, index) => listResource('treatments', { customerId }, index + 2, 100)))
-      const cards = [first, ...pages].flatMap(page => page.data || [])
+      const [cards, invoices, debtPayments] = await Promise.all([loadAll('treatments', { customerId }), loadAll('invoices', { customerId }), loadAll('debts', { customerId })])
       const details = await Promise.all(cards.map(card => getResource('treatments', card.id)))
-      const record = { customer, timeline, treatments: details }
+      const record = { customer, timeline, treatments: details, invoices, debtPayments }
       if (action === 'print') setPrintRecord(record)
       else setShareRecord(record)
     } catch (error) {
@@ -68,9 +71,10 @@ export default function CustomerOverview({ customerId, overview, onOverview }) {
             setMessage('Đã ghi nhận buổi thực hiện thành công.');
             setMessageType('success');
           }}
-          onUndo={async id => {
+          onUndo={async target => {
             try {
-              await undoTreatmentExecution(id);
+              if (target?.childHistory && target.parentHistory?.children?.length > 1) await updateGroupedTreatmentExecution(target.parentHistory.id, { treatment_id: target.parentHistory.treatment_id, children: target.parentHistory.children.filter(child => Number(child.id) !== Number(target.childHistory.id)).map(child => ({ treatment_id: child.treatment_id, staffs: child.staffs || [] })) })
+              else await undoTreatmentExecution(target?.parentHistory?.id || target?.id || target);
               onOverview(await getCustomerOverview(customerId));
             } catch (error) {
               setMessageType('error');

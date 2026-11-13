@@ -1,4 +1,5 @@
 import { validateCustomerBirthDate } from './validation'
+import { isDigitsOnly } from './phone'
 
 export const skinTypes = [
   ['DRY', 'Da khô'], ['OILY_ACNE', 'Da dầu – mụn'],
@@ -28,6 +29,7 @@ export function prepareCustomerForm(draft, original) {
 
 export function validateCustomerForm(draft, currentDate) {
   if (!draft.fullname?.trim() || !draft.phone_number?.trim()) return 'Vui lòng nhập họ tên và số điện thoại.'
+  if (!isDigitsOnly(draft.phone_number)) return 'Số điện thoại chỉ được chứa chữ số.'
   const birthWarning = validateCustomerBirthDate(draft.date_of_birth, currentDate)
   if (birthWarning) return birthWarning
   if (validateCustomerBirthDate(draft.profile_date, currentDate)) return 'Ngày lập hồ sơ phải là ngày hợp lệ, năm từ 1000 đến 9999 và không ở tương lai.'

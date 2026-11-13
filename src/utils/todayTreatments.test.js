@@ -2,22 +2,23 @@ import { expect, it } from 'vitest'
 import { canCloseTreatment, canExecuteCard, isTreatmentComplete, todayTreatmentRows, treatmentHistoryGroups } from './todayTreatments'
 
 const day = '2026-10-29'
-const history = { id: 50, execution_date: day, branch_id: 2, staffs: [{ staff_id: 9, staff_name: 'Lan' }] }
+const childHistory = { id: 50, treatment_id: 2, execution_date: day, branch_id: 2, staffs: [{ staff_id: 9, staff_name: 'Lan' }] }
+const parentHistory = { id: 40, execution_date: day, branch_id: 2, children: [childHistory] }
 const root = { id: 1, product_name: 'Gói', customer_name: 'Khách A', created_at: '2020-01-01', branch_id: 1 }
-const detail = { data: { ...root, children: [{ id: 2, product_name: 'Laser', remaining_sessions: null, histories: [history] }, { id: 3, product_name: 'Điện di', remaining_sessions: 1, histories: [] }] } }
+const detail = { data: { ...root, histories: [parentHistory], children: [{ id: 2, product_name: 'Laser', remaining_sessions: null }, { id: 3, product_name: 'Điện di', remaining_sessions: 1 }] } }
 
-it('includes an old group through child execution and preserves child-specific history and staff', () => {
+it('renders an old group from explicit parent history children without timestamp inference', () => {
   const rows = todayTreatmentRows([root], [detail], day, 2)
   expect(rows).toHaveLength(3)
-  expect(rows[0].group).toBe(true)
-  expect(rows[1]).toMatchObject({ child: true, card: { id: 2, customer_name: 'Khách A' }, history })
+  expect(rows[0]).toMatchObject({ group: true, history: parentHistory })
+  expect(rows[1]).toMatchObject({ child: true, card: { id: 2, customer_name: 'Khách A' }, history: childHistory, parentHistory })
   expect(rows[2].history).toBeNull()
   expect(todayTreatmentRows([root], [detail], day, 3)).toEqual([])
 })
 
 it('shows new groups even if no child was performed', () => {
   const fresh = { ...root, created_at: day }
-  const rows = todayTreatmentRows([fresh], [{ data: { ...detail.data, created_at: day, children: [{ id: 2, histories: [] }] } }], day, 1)
+  const rows = todayTreatmentRows([fresh], [{ data: { ...detail.data, created_at: day, histories: [], children: [{ id: 2, histories: [] }] } }], day, 1)
   expect(rows).toHaveLength(2)
   expect(rows[0].group).toBe(true)
   expect(rows[1].history).toBeNull()
@@ -48,90 +49,69 @@ it('only offers closure for an open lifetime treatment or a group containing one
   expect(canCloseTreatment({ remaining_sessions: null, closed_at: day })).toBe(false)
 })
 
-it('summarizes child histories by Vietnam day and branch without losing repeated executions', () => {
-  const groups = treatmentHistoryGroups({ product_name: 'Gói', children: [
-    { id: 1, product_name: 'pnp', histories: [{ id: 1, execution_date: '2026-10-30', branch_id: 1 }, { id: 2, execution_date: '2026-10-30', branch_id: 1 }] },
-    { id: 2, product_name: 'laser', histories: [{ id: 3, execution_date: '2026-10-30', branch_id: 1 }, { id: 4, execution_date: '2026-10-30', branch_id: 2 }, { id: 5, execution_date: '2026-10-29', branch_id: 1 }, { id: 6, execution_date: '2026-10-30', branch_id: 1, deleted_at: day }] },
-  ] })
-  expect(groups.map(group => [group.day, group.branch_id, group.sessions.length])).toEqual([['2026-10-30', 1, 2], ['2026-10-30', 1, 1], ['2026-10-30', 2, 1], ['2026-10-29', 1, 1]])
-  expect(groups[0].sessions.map(entry => entry.card.product_name)).toEqual(['pnp', 'laser'])
-  expect(groups[1].sessions.map(entry => entry.card.product_name)).toEqual(['pnp'])
+it('keeps repeated parent visits distinct and preserves configured child order', () => {
+  const card = { id: 1, product_name: 'Combo', customer_name: 'Khách', children: [{ id: 10, product_name: 'pnp' }, { id: 20, product_name: 'tan nhang' }], histories: [
+    { id: 100, execution_date: '2026-10-31', branch_id: 1, created_at: '2026-10-31T10:00:00Z', children: [{ id: 101, treatment_id: 10 }, { id: 102, treatment_id: 20 }] },
+    { id: 200, execution_date: '2026-10-31', branch_id: 1, created_at: '2026-10-31T15:00:00Z', children: [{ id: 202, treatment_id: 20 }] },
+  ] }
+  const groups = treatmentHistoryGroups(card)
+  expect(groups.map(group => [group.historyId, group.sessions.map(session => session.card.product_name)])).toEqual([[200, ['tan nhang']], [100, ['pnp', 'tan nhang']]])
 })
 
-
-it('separates repeated executions on the same day into distinct visit groups in todayTreatmentRows', () => {
-  const comboRoot = { id: 100, product_name: 'Combo nám', customer_name: 'Chị Mai', created_at: '2026-10-31', branch_id: 1 }
-  const h1 = { id: 101, execution_date: '2026-10-31', branch_id: 1, created_at: '2026-10-31T09:00:00Z', customer_signature_svg: '<svg1/>' }
-  const h2 = { id: 102, execution_date: '2026-10-31', branch_id: 1, created_at: '2026-10-31T09:00:10Z', customer_signature_svg: '<svg1/>' }
-  const h3 = { id: 103, execution_date: '2026-10-31', branch_id: 1, created_at: '2026-10-31T14:00:00Z', customer_signature_svg: '<svg2/>' }
-  const h4 = { id: 104, execution_date: '2026-10-31', branch_id: 1, created_at: '2026-10-31T14:00:10Z', customer_signature_svg: '<svg2/>' }
-
-  const comboDetail = {
-    data: {
-      ...comboRoot,
-      children: [
-        { id: 110, product_name: 'pnp', histories: [h1, h3] },
-        { id: 120, product_name: 'tan nhang', histories: [h2, h4] },
-        { id: 130, product_name: 'laser', histories: [] }
-      ]
-    }
-  }
-
-  const rows = todayTreatmentRows([comboRoot], [comboDetail], '2026-10-31', 1)
-  const groupRows = rows.filter(r => r.group)
-  expect(groupRows).toHaveLength(3)
-  expect(groupRows[0].groupTitle).toBe('Combo nám')
-  expect(groupRows[1].groupTitle).toBe('Combo nám')
-  expect(groupRows[2].groupTitle).toContain('Chưa thực hiện')
+it('does not duplicate child histories that already belong to a real parent visit', () => {
+  const child = { id: 101, treatment_id: 10, execution_date: day, branch_id: 1, customer_signature_svg: '<svg>same</svg>' }
+  const card = { id: 1, product_name: 'Combo', customer_name: 'Khách', histories: [{ id: 100, execution_date: day, branch_id: 1, children: [child] }], children: [
+    { id: 10, product_name: 'Laser', histories: [child] },
+  ] }
+  expect(treatmentHistoryGroups(card).map(group => group.historyId)).toEqual([100])
 })
 
-it('maintains group position and service order when a service is undone in treatmentHistoryGroups', () => {
-  const cardBefore = {
-    id: 1,
-    product_name: 'Combo',
-    customer_name: 'Khách',
-    children: [
-      {
-        id: 10,
-        product_name: 'pnp',
-        histories: [
-          { id: 201, execution_date: '2026-10-31', branch_id: 1, created_at: '2026-10-31T15:00:00Z' },
-          { id: 101, execution_date: '2026-10-31', branch_id: 1, created_at: '2026-10-31T10:00:00Z' }
-        ]
-      },
-      {
-        id: 20,
-        product_name: 'tan nhang',
-        histories: [
-          { id: 202, execution_date: '2026-10-31', branch_id: 1, created_at: '2026-10-31T15:00:00Z' },
-          { id: 102, execution_date: '2026-10-31', branch_id: 1, created_at: '2026-10-31T10:00:00Z' }
-        ]
-      }
-    ]
-  }
+it('groups legacy child histories with the same signature into one display visit', () => {
+  const card = { id: 1, product_name: 'Combo', customer_name: 'Khách', children: [
+    { id: 10, product_name: 'Laser', histories: [{ id: 101, execution_date: day, branch_id: 1, created_at: `${day}T09:00:00Z`, customer_signature_svg: '<svg>same</svg>', note: 'Theo dõi' }] },
+    { id: 20, product_name: 'Điện di', histories: [{ id: 102, execution_date: day, branch_id: 1, created_at: `${day}T09:01:00Z`, customer_signature_svg: '<svg>same</svg>', note: 'Theo dõi' }] },
+  ] }
+  const groups = treatmentHistoryGroups(card)
+  expect(groups).toHaveLength(1)
+  expect(groups[0]).toMatchObject({ legacy: true, historyId: 101, day, branch_id: 1 })
+  expect(groups[0].sessions.map(session => session.card.id)).toEqual([10, 20])
+})
 
-  const before = treatmentHistoryGroups(cardBefore)
-  expect(before).toHaveLength(2)
-  expect(before[0].sessions.map(s => s.card.product_name)).toEqual(['pnp', 'tan nhang'])
-  expect(before[1].sessions.map(s => s.card.product_name)).toEqual(['pnp', 'tan nhang'])
+it('keeps legacy histories with different signatures in separate display visits', () => {
+  const card = { id: 1, product_name: 'Combo', customer_name: 'Khách', children: [
+    { id: 10, product_name: 'Laser', histories: [{ id: 101, execution_date: day, branch_id: 1, customer_signature_svg: '<svg>one</svg>' }] },
+    { id: 20, product_name: 'Điện di', histories: [{ id: 102, execution_date: day, branch_id: 1, customer_signature_svg: '<svg>two</svg>' }] },
+  ] }
+  expect(treatmentHistoryGroups(card).map(group => group.sessions.map(session => session.history.id))).toEqual([[102], [101]])
+})
 
-  // Undo pnp from the latest group (id: 201)
-  const cardAfter = {
-    ...cardBefore,
-    children: [
-      {
-        ...cardBefore.children[0],
-        histories: [{ id: 101, execution_date: '2026-10-31', branch_id: 1, created_at: '2026-10-31T10:00:00Z' }]
-      },
-      cardBefore.children[1]
-    ]
-  }
+it('splits repeated legacy child histories with the same signature into separate visits', () => {
+  const signature = '<svg>same</svg>'
+  const card = { id: 1, product_name: 'Combo', customer_name: 'Khách', children: [
+    { id: 10, product_name: 'Laser', histories: [
+      { id: 101, execution_date: day, branch_id: 1, created_at: `${day}T09:00:00Z`, customer_signature_svg: signature },
+      { id: 103, execution_date: day, branch_id: 1, created_at: `${day}T10:00:00Z`, customer_signature_svg: signature },
+    ] },
+    { id: 20, product_name: 'Điện di', histories: [
+      { id: 102, execution_date: day, branch_id: 1, created_at: `${day}T09:01:00Z`, customer_signature_svg: signature },
+      { id: 104, execution_date: day, branch_id: 1, created_at: `${day}T10:01:00Z`, customer_signature_svg: signature },
+    ] },
+  ] }
+  expect(treatmentHistoryGroups(card).map(group => group.sessions.map(session => session.history.id))).toEqual([[103, 104], [101, 102]])
+})
 
-  const after = treatmentHistoryGroups(cardAfter)
-  expect(after).toHaveLength(2)
-  // The latest group (at 15:00) MUST REMAIN at index 0 and not jump to the bottom!
-  expect(after[0].sessions.map(s => s.card.product_name)).toEqual(['tan nhang'])
-  expect(after[0].sessions[0].history.id).toBe(202)
-  // The older group (at 10:00) remains at index 1
-  expect(after[1].sessions.map(s => s.card.product_name)).toEqual(['pnp', 'tan nhang'])
+it('groups unsigned legacy histories with contiguous IDs into one display visit', () => {
+  const card = { id: 1, product_name: 'Combo', customer_name: 'Khách', children: [
+    { id: 10, product_name: 'Laser', histories: [{ id: 101, execution_date: day, branch_id: 1, note: 'Giống nhau' }] },
+    { id: 20, product_name: 'Điện di', histories: [{ id: 102, execution_date: day, branch_id: 1, note: 'Giống nhau' }] },
+  ] }
+  expect(treatmentHistoryGroups(card).map(group => group.sessions.map(session => session.history.id))).toEqual([[101, 102]])
+})
+
+it('keeps unsigned legacy histories with an ID gap in separate display visits', () => {
+  const card = { id: 1, product_name: 'Combo', customer_name: 'Khách', children: [
+    { id: 10, product_name: 'Laser', histories: [{ id: 101, execution_date: day, branch_id: 1 }] },
+    { id: 20, product_name: 'Điện di', histories: [{ id: 103, execution_date: day, branch_id: 1 }] },
+  ] }
+  expect(treatmentHistoryGroups(card).map(group => group.sessions.map(session => session.history.id))).toEqual([[103], [101]])
 })

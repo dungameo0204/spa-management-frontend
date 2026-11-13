@@ -39,6 +39,8 @@ it('hiển thị nhóm nghìn nhưng callback trả chuỗi tiền không có d�
   expect(input).toHaveValue('125.000')
   expect(onAmountChange).toHaveBeenLastCalledWith(89, '125000')
   expect(within(screen.getByRole('status', { name: 'Tổng tiền thu của khách' })).getByText(/125\.000/)).toBeInTheDocument()
+  await actor.tab()
+  expect(input).toHaveValue('125.000')
 })
 
 it('chọn và bỏ chọn hóa đơn thực tế cập nhật tổng thu theo công nợ API', async () => {

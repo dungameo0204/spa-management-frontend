@@ -29,6 +29,7 @@ it('EXISTING yêu cầu mã và có thể để backend mặc định snapshot',
 
 it.each([
   [{ customer_name: ' ' }, 'họ tên'], [{ branch_id: '' }, 'chi nhánh'],
+  [{ customer_phone: '0901 234 567' }, 'chữ số'], [{ customer_phone: '0901abc' }, 'chữ số'],
   [{ arrival_date: '2026-02-30' }, 'ngày đến'], [{ arrival_time: '24:00' }, 'Giờ đến'], [{ arrival_time: '09:15' }, '30 phút'],
   [{ consultation_total: '-1' }, 'Giá trị'], [{ consultation_total: '1.234' }, 'Giá trị'],
   [{ note: 'ệ'.repeat(22000) }, 'Ghi chú quá dài'],

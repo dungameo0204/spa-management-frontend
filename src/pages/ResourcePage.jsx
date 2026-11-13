@@ -32,6 +32,7 @@ import ExportTableButton from '../components/ExportTableButton'
 import { directoryExportFilename, directoryExportOptions, loadDirectoryRows } from '../utils/directoryExport'
 import RefreshButton from '../components/RefreshButton'
 import { clearBranchCatalogCache, clearProductCatalogCache, clearStaffCatalogCache, useBranchCatalog } from '../hooks/useProductCatalog'
+import { digitsOnly } from '../utils/phone'
 
 const text = (key, label, required = false) => ({ key, label, required })
 const specs = {
@@ -58,7 +59,7 @@ function Field({ field, value, onChange, lookups, manager, editing }) {
   if (field.key === 'default_sessions' && !value.is_treatment_combo) return null
   if (field.key === 'price' && value.is_product == 0) return null
   const val = value[field.key] ?? ''
-  const handle = e => onChange(field.key, field.type === 'checkbox' ? e.target.checked : e.target.value)
+  const handle = e => onChange(field.key, field.type === 'checkbox' ? e.target.checked : field.key === 'phone_number' ? digitsOnly(e.target.value) : e.target.value)
   if (field.lookup === 'customers') return <SearchPicker resource="customers" label={field.label} value={value.customer_id || ''} initialLabel={value.customer_name} required={field.required} onChange={item => onChange('customer', item)} />
   if (field.lookup === 'services') return <SearchPicker resource="products" label={field.label} value={val} initialLabel={val} filters={{ is_product: 0 }} itemFilter={item => Number(item.is_product) === 0} onChange={item => onChange(field.key, item?.name || '')} />
   if (field.lookup) return <label className="field" key={field.key}>{field.label}<MobileSelect required={field.required || (field.lookup === 'branches' && manager && field.key === 'branch_id')} value={val} onChange={handle}><option value="">Chọn {field.label.toLowerCase()}</option>{lookups[field.lookup]?.map(item => <option key={item.id} value={item.id}>{item.fullname || item.name}</option>)}</MobileSelect></label>
@@ -66,7 +67,7 @@ function Field({ field, value, onChange, lookups, manager, editing }) {
   if (field.type === 'checkbox') return <label className="check-field"><input type="checkbox" checked={Boolean(val)} onChange={handle} /> {field.label}</label>
   if (field.key === 'date_of_birth') return <label className="field">{field.label}<DateInput aria-label={field.label} birthDate min="1000-01-01" max={today()} value={val} onChange={next => onChange(field.key, next)} /></label>
   if (field.key === 'price' || field.key === 'sale_price') return <label className="field">{field.label}<MoneyInput required value={val} onChange={next => onChange(field.key, next)} /></label>
-  return <label className="field" key={field.key}>{field.label}<input type={field.type || 'text'} min={field.type === 'number' ? '0' : undefined} required={field.required || (!editing && field.key === 'password')} value={val} onChange={handle} placeholder={`Nhập ${field.label.toLowerCase()}`} /></label>
+  return <label className="field" key={field.key}>{field.label}<input type={field.type || 'text'} inputMode={field.key === 'phone_number' ? 'numeric' : undefined} pattern={field.key === 'phone_number' ? '[0-9]*' : undefined} min={field.type === 'number' ? '0' : undefined} required={field.required || (!editing && field.key === 'password')} value={val} onChange={handle} placeholder={`Nhập ${field.label.toLowerCase()}`} /></label>
 }
 export default function ResourcePage({ resource }) {
   const spec = specs[resource], { user } = useAuth(), { branchId } = useBranch(), queryClient = useQueryClient()

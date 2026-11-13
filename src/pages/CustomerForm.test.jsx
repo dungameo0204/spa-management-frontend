@@ -36,6 +36,14 @@ async function createForm(actor) {
   return within(form)
 }
 
+it('keeps only digits in the customer phone input', async () => {
+  const actor = show()
+  await actor.click(screen.getByRole('button', { name: 'Thêm mới' }))
+  const phone = screen.getByLabelText(/^Số điện thoại/)
+  await actor.type(phone, '0901 abc-234 567')
+  expect(phone).toHaveValue('0901234567')
+})
+
 it('creates a customer with multiple skin types, referrals, multiline notes and history', async () => {
   const actor = show()
   const form = await createForm(actor)

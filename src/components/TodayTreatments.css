@@ -22,12 +22,18 @@
 .today-treatments .today-session-id { font-size:11px; color:var(--muted); }
 .today-treatments td[data-label="Đã làm hôm nay"] { text-align:center; }
 .today-treatments .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
-.today-treatments table { min-width: 660px; width: 100%; }
+.today-treatments table { min-width: 660px; width: 100%; table-layout:fixed; }
+.today-treatments .today-col-customer { width: 11%; }
+.today-treatments .today-col-service { width: 21%; }
+.today-treatments .today-col-completed { width: 12%; }
+.today-treatments .today-col-staff { width: 17%; }
+.today-treatments .today-col-signature { width: 230px; }
+.today-treatments .today-col-note { width: auto; }
 .today-treatments th,
 .today-treatments td { padding: 9px 8px; font-size: 12px; }
 .today-treatments th:last-child,
 .today-treatments td:last-child { padding-right: 12px; }
-.today-treatments .today-session-signatures { display:flex; align-items:center; justify-content:flex-end; gap:6px; min-width:160px; }
+.today-treatments .today-session-signatures { display:flex; align-items:center; justify-content:flex-end; gap:5px; min-width:0; }
 .today-treatments .today-signature-preview { display:flex; align-items:center; gap:5px; flex-shrink:0; }
 .today-treatments .today-signature-preview img { width:60px; height:24px; object-fit:contain; border-radius:4px; border:1px solid var(--line); background:#fff; }
 .today-treatments .today-signature-preview small { white-space:nowrap; font-size:11px; font-weight:600; color:var(--ink); }
@@ -38,6 +44,9 @@
 .today-treatments .today-date-input input { min-height:34px; padding:6px 8px; border:1px solid var(--line); border-radius:8px; background:var(--white); color:var(--ink); font:inherit; }
 .today-treatments .today-date-picker .icon-btn { width:34px; height:34px; }
 .today-treatments .today-button { min-height:34px; padding:7px 10px; }
+.today-treatments .today-mutation-alert { margin:0 0 12px; border:2px solid #b42318; box-shadow:0 0 0 3px rgba(180,35,24,.14); animation:today-mutation-alert-pulse .75s ease-in-out 4; }
+@keyframes today-mutation-alert-pulse { 50% { background:#ffe4e1; border-color:#7a1c14; transform:translateX(2px); } }
+[data-theme=dark] .today-treatments .today-mutation-alert { background:#4b3035; color:#ffd6da; border-color:#f28b82; }
 
 
 /* Phân trang hiện đại, chuyên nghiệp */
@@ -148,6 +157,17 @@
   height: 34px;
   color: var(--muted);
   font-size: 13px;
+}
+
+.today-treatments .today-session-note {
+  display: -webkit-box;
+  max-width: 260px;
+  overflow: hidden;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }
 
 @media(max-width: 700px) {

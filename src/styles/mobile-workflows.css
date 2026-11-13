@@ -72,7 +72,7 @@
   .today-treatments .today-visit td[colspan]::before { display: none; }
   .today-treatments .today-visit td[data-label="Khách hàng"] { grid-column: 1 / -1; font-size: 14px; font-weight: 700; }
   .today-treatments .today-visit td[data-label="Dịch vụ"] { grid-column: 1; }
-  .today-treatments .today-visit td[data-label="Đã làm hôm nay"] { grid-column: 2; grid-row: 1 / span 2; justify-content: flex-end; align-self: center; width: auto; }
+  .today-treatments .today-visit td[data-label="Đã làm hôm nay"] { grid-column: 2; justify-content: flex-end; align-self: center; width: auto; }
   .today-treatments .today-visit td[data-label="Đã làm hôm nay"]::before { display: none; }
   .today-treatments .today-visit td[data-label="Nhân viên thực hiện"],
   .today-treatments .today-visit td[data-label="Chữ ký khách hàng"],

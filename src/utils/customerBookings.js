@@ -1,4 +1,5 @@
 import { dateOnly, SPA_TIME_ZONE } from './format'
+import { isDigitsOnly } from './phone'
 
 export const arrivalTimeSlots = Array.from({ length: 34 }, (_, index) => {
   const hour = String(7 + Math.floor(index / 2)).padStart(2, '0')
@@ -46,6 +47,7 @@ export function validateBookingFilters(filters) {
 export function bookingPayload(form) {
   const name = String(form.customer_name || '').trim(), phone = String(form.customer_phone || '').trim()
   if (form.customer_type === 'NEW' && (!name || !phone)) throw new Error('Nhập họ tên và số điện thoại của khách mới.')
+  if (form.customer_type === 'NEW' && !isDigitsOnly(phone)) throw new Error('Số điện thoại chỉ được chứa chữ số.')
   if (form.customer_type === 'EXISTING' && !form.customer_id) throw new Error('Chọn khách hàng đã đăng ký.')
   if (!form.branch_id) throw new Error('Chọn chi nhánh tiếp nhận.')
   if (!form.arrival_date || dateOnly(form.arrival_date) !== form.arrival_date) throw new Error('Chọn ngày đến hợp lệ.')

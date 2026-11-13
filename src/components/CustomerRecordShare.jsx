@@ -15,6 +15,8 @@ function prepareCapture(document) {
 }
 
 const safeFilename = value => String(value || 'khach-hang').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase() || 'khach-hang'
+const formatFileSize = size => size < 1024 * 1024 ? `${Math.ceil(size / 1024)} KB` : `${(size / (1024 * 1024)).toFixed(1)} MB`
+const validShareFiles = files => files.length === 3 && files.every(file => file instanceof File && file.type === 'image/jpeg' && file.size > 0)
 
 function download(file) {
   const url = URL.createObjectURL(file)
@@ -92,16 +94,18 @@ function ShareDialog({ files, title, onClose }) {
     setPreviews(urls)
     return () => urls.forEach(url => URL.revokeObjectURL(url))
   }, [files])
+  const readyToShare = validShareFiles(files)
+  const totalSize = files.reduce((size, file) => size + file.size, 0)
   const data = { title, files }
   let canShare = false
-  try { canShare = typeof navigator.share === 'function' && (!navigator.canShare || navigator.canShare({ files })) } catch { /* Unsupported file sharing. */ }
+  try { canShare = readyToShare && typeof navigator.share === 'function' && (!navigator.canShare || navigator.canShare(data)) } catch { /* Unsupported file sharing. */ }
   const canCopy = typeof navigator.clipboard?.write === 'function' && typeof ClipboardItem !== 'undefined'
   const share = async () => {
     setBusy(true); setNotice(''); setFailed(false)
     try {
       // Call directly in the click handler: capture has already finished.
       await navigator.share(data)
-      setNotice('Đã chuyển yêu cầu cho hệ thống, chưa xác nhận đã gửi. Nếu ứng dụng không mở, hãy sao chép hoặc tải ảnh bên dưới.')
+      setNotice(`Đã chuyển đủ ${files.length} ảnh cho hệ thống, chưa xác nhận ứng dụng đã gửi. Nếu thiếu ảnh trong Zalo hoặc Telegram, hãy tải cả 3 ảnh bên dưới để đính kèm thủ công.`)
     } catch (error) {
       if (error?.name !== 'AbortError') {
         setFailed(true); setNotice('Không thể chia sẻ trực tiếp. Bạn có thể sao chép từng ảnh hoặc tải ảnh để gửi thủ công.')
@@ -111,7 +115,7 @@ function ShareDialog({ files, title, onClose }) {
   const copy = async (file, index) => {
     setBusy(true); setNotice(''); setFailed(false)
     try {
-      await navigator.clipboard.write([new ClipboardItem({ 'image/png': file })])
+      await navigator.clipboard.write([new ClipboardItem({ [file.type]: file })])
       setNotice(`Đã sao chép trang ${index + 1}. Mở cuộc trò chuyện trong Discord, Zalo hoặc ứng dụng nhận ảnh rồi nhấn Ctrl+V để dán.`)
     } catch {
       setFailed(true); setNotice('Không thể sao chép ảnh trên trình duyệt này. Hãy tải ảnh để đính kèm vào cuộc trò chuyện.')
@@ -119,13 +123,15 @@ function ShareDialog({ files, title, onClose }) {
   }
   return createPortal(<div className="customer-record-share-layer"><section ref={ref} className="customer-record-share-dialog" role="dialog" aria-modal="true" aria-labelledby="record-share-title" aria-describedby="record-share-help">
     <header><h2 id="record-share-title">Chia sẻ hồ sơ khách hàng</h2><button type="button" className="btn secondary" onClick={onClose}>Đóng</button></header>
-    <div className="customer-record-share-actions"><button type="button" className="btn" disabled={!canShare || busy} onClick={share}>{busy ? 'Đang xử lý…' : 'Gửi qua ứng dụng'}</button><button type="button" className="btn secondary" onClick={() => { files.forEach(download); setFailed(false); setNotice(`Đã yêu cầu tải ${files.length} ảnh PNG. Kiểm tra mục tải xuống của trình duyệt.`) }}>Tải tất cả ảnh</button></div>
-    {!canShare && <p>Thiết bị này không hỗ trợ chia sẻ tệp trực tiếp. Hãy sao chép hoặc tải ảnh bên dưới.</p>}
+    <p id="record-share-help" className="customer-record-share-summary">Tổng dung lượng {formatFileSize(totalSize)}.</p>
+    <div className="customer-record-share-actions"><button type="button" className="btn" disabled={!canShare || busy} onClick={share}>{busy ? 'Đang xử lý…' : 'Gửi 3 ảnh qua ứng dụng'}</button><button type="button" className="btn secondary" onClick={() => { files.forEach(download); setFailed(false); setNotice(`Đã yêu cầu tải ${files.length} ảnh JPEG. Kiểm tra mục tải xuống của trình duyệt.`) }}>Tải tất cả ảnh</button></div>
+    {!readyToShare && <p role="alert">Không tạo đủ 3 ảnh hợp lệ để chia sẻ. Hãy đóng và thử lại.</p>}
+    {readyToShare && !canShare && <p>Thiết bị này không hỗ trợ chia sẻ đồng thời 3 tệp ảnh. Hãy sao chép hoặc tải ảnh bên dưới.</p>}
     {!canCopy && <p>Trình duyệt này không hỗ trợ sao chép ảnh. Bạn vẫn có thể tải ảnh để gửi.</p>}
     {notice && <p role={failed ? 'alert' : 'status'}>{notice}</p>}
     <div className="customer-record-share-previews">{files.map((file, index) => <figure key={file.name}>
       {previews[index] && <img src={previews[index]} alt={`Xem trước hồ sơ trang ${index + 1}`} />}
-      <figcaption>Trang {index + 1}</figcaption><div className="customer-record-share-actions"><button type="button" className="btn secondary" disabled={!canCopy || busy} onClick={() => copy(file, index)}>Sao chép ảnh trang {index + 1}</button><button type="button" className="btn secondary" onClick={() => download(file)}>Tải trang {index + 1}</button></div>
+        <figcaption>Trang {index + 1} · {formatFileSize(file.size)}</figcaption><div className="customer-record-share-actions"><button type="button" className="btn secondary" disabled={!canCopy || busy} onClick={() => copy(file, index)}>Sao chép ảnh trang {index + 1}</button><button type="button" className="btn secondary" onClick={() => download(file)}>Tải trang {index + 1}</button></div>
     </figure>)}</div>
   </section></div>, document.body)
 }
@@ -154,10 +160,11 @@ export default function CustomerRecordShare({ record, onDone, onMessage }) {
         for (const [index, page] of pages.entries()) {
           if (cancelled) return
           const canvas = await html2canvas(page, { backgroundColor: '#ffffff', scale: 2, useCORS: true, logging: false, onclone: prepareCapture })
-          const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'))
+          const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95))
           if (!blob) throw new Error(`Không thể tạo ảnh trang ${index + 1}.`)
-          files.push(new File([blob], `ho-so-${baseName}-trang-${index + 1}.png`, { type: 'image/png' }))
+          files.push(new File([blob], `ho-so-${baseName}-trang-${index + 1}.jpg`, { type: 'image/jpeg' }))
         }
+        if (!validShareFiles(files)) throw new Error('Không tạo đủ 3 ảnh JPEG hợp lệ.')
         if (cancelled) return
         setPrepared({ record, files })
       } catch (error) {

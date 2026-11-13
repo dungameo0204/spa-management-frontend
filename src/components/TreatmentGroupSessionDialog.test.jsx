@@ -3,54 +3,32 @@ import { cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import TreatmentGroupSessionDialog from './TreatmentGroupSessionDialog'
-import { getResource, signTreatmentHistory, updateTreatmentHistoryNote } from '../api/resources'
+import { signTreatmentHistory, updateTreatmentHistoryNote } from '../api/resources'
 
-vi.mock('../api/resources', () => ({ getResource: vi.fn(), signTreatmentHistory: vi.fn(), updateTreatmentHistoryNote: vi.fn() }))
+vi.mock('../api/resources', () => ({ signTreatmentHistory: vi.fn(), updateTreatmentHistoryNote: vi.fn() }))
 vi.mock('./SignaturePad', () => ({ default: ({ onChange }) => <button onClick={() => onChange('<svg/>')}>Ký một lần</button> }))
-const sessions = [
-  { card: { id: 11, product_name: 'Laser' }, history: { id: 101, branch_id: 1 } },
-  { card: { id: 12, product_name: 'Điện di' }, history: { id: 102, branch_id: 1 } },
-  { card: { id: 13, product_name: 'Đã ký' }, history: { id: 103, branch_id: 1, customer_signature_svg: '<svg/>' } },
-]
-beforeEach(() => {
-  vi.clearAllMocks()
-  getResource.mockImplementation(async (_, id) => ({ histories: sessions.filter(entry => entry.card.id === id).map(entry => entry.history) }))
-  signTreatmentHistory.mockResolvedValue({ data: { customer_signature_svg: '<svg/>' } })
-  updateTreatmentHistoryNote.mockResolvedValue({})
-})
+const history = { id: 100, branch_id: 1 }
+const sessions = [{ card: { id: 11, product_name: 'Laser' }, history: { id: 101, treatment_id: 11, branch_id: 1 } }, { card: { id: 12, product_name: 'Điện di' }, history: { id: 102, treatment_id: 12, branch_id: 1 } }]
+beforeEach(() => { vi.clearAllMocks(); signTreatmentHistory.mockResolvedValue({ data: { customer_signature_svg: '<svg/>' } }); updateTreatmentHistoryNote.mockResolvedValue({}) })
 afterEach(cleanup)
-it('saves one group note on the representative treatment history only', async () => {
-  const actor = open()
-  expect(screen.getAllByRole('textbox')).toHaveLength(1)
+function open() {
+  const onUpdated = vi.fn()
+  render(<QueryClientProvider client={new QueryClient()}><TreatmentGroupSessionDialog card={{ id: 1, customer_name: 'Khách A', product_name: 'Gói' }} history={history} sessions={sessions} user={{ system_role: 'MANAGER' }} onClose={vi.fn()} onUpdated={onUpdated} /></QueryClientProvider>)
+  return { actor: userEvent.setup(), onUpdated }
+}
+it('saves the group note on the parent history only', async () => {
+  const { actor } = open()
   await actor.type(screen.getByRole('textbox', { name: 'Ghi chú buổi thực hiện' }), 'làm lần 1')
   await actor.click(screen.getByRole('button', { name: 'Lưu ghi chú' }))
   await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Đã lưu ghi chú buổi thực hiện'))
-  expect(updateTreatmentHistoryNote.mock.calls).toEqual([[101, 'làm lần 1']])
-  expect(signTreatmentHistory).not.toHaveBeenCalled()
+  expect(updateTreatmentHistoryNote).toHaveBeenCalledWith(100, 'làm lần 1')
 })
-function open() {
-  render(<QueryClientProvider client={new QueryClient()}><TreatmentGroupSessionDialog card={{ id: 1, customer_name: 'Khách A', product_name: 'Gói' }} sessions={sessions} user={{ system_role: 'MANAGER' }} onClose={vi.fn()} /></QueryClientProvider>)
-  return userEvent.setup()
-}
-it('one signature applies to all unsigned performed child histories, never overwriting signed ones', async () => {
-  const actor = open()
+it('signs the parent history once, never child histories', async () => {
+  const { actor, onUpdated } = open()
   await actor.click(screen.getByText('Ký một lần'))
   await actor.click(screen.getByRole('button', { name: 'Lưu và ký xác nhận' }))
   await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Đã ký xác nhận'))
-  expect(signTreatmentHistory.mock.calls).toEqual([[101, '<svg/>'], [102, '<svg/>']])
-  expect(updateTreatmentHistoryNote).not.toHaveBeenCalled()
-})
-it('partial failure preserves saved signatures and retry only signs the remainder', async () => {
-  signTreatmentHistory.mockImplementation(async id => {
-    if (id === 102 && signTreatmentHistory.mock.calls.length === 2) throw new Error('Mất kết nối')
-    return { data: { customer_signature_svg: '<svg/>' } }
-  })
-  const actor = open()
-  await actor.click(screen.getByText('Ký một lần'))
-  await actor.click(screen.getByRole('button', { name: 'Lưu và ký xác nhận' }))
-  await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Đã ký 1 buổi'))
-  getResource.mockImplementation(async (_, id) => ({ histories: sessions.filter(entry => entry.card.id === id).map(entry => ({ ...entry.history, ...(id === 11 ? { customer_signature_svg: '<svg/>' } : {}) })) }))
-  await actor.click(screen.getByRole('button', { name: 'Lưu và ký xác nhận' }))
-  await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Đã ký xác nhận'))
-  expect(signTreatmentHistory.mock.calls.map(call => call[0])).toEqual([101, 102, 102])
+  expect(signTreatmentHistory).toHaveBeenCalledTimes(1)
+  expect(signTreatmentHistory).toHaveBeenCalledWith(100, '<svg/>')
+  expect(onUpdated).toHaveBeenCalledWith(expect.objectContaining({ id: 100, customer_signature_svg: '<svg/>' }))
 })

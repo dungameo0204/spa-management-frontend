@@ -3,7 +3,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import html2canvas from 'html2canvas'
 import CustomerRecordShare, { prepareSignatures } from './CustomerRecordShare'
 
-vi.mock('html2canvas', () => ({ default: vi.fn(async () => ({ toBlob: cb => cb(new Blob(['png'], { type: 'image/png' })) })) }))
+vi.mock('html2canvas', () => ({ default: vi.fn(async () => ({ toBlob: (cb, type) => cb(new Blob(['jpeg'], { type })) })) }))
 vi.mock('./CustomerRecordPrint.css?raw', async () => ({ default: (await import('node:fs')).readFileSync(`${process.cwd()}/src/components/CustomerRecordPrint.css`, 'utf8') }))
 const record = { customer: { id: 1, fullname: 'Nguyễn An', referral_sources: [] }, timeline: [], treatments: [] }
 beforeEach(() => {
@@ -22,9 +22,11 @@ it('prepares previews without sharing or downloading until clicked', async () =>
   const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
   const { done } = await open()
   expect(html2canvas).toHaveBeenCalledTimes(3)
+  expect(html2canvas.mock.results.every(({ value }) => value instanceof Promise)).toBe(true)
   expect(click).not.toHaveBeenCalled()
   expect(await screen.findAllByAltText(/Xem trước hồ sơ trang/)).toHaveLength(3)
-  expect(screen.getByRole('button', { name: 'Gửi qua ứng dụng' })).toBeDisabled()
+  expect(document.querySelector('#record-share-help')).toHaveTextContent('Tổng dung lượng 1 KB.')
+  expect(screen.getByRole('button', { name: 'Gửi 3 ảnh qua ứng dụng' })).toBeDisabled()
   fireEvent.click(screen.getByRole('button', { name: 'Tải tất cả ảnh' }))
   expect(click).toHaveBeenCalledTimes(3)
   expect(done).not.toHaveBeenCalled()
@@ -36,9 +38,13 @@ it('shares directly from a new click and keeps previews after handoff', async ()
   navigator.canShare = () => true
   const { done } = await open()
   expect(navigator.share).not.toHaveBeenCalled()
-  fireEvent.click(screen.getByRole('button', { name: 'Gửi qua ứng dụng' }))
+  fireEvent.click(screen.getByRole('button', { name: 'Gửi 3 ảnh qua ứng dụng' }))
   expect(navigator.share).toHaveBeenCalledWith(expect.objectContaining({ files: expect.arrayContaining([expect.any(File)]) }))
-  await screen.findByText(/chưa xác nhận đã gửi/)
+  const sharedFiles = navigator.share.mock.calls[0][0].files
+  expect(sharedFiles).toHaveLength(3)
+  expect(sharedFiles.map(file => file.name)).toEqual(['ho-so-nguyen-an-trang-1.jpg', 'ho-so-nguyen-an-trang-2.jpg', 'ho-so-nguyen-an-trang-3.jpg'])
+  expect(sharedFiles.every(file => file.type === 'image/jpeg' && file.size > 0)).toBe(true)
+  await screen.findByText(/Đã chuyển đủ 3 ảnh/)
   expect(done).not.toHaveBeenCalled()
 })
 it.each(['AbortError', 'NotAllowedError'])('keeps previews without downloading on %s', async name => {
@@ -46,20 +52,20 @@ it.each(['AbortError', 'NotAllowedError'])('keeps previews without downloading o
   navigator.canShare = () => true
   const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
   const { done } = await open()
-  fireEvent.click(screen.getByRole('button', { name: 'Gửi qua ứng dụng' }))
-  await waitFor(() => expect(screen.getByRole('button', { name: 'Gửi qua ứng dụng' })).toBeEnabled())
+  fireEvent.click(screen.getByRole('button', { name: 'Gửi 3 ảnh qua ứng dụng' }))
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Gửi 3 ảnh qua ứng dụng' })).toBeEnabled())
   expect(click).not.toHaveBeenCalled()
   expect(done).not.toHaveBeenCalled()
   if (name === 'NotAllowedError') expect(screen.getByRole('alert')).toHaveTextContent('Không thể chia sẻ trực tiếp')
   else expect(screen.queryByRole('alert')).not.toBeInTheDocument()
 })
-it('copies the selected PNG page', async () => {
+it('copies the selected JPEG page', async () => {
   vi.stubGlobal('ClipboardItem', class { constructor(data) { this.data = data } })
   Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { write: vi.fn().mockResolvedValue(undefined) } })
   await open()
   fireEvent.click(screen.getByRole('button', { name: 'Sao chép ảnh trang 2' }))
   await screen.findByText(/Đã sao chép trang 2/)
-  expect(navigator.clipboard.write.mock.calls[0][0][0].data['image/png'].name).toContain('trang-2.png')
+  expect(navigator.clipboard.write.mock.calls[0][0][0].data['image/jpeg'].name).toContain('trang-2.jpg')
 })
 it('handles clipboard denial without losing download options', async () => {
   vi.stubGlobal('ClipboardItem', class {})

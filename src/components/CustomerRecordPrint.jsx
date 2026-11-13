@@ -3,13 +3,13 @@ import { createPortal } from 'react-dom'
 import { formatCurrency, formatSpaDate } from '../utils/format'
 import { dateInputDisplay } from './DateInput'
 import { historyFields, referralSources } from '../utils/customerForm'
+import { cardName, paymentRecordRows, treatmentRecordRows } from '../utils/customerRecord'
 import './CustomerRecordPrint.css'
 
 const gender = { FEMALE: 'Nữ', MALE: 'Nam', OTHER: 'Khác' }
 const optionLabel = (values, options) => (values || []).map(value => options.find(([key]) => key === value)?.[1] || value)
 const blankRows = count => Array.from({ length: count }, (_, index) => ({ id: `blank-${index}` }))
-const cardName = card => card?.product_name || card?.name || `Dịch vụ #${card?.product_id}`
-const sessions = card => card?.total_sessions === null ? 'Trọn đời' : card?.total_sessions != null ? `${card.total_sessions} buổi` : ''
+const sessions = card => card?.total_sessions === null ? 'Không giới hạn' : card?.total_sessions != null ? `${card.total_sessions} buổi` : ''
 const signatureSource = svg => {
   if (!svg) return ''
   const normalized = /<svg\b[^>]*\bxmlns=/i.test(svg) ? svg : svg.replace(/<svg\b/i, '<svg xmlns="http://www.w3.org/2000/svg"')
@@ -28,7 +28,9 @@ function treatmentCards(timeline) {
 }
 
 function purchasedItems(timeline) {
-  return timeline.filter(entry => entry.type === 'purchase' && entry.item).map(entry => ({ ...entry.item, purchase_date: entry.date || entry.item.invoice_date }))
+  return timeline.filter(entry => entry.type === 'purchase' && entry.item)
+    .map(entry => ({ ...entry.item, purchase_date: entry.date || entry.item.invoice_date }))
+    .sort((a, b) => String(a.purchase_date || '').localeCompare(String(b.purchase_date || '')) || Number(a.invoice_item_id || 0) - Number(b.invoice_item_id || 0))
 }
 
 function PurchaseList({ title, items }) {
@@ -49,30 +51,21 @@ function PurchaseList({ title, items }) {
 function WritingLine({ label, value, large = false }) {
   return <p className={large ? 'is-large' : ''}><b>{label}:</b><span>{value || ''}</span></p>
 }
+function PaymentHistory({ invoices, debtPayments }) {
+  const rows = paymentRecordRows(invoices, debtPayments)
+  if (!rows.length) return null
+  return <section className="customer-record-payments"><h2>LỊCH SỬ THANH TOÁN</h2><table><thead><tr><th>Ngày</th><th>Nội dung</th><th>Số tiền</th></tr></thead><tbody>{rows.map(row => <tr key={row.id}><td>{formatSpaDate(row.date)}</td><td>{row.content}</td><td>{formatCurrency(row.amount)}</td></tr>)}</tbody></table></section>
+}
 
 function TreatmentSheet({ customer, cards }) {
-  const histories = treatmentCards(cards.map(treatment => ({ type: 'treatment', treatment }))).flatMap(card => (card.histories || []).map(history => ({ ...history, card })))
-    .sort((a, b) => String(a.execution_date).localeCompare(String(b.execution_date)) || Number(a.id || 0) - Number(b.id || 0))
-  const sessionsByTreatment = new Map()
-  const grouped = new Map()
-  histories.forEach(history => {
-    const isLifetime = history.card.total_sessions === null
-    const session = isLifetime ? null : (sessionsByTreatment.get(history.card.id) || 0) + 1
-    if (!isLifetime) sessionsByTreatment.set(history.card.id, session)
-    const date = String(history.execution_date || '').slice(0, 10)
-    const row = grouped.get(date) || { id: `date-${date}`, execution_date: history.execution_date, services: [], signatures: [] }
-    row.services.push(`${cardName(history.card)}${session ? ` (lần ${session})` : ''}`)
-    if (history.customer_signature_svg) row.signatures.push(history.customer_signature_svg)
-    grouped.set(date, row)
-  })
-  const rowsWithHistory = [...grouped.values()].map((row, index) => ({ ...row, visitNumber: index + 1, signature: row.signatures[0] }))
+  const rowsWithHistory = treatmentRecordRows(cards)
   const total = Math.max(12, rowsWithHistory.length + 5)
   const rows = [...rowsWithHistory, ...blankRows(Math.max(0, total - rowsWithHistory.length))]
   return <section className="customer-record-page customer-record-treatment-page">
     <h1>PHIẾU THEO DÕI ĐIỀU TRỊ</h1>
     <div className="customer-record-line"><b>Họ và tên chủ thẻ:</b><span>{customer.fullname}</span></div>
     <div className="customer-record-line"><b>SĐT:</b><span>{customer.phone_number}</span></div>
-    <table className="customer-record-treatment-table"><thead><tr><th>Ngày</th><th>Dịch vụ thực hiện</th><th>Số lần</th><th>Chữ ký KH</th></tr></thead><tbody>{rows.map((history, index) => <tr key={history.id ?? `blank-${index}`}><td>{history.execution_date ? formatSpaDate(history.execution_date) : ''}</td><td>{history.services?.join(', ') || ''}</td><td>{history.visitNumber || ''}</td><td>{history.signature && <img className="customer-record-signature-image" src={signatureSource(history.signature)} alt="Chữ ký khách hàng" />}</td></tr>)}</tbody></table>
+    <table className="customer-record-treatment-table"><thead><tr><th>Ngày</th><th>Dịch vụ thực hiện</th><th>Số lần</th><th>Nhân viên thực hiện</th><th>Chữ ký KH</th></tr></thead><tbody>{rows.map((history, index) => <tr key={history.id || `blank-${index}`}><td>{history.execution_date ? formatSpaDate(history.execution_date) : ''}</td><td>{history.services?.join(', ') || ''}{history.notes?.map((note, noteIndex) => <div className="customer-record-treatment-note" key={`${history.id}-note-${noteIndex}`}><b>Ghi chú:</b> {note}</div>)}</td><td>{history.visitNumber || ''}</td><td>{history.staff?.map((staff, staffIndex) => <div key={`${history.id}-staff-${staffIndex}`}>{staff}</div>)}</td><td>{history.signature && <img className="customer-record-signature-image" src={signatureSource(history.signature)} alt="Chữ ký khách hàng" />}</td></tr>)}</tbody></table>
   </section>
 }
 
@@ -86,7 +79,7 @@ export default function CustomerRecordPrint({ record, onDone, mode = 'print' }) 
     return () => { cancelAnimationFrame(frame); clearTimeout(timer); window.removeEventListener('afterprint', done) }
   }, [record, onDone, mode])
   if (!record) return null
-  const { customer, timeline = [], treatments } = record
+  const { customer, timeline = [], treatments, invoices = [], debtPayments = [] } = record
   const referral = optionLabel(customer.referral_sources, referralSources)
   const cards = treatments || treatmentCards(timeline)
   const purchases = purchasedItems(timeline)
@@ -102,13 +95,12 @@ export default function CustomerRecordPrint({ record, onDone, mode = 'print' }) 
       <div className="customer-record-details"><p><b>Họ tên khách hàng:</b><span>{customer.fullname}</span></p><p><b>Giới tính:</b><span>{gender[customer.gender] || ''}</span></p><p><b>Ngày sinh / Tuổi:</b><span>{dateInputDisplay(customer.date_of_birth, true)}</span></p><p><b>Điện thoại:</b><span>{customer.phone_number}</span></p><p className="wide"><b>Địa chỉ:</b><span>{customer.address}</span></p></div>
       <h3>Biết đến spa qua đâu?</h3><div className="customer-record-referrals">{referralSources.map(([key, label]) => <div key={key}><i className={referral.includes(label) ? 'checked' : ''}>✓</i>{label}</div>)}</div>
       <section className="customer-record-history"><h1>KHAI THÁC TIỀN SỬ</h1><ol>{historyFields.map(([key, label]) => <li key={label}><b>{label}?</b><span>{customer[key] || ''}</span></li>)}</ol></section>
+      <section className="customer-record-consultation"><h2>THÔNG TIN TƯ VẤN</h2><div className="customer-record-writing"><WritingLine label="Công nợ còn lại" value={formatCurrency(customer.total_debt ?? 0)} /><WritingLine label="Kết luận tình trạng da" value={customer.skin_assessment} large /><WritingLine label="Dịch vụ điều trị" value={customer.consultation_note} large /></div></section>
     </section>
     <section className="customer-record-page customer-record-consultation">
       <PurchaseList title="DỊCH VỤ ĐÃ MUA" items={services} />
       <PurchaseList title="SẢN PHẨM ĐÃ MUA" items={products} />
-      <h2>THÔNG TIN TƯ VẤN</h2>
-      <div className="customer-record-writing"><WritingLine label="Công nợ còn lại" value={formatCurrency(customer.total_debt ?? 0)} /><WritingLine label="Kết luận tình trạng da" value={customer.skin_assessment} large /><WritingLine label="Nội dung tư vấn" value={customer.consultation_note} large /></div>
-      <p className="customer-record-confirmation">Tôi đã được tư vấn, giải thích tình trạng da và các phương pháp kết hợp trong quá trình điều trị; đồng ý thực hiện theo chỉ định liệu trình và hướng dẫn chăm sóc.</p>
+      <PaymentHistory invoices={invoices} debtPayments={debtPayments} />
     </section>
     <TreatmentSheet customer={customer} cards={cards} />
   </div>, document.body)

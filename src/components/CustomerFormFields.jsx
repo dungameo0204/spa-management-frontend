@@ -4,6 +4,7 @@ import MobileSelect from './MobileSelect'
 import { today } from '../utils/format'
 import { historyFields, referralSources, skinTypes } from '../utils/customerForm'
 import DateInput from './DateInput'
+import { digitsOnly } from '../utils/phone'
 import './CustomerFormFields.css'
 
 function TextArea({ fieldKey, label, value, onChange }) {
@@ -33,7 +34,7 @@ function MultipleChoices({ fieldKey, label, options, value, onChange }) {
 }
 
 export default function CustomerFormFields({ value, onChange }) {
-  const input = (key, label, type = 'text', required = false) => <label className="field"><span>{label}{required && <span className="customer-required" aria-hidden="true"> *</span>}</span>{type === 'date' ? <DateInput aria-label={label} birthDate={key === 'date_of_birth'} required={required} value={value[key] ?? ''} min="1000-01-01" max={today()} onChange={next => onChange(key, next)} /> : <input aria-label={label} type={type} required={required} value={value[key] ?? ''} maxLength={key === 'profile_code' ? 50 : undefined} onChange={event => onChange(key, event.target.value)} />}</label>
+  const input = (key, label, type = 'text', required = false) => <label className="field"><span>{label}{required && <span className="customer-required" aria-hidden="true"> *</span>}</span>{type === 'date' ? <DateInput aria-label={label} birthDate={key === 'date_of_birth'} required={required} value={value[key] ?? ''} min="1000-01-01" max={today()} onChange={next => onChange(key, next)} /> : <input aria-label={label} type={type} inputMode={key === 'phone_number' ? 'numeric' : undefined} pattern={key === 'phone_number' ? '[0-9]*' : undefined} required={required} value={value[key] ?? ''} maxLength={key === 'profile_code' ? 50 : undefined} onChange={event => onChange(key, key === 'phone_number' ? digitsOnly(event.target.value) : event.target.value)} />}</label>
   return <div className="customer-form-sections">
     <div className="customer-form-intro"><Sparkles size={17} /><p>Nhập họ tên và số điện thoại; hồ sơ chăm sóc có thể bổ sung sau.</p></div>
     <section className="customer-form-card" aria-labelledby="customer-basic-title">

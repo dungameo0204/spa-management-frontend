@@ -1,7 +1,17 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { expect, it, vi } from 'vitest'
+import { afterEach, expect, it, vi } from 'vitest'
 import DateInput, { dateInputDisplay, dateInputValue } from './DateInput'
+
+afterEach(() => vi.useRealTimers())
+
+it('marks today in the calendar without replacing the selected-day style', () => {
+  vi.useFakeTimers()
+  vi.setSystemTime(new Date(2026, 10, 12, 12))
+  render(<DateInput aria-label="Ngày" value="2026-11-12" onChange={vi.fn()} />)
+  fireEvent.click(screen.getByRole('button', { name: 'Mở lịch Ngày' }))
+  expect(screen.getByRole('button', { name: '12', exact: true })).toHaveClass('is-today', 'is-selected')
+})
 
 it('allows an empty optional date but rejects partial dates and empty required dates', () => {
   const { rerender } = render(<DateInput aria-label="Ngày" value="" onChange={vi.fn()} />)
@@ -62,4 +72,18 @@ it('supports birth year and month-year while preserving omitted precision in the
   expect(dateInputValue('08/1995', true)).toBe('1995-08-01')
   expect(dateInputDisplay('1995-01-01', true)).toBe('1995')
   expect(dateInputDisplay('1995-08-01', true)).toBe('08/1995')
+})
+
+it('does not intercept Command/Ctrl shortcuts or composition keystrokes', () => {
+  const onChange = vi.fn()
+  render(<DateInput aria-label="Ngày" value="" onChange={onChange} />)
+  const input = screen.getByLabelText('Ngày')
+  fireEvent.keyDown(input, { key: 'a', metaKey: true })
+  fireEvent.keyDown(input, { key: '2', isComposing: true })
+  expect(onChange).not.toHaveBeenCalled()
+  fireEvent.compositionStart(input)
+  fireEvent.change(input, { target: { value: '15/09/2026' }, nativeEvent: { isComposing: true } })
+  expect(onChange).not.toHaveBeenCalled()
+  fireEvent.compositionEnd(input, { target: { value: '15/09/2026' } })
+  expect(onChange).toHaveBeenLastCalledWith('2026-09-15')
 })

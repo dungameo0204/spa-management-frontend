@@ -8,6 +8,7 @@ import MoneyInput from './MoneyInput'
 import { arrivalTimeSlots, bookingPayload, defaultBookingArrivalDate } from '../utils/customerBookings'
 import { dateOnly } from '../utils/format'
 import DateInput from './DateInput'
+import { digitsOnly } from '../utils/phone'
 
 export default function CustomerBookingForm({ booking, branchId, user, pending, onSave, onCancel }) {
   const manager = user.system_role === 'MANAGER'
@@ -35,7 +36,7 @@ export default function CustomerBookingForm({ booking, branchId, user, pending, 
       <legend>1. Thông tin khách hàng</legend>
       <div className="booking-customer-types" role="group" aria-label="Loại khách hàng">{[['NEW', 'Khách mới'], ['EXISTING', 'Khách cũ']].map(([type, label]) => <button type="button" key={type} aria-pressed={form.customer_type === type} className={`btn ${form.customer_type === type ? 'primary' : 'secondary'}`} onClick={() => { setForm(current => ({ ...current, customer_type: type, customer_id: '', customer_name: '', customer_phone: '' })); setCustomerLabel('') }}>{label}</button>)}</div>
       {form.customer_type === 'EXISTING' && <SearchPicker resource="customers" label="Khách hàng đã đăng ký" value={form.customer_id} initialLabel={customerLabel} onChange={item => { setForm(current => ({ ...current, customer_id: item?.id || '', customer_name: item?.fullname || item?.name || '', customer_phone: item?.phone_number || '' })); setCustomerLabel(item?.fullname || item?.name || '') }} />}
-      <div className="booking-form-grid"><label className="field"><span>Họ và tên</span><input maxLength={255} required={form.customer_type === 'NEW'} value={form.customer_name} onChange={event => set('customer_name', event.target.value)} /></label><label className="field"><span>Số điện thoại</span><input type="tel" maxLength={50} required={form.customer_type === 'NEW'} value={form.customer_phone} onChange={event => set('customer_phone', event.target.value)} /></label></div>
+      <div className="booking-form-grid"><label className="field"><span>Họ và tên</span><input maxLength={255} required={form.customer_type === 'NEW'} value={form.customer_name} onChange={event => set('customer_name', event.target.value)} /></label><label className="field"><span>Số điện thoại</span><input type="tel" inputMode="numeric" pattern="[0-9]*" maxLength={50} required={form.customer_type === 'NEW'} value={form.customer_phone} onChange={event => set('customer_phone', digitsOnly(event.target.value))} /></label></div>
       {form.customer_type === 'NEW' && <p className="small-muted">Đặt lịch không tự tạo hồ sơ khách hàng.</p>}
     </fieldset>
     <fieldset disabled={pending}>
