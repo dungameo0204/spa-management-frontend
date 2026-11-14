@@ -17,7 +17,7 @@ it('combines all treatment visits on the same date into one row while preserving
     { id: 3, product_id: 7, product_name: 'Laser', total_sessions: 10, histories: [{ id: 4, execution_date: '2026-03-02 08:00:00' }] },
   ])
   expect(rows).toHaveLength(2)
-  expect(rows[0]).toMatchObject({ visitNumber: 1, services: ['Laser (lần 2/10)', 'PRP (lần 1/5)'], staff: ['Laser: Lan, Hương', 'PRP: Minh'], notes: ['Làm sạch\nĐắp mặt nạ', 'Dưỡng ẩm'], signature: 'first-signature' })
+  expect(rows[0]).toMatchObject({ visitNumber: 1, services: ['Laser (lần 1,2/10)', 'PRP (lần 1/5)'], staff: ['Laser: Lan, Hương', 'PRP: Minh'], notes: ['Làm sạch\nĐắp mặt nạ', 'Dưỡng ẩm'], signature: 'first-signature' })
   expect(rows[1]).toMatchObject({ visitNumber: 2, services: ['Laser (lần 3/10)'] })
 })
 

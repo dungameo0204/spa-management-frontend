@@ -57,7 +57,7 @@ export default function CustomerFormFields({ value, onChange }) {
     </details>
     <section className="customer-form-card" aria-labelledby="customer-advice-title"><h3 id="customer-advice-title"><ClipboardList size={19} /> Đánh giá và tư vấn</h3>
       <TextArea fieldKey="skin_assessment" label="Đánh giá tình trạng da" value={value} onChange={onChange} />
-      <TextArea fieldKey="consultation_note" label="Nội dung tư vấn" value={value} onChange={onChange} />
+      <TextArea fieldKey="consultation_note" label="Dịch vụ điều trị" value={value} onChange={onChange} />
       <TextArea fieldKey="note" label="Ghi chú khách hàng" value={value} onChange={onChange} />
     </section>
   </div>

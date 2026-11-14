@@ -51,6 +51,10 @@ function PurchaseList({ title, items }) {
 function WritingLine({ label, value, large = false }) {
   return <p className={large ? 'is-large' : ''}><b>{label}:</b><span>{value || ''}</span></p>
 }
+function TreatmentServiceLines({ value }) {
+  const lines = String(value || '').split(/\r?\n/)
+  return <div className="customer-record-treatment-service">{lines.map((line, index) => <div className="customer-record-line" key={index}><b>{index === 0 ? 'Dịch vụ điều trị:' : ''}</b><span>{line}</span></div>)}</div>
+}
 function PaymentHistory({ invoices, debtPayments }) {
   const rows = paymentRecordRows(invoices, debtPayments)
   if (!rows.length) return null
@@ -65,6 +69,7 @@ function TreatmentSheet({ customer, cards }) {
     <h1>PHIẾU THEO DÕI ĐIỀU TRỊ</h1>
     <div className="customer-record-line"><b>Họ và tên chủ thẻ:</b><span>{customer.fullname}</span></div>
     <div className="customer-record-line"><b>SĐT:</b><span>{customer.phone_number}</span></div>
+    <TreatmentServiceLines value={customer.consultation_note} />
     <table className="customer-record-treatment-table"><thead><tr><th>Ngày</th><th>Dịch vụ thực hiện</th><th>Số lần</th><th>Nhân viên thực hiện</th><th>Chữ ký KH</th></tr></thead><tbody>{rows.map((history, index) => <tr key={history.id || `blank-${index}`}><td>{history.execution_date ? formatSpaDate(history.execution_date) : ''}</td><td>{history.services?.join(', ') || ''}{history.notes?.map((note, noteIndex) => <div className="customer-record-treatment-note" key={`${history.id}-note-${noteIndex}`}><b>Ghi chú:</b> {note}</div>)}</td><td>{history.visitNumber || ''}</td><td>{history.staff?.map((staff, staffIndex) => <div key={`${history.id}-staff-${staffIndex}`}>{staff}</div>)}</td><td>{history.signature && <img className="customer-record-signature-image" src={signatureSource(history.signature)} alt="Chữ ký khách hàng" />}</td></tr>)}</tbody></table>
   </section>
 }

@@ -73,8 +73,8 @@ export function treatmentRecordRows(roots = []) {
       const eligibleCards = cards.filter(card => productKey(card) === key && (Number(card.id) === Number(session.card.id) || (cardCreatedAt(card) && cardCreatedAt(card) <= timeOf(session.history))))
       const lifetime = eligibleCards.some(card => card.total_sessions === null)
       const total = lifetime ? null : eligibleCards.reduce((sum, card) => sum + (Number(card.total_sessions) || 0), 0)
-      const service = services.get(key) || { key, name: cardName(session.card), completed, total, lifetime, staff: [] }
-      service.completed = completed
+      const service = services.get(key) || { key, name: cardName(session.card), completed: [], total, lifetime, staff: [] }
+      service.completed.push(completed)
       service.total = total
       service.lifetime = lifetime
       const names = staffNames(session.history)
@@ -87,7 +87,7 @@ export function treatmentRecordRows(roots = []) {
       id: `day:${day}`,
       execution_date: daySessions[0].history.execution_date || day,
       day,
-      services: serviceValues.map(service => `${service.name} (lần ${service.completed}/${service.lifetime ? 'không giới hạn' : service.total || '?'})`),
+      services: serviceValues.map(service => `${service.name} (lần ${service.completed.join(',')}/${service.lifetime ? 'không giới hạn' : service.total || '?'})`),
       staff: serviceValues.filter(service => service.staff.length).map(service => `${service.name}: ${[...new Set(service.staff)].join(', ')}`),
       notes: notesFor(daySessions.flatMap(session => [session.visit.note, session.history.note])),
       signature: daySessions.map(session => session.history.customer_signature_svg || session.visit.signature).find(Boolean),
