@@ -114,7 +114,7 @@ export default function TodayTreatments() {
     onError: async err => { setMessageType('error'); setMessage(err.message); await refreshTable() },
   })
   const undoMutation = useMutation({ mutationFn: target => {
-    const id = typeof target === 'object' ? target.parentHistory?.id || target.id : target
+    const id = typeof target === 'object' ? target.childHistory?.id || target.parentHistory?.id || target.id : target
     const history = typeof target === 'object' ? target.parentHistory || target : cardDetails.flatMap(detail => treatmentCards(detail.data || {})).flatMap(card => card.histories || []).find(history => history.id === id)
     if (!canUndoTreatmentExecution(user, history)) throw new Error('Bạn không có quyền hoàn tác buổi thực hiện này.')
     if (target?.childHistory && target.parentHistory?.children?.length > 1) return updateGroupedTreatmentExecution(target.parentHistory.id, { treatment_id: target.parentHistory.treatment_id, children: target.parentHistory.children.filter(item => Number(item.id) !== Number(target.childHistory.id)).map(item => ({ treatment_id: item.treatment_id, staffs: item.staffs || [] })) })

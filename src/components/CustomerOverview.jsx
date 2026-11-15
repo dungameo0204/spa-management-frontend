@@ -74,7 +74,7 @@ export default function CustomerOverview({ customerId, overview, onOverview }) {
           onUndo={async target => {
             try {
               if (target?.childHistory && target.parentHistory?.children?.length > 1) await updateGroupedTreatmentExecution(target.parentHistory.id, { treatment_id: target.parentHistory.treatment_id, children: target.parentHistory.children.filter(child => Number(child.id) !== Number(target.childHistory.id)).map(child => ({ treatment_id: child.treatment_id, staffs: child.staffs || [] })) })
-              else await undoTreatmentExecution(target?.parentHistory?.id || target?.id || target);
+              else await undoTreatmentExecution(target?.childHistory?.id || target?.parentHistory?.id || target?.id || target);
               onOverview(await getCustomerOverview(customerId));
             } catch (error) {
               setMessageType('error');

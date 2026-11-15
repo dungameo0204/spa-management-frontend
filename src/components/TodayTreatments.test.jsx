@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, expect, it, vi } from 'vitest'
 import TodayTreatments from './TodayTreatments'
-import { executeTreatment, getResource, listResource, updateGroupedTreatmentExecution } from '../api/resources'
+import { executeTreatment, getResource, listResource, undoTreatmentExecution, updateGroupedTreatmentExecution } from '../api/resources'
 
 vi.mock('../auth/AuthProvider', () => ({ useAuth: () => ({ user: { system_role: 'MANAGER', branch_id: 1 } }) }))
 vi.mock('./AppShell', () => ({ useBranch: () => ({ branchId: 1 }) }))
@@ -76,6 +76,22 @@ it('adds a child to the existing parent visit with PUT instead of creating a sec
     { treatment_id: 12, staffs: [] },
   ] })
   expect(executeTreatment).not.toHaveBeenCalled()
+})
+
+it('deletes the final child history instead of its parent group history', async () => {
+  const executionDate = new Date().toISOString()
+  const childHistory = { id: 101, treatment_id: 11, execution_date: executionDate, branch_id: 1, staffs: [] }
+  const root = { id: 10, customer_name: 'Khách A', product_name: 'Gói nám', created_at: executionDate, branch_id: 1, histories: [{ id: 100, treatment_id: 10, execution_date: executionDate, branch_id: 1, children: [childHistory] }], children: [{ id: 11, product_name: 'Laser', remaining_sessions: 1, histories: [] }] }
+  listResource.mockImplementation(async resource => resource === 'treatments' ? { data: [root], totalPages: 1 } : { data: [], totalPages: 1 })
+  getResource.mockResolvedValue(root)
+  undoTreatmentExecution.mockResolvedValue({})
+  render(<QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}><TodayTreatments /></QueryClientProvider>)
+  await screen.findByText('Laser')
+  fireEvent.click(screen.getByRole('checkbox', { name: 'Đã làm Khách A - Laser' }))
+  fireEvent.click(within(screen.getByRole('alertdialog')).getByRole('button', { name: 'Xác nhận', exact: true }))
+  await waitFor(() => expect(undoTreatmentExecution).toHaveBeenCalledWith(101))
+  expect(undoTreatmentExecution).not.toHaveBeenCalledWith(100)
+  expect(updateGroupedTreatmentExecution).not.toHaveBeenCalled()
 })
 
 it('refetches the active list and its visible card details from the refresh button', async () => {
