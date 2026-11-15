@@ -66,6 +66,17 @@ it('does not duplicate child histories that already belong to a real parent visi
   expect(treatmentHistoryGroups(card).map(group => group.historyId)).toEqual([100])
 })
 
+it('links overview child histories to their parent visit by parent_history_id', () => {
+  const card = { id: 1, product_name: 'Combo', customer_name: 'Khách', histories: [{ id: 100, execution_date: day, branch_id: 1, branch_name: 'CS 1' }], children: [
+    { id: 10, product_name: 'Laser', histories: [{ id: 101, treatment_id: 10, parent_history_id: 100, execution_date: day, branch_id: 1 }] },
+    { id: 20, product_name: 'Điện di', histories: [{ id: 102, treatment_id: 20, parent_history_id: 100, execution_date: day, branch_id: 1 }] },
+  ] }
+  const groups = treatmentHistoryGroups(card)
+  expect(groups).toHaveLength(1)
+  expect(groups[0]).toMatchObject({ historyId: 100, day, branch_id: 1 })
+  expect(groups[0].sessions.map(session => [session.card.product_name, session.history.id])).toEqual([['Laser', 101], ['Điện di', 102]])
+})
+
 it('groups legacy child histories with the same signature into one display visit', () => {
   const card = { id: 1, product_name: 'Combo', customer_name: 'Khách', children: [
     { id: 10, product_name: 'Laser', histories: [{ id: 101, execution_date: day, branch_id: 1, created_at: `${day}T09:00:00Z`, customer_signature_svg: '<svg>same</svg>', note: 'Theo dõi' }] },

@@ -17,11 +17,16 @@ function rootIdFor(mapping) {
 async function assertStandaloneCard(invoiceId, treatmentId, name) {
   const detail = await getResource('treatments', treatmentId)
   if (detail.closed_at || detail.parent_treatment_id != null || detail.children?.length || (detail.remaining_sessions !== null && Number(detail.remaining_sessions) < 1)) throw new Error(`Hóa đơn #${invoiceId} đã lưu; thẻ ${name} đã hết buổi hoặc không đúng thẻ độc lập. Kiểm tra thẻ trước khi tick lại.`)
+  return detail
 }
 
-async function assertGroupChild(invoiceId, rootId, child, name) {
-  const detail = await getResource('treatments', child.treatment_id)
-  if (detail.closed_at || (detail.remaining_sessions !== null && Number(detail.remaining_sessions) < 1) || Number(detail.parent_treatment_id) !== Number(rootId) || Number(detail.product_id) !== Number(child.product_id)) throw new Error(`Hóa đơn #${invoiceId} đã lưu; thẻ ${name} đã hết buổi hoặc không đúng thẻ con. Kiểm tra thẻ trước khi tick lại.`)
+function assertGroupChildren(invoiceId, root, children, name) {
+  const cards = Array.isArray(root.children) ? root.children : []
+  for (const child of children) {
+    const matches = cards.filter(card => Number(card.id) === Number(child.treatment_id) && Number(card.product_id) === Number(child.product_id))
+    const detail = matches[0]
+    if (matches.length !== 1 || detail.closed_at || (detail.remaining_sessions !== null && Number(detail.remaining_sessions) < 1)) throw new Error(`Hóa đơn #${invoiceId} đã lưu; thẻ ${name} đã hết buổi hoặc không đúng thẻ con. Kiểm tra thẻ trước khi tick lại.`)
+  }
 }
 
 function addGroupChild(groups, rootId, child, metadata) {
@@ -34,6 +39,10 @@ function addGroupChild(groups, rootId, child, metadata) {
 
 function currentVisit(root, branchId, executionDate) {
   return (root.histories || []).find(history => !history.deleted_at && Array.isArray(history.children) && dateOnly(history.execution_date) === dateOnly(executionDate) && (!branchId || Number(history.branch_id) === Number(branchId)))
+}
+
+function recordedOnDate(card, branchId, executionDate) {
+  return (card.histories || []).some(history => !history.deleted_at && dateOnly(history.execution_date) === dateOnly(executionDate) && (!branchId || Number(history.branch_id) === Number(branchId)))
 }
 
 function groupPayload(rootId, branchId, executionDate, children, metadata) {
@@ -51,7 +60,7 @@ export async function recordInvoiceSessions(invoiceId, lines, branchId, itemMapp
   const executionDate = toSqlDateTime(invoiceDate)
   if (!executionDate) throw new Error(`Hóa đơn #${invoiceId} đã lưu nhưng không nhận được ngày hóa đơn hợp lệ để ghi nhận buổi. Kiểm tra thẻ liệu trình; không tạo lại hóa đơn.`)
   const mappings = Array.isArray(itemMappings) ? itemMappings : []
-  const skipped = [], groups = new Map()
+  const skipped = [], alreadyRecorded = [], groups = new Map()
   for (const [requestIndex, line] of (lines || []).entries()) {
     if (Number(line.is_product)) continue
     const mapping = mappingFor(mappings, requestIndex, line.product_name, skipped)
@@ -78,7 +87,8 @@ export async function recordInvoiceSessions(invoiceId, lines, branchId, itemMapp
       if (!rootId || !addGroupChild(groups, rootId, { treatment_id: treatmentId, product_id: line.product_id, staffs: line.performStaffs || [] }, { name: line.product_name, note: line.sessionNote, signature: line.sessionSignature })) skipped.push(line.product_name || 'Dịch vụ')
       continue
     }
-    await assertStandaloneCard(invoiceId, treatmentId, line.product_name)
+    const detail = await assertStandaloneCard(invoiceId, treatmentId, line.product_name)
+    if (recordedOnDate(detail, branchId, executionDate)) { alreadyRecorded.push(line.product_name || 'Dịch vụ'); continue }
     let created
     try { created = await executeTreatment({ treatment_id: treatmentId, ...(branchId ? { branch_id: branchId } : {}), execution_date: executionDate, staffs: [], ...(line.sessionNote?.trim() ? { note: line.sessionNote.trim() } : {}), ...(line.sessionSignature ? { customer_signature_svg: line.sessionSignature } : {}) }) }
     catch (error) { throw new Error(`Hóa đơn #${invoiceId} đã lưu; không xác nhận được buổi cho ${line.product_name}: ${error.message}. Kiểm tra lịch sử thẻ trước khi thực hiện lại.`) }
@@ -90,16 +100,20 @@ export async function recordInvoiceSessions(invoiceId, lines, branchId, itemMapp
 
   for (const group of groups.values()) {
     const children = [...group.children.values()]
-    for (const child of children) await assertGroupChild(invoiceId, group.rootId, child, group.name)
     const root = await getResource('treatments', group.rootId)
     if (root.closed_at) throw new Error(`Hóa đơn #${invoiceId} đã lưu; liệu trình cha của ${group.name} không còn hoạt động. Kiểm tra thẻ trước khi tick lại.`)
+    assertGroupChildren(invoiceId, root, children, group.name)
     const visit = currentVisit(root, branchId, executionDate)
     try {
       if (visit) {
         const existing = (visit.children || []).filter(child => !child.deleted_at).map(child => ({ treatment_id: child.treatment_id, staffs: child.staffs || [] }))
         const childByTreatmentId = new Map(existing.map(child => [Number(child.treatment_id), child]))
-        children.forEach(child => childByTreatmentId.set(Number(child.treatment_id), { treatment_id: child.treatment_id, staffs: child.staffs }))
-        await updateGroupedTreatmentExecution(visit.id, { treatment_id: group.rootId, children: [...childByTreatmentId.values()] })
+        const pending = children.filter(child => !childByTreatmentId.has(Number(child.treatment_id)))
+        if (pending.length !== children.length) alreadyRecorded.push(group.name || 'Dịch vụ')
+        if (pending.length) {
+          pending.forEach(child => childByTreatmentId.set(Number(child.treatment_id), { treatment_id: child.treatment_id, staffs: child.staffs }))
+          await updateGroupedTreatmentExecution(visit.id, { treatment_id: group.rootId, children: [...childByTreatmentId.values()] })
+        }
       } else {
         await executeTreatment(groupPayload(group.rootId, branchId, executionDate, children.map(({ treatment_id, staffs }) => ({ treatment_id, staffs })), group))
       }
@@ -107,5 +121,5 @@ export async function recordInvoiceSessions(invoiceId, lines, branchId, itemMapp
       throw new Error(`Hóa đơn #${invoiceId} đã lưu; không xác nhận được buổi cho ${group.name}: ${error.message}. Kiểm tra lịch sử thẻ trước khi thực hiện lại.`)
     }
   }
-  return skipped
+  return { skipped, alreadyRecorded: [...new Set(alreadyRecorded)] }
 }

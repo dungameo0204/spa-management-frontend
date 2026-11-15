@@ -6,17 +6,18 @@ import { beforeEach, expect, it, vi } from 'vitest'
 import ResourcePage from './ResourcePage'
 import InventoryPage from './InventoryPage'
 import TreatmentsPage from './TreatmentsPage'
-import { listResource } from '../api/resources'
+import { listResource, listTreatmentCustomers } from '../api/resources'
 import { exportTable } from '../utils/exportTable'
 
 vi.mock('../auth/AuthProvider', () => ({ useAuth: () => ({ user: { id: 1, system_role: 'MANAGER' } }) }))
 vi.mock('../components/AppShell', () => ({ useBranch: () => ({ branchId: '2' }) }))
 vi.mock('../utils/exportTable', () => ({ exportTable: vi.fn() }))
-vi.mock('../api/resources', () => ({ listResource: vi.fn(), getResource: vi.fn(async () => ({ histories: [] })), createResource: vi.fn(), updateResource: vi.fn(), deleteResource: vi.fn(), restoreResource: vi.fn(), getCustomerOverview: vi.fn(), getReportDetails: vi.fn(), executeTreatment: vi.fn(), assignTreatmentStaffs: vi.fn(), undoTreatmentExecution: vi.fn() }))
+vi.mock('../api/resources', () => ({ listResource: vi.fn(), listTreatmentCustomers: vi.fn(), getResource: vi.fn(async () => ({ histories: [] })), createResource: vi.fn(), updateResource: vi.fn(), deleteResource: vi.fn(), restoreResource: vi.fn(), getCustomerOverview: vi.fn(), getReportDetails: vi.fn(), executeTreatment: vi.fn(), assignTreatmentStaffs: vi.fn(), undoTreatmentExecution: vi.fn() }))
 
 beforeEach(() => {
   vi.resetAllMocks()
   listResource.mockImplementation(async (resource, filters, page = 1) => ({ total: 2, totalPages: ['customers', 'products', 'treatments', 'expenses'].includes(resource) ? 2 : 1, data: resource === 'customers' ? [{ id: page, fullname: `Lan ${page}`, phone_number: '0901234567' }] : resource === 'products' ? [{ id: page, name: `Kem ${page}`, is_product: 1, inventory: [{ branch_id: 1, branch_name: 'A', quantity: 8 }, { branch_id: 2, branch_name: 'B', quantity: 3 }] }] : resource === 'expenses' ? [{ id: page, note: `Chi phí ${page}`, amount: 100000, expense_date: '2026-11-03', branch_name: 'B' }] : resource === 'treatments' ? [{ id: page, customer_id: page, customer_name: `Lan ${page}`, product_name: 'Laser', remaining_sessions: 2, total_sessions: 5 }] : [] }))
+  listTreatmentCustomers.mockResolvedValue({ total: 1, totalPages: 1, page: 1, pageSize: 20, data: [{ id: 1, fullname: 'Lan 1', active_treatments: [{ id: 1, customer_id: 1, customer_name: 'Lan 1', product_name: 'Laser', remaining_sessions: 2, total_sessions: 5, matching_execution_count: 2, latest_matching_execution_date: '2026-10-16' }], completed_treatments: [] }] })
 })
 
 function show(page) {
@@ -53,16 +54,17 @@ it('exports all loaded treatment cards rather than the visible customer page', a
   await userEvent.click(screen.getByRole('button', { name: 'Xuất Excel' }))
   await waitFor(() => expect(exportTable).toHaveBeenCalledTimes(1))
   expect(exportTable.mock.calls[0][0].rows.map(row => row.id)).toEqual([1, 2])
-  expect(listResource).toHaveBeenCalledWith('treatments', { customerSearch: '' }, 2, 100)
+  expect(listResource).toHaveBeenCalledWith('treatments', { customerSearch: '' }, 1, 100)
 })
 
 it('exports treatment execution-filter metadata with the selected execution range', async () => {
-  listResource.mockImplementation(async (resource, filters, page = 1) => ({ total: 1, totalPages: 1, data: resource === 'treatments' ? [{ id: page, customer_id: page, customer_name: `Lan ${page}`, product_name: 'Laser', remaining_sessions: 2, total_sessions: 5, matching_execution_count: 2, latest_matching_execution_date: '2026-10-16' }] : resource === 'branches' ? [] : [] }))
+  listResource.mockImplementation(async (resource, _filters, page = 1) => ({ total: 1, totalPages: 1, data: resource === 'treatments' ? [{ id: page, customer_id: page, customer_name: `Lan ${page}`, product_name: 'Laser', remaining_sessions: 2, total_sessions: 5, matching_execution_count: 2, latest_matching_execution_date: '2026-10-16' }] : resource === 'branches' ? [] : [] }))
+  listTreatmentCustomers.mockResolvedValue({ total: 1, totalPages: 1, page: 1, pageSize: 20, data: [{ id: 1, fullname: 'Lan 1', active_treatments: [{ id: 1, customer_id: 1, customer_name: 'Lan 1', product_name: 'Laser', remaining_sessions: 2, total_sessions: 5, matching_execution_count: 2, latest_matching_execution_date: '2026-10-16' }], completed_treatments: [] }] })
   show(<TreatmentsPage />)
   await userEvent.selectOptions(screen.getByRole('combobox'), 'execution')
   await userEvent.type(screen.getByLabelText('Từ ngày'), '01102026')
   await userEvent.type(screen.getByLabelText('Đến ngày'), '31102026')
-  await waitFor(() => expect(listResource).toHaveBeenCalledWith('treatments', { customerSearch: '', executionStartDate: '2026-10-01', executionEndDate: '2026-10-31' }, 1, 100))
+  await waitFor(() => expect(listTreatmentCustomers).toHaveBeenCalledWith({ customerSearch: '', executionStartDate: '2026-10-01', executionEndDate: '2026-10-31' }, 1, 20))
   await userEvent.click(screen.getByRole('button', { name: 'Xuất Excel' }))
   await waitFor(() => expect(exportTable).toHaveBeenCalledTimes(1))
   expect(exportTable.mock.calls[0][0].context).toEqual(expect.arrayContaining(['Lọc theo', 'Ngày thực hiện']))

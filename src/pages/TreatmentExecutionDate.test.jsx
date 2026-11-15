@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import TreatmentsPage from './TreatmentsPage'
 import TodayTreatments from '../components/TodayTreatments'
-import { executeTreatment, assignTreatmentStaffs, undoTreatmentExecution, getResource, listResource } from '../api/resources'
+import { executeTreatment, assignTreatmentStaffs, undoTreatmentExecution, getResource, listResource, listTreatmentCustomers } from '../api/resources'
 import { today } from '../utils/format'
 
 const auth = vi.hoisted(() => ({ role: 'MANAGER' }))
@@ -14,7 +14,7 @@ vi.mock('../components/AppShell', () => ({ useBranch: () => ({ branchId: 2 }) })
 vi.mock('../components/RoleStaffPicker', () => ({ default: () => <div>Chọn nhân viên</div> }))
 vi.mock('../api/resources', () => ({
   executeTreatment: vi.fn(), assignTreatmentStaffs: vi.fn(), undoTreatmentExecution: vi.fn(),
-  createResource: vi.fn(), getResource: vi.fn(), listResource: vi.fn(),
+  createResource: vi.fn(), getResource: vi.fn(), listResource: vi.fn(), listTreatmentCustomers: vi.fn(),
 }))
 
 const card = { id: 10, customer_id: 20, customer_name: 'Lan', product_name: 'Chăm sóc da', remaining_sessions: 5, total_sessions: 6, branch_id: 2 }
@@ -23,6 +23,7 @@ beforeEach(() => {
   vi.clearAllMocks()
   auth.role = 'MANAGER'
   listResource.mockImplementation(async resource => ({ data: resource === 'treatments' ? [{ ...card, created_at: today() }] : resource === 'branches' ? [{ id: 2, name: 'Cơ sở 2' }] : [], totalPages: 1 }))
+  listTreatmentCustomers.mockResolvedValue({ data: [{ id: 20, fullname: 'Lan', active_treatments: [{ ...card, created_at: today() }], completed_treatments: [] }], total: 1, totalPages: 1, page: 1, pageSize: 20 })
   getResource.mockImplementation(async resource => resource === 'treatments' ? { ...card, histories: [] } : { id: 20, fullname: 'Lan', total_debt: 0 })
   executeTreatment.mockResolvedValue({ treatmentHistoryId: 30 })
   assignTreatmentStaffs.mockResolvedValue({})
@@ -161,15 +162,15 @@ it('sửa nhân viên của buổi đã có không hiển thị hoặc gửi ng�
 })
 
 it('lọc theo ngày thực hiện gửi đúng query, hiển thị metadata và xóa lọc tải lại toàn bộ', async () => {
-  listResource.mockImplementation(async (resource, _filters) => ({ data: resource === 'treatments' ? [{ ...card, matching_execution_count: 2, latest_matching_execution_date: '2026-10-16' }] : resource === 'branches' ? [{ id: 2, name: 'Cơ sở 2' }] : [], totalPages: 1 }))
+  listTreatmentCustomers.mockResolvedValue({ data: [{ id: 20, fullname: 'Lan', active_treatments: [{ ...card, matching_execution_count: 2, latest_matching_execution_date: '2026-10-16' }], completed_treatments: [] }], total: 1, totalPages: 1, page: 1, pageSize: 20 })
   const actor = userEvent.setup()
   show(<TreatmentsPage />)
   await actor.selectOptions(screen.getByRole('combobox'), 'execution')
   await actor.type(screen.getByLabelText('Từ ngày'), '01102026')
   await actor.type(screen.getByLabelText('Đến ngày'), '31102026')
-  await waitFor(() => expect(listResource).toHaveBeenCalledWith('treatments', { customerSearch: '', executionStartDate: '2026-10-01', executionEndDate: '2026-10-31' }, 1, 100))
+  await waitFor(() => expect(listTreatmentCustomers).toHaveBeenCalledWith({ customerSearch: '', executionStartDate: '2026-10-01', executionEndDate: '2026-10-31' }, 1, 20))
   await actor.click(screen.getByRole('button', { name: 'Lan: 1 dịch vụ' }))
   expect(await screen.findByText('2 buổi trong khoảng lọc · gần nhất 16/10/2026')).toBeInTheDocument()
   await actor.click(screen.getByRole('button', { name: 'Xóa lọc' }))
-  await waitFor(() => expect(listResource).toHaveBeenCalledWith('treatments', { customerSearch: '' }, 1, 100))
+  await waitFor(() => expect(listTreatmentCustomers).toHaveBeenCalledWith({ customerSearch: '' }, 1, 20))
 })

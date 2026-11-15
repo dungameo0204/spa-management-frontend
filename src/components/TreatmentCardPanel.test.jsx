@@ -133,3 +133,9 @@ it('does not ask finite cards to sign completion', () => {
   expect(screen.queryByRole('button', { name: 'Ký kết thúc liệu trình' })).toBeNull()
   expect(screen.queryByRole('button', { name: 'Thực hiện' })).toBeNull()
 })
+
+it('uses the list endpoint today execution count when histories are omitted', () => {
+  card = { id: 99, product_name: 'Đã làm hôm nay', remaining_sessions: 1, total_sessions: 5, today_execution_count: 2 }
+  render(<QueryClientProvider client={new QueryClient()}><TreatmentCardPanel card={card} embedded /></QueryClientProvider>)
+  expect(screen.getByText('Đã thực hiện 2 buổi hôm nay')).toBeInTheDocument()
+})

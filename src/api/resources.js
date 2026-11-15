@@ -13,6 +13,9 @@ function endpoint(resource) { const path = paths[resource]; if (!path) throw new
 export function listResource(resource, filters = {}, page = 1, pageSize = 20, signal) {
   return request(endpoint(resource), { query: { ...filters, page, pageSize }, signal }).then(result => normalizePagedResponse(result, page, pageSize))
 }
+export function listTreatmentCustomers(filters = {}, page = 1, pageSize = 20, signal) {
+  return request('/api/treatments/customers', { query: { ...filters, page, pageSize }, signal }).then(result => normalizePagedResponse(result, page, pageSize))
+}
 export function getResource(resource, id, filters = {}) {
   if (resource === 'commissions') throw new Error('API chi tiết không khả dụng cho tài nguyên này')
   return request(`${endpoint(resource)}/${encodeURIComponent(id)}`, { query: filters }).then(result => result.data)

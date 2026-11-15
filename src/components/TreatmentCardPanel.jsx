@@ -38,7 +38,7 @@ export default function TreatmentCardPanel({ card, branchId, onOpen, showHistory
   const canExecuteThisCard = !current.closed_at && cards.some(canExecuteCard)
   const hasDetail = Boolean(onOpen && !showHistory)
   const visitCount = grouped ? treatmentHistoryGroups(current).length : (current.histories?.length || 0)
-  const todayExecutions = grouped
+  const todayExecutions = current.today_execution_count != null ? Number(current.today_execution_count) : grouped
     ? treatmentHistoryGroups(current).filter(group => group.day === today()).length
     : (current.histories?.filter(h => dateOnly(h.execution_date) === today()).length || 0)
   const branchList = Array.isArray(branches) ? branches : (branches?.data || branchesQuery.data || [])

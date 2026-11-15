@@ -3,7 +3,7 @@
   "private": true,
   "description": "ROSA - Phần mềm quản lý bán hàng, khách hàng và vận hành spa",
   "author": "ROSA",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "type": "module",
   "main": "desktop/main.cjs",
   "scripts": {

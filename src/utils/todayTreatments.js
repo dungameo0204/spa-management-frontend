@@ -104,13 +104,24 @@ function legacyHistoryGroups(card, parentChildHistoryIds) {
   return groups
 }
 
+function parentHistoryChildren(card, parentHistory) {
+  const histories = new Map((parentHistory.children || []).filter(history => !history.deleted_at).map(history => [Number(history.id), history]))
+  for (const child of card.children || []) {
+    for (const history of child.histories || []) {
+      if (!history.deleted_at && Number(history.parent_history_id) === Number(parentHistory.id)) histories.set(Number(history.id), history)
+    }
+  }
+  return [...histories.values()]
+}
+
 // New visits are explicit parent treatment-history records. Child-only legacy rows
 // use the copied SVG, or contiguous IDs for unsigned rows, as display-only markers.
 export function treatmentHistoryGroups(card) {
   const cards = treatmentCards(card)
   const childOrder = new Map((card.children || []).map((child, index) => [Number(child.id), index]))
-  const parentVisits = (card.histories || []).filter(history => !history.deleted_at && Array.isArray(history.children))
-  const parentChildHistoryIds = new Set(parentVisits.flatMap(history => history.children || []).map(history => Number(history.id)))
+  const parentVisits = (card.histories || []).filter(history => !history.deleted_at && (Array.isArray(history.children) || (card.children || []).some(child => (child.histories || []).some(childHistory => Number(childHistory.parent_history_id) === Number(history.id)))))
+  const parentChildren = new Map(parentVisits.map(history => [Number(history.id), parentHistoryChildren(card, history)]))
+  const parentChildHistoryIds = new Set([...parentChildren.values()].flatMap(histories => histories).map(history => Number(history.id)))
   const groups = parentVisits.map(history => ({
     key: `history:${history.id}`,
     history,
@@ -119,7 +130,7 @@ export function treatmentHistoryGroups(card) {
     branch_id: history.branch_id,
     branch_name: history.branch_name,
     firstCreatedAt: history.created_at || history.execution_date,
-    sessions: history.children.filter(child => !child.deleted_at).map(child => {
+    sessions: parentChildren.get(Number(history.id)).map(child => {
       const childCard = cards.find(candidate => Number(candidate.id) === Number(child.treatment_id))
       return { card: { ...(childCard || { id: child.treatment_id, product_name: `Dịch vụ #${child.treatment_id}` }), customer_name: card.customer_name }, history: child }
     }),

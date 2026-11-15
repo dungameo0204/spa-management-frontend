@@ -135,3 +135,28 @@ it('mở buổi cũ đã ký trong hồ sơ, sửa note và tải lại overview
     expect(executeTreatment).not.toHaveBeenCalled()
   } finally { overview.timeline[0].treatment.histories = [] }
 })
+
+it('hiển thị lịch sử nhóm cha/con từ overview trong đúng thẻ liệu trình', async () => {
+  const groupedOverview = {
+    customer: { id: 17, fullname: 'Khách thử' },
+    timeline: [{
+      type: 'treatment',
+      date: '2026-10-28',
+      treatment: {
+        id: 36, product_name: 'Gói chăm sóc da', remaining_sessions: 2, total_sessions: 5,
+        children: [{ id: 37, product_name: 'Laser', remaining_sessions: 1, total_sessions: 2, histories: [{ id: 71, treatment_id: 37, parent_history_id: 70, branch_id: 1, staffs: [{ staff_name: 'KTV Lan' }] }] }, { id: 38, product_name: 'Đắp mặt nạ', remaining_sessions: 1, total_sessions: 2, histories: [{ id: 72, treatment_id: 38, parent_history_id: 70, branch_id: 1, staffs: [{ staff_name: 'KTV Hoa' }] }] }],
+        histories: [{ id: 70, treatment_id: 36, execution_date: '2026-10-28', branch_id: 1, branch_name: 'CS 1', note: 'Da ổn' }],
+      },
+    }],
+  }
+  const client = new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } })
+  render(<QueryClientProvider client={client}><CustomerOverview customerId={17} overview={groupedOverview} onOverview={vi.fn()} /></QueryClientProvider>)
+  const actor = userEvent.setup()
+  await actor.click(screen.getByRole('button', { name: 'Xem lịch sử' }))
+  expect(screen.getByText('28/10/2026 · CS 1')).toBeInTheDocument()
+  expect(document.querySelectorAll('.treatment-history-service-row')).toHaveLength(2)
+  expect(screen.getByText('Laser')).toBeInTheDocument()
+  expect(screen.getByText('Đắp mặt nạ')).toBeInTheDocument()
+  expect(screen.getByText('KTV Lan')).toBeInTheDocument()
+  expect(screen.getByText('KTV Hoa')).toBeInTheDocument()
+})
