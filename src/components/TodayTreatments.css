@@ -20,7 +20,7 @@
 .today-treatments .today-child-service { display:flex; align-items:center; gap:8px; }
 .today-treatments .today-child-service::before { content:'↳'; color:var(--muted); }
 .today-treatments .today-session-id { font-size:11px; color:var(--muted); }
-.today-treatments td[data-label="Đã làm hôm nay"] { text-align:center; }
+.today-treatments td[data-label="Đã thực hiện"] { text-align:center; }
 .today-treatments .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
 .today-treatments table { min-width: 660px; width: 100%; }
 .today-treatments th,
@@ -37,6 +37,12 @@
 .today-treatments .today-treatment-note .session-followup-button { display:inline-flex; align-items:center; justify-content:center; width:26px; min-width:26px; padding:0; margin-left:auto; }
 .today-treatments .today-treatments-heading { align-items:center; gap:16px; }
 .today-treatments .today-date-picker { display:flex; align-items:end; gap:7px; flex-wrap:wrap; }
+.today-treatments .today-filter-controls { display:grid; gap:7px; justify-items:end; }
+.today-treatments .today-filter-mode, .today-treatments .today-range-picker, .today-treatments .today-range-presets { display:flex; align-items:end; gap:7px; flex-wrap:wrap; }
+.today-treatments .today-filter-mode .btn, .today-treatments .today-range-presets .btn { min-height:34px; padding:6px 9px; font-size:12px; }
+.today-treatments .today-range-separator { color:var(--muted); padding-bottom:8px; }
+.today-treatments .today-range-day th { padding:10px 8px 6px; color:var(--sage); background:var(--white); text-align:left; }
+.today-treatments .today-range-day th > span { margin-right:10px; }
 .today-treatments .today-date-input { display:grid; gap:3px; color:var(--muted); font-size:11px; font-weight:600; }
 .today-treatments .today-date-input input { min-height:34px; padding:6px 8px; border:1px solid var(--line); border-radius:8px; background:var(--white); color:var(--ink); font:inherit; }
 .today-treatments .today-date-picker .icon-btn { width:34px; height:34px; }
@@ -162,6 +168,8 @@
 @media(max-width: 700px) {
   .today-treatments .today-treatments-heading { align-items:flex-start; }
   .today-treatments .today-date-picker { width:100%; }
+  .today-treatments .today-filter-controls { width:100%; justify-items:stretch; }
+  .today-treatments .today-range-picker { width:100%; }
   .today-treatments .today-treatments-status-row { align-items:flex-start; flex-direction:column; }
   .today-treatments .today-treatments-toolbar { margin-left:0; }
   .today-treatments .today-pagination {
@@ -258,7 +266,7 @@
     padding-bottom:8px;
   }
   .today-treatments .today-child-service { flex:1; min-width:0; }
-  .today-treatments .today-treatment-child td[data-label="Đã làm hôm nay"] {
+  .today-treatments .today-treatment-child td[data-label="Đã thực hiện"] {
     position:absolute;
     top:8px;
     right:10px;
@@ -304,7 +312,7 @@
     color:var(--ink);
     font-weight:700;
   }
-  .today-treatments .today-treatment-standalone td[data-label="Đã làm hôm nay"] {
+  .today-treatments .today-treatment-standalone td[data-label="Đã thực hiện"] {
     position:absolute;
     top:17px;
     right:10px;
@@ -331,7 +339,7 @@
     border-top:1px solid color-mix(in srgb, var(--sage) 18%, transparent);
   }
 
-  .today-treatments td[data-label="Đã làm hôm nay"] input {
+  .today-treatments td[data-label="Đã thực hiện"] input {
     display:block;
     width:19px;
     height:19px;

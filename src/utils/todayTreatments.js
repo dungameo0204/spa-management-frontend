@@ -15,8 +15,15 @@ export function findTreatmentHistory(card, historyId) {
   return null
 }
 
-export function todayTreatmentRows(roots, details, day, branchId) {
+export function todayTreatmentRows(roots, details, startDate, endDateOrBranch, explicitBranchId) {
+  // Keep the former four-argument API for callers that view a single day.
+  const endDate = explicitBranchId === undefined ? startDate : endDateOrBranch
+  const branchId = explicitBranchId === undefined ? endDateOrBranch : explicitBranchId
   const matchesBranch = id => !branchId || Number(id) === Number(branchId)
+  const inRange = value => {
+    const day = dateOnly(value)
+    return day >= startDate && day <= endDate
+  }
   return roots.flatMap((root, index) => {
     const detail = details[index]
     // The execution-date list is the authoritative snapshot for a real visit.
@@ -24,7 +31,7 @@ export function todayTreatmentRows(roots, details, day, branchId) {
     // otherwise a child removed by a grouped PUT can reappear in the table.
     const card = Array.isArray(root.histories) ? root : mergeTreatmentCards([root], detail?.data ? [detail.data] : [])[0]
     const cards = treatmentCards(card)
-    const historiesFor = item => (item.histories || []).filter(history => dateOnly(history.execution_date) === day && matchesBranch(history.branch_id) && !history.deleted_at)
+    const historiesFor = item => (item.histories || []).filter(history => inRange(history.execution_date) && matchesBranch(history.branch_id) && !history.deleted_at)
 
     const hasHistoriesToday = cards.some(item => historiesFor(item).length > 0)
     if (!hasHistoriesToday) return []
@@ -32,16 +39,16 @@ export function todayTreatmentRows(roots, details, day, branchId) {
     // Group histories are explicit API relationships. Legacy histories without a parent remain separate rows.
     if (card.children?.length) {
       const childCards = card.children || []
-      const groups = treatmentHistoryGroups(card).filter(group => group.day === day && matchesBranch(group.branch_id))
+      const groups = treatmentHistoryGroups(card).filter(group => group.day >= startDate && group.day <= endDate && matchesBranch(group.branch_id))
       return groups.flatMap(group => {
         const parentVisit = Array.isArray(group.history?.children)
         const visitChildren = parentVisit
           ? childCards.map(child => {
               const session = group.sessions.find(entry => Number(entry.card.id) === Number(child.id))
-              return { card: { ...child, customer_name: child.customer_name || card.customer_name, branch_id: child.branch_id ?? card.branch_id }, detail, history: session?.history || null, child: true, groupKey: group.key, parentHistoryId: group.history.id }
+              return { card: { ...child, customer_name: child.customer_name || card.customer_name, branch_id: child.branch_id ?? card.branch_id }, detail, history: session?.history || null, child: true, day: group.day, groupKey: group.key, parentHistoryId: group.history.id }
             })
-          : group.sessions.map(({ card: child, history }) => ({ card: child, detail, history, child: true, groupKey: group.key, parentHistoryId: null }))
-        return [{ card, detail, group: true, groupKey: group.key, groupTitle: card.product_name, history: group.history, sessions: group.sessions }, ...visitChildren]
+          : group.sessions.map(({ card: child, history }) => ({ card: child, detail, history, child: true, day: group.day, groupKey: group.key, parentHistoryId: null }))
+        return [{ card, detail, group: true, day: group.day, groupKey: group.key, groupTitle: card.product_name, history: group.history, sessions: group.sessions }, ...visitChildren]
       })
     }
 
@@ -49,7 +56,7 @@ export function todayTreatmentRows(roots, details, day, branchId) {
     const histories = historiesFor(card)
     const inherited = { ...card, customer_name: card.customer_name, branch_id: card.branch_id }
     return histories.length
-      ? histories.map(history => ({ card: inherited, detail, history, multiple: histories.length > 1, child: false }))
+      ? histories.map(history => ({ card: inherited, detail, history, day: dateOnly(history.execution_date), multiple: histories.length > 1, child: false }))
       : []
   })
 }

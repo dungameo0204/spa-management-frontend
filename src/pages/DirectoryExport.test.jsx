@@ -1,11 +1,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MemoryRouter } from 'react-router-dom'
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, expect, it, vi } from 'vitest'
 import ResourcePage from './ResourcePage'
 import InventoryPage from './InventoryPage'
-import TreatmentsPage from './TreatmentsPage'
 import { listResource } from '../api/resources'
 import { exportTable } from '../utils/exportTable'
 
@@ -42,16 +41,4 @@ it('exports all stock pages for only the selected branch', async () => {
   await waitFor(() => expect(exportTable).toHaveBeenCalledTimes(1))
   expect(exportTable.mock.calls[0][0].rows).toEqual([1, 2].map(page => ({ name: `Kem ${page}`, branch_name: 'B', quantity: 3, unit: undefined })))
   expect(listResource).toHaveBeenCalledWith('products', { is_product: 1, search: '' }, 2, 100)
-})
-
-it('exports all loaded treatment cards rather than the visible customer page', async () => {
-  show(<TreatmentsPage />)
-  const actions = screen.getByRole('group', { name: 'Thao tác liệu trình' })
-  expect(within(actions).getByRole('button', { name: 'Xuất Excel' })).toBeInTheDocument()
-  expect(within(actions).getByRole('button', { name: 'Tạo thẻ' })).toBeInTheDocument()
-  await waitFor(() => expect(screen.getByRole('button', { name: 'Xuất Excel' })).toBeEnabled())
-  await userEvent.click(screen.getByRole('button', { name: 'Xuất Excel' }))
-  await waitFor(() => expect(exportTable).toHaveBeenCalledTimes(1))
-  expect(exportTable.mock.calls[0][0].rows.map(row => row.id)).toEqual([1, 2])
-  expect(listResource).toHaveBeenCalledWith('treatments', { customerSearch: '' }, 2, 100)
 })

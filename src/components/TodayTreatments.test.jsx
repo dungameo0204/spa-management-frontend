@@ -24,6 +24,27 @@ it('loads a historical day with the execution-date API filter instead of treatme
   expect(screen.getByRole('button', { name: 'Sửa nhân viên Khách A - Laser' })).toHaveTextContent('Lan')
 })
 
+it('applies an inclusive date range and groups the displayed visits by day', async () => {
+  listResource.mockImplementation(async (resource, filters = {}) => {
+    if (resource !== 'treatments') return { data: [], totalPages: 1 }
+    if (filters.executionStartDate === '2026-10-19' && filters.executionEndDate === '2026-10-20') return { data: [
+      { id: 10, customer_name: 'Khách A', product_name: 'Laser', histories: [{ id: 50, execution_date: '2026-10-20', branch_id: 1, staffs: [] }] },
+      { id: 11, customer_name: 'Khách B', product_name: 'Peel', histories: [{ id: 51, execution_date: '2026-10-19', branch_id: 1, staffs: [] }] },
+    ], totalPages: 1 }
+    return { data: [], totalPages: 1 }
+  })
+  render(<QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}><TodayTreatments /></QueryClientProvider>)
+  fireEvent.click(screen.getByRole('button', { name: 'Khoảng ngày' }))
+  fireEvent.change(screen.getByLabelText('Từ ngày'), { target: { value: '2026-10-19' } })
+  fireEvent.change(screen.getByLabelText('Đến ngày'), { target: { value: '2026-10-20' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Xem' }))
+  await waitFor(() => expect(listResource).toHaveBeenCalledWith('treatments', { executionStartDate: '2026-10-19', executionEndDate: '2026-10-20' }, 1, 100))
+  expect(await screen.findByText('20/10/2026')).toBeInTheDocument()
+  expect(screen.getByText('19/10/2026')).toBeInTheDocument()
+  fireEvent.click(screen.getAllByRole('button', { name: 'Xem riêng ngày này' })[0])
+  expect(screen.getByLabelText('Ngày xem')).toHaveValue('19/10/2026')
+})
+
 it('renders an executed child service for a historical day instead of its parent package', async () => {
   listResource.mockImplementation(async (resource, filters = {}) => {
     if (resource !== 'treatments') return { data: [], totalPages: 1 }

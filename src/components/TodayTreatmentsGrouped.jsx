@@ -21,12 +21,19 @@ export default function TodayTreatments() {
   const { branchId } = useBranch(), { user } = useAuth(), qc = useQueryClient()
   const manager = user.system_role === 'MANAGER'
   const [viewDate, setViewDate] = useState(today)
+  const [filterMode, setFilterMode] = useState('day')
+  const [rangeStart, setRangeStart] = useState(today), [rangeEnd, setRangeEnd] = useState(today)
+  const [appliedRange, setAppliedRange] = useState(() => ({ start: today(), end: today() }))
   const [sessionEditor, setSessionEditor] = useState(null)
   const [page, setPage] = useState(1), [selected, setSelected] = useState(null), [undo, setUndo] = useState(null), [groupRemoval, setGroupRemoval] = useState(null)
   const [staffs, setStaffs] = useState([]), [message, setMessage] = useState(''), [messageType, setMessageType] = useState('success')
-  const todayDate = today(), viewingToday = viewDate === todayDate
-  const query = useQuery({ queryKey: ['dashboard-treatments', viewDate, branchId], queryFn: async () => {
-    const executionFilters = { executionStartDate: viewDate, executionEndDate: viewDate }
+  const todayDate = today(), rangeActive = filterMode === 'range'
+  const executionStartDate = rangeActive ? appliedRange.start : viewDate
+  const executionEndDate = rangeActive ? appliedRange.end : viewDate
+  const viewingToday = !rangeActive && viewDate === todayDate
+  const resetInteraction = () => { setPage(1); setSelected(null); setUndo(null); setGroupRemoval(null); setMessage('') }
+  const query = useQuery({ queryKey: ['dashboard-treatments', executionStartDate, executionEndDate, branchId], queryFn: async () => {
+    const executionFilters = { executionStartDate, executionEndDate }
     const executedCards = await listAllResource('treatments', executionFilters)
     return mergeTreatmentCards(executedCards)
   } })
@@ -44,29 +51,30 @@ export default function TodayTreatments() {
   // The list endpoint includes child cards but not their execution histories.
   // Only skip detail requests when histories are explicitly present on every card.
   const cardDetails = useQueries({ queries: allCards.map(card => ({
-    queryKey: ['dashboard-treatments', 'detail', card.id, viewDate],
-    queryFn: () => getResource('treatments', card.id, { executionStartDate: viewDate, executionEndDate: viewDate }),
+    queryKey: ['dashboard-treatments', 'detail', card.id, executionStartDate, executionEndDate],
+    queryFn: () => getResource('treatments', card.id, { executionStartDate, executionEndDate }),
     enabled: treatmentCards(card).some(item => !Array.isArray(item.histories)),
     initialData: treatmentCards(card).every(item => Array.isArray(item.histories)) ? card : undefined,
   })) })
   const detailError = cardDetails.find(detail => detail.isError)?.error
-  const rows = todayTreatmentRows(allCards, cardDetails, viewDate, branchId)
+  const rows = todayTreatmentRows(allCards, cardDetails, executionStartDate, executionEndDate, branchId)
 
   // Gom các dòng theo khối lượt thực hiện (block) để không bao giờ bị cắt đôi giữa 2 trang
   const blocks = []
   let currentBlock = null
   for (const row of rows) {
     if (row.group) {
-      currentBlock = { groupRow: row, childRows: [] }
+      currentBlock = { day: row.day, groupRow: row, childRows: [] }
       blocks.push(currentBlock)
     } else if (currentBlock && row.child) {
       currentBlock.childRows.push(row)
     } else {
       currentBlock = null
-      blocks.push({ groupRow: null, childRows: [row] })
+      blocks.push({ day: row.day, groupRow: null, childRows: [row] })
     }
   }
 
+  blocks.sort((a, b) => a.day.localeCompare(b.day) || Number(a.groupRow?.history?.id || a.childRows[0]?.history?.id || 0) - Number(b.groupRow?.history?.id || b.childRows[0]?.history?.id || 0))
   const PAGE_SIZE = 10
   const pages = Math.max(1, Math.ceil(blocks.length / PAGE_SIZE))
   const currentPage = Math.min(page, pages)
@@ -76,12 +84,22 @@ export default function TodayTreatments() {
   function changeViewDate(offset) {
     const date = new Date(`${viewDate}T12:00:00+07:00`)
     date.setUTCDate(date.getUTCDate() + offset)
-    setViewDate(date.toISOString().slice(0, 10)); setPage(1); setSelected(null); setUndo(null); setGroupRemoval(null); setMessage('')
+    setViewDate(date.toISOString().slice(0, 10)); resetInteraction()
   }
   function selectViewDate(value) {
     if (!value || value > todayDate) return
-    setViewDate(value); setPage(1); setSelected(null); setUndo(null); setGroupRemoval(null); setMessage('')
+    setFilterMode('day'); setViewDate(value); resetInteraction()
   }
+  function applyRange() {
+    if (!rangeStart || !rangeEnd) { setMessageType('error'); setMessage('Vui lòng chọn đủ từ ngày và đến ngày.'); return }
+    if (rangeStart > rangeEnd) { setMessageType('error'); setMessage('Từ ngày không được sau đến ngày.'); return }
+    if (rangeEnd > todayDate) { setMessageType('error'); setMessage('Không thể xem ngày trong tương lai.'); return }
+    setAppliedRange({ start: rangeStart, end: rangeEnd }); resetInteraction()
+  }
+  function applyPreset(start, end) {
+    setFilterMode('range'); setRangeStart(start); setRangeEnd(end); setAppliedRange({ start, end }); resetInteraction()
+  }
+  function viewSingleDay(day) { setFilterMode('day'); setViewDate(day); resetInteraction() }
   async function refreshTreatments() {
     setSelected(null); setUndo(null); setGroupRemoval(null); setMessage('')
     try {
@@ -162,14 +180,15 @@ export default function TodayTreatments() {
     mutation.mutate(groupRemoval.draft)
   }
   return <section className="section-card today-treatments">
-    <div className="surface-heading today-treatments-heading"><div><span className="eyebrow">KHÁCH LÀM DỊCH VỤ</span><h2>{viewingToday ? 'Khách hàng hôm nay' : `Khách hàng ngày ${formatSpaDate(viewDate)}`}</h2></div><div className="today-date-picker" aria-label="Chọn ngày xem khách hàng"><button type="button" className="icon-btn" aria-label="Ngày trước" onClick={() => changeViewDate(-1)}><ChevronLeft size={20} /></button><label className="today-date-input"><span>Ngày xem</span><DateInput aria-label="Ngày xem" max={todayDate} value={viewDate} onChange={selectViewDate} /></label><button type="button" className="btn secondary today-button" disabled={viewingToday} onClick={() => selectViewDate(todayDate)}>Hôm nay</button><button type="button" className="icon-btn" aria-label="Ngày tiếp theo" disabled={viewingToday} onClick={() => changeViewDate(1)}><ChevronRight size={20} /></button></div></div>
-    <div className="today-treatments-status-row"><p className="small-muted">{viewingToday ? <>Các lần thực hiện hôm nay. Với liệu trình nhóm, tick/bỏ tick và nhân viên được lưu cùng lúc cho cả lần đến.{!manager && ' Nhân viên chỉ được sửa/xóa lịch sử có ngày thực hiện và ngày tạo đều là hôm nay, tại cơ sở của mình.'}</> : manager ? <>Đang xem các buổi đã thực hiện ngày {formatSpaDate(viewDate)}. Quản lý có thể sửa lần thực hiện, nhân viên hoặc hoàn tác tại ngày này.</> : <>Đang xem các buổi đã thực hiện ngày {formatSpaDate(viewDate)}. Nhân viên chỉ có thể gán lại nhân viên thực hiện.</>}</p><div className="list-toolbar today-treatments-toolbar"><span className="list-count">{blocks.length} lượt khách</span><RefreshButton label="Tải lại danh sách khách hàng" disabled={query.isFetching} onClick={refreshTreatments} /></div></div>
+    <div className="surface-heading today-treatments-heading"><div><span className="eyebrow">KHÁCH LÀM DỊCH VỤ</span><h2>{rangeActive ? `Khách hàng từ ${formatSpaDate(executionStartDate)} đến ${formatSpaDate(executionEndDate)}` : viewingToday ? 'Khách hàng hôm nay' : `Khách hàng ngày ${formatSpaDate(viewDate)}`}</h2></div><div className="today-filter-controls"><div className="today-filter-mode" role="group" aria-label="Chế độ xem khách hàng"><button type="button" className={rangeActive ? 'btn secondary' : 'btn primary'} onClick={() => { setFilterMode('day'); resetInteraction() }}>Theo ngày</button><button type="button" className={rangeActive ? 'btn primary' : 'btn secondary'} onClick={() => { setFilterMode('range'); resetInteraction() }}>Khoảng ngày</button></div>{rangeActive ? <div className="today-range-picker" role="group" aria-label="Chọn khoảng ngày xem khách hàng"><label className="today-date-input"><span>Từ ngày</span><DateInput aria-label="Từ ngày" max={todayDate} value={rangeStart} onChange={setRangeStart} /></label><span className="today-range-separator" aria-hidden="true">→</span><label className="today-date-input"><span>Đến ngày</span><DateInput aria-label="Đến ngày" max={todayDate} value={rangeEnd} onChange={setRangeEnd} /></label><button type="button" className="btn primary today-button" onClick={applyRange}>Xem</button><div className="today-range-presets"><button type="button" className="btn secondary" onClick={() => applyPreset(todayDate, todayDate)}>Hôm nay</button><button type="button" className="btn secondary" onClick={() => { const start = new Date(`${todayDate}T12:00:00+07:00`); start.setUTCDate(start.getUTCDate() - 6); applyPreset(start.toISOString().slice(0, 10), todayDate) }}>7 ngày qua</button><button type="button" className="btn secondary" onClick={() => applyPreset(`${todayDate.slice(0, 8)}01`, todayDate)}>Tháng này</button></div></div> : <div className="today-date-picker" role="group" aria-label="Chọn ngày xem khách hàng"><button type="button" className="icon-btn" aria-label="Ngày trước" onClick={() => changeViewDate(-1)}><ChevronLeft size={20} /></button><label className="today-date-input"><span>Ngày xem</span><DateInput aria-label="Ngày xem" max={todayDate} value={viewDate} onChange={selectViewDate} /></label><button type="button" className="btn secondary today-button" disabled={viewingToday} onClick={() => selectViewDate(todayDate)}>Hôm nay</button><button type="button" className="icon-btn" aria-label="Ngày tiếp theo" disabled={viewingToday} onClick={() => changeViewDate(1)}><ChevronRight size={20} /></button></div>}</div></div>
+    <div className="today-treatments-status-row"><p className="small-muted">{rangeActive ? <>Đang xem các buổi đã thực hiện từ {formatSpaDate(executionStartDate)} đến {formatSpaDate(executionEndDate)}. Chọn một ngày để xem và thao tác nhanh từng ngày.</> : viewingToday ? <>Các lần thực hiện hôm nay. Với liệu trình nhóm, tick/bỏ tick và nhân viên được lưu cùng lúc cho cả lần đến.{!manager && ' Nhân viên chỉ được sửa/xóa lịch sử có ngày thực hiện và ngày tạo đều là hôm nay, tại cơ sở của mình.'}</> : manager ? <>Đang xem các buổi đã thực hiện ngày {formatSpaDate(viewDate)}. Quản lý có thể sửa lần thực hiện, nhân viên hoặc hoàn tác tại ngày này.</> : <>Đang xem các buổi đã thực hiện ngày {formatSpaDate(viewDate)}. Nhân viên chỉ có thể gán lại nhân viên thực hiện.</>}</p><div className="list-toolbar today-treatments-toolbar"><span className="list-count">{blocks.length} lượt khách</span><RefreshButton label="Tải lại danh sách khách hàng" disabled={query.isFetching} onClick={refreshTreatments} /></div></div>
     {message && !selected && <p role={messageType === 'error' ? 'alert' : 'status'} className={messageType === 'error' ? 'form-alert' : 'success-alert'}>{message}</p>}
     {detailError && <p role="alert" className="form-alert">Không tải được lịch sử thực hiện: {detailError.message}</p>}
     {query.isError ? <p className="form-alert">Không tải được thẻ: {query.error.message}</p> : query.isLoading ? <p>Đang tải thẻ...</p> : blocks.length ? <>
       <div className="table-scroll"><table><thead><tr><th>Khách hàng</th><th>Dịch vụ</th><th>{viewingToday ? 'Đã làm hôm nay' : 'Đã thực hiện'}</th><th>Nhân viên thực hiện</th><th>Ghi chú</th></tr></thead>
-      {visibleBlocks.map(block => (
-        <tbody className="today-visit" key={block.groupRow ? `block-group-${block.groupRow.card.id}-${block.groupRow.groupKey || '0'}` : `block-standalone-${block.childRows[0]?.card.id}-${block.childRows[0]?.history?.id || 'new'}`}>
+      {visibleBlocks.map((block, index) => <Fragment key={block.groupRow ? `block-group-${block.groupRow.card.id}-${block.groupRow.groupKey || '0'}` : `block-standalone-${block.childRows[0]?.card.id}-${block.childRows[0]?.history?.id || 'new'}`}>
+        {rangeActive && (index === 0 || visibleBlocks[index - 1].day !== block.day) && <tbody className="today-range-day"><tr><th colSpan={5}><span>{block.day === todayDate ? `${formatSpaDate(block.day)} · Hôm nay` : formatSpaDate(block.day)}</span><button type="button" className="text-action" onClick={() => viewSingleDay(block.day)}>Xem riêng ngày này</button></th></tr></tbody>}
+        <tbody className="today-visit">
           {block.groupRow && (() => {
             const { card, groupKey, groupTitle, history: groupHistory, sessions: rowSessions } = block.groupRow
             const sessions = rowSessions || []
@@ -203,7 +222,7 @@ export default function TodayTreatments() {
               <tr className={child ? 'today-treatment-child' : 'today-treatment-standalone'} data-history-id={history?.id}>
                 <td data-label="Khách hàng">{child ? null : card.customer_name}</td>
                 <td data-label="Dịch vụ"><span className={child ? 'today-child-service' : undefined}>{card.product_name}</span></td>
-                <td data-label="Đã làm hôm nay"><input type="checkbox" aria-label={`Đã làm ${card.customer_name} - ${card.product_name}${suffix}`} checked={checked} disabled={groupedVisit ? !canEditGroup || mutation.isPending || undoMutation.isPending || Boolean(groupRemoval) : !history || !canUndo || mutation.isPending || undoMutation.isPending} onChange={e => groupedVisit ? toggleGroupChild(block.groupRow.card, parentHistory, block.childRows, card, history, e.target.checked) : e.target.checked ? pick(card, history) : canUndo && setUndo(history.id)} /></td>
+                <td data-label="Đã thực hiện"><input type="checkbox" aria-label={`Đã làm ${card.customer_name} - ${card.product_name}${suffix}`} checked={checked} disabled={groupedVisit ? !canEditGroup || mutation.isPending || undoMutation.isPending || Boolean(groupRemoval) : !history || !canUndo || mutation.isPending || undoMutation.isPending} onChange={e => groupedVisit ? toggleGroupChild(block.groupRow.card, parentHistory, block.childRows, card, history, e.target.checked) : e.target.checked ? pick(card, history) : canUndo && setUndo(history.id)} /></td>
                 <td data-label="Nhân viên thực hiện">
                   {active && (selected?.type !== 'group' || selected.showStaffPicker) ? 'Đang chọn nhân viên bên dưới' : groupedVisit && checked && canEditGroup ? <button type="button" className="text-action" onClick={() => openGroupDraft(block.groupRow.card, parentHistory, block.childRows, card, history)} aria-label={`Sửa nhân viên ${card.customer_name} - ${card.product_name}${suffix}`}>{history ? staffSummary(history) || 'Chưa gán NV' : 'Gán nhân viên'}</button> : history ? canAssign ? <button type="button" className="text-action" onClick={() => pick(card, history)} aria-label={`Sửa nhân viên ${card.customer_name} - ${card.product_name}${suffix}`}>{staffSummary(history) || 'Chưa gán NV'}</button> : (staffSummary(history) || 'Chưa gán NV') : 'Chưa thực hiện'}
                 </td>
@@ -215,7 +234,7 @@ export default function TodayTreatments() {
             </Fragment>
           })}
         </tbody>
-      ))}
+      </Fragment>)}
       </table></div>
       <Pagination
         page={currentPage}
@@ -225,7 +244,7 @@ export default function TodayTreatments() {
         onChange={setPage}
         label="lượt khách"
       />
-    </> : <p className="small-muted">{viewingToday ? 'Chưa có khách làm dịch vụ hôm nay.' : `Chưa có khách làm dịch vụ ngày ${formatSpaDate(viewDate)}.`}</p>}
+    </> : <p className="small-muted">{rangeActive ? `Chưa có khách làm dịch vụ từ ${formatSpaDate(executionStartDate)} đến ${formatSpaDate(executionEndDate)}.` : viewingToday ? 'Chưa có khách làm dịch vụ hôm nay.' : `Chưa có khách làm dịch vụ ngày ${formatSpaDate(viewDate)}.`}</p>}
     {undo && <ConfirmDialog title="Hoàn tác buổi thực hiện?" message="Buổi thực hiện và tiền công đã ghi nhận sẽ bị hoàn tác." pending={undoMutation.isPending} onCancel={() => setUndo(null)} onConfirm={() => undoMutation.mutate(undo)} />}
     {groupRemoval && <ConfirmDialog title="Bỏ dịch vụ khỏi lần thực hiện?" message={groupRemoval.removesVisit ? `Bỏ ${groupRemoval.serviceName} sẽ xóa lần thực hiện này và hoàn lại buổi dịch vụ.` : `Bỏ ${groupRemoval.serviceName} sẽ hoàn lại buổi dịch vụ này khỏi lần thực hiện.`} pending={mutation.isPending} confirmLabel="Bỏ dịch vụ" onCancel={() => setGroupRemoval(null)} onConfirm={confirmGroupRemoval} />}
     {sessionEditor && (sessionEditor.group ? <TreatmentGroupSessionDialog card={sessionEditor.card} history={sessionEditor.history} user={user} onClose={() => setSessionEditor(null)} /> : <TreatmentSessionDialog history={sessionEditor.history} card={sessionEditor.card} user={user} onClose={() => setSessionEditor(null)} />)}

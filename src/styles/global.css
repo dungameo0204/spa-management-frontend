@@ -7,7 +7,7 @@
 .today-date-picker>.btn{padding:8px 12px}
 .customer-debt-actions{margin:12px 0 18px}
 .customer-debt-actions .btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
-@media(max-width:600px){.today-treatments-heading{align-items:flex-start}.today-date-picker{width:100%}.today-date-picker .today-date-input{flex:1;width:auto}.today-date-picker>.btn{padding:8px 10px}}
+@media(max-width:600px){.today-treatments-heading{align-items:flex-start}.today-date-picker{width:100%}.today-date-picker .today-date-input{flex:1;width:auto}.today-date-picker>.btn{padding:8px 10px}.today-range-picker .today-date-input{flex:1 1 130px;width:auto}.today-range-presets{width:100%}}
 .page-heading-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
 @media(max-width:767px){.page-heading-actions{width:100%}.page-heading-actions .btn{flex:1 1 140px;width:auto}}
 /* Receipt printed outside drawers; page size is chosen at runtime by ReceiptPrint. */

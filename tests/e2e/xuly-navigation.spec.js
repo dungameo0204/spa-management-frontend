@@ -58,6 +58,13 @@ for (const width of [1440, 390, 320]) {
     await expect(section.locator('tbody > tr')).toHaveCount(20)
     await group.getByRole('button', { name: 'Hôm nay', exact: true }).click()
     await expect(group.getByLabel('Ngày xem', { exact: true })).toHaveValue('2026-11-06')
+    await page.getByRole('button', { name: 'Khoảng ngày', exact: true }).click()
+    const range = page.getByLabel('Chọn khoảng ngày xem khách hàng')
+    await range.getByLabel('Từ ngày').fill('04/11/2026')
+    await range.getByLabel('Đến ngày').fill('06/11/2026')
+    await range.getByRole('button', { name: 'Xem', exact: true }).click()
+    await expect(range).toBeVisible()
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   })
 }
 

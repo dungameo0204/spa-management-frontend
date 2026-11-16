@@ -40,6 +40,17 @@ describe('todayTreatmentRows', () => {
     expect(rows.filter(row => row.child).map(row => row.history?.id)).toEqual([501])
   })
 
+  it('includes independent visits from every day of an inclusive execution range', () => {
+    const root = { id: 10, customer_name: 'Khách A', product_name: 'Laser', histories: [
+      { id: 501, execution_date: '2026-11-05', branch_id: 1 },
+      { id: 502, execution_date: '2026-11-06', branch_id: 1 },
+      { id: 503, execution_date: '2026-11-07', branch_id: 1 },
+      { id: 504, execution_date: '2026-11-08', branch_id: 1 },
+    ] }
+    const rows = todayTreatmentRows([root], [], '2026-11-06', '2026-11-07', 1)
+    expect(rows.map(row => [row.history.id, row.day])).toEqual([[502, '2026-11-06'], [503, '2026-11-07']])
+  })
+
   it('shows every child in a real parent visit without adding a synthetic unperformed visit', () => {
     const day = '2026-11-07'
     const root = {

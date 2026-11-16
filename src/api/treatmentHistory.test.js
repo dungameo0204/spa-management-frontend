@@ -1,5 +1,5 @@
 import { afterEach, expect, it, vi } from 'vitest'
-import { getResource, listAllResource, updateGroupedTreatmentExecution, updateTreatmentHistoryNote } from './resources'
+import { getResource, listAllResource, listTreatmentCustomers, updateGroupedTreatmentExecution, updateTreatmentHistoryNote } from './resources'
 
 afterEach(() => vi.unstubAllGlobals())
 
@@ -20,6 +20,14 @@ it('loads all pages of both execution and creation lists', async () => {
     expect(await listAllResource('treatments', filters)).toHaveLength(103)
   }
   expect(fetch).toHaveBeenCalledTimes(4)
+})
+
+it('requests customer-paged treatments from the dedicated endpoint with the supplied filters', async () => {
+  vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ total: 21, page: 2, pageSize: 20, totalPages: 2, data: [{ customer_id: 9, active_treatments: [], completed_treatments: [] }] }) }))
+  const result = await listTreatmentCustomers({ customerSearch: 'Lan', executionStartDate: '2026-11-07' }, 2, 20)
+  expect(fetch.mock.calls[0][0].pathname).toBe('/api/treatments/customers')
+  expect(fetch.mock.calls[0][0].searchParams.toString()).toBe('customerSearch=Lan&executionStartDate=2026-11-07&page=2&pageSize=20')
+  expect(result).toMatchObject({ total: 21, page: 2, totalPages: 2, data: [{ customer_id: 9 }] })
 })
 
 it('updates only the requested history endpoint, including null', async () => {
