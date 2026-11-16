@@ -17,7 +17,7 @@ it('prints grouped child services once, notes, staff and payment history', () =>
 
   expect(screen.getAllByText('Dịch vụ điều trị:')).toHaveLength(2)
   expect(screen.queryByText('Nội dung tư vấn')).not.toBeInTheDocument()
-  expect(screen.getByText(/Chăm sóc da × Không giới hạn/)).toBeInTheDocument()
+  expect(screen.getByText(/Chăm sóc da × Trọn gói/)).toBeInTheDocument()
   const cover = document.querySelector('.customer-record-cover')
   expect(cover.textContent.indexOf('KHAI THÁC TIỀN SỬ')).toBeLessThan(cover.textContent.indexOf('THÔNG TIN TƯ VẤN'))
   const paymentRows = document.querySelectorAll('.customer-record-payments tbody tr')
@@ -31,7 +31,7 @@ it('prints grouped child services once, notes, staff and payment history', () =>
   expect(treatmentServiceLines[0]).toHaveTextContent('Dịch vụ điều trị:Dưỡng ẩm')
   expect(treatmentServiceLines[1]).toHaveTextContent('Chống nắng')
   expect(historyRow).toHaveTextContent('04/11/2026')
-  expect(historyRow).toHaveTextContent('Laser (lần 1/10), PNP (lần 1/không giới hạn)')
+  expect(historyRow).toHaveTextContent('Laser (lần 1/10), PNP (lần 1/Trọn gói)')
   expect(historyRow).toHaveTextContent('1')
   expect(historyRow).toHaveTextContent('Laser: KTV Lan')
   expect(historyRow).toHaveTextContent('PNP: KTV Hương')

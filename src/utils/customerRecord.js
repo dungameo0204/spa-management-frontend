@@ -87,7 +87,7 @@ export function treatmentRecordRows(roots = []) {
       id: `day:${day}`,
       execution_date: daySessions[0].history.execution_date || day,
       day,
-      services: serviceValues.map(service => `${service.name} (lần ${service.completed.join(',')}/${service.lifetime ? 'không giới hạn' : service.total || '?'})`),
+      services: serviceValues.map(service => `${service.name} (lần ${service.completed.join(',')}/${service.lifetime ? 'Trọn gói' : service.total || '?'})`),
       staff: serviceValues.filter(service => service.staff.length).map(service => `${service.name}: ${[...new Set(service.staff)].join(', ')}`),
       notes: notesFor(daySessions.flatMap(session => [session.visit.note, session.history.note])),
       signature: daySessions.map(session => session.history.customer_signature_svg || session.visit.signature).find(Boolean),

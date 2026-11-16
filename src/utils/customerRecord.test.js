@@ -21,6 +21,13 @@ it('combines all treatment visits on the same date into one row while preserving
   expect(rows[1]).toMatchObject({ visitNumber: 2, services: ['Laser (lần 3/10)'] })
 })
 
+it('labels null session totals as package treatments in printed treatment rows', () => {
+  const rows = treatmentRecordRows([
+    { id: 1, product_id: 7, product_name: 'PRP', total_sessions: null, histories: [{ id: 1, execution_date: '2026-03-01 08:00:00' }] },
+  ])
+  expect(rows[0].services).toEqual(['PRP (lần 1/Trọn gói)'])
+})
+
 it('sorts initial and supplementary payments chronologically', () => {
   expect(paymentRecordRows([{ id: 3, invoice_date: '2026-03-01', paid_amount: 200 }], [{ id: 4, invoice_id: 3, payment_date: '2026-03-02', amount: 50 }])).toMatchObject([{ content: 'Thanh toán hóa đơn #3', amount: 200 }, { content: 'Thanh toán bổ sung hóa đơn #3', amount: 50 }])
 })

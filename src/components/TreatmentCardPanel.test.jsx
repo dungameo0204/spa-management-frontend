@@ -115,6 +115,19 @@ it('keeps selection on children and execution/history controls on the parent wit
   expect(screen.queryByText('Chi tiết 2 lượt thực hiện')).toBeNull()
 })
 
+it('shows grouped treatment history by newest execution date first', () => {
+  card.histories = [
+    { id: 80, execution_date: '2026-10-30', created_at: '2026-11-02T10:00:00Z', branch_id: 1, branch_name: 'CS1', children: [{ id: 90, treatment_id: 11, branch_id: 1 }] },
+    { id: 81, execution_date: '2026-11-01', created_at: '2026-11-01T08:00:00Z', branch_id: 1, branch_name: 'CS1', children: [{ id: 91, treatment_id: 11, branch_id: 1 }] },
+  ]
+  render(<QueryClientProvider client={new QueryClient()}><TreatmentCardPanel card={card} branchId={1} embedded showHistory /></QueryClientProvider>)
+
+  expect([...document.querySelectorAll('.treatment-history-day-heading > strong')].map(heading => heading.textContent)).toEqual([
+    '01/11/2026 · CS1',
+    '30/10/2026 · CS1',
+  ])
+})
+
 it('offers undo for every child in a grouped visit and identifies the selected child', async () => {
   const parentHistory = { id: 80, treatment_id: 1, execution_date: '2026-10-30', branch_id: 1, children: [{ id: 90, treatment_id: 11, branch_id: 1 }, { id: 91, treatment_id: 12, branch_id: 1 }] }
   card.histories = [parentHistory]

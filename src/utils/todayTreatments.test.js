@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { canCloseTreatment, canExecuteCard, isTreatmentComplete, todayTreatmentRows, treatmentHistoryGroups } from './todayTreatments'
+import { canCloseTreatment, canExecuteCard, isTreatmentComplete, sortTreatmentHistories, todayTreatmentRows, treatmentHistoryGroups } from './todayTreatments'
 
 const day = '2026-10-29'
 const childHistory = { id: 50, treatment_id: 2, execution_date: day, branch_id: 2, staffs: [{ staff_id: 9, staff_name: 'Lan' }] }
@@ -56,6 +56,28 @@ it('keeps repeated parent visits distinct and preserves configured child order',
   ] }
   const groups = treatmentHistoryGroups(card)
   expect(groups.map(group => [group.historyId, group.sessions.map(session => session.card.product_name)])).toEqual([[200, ['tan nhang']], [100, ['pnp', 'tan nhang']]])
+})
+
+it('orders grouped visits by execution date before created time and keeps invalid dates last', () => {
+  const card = { id: 1, product_name: 'Combo', customer_name: 'Khách', children: [{ id: 10, product_name: 'Laser' }], histories: [
+    { id: 103, execution_date: 'không hợp lệ', created_at: '2026-11-03T12:00:00Z', children: [{ id: 203, treatment_id: 10 }] },
+    { id: 101, execution_date: '2026-11-01', created_at: '2026-11-03T12:00:00Z', children: [{ id: 201, treatment_id: 10 }] },
+    { id: 102, execution_date: '2026-11-02', created_at: '2026-11-01T08:00:00Z', children: [{ id: 202, treatment_id: 10 }] },
+  ] }
+
+  expect(treatmentHistoryGroups(card).map(group => group.historyId)).toEqual([102, 101, 103])
+})
+
+it('orders single histories by execution date, then creation time and ID without mutating input', () => {
+  const histories = [
+    { id: 10, execution_date: '2026-11-01', created_at: '2026-11-01T08:00:00Z' },
+    { id: 12, execution_date: '2026-11-02', created_at: '2026-11-02T08:00:00Z' },
+    { id: 11, execution_date: '2026-11-02', created_at: '2026-11-02T08:00:00Z' },
+    { id: 13, execution_date: '', created_at: '2026-11-03T08:00:00Z' },
+  ]
+
+  expect(sortTreatmentHistories(histories).map(history => history.id)).toEqual([12, 11, 10, 13])
+  expect(histories.map(history => history.id)).toEqual([10, 12, 11, 13])
 })
 
 it('does not duplicate child histories that already belong to a real parent visit', () => {

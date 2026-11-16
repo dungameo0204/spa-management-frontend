@@ -30,6 +30,11 @@ it('accepts separator-formatted paste as digits', async () => {
   expect(onChange).toHaveBeenLastCalledWith('3000000')
 })
 
+it('renders decimal API values as their integer money amount', () => {
+  render(<MoneyInput aria-label="Số tiền" value="340000000.00" onChange={() => {}} />)
+  expect(screen.getByLabelText('Số tiền')).toHaveValue('340.000.000')
+})
+
 it('does not normalize an IME composition until composition ends', () => {
   const onChange = vi.fn()
   render(<MoneyInput aria-label="Số tiền" value="" onChange={onChange} />)
@@ -37,6 +42,7 @@ it('does not normalize an IME composition until composition ends', () => {
   fireEvent.compositionStart(input)
   fireEvent.change(input, { target: { value: '３' }, nativeEvent: { isComposing: true } })
   expect(onChange).not.toHaveBeenCalled()
+  expect(input).toHaveValue('３')
   fireEvent.compositionEnd(input, { target: { value: '3000000' } })
   expect(onChange).toHaveBeenLastCalledWith('3000000')
 })

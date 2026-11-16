@@ -53,6 +53,38 @@ function historyTime(history) {
   return String(history.created_at || history.execution_date || '')
 }
 
+function validTime(value) {
+  if (!dateOnly(value)) return null
+  const time = new Date(value).getTime()
+  return Number.isFinite(time) ? time : null
+}
+
+// Keep every treatment-history view consistent: business execution day first,
+// then creation time and ID for a deterministic order within the same day.
+export function compareTreatmentHistoryRecency(a, b) {
+  const aDay = dateOnly(a?.execution_date), bDay = dateOnly(b?.execution_date)
+  if (aDay || bDay) {
+    if (!aDay) return 1
+    if (!bDay) return -1
+    if (aDay !== bDay) return aDay < bDay ? 1 : -1
+  }
+
+  const aCreatedAt = validTime(a?.created_at), bCreatedAt = validTime(b?.created_at)
+  if (aCreatedAt != null || bCreatedAt != null) {
+    if (aCreatedAt == null) return 1
+    if (bCreatedAt == null) return -1
+    if (aCreatedAt !== bCreatedAt) return bCreatedAt - aCreatedAt
+  }
+
+  const aId = Number(a?.id), bId = Number(b?.id)
+  if (Number.isFinite(aId) && Number.isFinite(bId) && aId !== bId) return bId - aId
+  return 0
+}
+
+export function sortTreatmentHistories(histories) {
+  return [...(histories || [])].sort(compareTreatmentHistoryRecency)
+}
+
 function legacyHistoryGroups(card, parentChildHistoryIds) {
   const buckets = new Map()
   for (const child of card.children || []) {
@@ -138,5 +170,5 @@ export function treatmentHistoryGroups(card) {
 
   groups.push(...legacyHistoryGroups(card, parentChildHistoryIds))
   for (const group of groups) group.sessions.sort((a, b) => (childOrder.get(Number(a.card.id)) ?? 999) - (childOrder.get(Number(b.card.id)) ?? 999))
-  return groups.sort((a, b) => String(b.firstCreatedAt).localeCompare(String(a.firstCreatedAt)) || Number(b.historyId) - Number(a.historyId))
+  return groups.sort((a, b) => compareTreatmentHistoryRecency(a.history, b.history))
 }

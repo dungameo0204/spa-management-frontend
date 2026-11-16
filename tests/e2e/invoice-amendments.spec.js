@@ -1,11 +1,12 @@
 import { test, expect } from './fixtures'
 import { expectDesktopInvoiceLine } from './invoice-line-layout'
 
-async function setup(page, { rejectDelete = false, rejectUpdate = false, standalone = false } = {}) {
+async function setup(page, { rejectDelete = false, rejectUpdate = false, standalone = false, decimalSnapshotPrice = false } = {}) {
   const puts = [], deletes = []
   let reads = 0
   const invoice = { id: 88, customer_id: 10, customer_name: 'Khách A', total_amount: 40000000, paid_amount: 40000000, wallet_used: 0, items: [{ id: 123, product_id: 20, snapshot_name: 'Trị nám', snapshot_price: 40000000, quantity: 1, treatment: { id: 200, total_sessions: null, children: [{ id: 201, product_id: 12, product_name: 'Laser đã mua', total_sessions: 5 }, { id: 202, product_id: 15, product_name: 'Điện di đã mua', total_sessions: null }] } }] }
   if (standalone) invoice.items[0].treatment = { id: 200, total_sessions: 5, children: [] }
+  if (decimalSnapshotPrice) invoice.items[0].snapshot_price = '40000000.00'
   await page.addInitScript(() => localStorage.setItem('xuly.session', JSON.stringify({ token: 'test-token', user: { id: 1, system_role: 'MANAGER' } })))
   await page.route('**/api/**', route => {
     const path = new URL(route.request().url()).pathname, method = route.request().method()
@@ -39,6 +40,16 @@ test('PUT preserves item identity and actual child configuration; GET refreshes 
   await page.getByRole('button', { name: 'Lưu hóa đơn' }).click()
   await expect.poll(() => state.puts.length).toBe(2)
   expect(state.puts[1].items[0].invoice_item_id).toBe(456)
+})
+
+test('editing an invoice with decimal API unit price displays and resubmits the correct VND amount', async ({ page }) => {
+  const state = await setup(page, { decimalSnapshotPrice: true })
+  await page.getByRole('button', { name: 'Chỉnh sửa', exact: true }).click()
+  const unitPrice = page.locator('.compact-invoice-line').getByRole('textbox', { name: 'Đơn giá' })
+  await expect(unitPrice).toHaveValue('40.000.000')
+  await page.getByRole('button', { name: 'Lưu hóa đơn' }).click()
+  await expect.poll(() => state.puts.length).toBe(1)
+  expect(state.puts[0].items[0].unit_price).toBe(40000000)
 })
 
 for (const width of [1024, 1280, 1440, 1920]) test(`standalone amendment has inline lifetime and saves finite/lifetime configuration at ${width}px`, async ({ page }) => {

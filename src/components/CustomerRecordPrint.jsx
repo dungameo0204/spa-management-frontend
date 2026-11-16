@@ -9,7 +9,7 @@ import './CustomerRecordPrint.css'
 const gender = { FEMALE: 'Nữ', MALE: 'Nam', OTHER: 'Khác' }
 const optionLabel = (values, options) => (values || []).map(value => options.find(([key]) => key === value)?.[1] || value)
 const blankRows = count => Array.from({ length: count }, (_, index) => ({ id: `blank-${index}` }))
-const sessions = card => card?.total_sessions === null ? 'Không giới hạn' : card?.total_sessions != null ? `${card.total_sessions} buổi` : ''
+const sessions = card => card?.total_sessions === null ? 'Trọn gói' : card?.total_sessions != null ? `${card.total_sessions} buổi` : ''
 const signatureSource = svg => {
   if (!svg) return ''
   const normalized = /<svg\b[^>]*\bxmlns=/i.test(svg) ? svg : svg.replace(/<svg\b/i, '<svg xmlns="http://www.w3.org/2000/svg"')

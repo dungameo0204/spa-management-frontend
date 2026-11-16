@@ -160,3 +160,28 @@ it('hiển thị lịch sử nhóm cha/con từ overview trong đúng thẻ li�
   expect(screen.getByText('KTV Lan')).toBeInTheDocument()
   expect(screen.getByText('KTV Hoa')).toBeInTheDocument()
 })
+
+it('hiển thị lịch sử liệu trình đơn mới nhất trước trong chi tiết khách hàng', async () => {
+  const orderedOverview = {
+    customer: { id: 17, fullname: 'Khách thử' },
+    timeline: [{
+      type: 'treatment', date: '2026-11-02',
+      treatment: {
+        id: 36, product_name: 'Chăm sóc da', remaining_sessions: 2, total_sessions: 5,
+        histories: [
+          { id: 71, execution_date: '2026-10-30', created_at: '2026-11-02T10:00:00Z', branch_id: 1, note: 'Buổi cũ' },
+          { id: 72, execution_date: '2026-11-01', created_at: '2026-11-01T08:00:00Z', branch_id: 1, note: 'Buổi mới' },
+        ],
+      },
+    }],
+  }
+  const client = new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } })
+  render(<QueryClientProvider client={client}><CustomerOverview customerId={17} overview={orderedOverview} onOverview={vi.fn()} /></QueryClientProvider>)
+  const actor = userEvent.setup()
+
+  await actor.click(screen.getByRole('button', { name: 'Xem lịch sử' }))
+  expect([...document.querySelectorAll('.treatment-history-compact-item')].map(item => item.textContent)).toEqual([
+    expect.stringContaining('01/11/2026'),
+    expect.stringContaining('30/10/2026'),
+  ])
+})

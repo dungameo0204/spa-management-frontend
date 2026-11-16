@@ -1,11 +1,12 @@
 import { formatSpaDate } from '../utils/format'
 import { canUndoTreatmentExecution } from '../auth/permissions'
+import { sortTreatmentHistories } from '../utils/todayTreatments'
 
 export default function TreatmentHistoryList({ histories, branches, user, onAssign, onUndo, onFollowUp }) {
   if (!histories?.length) return <p className="muted">Chưa thực hiện buổi nào.</p>
 
   return <div className="treatment-history-compact-list">
-    {histories.map(history => {
+    {sortTreatmentHistories(histories).map(history => {
       const branch = branches?.find(item => Number(item.id) === Number(history.branch_id))
       const branchName = history.branch_name || branch?.name || (history.branch_id != null && Number(history.branch_id) === Number(user.branch_id) ? user.branch_name : null) || (history.branch_id != null ? `CS ${history.branch_id}` : 'Chưa rõ cơ sở')
       const canEdit = user.system_role === 'MANAGER' || (history.branch_id != null && Number(history.branch_id) === Number(user.branch_id))
