@@ -28,6 +28,19 @@ it('labels null session totals as package treatments in printed treatment rows',
   expect(rows[0].services).toEqual(['PRP (lần 1/Trọn gói)'])
 })
 
+it('orders printed and shared treatment visits from oldest to newest execution time', () => {
+  const rows = treatmentRecordRows([
+    { id: 1, product_id: 7, product_name: 'Laser', total_sessions: 10, histories: [
+      { id: 2, execution_date: '2026-03-03 09:00:00', created_at: '2026-03-03 09:01:00' },
+      { id: 1, execution_date: '2026-03-01 09:00:00', created_at: '2026-03-04 09:00:00' },
+    ] },
+  ])
+  expect(rows.map(row => [row.visitNumber, row.day, row.services])).toEqual([
+    [1, '2026-03-01', ['Laser (lần 1/10)']],
+    [2, '2026-03-03', ['Laser (lần 2/10)']],
+  ])
+})
+
 it('sorts initial and supplementary payments chronologically', () => {
   expect(paymentRecordRows([{ id: 3, invoice_date: '2026-03-01', paid_amount: 200 }], [{ id: 4, invoice_id: 3, payment_date: '2026-03-02', amount: 50 }])).toMatchObject([{ content: 'Thanh toán hóa đơn #3', amount: 200 }, { content: 'Thanh toán bổ sung hóa đơn #3', amount: 50 }])
 })

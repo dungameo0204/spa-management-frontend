@@ -16,6 +16,7 @@ export function allTreatmentCards(roots = []) {
 }
 
 const timeOf = history => String(history?.created_at || history?.execution_date || '')
+const executionTimeOf = visit => String(visit?.execution_date || '')
 const cardCreatedAt = card => String(card?.created_at || card?.invoice_date || card?.purchase_date || '')
 const productKey = card => card?.product_id != null ? `product:${card.product_id}` : `card:${card?.id}`
 // Keep line breaks that belong to one saved note. A visit can legitimately carry
@@ -52,7 +53,9 @@ export function treatmentRecordRows(roots = []) {
   const cards = allTreatmentCards(roots)
   const visits = roots.flatMap(visitsForRoot)
     .filter(row => row.sessions.length)
-    .sort((a, b) => timeOf(a).localeCompare(timeOf(b)) || String(a.id).localeCompare(String(b.id)))
+    // Treatment sheets are chronological by the business execution time. Creation
+    // time and ID only make entries with the same execution time deterministic.
+    .sort((a, b) => executionTimeOf(a).localeCompare(executionTimeOf(b)) || timeOf(a).localeCompare(timeOf(b)) || String(a.id).localeCompare(String(b.id)))
   const completedByProduct = new Map()
 
   const sessions = visits.flatMap(visit => visit.sessions.map(session => ({ ...session, visit })))
