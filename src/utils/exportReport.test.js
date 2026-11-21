@@ -8,7 +8,7 @@ beforeEach(() => {
   vi.clearAllMocks()
   getStaffTotals.mockImplementation(async (kind, filters, page) => kind === 'commissions' ? { staffTotals: [{ staff_id: 3, branch_id: page, staff_name: 'Nhân viên A', branch_name: `CS${page}`, total_amount: 40000, record_count: 2 }], total: 2, totalPages: 2, totalAmount: 80000 } : { staffTotals: [], total: 0, totalPages: 0 })
   getReportDetails.mockImplementation(async kind => kind === 'commissions' ? { data: [{ commission_amount: '20000.00', commission_amount_snapshot: 0, execution_date: '2026-10-01', customer_name: 'Khách A' }], total: 2, totalPages: 2 } : { data: [], total: 0, totalPages: 0 })
-  getRevenue.mockResolvedValue({ daily: [{ date: '2026-10-01', totalRevenue: 50000, serviceRevenue: 0, productRevenue: 0, legacyDebtRevenue: 50000, netCashFlow: -50000 }] })
+  getRevenue.mockResolvedValue({ daily: [{ date: '2026-10-01', totalRevenue: 50000, serviceRevenue: 0, productRevenue: 0, legacyDebtRevenue: 50000, receipts: { byPaymentMethod: { CASH: 10000, TRANSFER: 20000, CARD: 30000, OTHER: 0 } }, netCashFlow: -50000 }] })
 })
 
 it('exports all staff pages into one sheet per employee, including all their branches', async () => {
@@ -36,7 +36,11 @@ it('includes daily revenue and staff rate breakdown in the full-period workbook'
   expect(daily.getCell('B5').value).toBe(50000)
   expect(daily.getCell('E4').value).toBe('Doanh thu thu nợ cũ')
   expect(daily.getCell('E5').value).toBe(50000)
-  expect(daily.getCell('N5').value).toBe(-50000)
+  expect(daily.getCell('J4').value).toBe('Thực thu tiền mặt')
+  expect(daily.getCell('J5').value).toBe(10000)
+  expect(daily.getCell('K5').value).toBe(20000)
+  expect(daily.getCell('L5').value).toBe(30000)
+  expect(daily.getCell('Q5').value).toBe(-50000)
   expect(getRevenue).toHaveBeenCalledWith(range)
 }, 30000)
 

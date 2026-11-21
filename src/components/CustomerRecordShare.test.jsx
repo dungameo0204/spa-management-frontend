@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import html2canvas from 'html2canvas'
-import CustomerRecordShare, { prepareSignatures } from './CustomerRecordShare'
+import CustomerRecordShare, { paginateConsultationPages, paginateTreatmentPages, prepareSignatures } from './CustomerRecordShare'
 
 vi.mock('html2canvas', () => ({ default: vi.fn(async () => ({ toBlob: (cb, type) => cb(new Blob(['jpeg'], { type })) })) }))
 vi.mock('./CustomerRecordPrint.css?raw', async () => ({ default: (await import('node:fs')).readFileSync(`${process.cwd()}/src/components/CustomerRecordPrint.css`, 'utf8') }))
@@ -109,9 +109,47 @@ it('rasterizes the entire SVG viewBox at explicit dimensions', async () => {
   await prepareSignatures(root)
   const svg = decodeURIComponent(source.split(',')[1])
   expect(svg).toContain('viewBox="100 40 400 80"')
-  expect(svg).toContain('width="240"')
-  expect(svg).toContain('height="60"')
+  expect(svg).toContain('width="360"')
+  expect(svg).toContain('height="90"')
   expect(svg).toContain('preserveAspectRatio="xMidYMid meet"')
-  expect(drawImage).toHaveBeenCalledWith(expect.anything(), 0, 0, 240, 60)
+  expect(drawImage).toHaveBeenCalledWith(expect.anything(), 0, 0, 360, 90)
   expect(image.src).toBe('data:image/png;base64,cG5n')
+})
+
+it('splits long treatment sheets into multiple fixed-aspect A4 pages', () => {
+  const root = document.createElement('div')
+  root.innerHTML = `<section class="customer-record-page customer-record-treatment-page"><h1>PHIẾU THEO DÕI ĐIỀU TRỊ</h1><table class="customer-record-treatment-table"><thead><tr><th>Ngày</th></tr></thead><tbody><tr id="r1"><td>1</td></tr><tr id="r2"><td>2</td></tr><tr id="r3"><td>3</td></tr><tr id="r4"><td>4</td></tr><tr id="r5" data-blank="true"><td></td></tr></tbody></table></section>`
+  const page = root.querySelector('.customer-record-treatment-page')
+  vi.spyOn(page, 'getBoundingClientRect').mockReturnValue({ top: 0, width: 700, height: 1400 })
+  const r1 = root.querySelector('#r1'), r2 = root.querySelector('#r2'), r3 = root.querySelector('#r3'), r4 = root.querySelector('#r4'), r5 = root.querySelector('#r5')
+  vi.spyOn(r1, 'getBoundingClientRect').mockReturnValue({ bottom: 400 })
+  vi.spyOn(r2, 'getBoundingClientRect').mockReturnValue({ bottom: 900 })
+  vi.spyOn(r3, 'getBoundingClientRect').mockReturnValue({ bottom: 1100 })
+  vi.spyOn(r4, 'getBoundingClientRect').mockReturnValue({ bottom: 500 })
+  vi.spyOn(r5, 'getBoundingClientRect').mockReturnValue({ bottom: 1200 })
+  paginateTreatmentPages(root)
+  const pages = root.querySelectorAll('.customer-record-treatment-page')
+  expect(pages).toHaveLength(2)
+  expect(pages[0].style.height).toBe('990px')
+  expect(pages[1].style.height).toBe('990px')
+  expect(pages[0].querySelectorAll('tbody tr')).toHaveLength(2)
+  expect(pages[1].querySelector('h1')).toHaveTextContent('PHIẾU THEO DÕI ĐIỀU TRỊ (tiếp)')
+  expect(pages[1].querySelectorAll('tbody tr')).toHaveLength(2)
+})
+
+it('moves whole sections on page 2 to new pages when content overflows A4 height without splitting a table', () => {
+  const root = document.createElement('div')
+  root.innerHTML = `<section class="customer-record-page customer-record-consultation"><section id="s1" class="customer-record-purchases">Dịch vụ</section><section id="s2" class="customer-record-purchases">Sản phẩm</section><section id="s3" class="customer-record-payments">Thanh toán</section><section id="s4" class="customer-record-customer-note">Ghi chú</section></section>`
+  const page = root.querySelector('.customer-record-consultation')
+  vi.spyOn(page, 'getBoundingClientRect').mockReturnValue({ top: 0, width: 700, height: 1800 })
+  const s1 = root.querySelector('#s1'), s2 = root.querySelector('#s2'), s3 = root.querySelector('#s3'), s4 = root.querySelector('#s4')
+  vi.spyOn(s1, 'getBoundingClientRect').mockReturnValue({ bottom: 450 })
+  vi.spyOn(s2, 'getBoundingClientRect').mockReturnValue({ bottom: 900 })
+  vi.spyOn(s3, 'getBoundingClientRect').mockReturnValue({ bottom: 1350 })
+  vi.spyOn(s4, 'getBoundingClientRect').mockReturnValue({ bottom: 600 })
+  paginateConsultationPages(root)
+  const pages = root.querySelectorAll('.customer-record-page.customer-record-consultation')
+  expect(pages).toHaveLength(2)
+  expect([...pages[0].children].map(el => el.id)).toEqual(['s1', 's2'])
+  expect([...pages[1].children].map(el => el.id)).toEqual(['s3', 's4'])
 })

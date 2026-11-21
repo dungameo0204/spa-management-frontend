@@ -1,13 +1,13 @@
 import { Search, Inbox } from 'lucide-react'
 import Pagination from './Pagination'
 
-export default function DataList({ data, columns, search, onSearch, page, onPage, pageSize = 20, loading, error, onRetry, onRow, toolbarActions, className = '' }) {
+export default function DataList({ data, columns, search, onSearch, page, onPage, pageSize = 20, loading, fetching = false, error, onRetry, onRow, toolbarActions, className = '' }) {
   if (error) return <div className="empty-state"><Inbox size={38} /><h3>Không tải được dữ liệu</h3><p>{error.message}</p><button className="btn secondary" onClick={onRetry}>Thử lại</button></div>
   const items = data?.data || []
   const totalPages = Math.max(1, data?.totalPages || Math.ceil((data?.total || 0) / pageSize))
 
   return (
-    <div className={`list-panel ${className}`.trim()}>
+    <div className={`list-panel ${fetching && !loading ? 'is-fetching' : ''} ${className}`.trim()}>
       <div className="list-toolbar">
         <div className="search-box">
           <Search size={18} />
@@ -16,7 +16,9 @@ export default function DataList({ data, columns, search, onSearch, page, onPage
         <div className="list-toolbar-actions"><span className="list-count">{data?.total ?? 0} kết quả</span>{toolbarActions}</div>
       </div>
       {loading ? (
-        <div className="skeleton-list" aria-label="Đang tải">Đang tải dữ liệu...</div>
+        <div className="skeleton-list" aria-label="Đang tải" role="status">
+          {Array.from({ length: 6 }, (_, i) => <div className="skeleton-row" key={i} aria-hidden="true" />)}
+        </div>
       ) : !items.length ? (
         <div className="empty-state">
           <Inbox size={38} />

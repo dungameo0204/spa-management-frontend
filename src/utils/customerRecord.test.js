@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { paymentRecordRows, treatmentRecordRows } from './customerRecord'
+import { cleanCustomerNote, paymentRecordRows, treatmentRecordRows } from './customerRecord'
 
 it('combines successive cards with the same product into one accurate session progression', () => {
   const rows = treatmentRecordRows([
@@ -17,7 +17,7 @@ it('combines all treatment visits on the same date into one row while preserving
     { id: 3, product_id: 7, product_name: 'Laser', total_sessions: 10, histories: [{ id: 4, execution_date: '2026-03-02 08:00:00' }] },
   ])
   expect(rows).toHaveLength(2)
-  expect(rows[0]).toMatchObject({ visitNumber: 1, services: ['Laser (lần 1,2/10)', 'PRP (lần 1/5)'], staff: ['Laser: Lan, Hương', 'PRP: Minh'], notes: ['Làm sạch\nĐắp mặt nạ', 'Dưỡng ẩm'], signature: 'first-signature' })
+  expect(rows[0]).toMatchObject({ visitNumber: 1, services: ['Laser (lần 1,2/10)', 'PRP (lần 1/5)'], staff: ['Lan', 'Hương', 'Minh'], notes: ['Làm sạch\nĐắp mặt nạ', 'Dưỡng ẩm'], signature: 'first-signature' })
   expect(rows[1]).toMatchObject({ visitNumber: 2, services: ['Laser (lần 3/10)'] })
 })
 
@@ -42,5 +42,10 @@ it('orders printed and shared treatment visits from oldest to newest execution t
 })
 
 it('sorts initial and supplementary payments chronologically', () => {
-  expect(paymentRecordRows([{ id: 3, invoice_date: '2026-03-01', paid_amount: 200 }], [{ id: 4, invoice_id: 3, payment_date: '2026-03-02', amount: 50 }])).toMatchObject([{ content: 'Thanh toán hóa đơn #3', amount: 200 }, { content: 'Thanh toán bổ sung hóa đơn #3', amount: 50 }])
+  expect(paymentRecordRows([{ id: 3, invoice_date: '2026-03-01', paid_amount: 200, note: 'Chuyển khoản đợt 1' }], [{ id: 4, invoice_id: 3, payment_date: '2026-03-02', amount: 50 }])).toMatchObject([{ content: 'Thanh toán hóa đơn #3', note: 'Chuyển khoản đợt 1', amount: 200 }, { content: 'Thanh toán bổ sung hóa đơn #3', amount: 50 }])
+})
+
+it('removes auto-appended invoice log lines from customer notes', () => {
+  expect(cleanCustomerNote('khách VIP\n28/10/2026 [HĐ #134 - Tạo] khách đổi 1 buổi sang nám\n28/10/2026 [HĐ #134 - Đã xóa]')).toBe('khách VIP')
+  expect(cleanCustomerNote('28/10/2026 [HĐ #134 - Tạo] chỉ có log hóa đơn')).toBe('')
 })

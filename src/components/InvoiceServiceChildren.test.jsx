@@ -37,6 +37,16 @@ it('selects child staff in grouped checkboxes and publishes only on confirmation
   expect(onChange).toHaveBeenLastCalledWith([{ product_id: 12, total_sessions: 5, performStaffs: [{ staff_id: 2 }], performNow: true, staffBranchId: 1 }])
 })
 
+it('locks other child staff pickers after one child receives staff without blocking their completed state', () => {
+  render(<InvoiceServiceChildren children={[
+    { product_id: 12, total_sessions: 5, performNow: true, performStaffs: [{ staff_id: 2 }] },
+    { product_id: 13, total_sessions: 5, performNow: true },
+  ]} queries={[{ data: { id: 12, name: 'Điện di' } }, { data: { id: 13, name: 'Laser' } }]} branchId={1} onChange={vi.fn()} />, { wrapper: Wrapper })
+  expect(screen.getByRole('checkbox', { name: 'Chưa làm Laser' })).not.toBeChecked()
+  expect(screen.getByRole('button', { name: 'Nhân viên làm Laser' })).toBeDisabled()
+  expect(screen.getByRole('button', { name: 'Nhân viên làm Điện di' })).not.toBeDisabled()
+})
+
 it('displays actual child cards including exhausted and lifetime totals', () => {
   render(<InvoiceTreatmentDetail treatment={{ total_sessions: null, children: [{ id: 1, product_name: 'Điện di', total_sessions: null, remaining_sessions: 0 }, { id: 2, product_name: 'Laser', total_sessions: 5, remaining_sessions: 0 }] }} />)
   expect(screen.getByText('Trọn đời')).toBeInTheDocument()

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { CalendarDays, Plus, ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react'
 import { useAuth } from '../auth/AuthProvider'
 import { useBranch } from '../components/AppShell'
@@ -11,6 +11,8 @@ import CustomerBookingForm from '../components/CustomerBookingForm'
 import FormDrawer from '../components/FormDrawer'
 import ConfirmDialog from '../components/ConfirmDialog'
 import Pagination from '../components/Pagination'
+import ExportTableButton from '../components/ExportTableButton'
+import { directoryExportFilename, directoryExportOptions } from '../utils/directoryExport'
 import { dateOnly, formatSpaDate, formatCurrency, today } from '../utils/format'
 import { defaultBookingFilters, validateBookingFilters } from '../utils/customerBookings'
 import '../styles/customer-bookings.css'
@@ -28,7 +30,7 @@ export default function CustomerBookingsPage() {
   const filterError = validateBookingFilters(filters)
   const key = JSON.stringify([queryFilters, branchId])
   const page = paging.key === key ? paging.page : 1
-  const query = useQuery({ queryKey: ['customer-bookings', queryFilters, branchId], queryFn: ({ signal }) => listCustomerBookings({ ...queryFilters, branchId }, signal), enabled: !filterError })
+  const query = useQuery({ queryKey: ['customer-bookings', queryFilters, branchId], queryFn: ({ signal }) => listCustomerBookings({ ...queryFilters, branchId }, signal), enabled: !filterError, placeholderData: keepPreviousData })
   const detail = useQuery({ queryKey: ['customer-booking', drawer?.id], queryFn: ({ signal }) => getCustomerBooking(drawer.id, signal), enabled: Boolean(drawer?.id), staleTime: 0 })
   const writable = booking => canAccess(user, 'bookings.manage') && (manager || Number(booking.branch_id) === Number(user.branch_id))
   const mutation = useMutation({
@@ -50,7 +52,25 @@ export default function CustomerBookingsPage() {
   const groups = Map.groupBy ? Map.groupBy(visible, item => dateOnly(item.arrival_date)) : visible.reduce((map, item) => { const day = dateOnly(item.arrival_date); map.set(day, [...(map.get(day) || []), item]); return map }, new Map())
   const selected = detail.data
   return <div className="page customer-bookings">
-    <div className="page-heading booking-page-heading"><h1>Khách đặt lịch</h1><button className="btn primary" onClick={() => open('create')}><Plus size={18} />Tạo lịch đặt</button></div>
+    <div className="page-heading booking-page-heading">
+      <h1>Khách đặt lịch</h1>
+      <div className="page-heading-actions">
+        <ExportTableButton
+          disabled={query.isFetching || query.isError || Boolean(filterError) || !data.length}
+          filename={directoryExportFilename('customer-bookings')}
+          options={() => directoryExportOptions('customer-bookings', data, [
+            'Tìm kiếm', queryFilters.search || 'Tất cả',
+            'Từ ngày', queryFilters.startDate || 'Không giới hạn',
+            'Đến ngày', queryFilters.endDate || 'Không giới hạn',
+            'Từ giờ', queryFilters.startTime || 'Tất cả',
+            'Đến giờ', queryFilters.endTime || 'Tất cả',
+            'Dịch vụ quan tâm', productLabel || 'Tất cả',
+            'Mã cơ sở', branchId || 'Tất cả',
+          ])}
+        />
+        <button className="btn primary" onClick={() => open('create')}><Plus size={18} />Tạo lịch đặt</button>
+      </div>
+    </div>
     <CustomerBookingFilters value={filters} onChange={changeFilters} productLabel={productLabel} onProductLabel={setProductLabel} />
     {message && <p role="status" className="success-alert">{message}</p>}
     <section className="booking-agenda" aria-label="Danh sách lịch đặt" aria-busy={query.isFetching}>

@@ -18,7 +18,7 @@ function searchText(value) {
   return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase().trim()
 }
 
-export default function InvoiceChildStaffPicker({ name, selected = [], branchId, onChange }) {
+export default function InvoiceChildStaffPicker({ name, selected = [], branchId, onChange, disabled = false, className = '' }) {
   const [open, setOpen] = useState(false)
   const { user } = useAuth()
   const branch = user.system_role === 'STAFF' ? user.branch_id : branchId
@@ -35,7 +35,7 @@ export default function InvoiceChildStaffPicker({ name, selected = [], branchId,
     return person ? `${roleName} ${person.fullname}`.trim() : `Nhân viên #${entry.staff_id}`
   }).join(' · ')
   const error = roles.error || people.error
-  return <><button type="button" className={`invoice-child-staff${selected.length ? ' has-value' : ''}`} aria-label={`Nhân viên làm ${name}`} aria-haspopup="dialog" title={summary || 'Chọn nhân viên theo chức vụ'} onClick={() => setOpen(true)}><Users size={13} /><span>{summary || 'Chọn nhân viên'}</span>{selected.length > 0 && <span className="invoice-staff-count">{selected.length}</span>}</button>
+  return <><button type="button" className={`invoice-child-staff${selected.length ? ' has-value' : ''}${className ? ` ${className}` : ''}`} aria-label={`Nhân viên làm ${name}`} aria-haspopup="dialog" title={disabled ? 'Chỉ gán nhân viên cho một dịch vụ con trong mỗi buổi' : summary || 'Chọn nhân viên theo chức vụ'} disabled={disabled} onClick={() => setOpen(true)}><Users size={13} /><span>{summary || 'Chọn nhân viên'}</span>{selected.length > 0 && <span className="invoice-staff-count">{selected.length}</span>}</button>
     {open && createPortal(<StaffDialog name={name} groups={groups} selected={selected} branch={branch} loading={roles.isPending || people.isPending} error={error} onRetry={() => { roles.refetch(); people.refetch() }} onClose={() => setOpen(false)} onSave={value => { onChange(value); setOpen(false) }} />, document.body)}
   </>
 }
@@ -51,7 +51,7 @@ function StaffDialog({ name, groups, selected, branch, loading, error, onRetry, 
   const total = groups.reduce((sum, role) => sum + role.people.length, 0)
   const shown = visibleGroups.reduce((sum, role) => sum + role.people.length, 0)
   const remove = id => setDraft(current => current.filter(entry => Number(entry.staff_id) !== Number(id)))
-  return <div className="consultant-overlay" onMouseDown={event => { if (event.target === event.currentTarget) onClose() }}><section ref={ref} className="invoice-staff-dialog" role="dialog" aria-modal="true" aria-label={`Nhân viên làm ${name}`}>
+  return <div className="invoice-staff-overlay" onMouseDown={event => { if (event.target === event.currentTarget) onClose() }}><section ref={ref} className="invoice-staff-dialog" role="dialog" aria-modal="true" aria-label={`Nhân viên làm ${name}`}>
     <header><div><strong>Nhân viên thực hiện</strong><p>{name}</p></div><button type="button" className="icon-btn" aria-label="Đóng chọn nhân viên" onClick={onClose}><X size={18} /></button></header>
     <div className="invoice-staff-tools">
       <div className="invoice-staff-filters"><label className="invoice-staff-search"><Search size={16} aria-hidden="true" /><input type="search" aria-label="Tìm nhân viên" placeholder="Tìm tên nhân viên (có hoặc không dấu)…" value={search} onChange={event => setSearch(event.target.value)} /></label><label className="invoice-staff-role"><span>Chức vụ</span><select aria-label="Lọc chức vụ" value={roleId} onChange={event => setRoleId(event.target.value)}><option value="">Tất cả chức vụ</option>{groups.map(role => <option key={role.id} value={role.id}>{role.name} ({role.people.length})</option>)}</select></label></div>

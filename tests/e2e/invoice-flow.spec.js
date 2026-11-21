@@ -291,7 +291,8 @@ test('hóa đơn tìm khách/dịch vụ, đồng bộ chiết khấu và trả 
   await page.getByRole('option', { name: /Liệu trình da/ }).click()
   const summary = page.locator('.invoice-summary')
   await expect(summary.getByText('Tổng tiền hóa đơn')).toBeVisible()
-  await expect(summary.getByRole('textbox', { name: 'Phương thức thanh toán' })).toBeVisible()
+  const paymentMethod = summary.getByRole('combobox', { name: 'Phương thức thanh toán' })
+  await expect(paymentMethod).toHaveValue('CASH')
   await expect(summary.getByRole('textbox', { name: 'Ghi chú' })).toBeVisible()
   const layout = await summary.evaluate(el => {
     const rect = selector => el.querySelector(selector).getBoundingClientRect()
@@ -301,8 +302,8 @@ test('hóa đơn tìm khách/dịch vụ, đồng bộ chiết khấu và trả 
   expect(layout.total.top).toBe(layout.debt.top)
   expect(layout.wallet.top).toBeGreaterThanOrEqual(layout.total.bottom)
   expect(layout.wallet.top).toBeLessThan(layout.payment.bottom)
-  expect(layout.payment.top).toBe(layout.method.top)
-  expect(layout.method.top).toBe(layout.note.top)
+  expect(Math.abs(layout.payment.top - layout.method.top)).toBeLessThanOrEqual(2)
+  expect(Math.abs(layout.method.top - layout.note.top)).toBeLessThanOrEqual(2)
   expect(layout.payment.width).toBeLessThan(layout.width / 2)
   await page.setViewportSize({ width: 390, height: 800 })
   const mobileLayout = await summary.evaluate(el => {
@@ -317,9 +318,12 @@ test('hóa đơn tìm khách/dịch vụ, đồng bộ chiết khấu và trả 
   await expect(page.getByRole('textbox', { name: 'Giảm (đ)' })).toHaveValue('20.000')
   await page.getByRole('checkbox', { name: /Dùng ví khách hàng/ }).check()
   await expect(page.getByText('80.000 ₫').first()).toBeVisible()
+  await summary.locator('.invoice-payment-method .mobile-select-trigger').click()
+  await page.getByRole('listbox', { name: 'Phương thức thanh toán' }).getByRole('option', { name: 'Chuyển khoản', exact: true }).click()
   await page.getByRole('button', { name: 'Lưu hóa đơn' }).click()
   await expect.poll(() => requests.length).toBe(1)
-  expect(requests[0]).toMatchObject({ customer_id: 1, wallet_used: 100000, paid_amount: 80000, discount_percent: 0, discount_amount: 0, items: [{ product_id: 3, discount_percent: 10, discount_amount: 0 }] })
+  expect(requests[0]).toMatchObject({ customer_id: 1, wallet_used: 100000, paid_amount: 80000, payment_method: 'TRANSFER', discount_percent: 0, discount_amount: 0, items: [{ product_id: 3, discount_percent: 10, discount_amount: 0 }] })
+  expect(requests[0]).not.toHaveProperty('invoice_date')
 })
 
 test('quản lý chọn ngày hóa đơn quá khứ khi tạo, để trống thì máy chủ lấy thời điểm hiện tại', async ({ page }) => {

@@ -64,9 +64,29 @@ it('exports both active and completed treatment cards, preserving execution-filt
 })
 
 it('defines numeric VND cells for transactional, invoice and consultant exports', () => {
-  for (const resource of ['debts', 'wallet', 'expenses', 'imports', 'invoices', 'consultants']) {
+  for (const resource of ['debts', 'wallet', 'expenses', 'imports', 'invoices', 'consultants', 'customer-bookings']) {
     const moneyColumns = directoryExportOptions(resource, []).columns.filter(column => column.money)
     expect(moneyColumns.length).toBeGreaterThan(0)
     expect(moneyColumns.every(column => column.money)).toBe(true)
   }
+})
+
+it('exports all customer booking fields into separate columns', () => {
+  const options = directoryExportOptions('customer-bookings', [])
+  const row = {
+    id: 15, customer_type: 'EXISTING', registered_customer_name: 'Lan', registered_customer_phone: '0901234567',
+    arrival_date: '2026-11-22', arrival_time: '09:30:00', branch_name: 'ROSA CLINIC', product_name: 'Chăm sóc da',
+    has_arrived: 1, consultation_total: '1500000', promotion_note: 'Ưu đãi tháng 11', note: 'Khách yêu cầu phòng riêng',
+    created_at: '2026-11-20',
+  }
+  expect(options.columns.map(col => col.label)).toEqual([
+    'Loại khách', 'Khách hàng', 'Số điện thoại', 'Ngày đến', 'Giờ đến',
+    'Chi nhánh', 'Dịch vụ quan tâm', 'Trạng thái đến', 'Giá trị tư vấn',
+    'Nhu cầu / ưu đãi', 'Ghi chú cho nhân viên', 'Ngày tạo',
+  ])
+  expect(options.columns.map(col => col.value(row))).toEqual([
+    'Khách cũ', 'Lan', '0901234567', '22/11/2026', '09:30',
+    'ROSA CLINIC', 'Chăm sóc da', 'Đã đến', 1500000,
+    'Ưu đãi tháng 11', 'Khách yêu cầu phòng riêng', '20/11/2026',
+  ])
 })

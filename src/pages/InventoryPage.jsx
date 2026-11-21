@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { listResource } from '../api/resources'
 import { useBranch } from '../components/AppShell'
 import { Search } from 'lucide-react'
@@ -11,10 +11,9 @@ import RefreshButton from '../components/RefreshButton'
 export default function InventoryPage() {
   const { branchId } = useBranch()
   const [page, setPage] = useState(1), [search, setSearch] = useState('')
-  const products = useQuery({ queryKey: ['inventory', page, search, branchId], queryFn: () => listResource('products', { is_product: 1, search }, page) })
-  return <div className="page"><div className="page-heading"><div><span className="eyebrow">QUẢN LÝ KHO</span><h1>Tồn kho</h1><p>Số lượng sản phẩm theo từng cơ sở.</p></div></div>
-    <ExportTableButton disabled={products.isFetching || products.isError || !products.data?.data?.length} filename={directoryExportFilename('inventory')} options={async () => directoryExportOptions('inventory', inventoryExportRows(await loadDirectoryRows('products', { is_product: 1, search }), branchId), ['Tìm kiếm', search || 'Tất cả', 'Mã cơ sở', branchId || 'Tất cả'])} />
-    <div className="list-panel"><div className="list-toolbar"><div className="search-box"><Search size={18} /><input aria-label="Tìm sản phẩm tồn kho" placeholder="Tìm sản phẩm..." value={search} onChange={e => { setSearch(e.target.value); setPage(1) }} /></div><div className="list-toolbar-actions"><span className="list-count">{products.data?.total || 0} sản phẩm</span><RefreshButton label="Tải lại tồn kho" disabled={products.isFetching} onClick={() => products.refetch()} /></div></div>
+  const products = useQuery({ queryKey: ['inventory', page, search, branchId], queryFn: () => listResource('products', { is_product: 1, search }, page), placeholderData: keepPreviousData })
+  return <div className="page"><div className="page-heading"><div><span className="eyebrow">QUẢN LÝ KHO</span><h1>Tồn kho</h1><p>Số lượng sản phẩm theo từng cơ sở.</p></div><div className="page-heading-actions"><ExportTableButton disabled={products.isFetching || products.isError || !products.data?.data?.length} filename={directoryExportFilename('inventory')} options={async () => directoryExportOptions('inventory', inventoryExportRows(await loadDirectoryRows('products', { is_product: 1, search }), branchId), ['Tìm kiếm', search || 'Tất cả', 'Mã cơ sở', branchId || 'Tất cả'])} /></div></div>
+    <div className={`list-panel ${products.isFetching && !products.isLoading ? 'is-fetching' : ''}`.trim()}><div className="list-toolbar"><div className="search-box"><Search size={18} /><input aria-label="Tìm sản phẩm tồn kho" placeholder="Tìm sản phẩm..." value={search} onChange={e => { setSearch(e.target.value); setPage(1) }} /></div><div className="list-toolbar-actions"><span className="list-count">{products.data?.total || 0} sản phẩm</span><RefreshButton label="Tải lại tồn kho" disabled={products.isFetching} onClick={() => products.refetch()} /></div></div>
       {products.isError ? <p className="form-alert">{products.error.message}</p> : products.isLoading ? <p>Đang tải tồn kho...</p> : <div className="table-scroll"><table><thead><tr><th>Sản phẩm</th><th>Cơ sở</th><th>Tồn kho</th></tr></thead><tbody>{products.data?.data?.flatMap(product => {
         const entries = branchId ? (product.inventory || []).filter(entry => Number(entry.branch_id) === Number(branchId)) : product.inventory || []
         return (entries.length ? entries : [{ branch_name: branchId ? 'Cơ sở của bạn' : 'Chưa có tồn kho', quantity: 0 }]).map((entry, index) => <tr key={`${product.id}-${entry.branch_id || index}`}><td data-label="Sản phẩm">{product.name}</td><td data-label="Cơ sở">{entry.branch_name || 'Cơ sở của bạn'}</td><td data-label="Tồn kho"><strong>{entry.quantity ?? 0} {product.unit || ''}</strong></td></tr>)

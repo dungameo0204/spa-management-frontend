@@ -91,7 +91,7 @@ export function treatmentRecordRows(roots = []) {
       execution_date: daySessions[0].history.execution_date || day,
       day,
       services: serviceValues.map(service => `${service.name} (lần ${service.completed.join(',')}/${service.lifetime ? 'Trọn gói' : service.total || '?'})`),
-      staff: serviceValues.filter(service => service.staff.length).map(service => `${service.name}: ${[...new Set(service.staff)].join(', ')}`),
+      staff: [...new Set(serviceValues.flatMap(service => service.staff))],
       notes: notesFor(daySessions.flatMap(session => [session.visit.note, session.history.note])),
       signature: daySessions.map(session => session.history.customer_signature_svg || session.visit.signature).find(Boolean),
     }
@@ -103,6 +103,7 @@ export function paymentRecordRows(invoices = [], debtPayments = []) {
     id: `invoice:${invoice.id}`,
     date: invoice.invoice_date,
     content: `Thanh toán hóa đơn #${invoice.id}`,
+    note: String(invoice.note || '').trim(),
     amount: Number(invoice.paid_amount || 0),
   }))
   const paymentRows = debtPayments.map(payment => ({
@@ -112,4 +113,14 @@ export function paymentRecordRows(invoices = [], debtPayments = []) {
     amount: Number(payment.amount || 0),
   }))
   return [...invoiceRows, ...paymentRows].sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')) || a.id.localeCompare(b.id))
+}
+
+const invoiceLogLine = /^\s*\d{1,2}\/\d{1,2}\/\d{4}\s*\[HĐ\s*#\d+[^\]]*\]/i
+
+export function cleanCustomerNote(note) {
+  return String(note || '')
+    .split(/\r?\n/)
+    .filter(line => !invoiceLogLine.test(line))
+    .join('\n')
+    .trim()
 }

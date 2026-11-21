@@ -136,16 +136,15 @@ for (const entry of ['inline', 'detail', 'dashboard']) {
     await waitFor(() => expect(executeTreatment).toHaveBeenCalledWith({ treatment_id: 10, branch_id: 2, execution_date: '2026-09-15', staffs: [] }))
   })
 
-  it(`${entry}: STAFF chọn ngày và gửi execution_date mà không gửi branch_id`, async () => {
+  it(`${entry}: STAFF không chọn hoặc gửi execution_date`, async () => {
     auth.role = 'STAFF'
     const actor = userEvent.setup()
     await openExecution(entry, actor, false)
-    const date = screen.getByLabelText('Ngày thực hiện')
-    fireEvent.change(date, { target: { value: '15/09/2026' } })
+    expect(screen.queryByLabelText('Ngày thực hiện')).not.toBeInTheDocument()
     await actor.click(screen.getByRole('button', { name: 'Xác nhận', exact: true }))
     const confirmBtn = screen.queryByRole('button', { name: 'Ghi nhận không có chữ ký' })
     if (confirmBtn) await actor.click(confirmBtn)
-    await waitFor(() => expect(executeTreatment).toHaveBeenCalledWith({ treatment_id: 10, execution_date: '2026-09-15', staffs: [] }))
+    await waitFor(() => expect(executeTreatment).toHaveBeenCalledWith({ treatment_id: 10, staffs: [] }))
   })
 }
 

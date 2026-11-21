@@ -16,7 +16,102 @@ function prepareCapture(document) {
 
 const safeFilename = value => String(value || 'khach-hang').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase() || 'khach-hang'
 const formatFileSize = size => size < 1024 * 1024 ? `${Math.ceil(size / 1024)} KB` : `${(size / (1024 * 1024)).toFixed(1)} MB`
-const validShareFiles = files => files.length === 3 && files.every(file => file instanceof File && file.type === 'image/jpeg' && file.size > 0)
+const validShareFiles = files => files.length >= 3 && files.every(file => file instanceof File && file.type === 'image/jpeg' && file.size > 0)
+
+export function paginateConsultationPages(root) {
+  const firstPage = root.querySelector('.customer-record-page.customer-record-consultation')
+  if (!firstPage) return
+  const pageRect = firstPage.getBoundingClientRect()
+  if (pageRect.width <= 0) return
+  const maxPageHeight = Math.round(pageRect.width * (297 / 210))
+  const paddingBottom = parseFloat(getComputedStyle(firstPage).paddingBottom) || 0
+  const sections = [...firstPage.children]
+  if (sections.length <= 1) return
+
+  let currentPage = firstPage
+  let currentCount = 0
+  let limitBottom = currentPage.getBoundingClientRect().top + maxPageHeight - paddingBottom
+
+  const createContinuationPage = () => {
+    const nextPage = document.createElement('section')
+    nextPage.className = 'customer-record-page customer-record-consultation is-continuation'
+    currentPage.after(nextPage)
+    currentPage = nextPage
+    currentCount = 0
+    limitBottom = currentPage.getBoundingClientRect().top + maxPageHeight - paddingBottom
+  }
+
+  for (const section of sections) {
+    if (currentPage !== firstPage) currentPage.append(section)
+    const sectionBottom = section.getBoundingClientRect().bottom
+    if (currentCount > 0 && sectionBottom > limitBottom) {
+      createContinuationPage()
+      currentPage.append(section)
+    }
+    currentCount += 1
+  }
+}
+
+export function paginateTreatmentPages(root) {
+  const firstPage = root.querySelector('.customer-record-treatment-page')
+  if (!firstPage) return
+  const pageRect = firstPage.getBoundingClientRect()
+  if (pageRect.width <= 0) return
+  const fixedHeight = Math.round(pageRect.width * (297 / 210))
+  const paddingBottom = parseFloat(getComputedStyle(firstPage).paddingBottom) || 0
+  const table = firstPage.querySelector('.customer-record-treatment-table')
+  const thead = table?.querySelector('thead')
+  const tbody = table?.querySelector('tbody')
+  if (!table || !thead || !tbody) return
+
+  const setFixedHeight = page => {
+    page.style.height = `${fixedHeight}px`
+    page.style.minHeight = `${fixedHeight}px`
+    page.style.maxHeight = `${fixedHeight}px`
+  }
+  setFixedHeight(firstPage)
+
+  const rows = [...tbody.querySelectorAll('tr')]
+  let currentPage = firstPage
+  let currentBody = tbody
+  let currentCount = 0
+  let limitBottom = currentPage.getBoundingClientRect().top + fixedHeight - paddingBottom
+
+  const createContinuationPage = () => {
+    const nextPage = document.createElement('section')
+    nextPage.className = 'customer-record-page customer-record-treatment-page is-continuation'
+    setFixedHeight(nextPage)
+    const heading = document.createElement('h1')
+    heading.textContent = 'PHIẾU THEO DÕI ĐIỀU TRỊ (tiếp)'
+    const nextTable = document.createElement('table')
+    nextTable.className = 'customer-record-treatment-table'
+    nextTable.append(thead.cloneNode(true))
+    const nextBody = document.createElement('tbody')
+    nextTable.append(nextBody)
+    nextPage.append(heading, nextTable)
+    currentPage.after(nextPage)
+    currentPage = nextPage
+    currentBody = nextBody
+    currentCount = 0
+    limitBottom = currentPage.getBoundingClientRect().top + fixedHeight - paddingBottom
+  }
+
+  for (let index = 0; index < rows.length; index += 1) {
+    const row = rows[index]
+    if (currentBody !== tbody) currentBody.append(row)
+    const rowBottom = row.getBoundingClientRect().bottom
+    if (currentCount > 0 && rowBottom > limitBottom) {
+      const remaining = rows.slice(index)
+      if (remaining.every(item => item.dataset.blank === 'true')) {
+        remaining.forEach(item => item.remove())
+        break
+      }
+      createContinuationPage()
+      currentBody.append(row)
+    }
+    currentCount += 1
+  }
+}
 
 function download(file) {
   const url = URL.createObjectURL(file)
@@ -52,7 +147,7 @@ export async function prepareSignatures(root) {
     const svg = new DOMParser().parseFromString(decodeURIComponent(image.src.split(',')[1]), 'image/svg+xml').documentElement
     if (svg.localName !== 'svg' || svg.querySelector('parsererror')) throw new Error('Chữ ký không hợp lệ.')
     const bounds = image.getBoundingClientRect()
-    const width = Math.max(1, Math.round(bounds.width * 2)), height = Math.max(1, Math.round(bounds.height * 2))
+    const width = Math.max(1, Math.round(bounds.width * 3)), height = Math.max(1, Math.round(bounds.height * 3))
     svg.setAttribute('width', width)
     svg.setAttribute('height', height)
     svg.setAttribute('preserveAspectRatio', 'xMidYMid meet')
@@ -105,7 +200,7 @@ function ShareDialog({ files, title, onClose }) {
     try {
       // Call directly in the click handler: capture has already finished.
       await navigator.share(data)
-      setNotice(`Đã chuyển đủ ${files.length} ảnh cho hệ thống, chưa xác nhận ứng dụng đã gửi. Nếu thiếu ảnh trong Zalo hoặc Telegram, hãy tải cả 3 ảnh bên dưới để đính kèm thủ công.`)
+      setNotice(`Đã chuyển đủ ${files.length} ảnh cho hệ thống, chưa xác nhận ứng dụng đã gửi. Nếu thiếu ảnh trong Zalo hoặc Telegram, hãy tải cả ${files.length} ảnh bên dưới để đính kèm thủ công.`)
     } catch (error) {
       if (error?.name !== 'AbortError') {
         setFailed(true); setNotice('Không thể chia sẻ trực tiếp. Bạn có thể sao chép từng ảnh hoặc tải ảnh để gửi thủ công.')
@@ -124,9 +219,9 @@ function ShareDialog({ files, title, onClose }) {
   return createPortal(<div className="customer-record-share-layer"><section ref={ref} className="customer-record-share-dialog" role="dialog" aria-modal="true" aria-labelledby="record-share-title" aria-describedby="record-share-help">
     <header><h2 id="record-share-title">Chia sẻ hồ sơ khách hàng</h2><button type="button" className="btn secondary" onClick={onClose}>Đóng</button></header>
     <p id="record-share-help" className="customer-record-share-summary">Tổng dung lượng {formatFileSize(totalSize)}.</p>
-    <div className="customer-record-share-actions"><button type="button" className="btn" disabled={!canShare || busy} onClick={share}>{busy ? 'Đang xử lý…' : 'Gửi 3 ảnh qua ứng dụng'}</button><button type="button" className="btn secondary" onClick={() => { files.forEach(download); setFailed(false); setNotice(`Đã yêu cầu tải ${files.length} ảnh JPEG. Kiểm tra mục tải xuống của trình duyệt.`) }}>Tải tất cả ảnh</button></div>
-    {!readyToShare && <p role="alert">Không tạo đủ 3 ảnh hợp lệ để chia sẻ. Hãy đóng và thử lại.</p>}
-    {readyToShare && !canShare && <p>Thiết bị này không hỗ trợ chia sẻ đồng thời 3 tệp ảnh. Hãy sao chép hoặc tải ảnh bên dưới.</p>}
+    <div className="customer-record-share-actions"><button type="button" className="btn" disabled={!canShare || busy} onClick={share}>{busy ? 'Đang xử lý…' : `Gửi ${files.length} ảnh qua ứng dụng`}</button><button type="button" className="btn secondary" onClick={() => { files.forEach(download); setFailed(false); setNotice(`Đã yêu cầu tải ${files.length} ảnh JPEG. Kiểm tra mục tải xuống của trình duyệt.`) }}>Tải tất cả ảnh</button></div>
+    {!readyToShare && <p role="alert">Không tạo đủ ảnh hợp lệ để chia sẻ. Hãy đóng và thử lại.</p>}
+    {readyToShare && !canShare && <p>Thiết bị này không hỗ trợ chia sẻ đồng thời {files.length} tệp ảnh. Hãy sao chép hoặc tải ảnh bên dưới.</p>}
     {!canCopy && <p>Trình duyệt này không hỗ trợ sao chép ảnh. Bạn vẫn có thể tải ảnh để gửi.</p>}
     {notice && <p role={failed ? 'alert' : 'status'}>{notice}</p>}
     <div className="customer-record-share-previews">{files.map((file, index) => <figure key={file.name}>
@@ -153,18 +248,20 @@ export default function CustomerRecordShare({ record, onDone, onMessage }) {
         await prepareSignatures(root)
         await document.fonts?.ready
         if (cancelled) return
+        paginateConsultationPages(root)
+        paginateTreatmentPages(root)
         const html2canvas = (await import('html2canvas')).default
         const pages = [...root.querySelectorAll('.customer-record-page')]
         const baseName = safeFilename(record.customer.fullname || record.customer.profile_code)
         const files = []
         for (const [index, page] of pages.entries()) {
           if (cancelled) return
-          const canvas = await html2canvas(page, { backgroundColor: '#ffffff', scale: 2, useCORS: true, logging: false, onclone: prepareCapture })
-          const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95))
+          const canvas = await html2canvas(page, { backgroundColor: '#ffffff', scale: 3, useCORS: true, logging: false, onclone: prepareCapture })
+          const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.98))
           if (!blob) throw new Error(`Không thể tạo ảnh trang ${index + 1}.`)
           files.push(new File([blob], `ho-so-${baseName}-trang-${index + 1}.jpg`, { type: 'image/jpeg' }))
         }
-        if (!validShareFiles(files)) throw new Error('Không tạo đủ 3 ảnh JPEG hợp lệ.')
+        if (!validShareFiles(files)) throw new Error('Không tạo đủ ảnh JPEG hợp lệ.')
         if (cancelled) return
         setPrepared({ record, files })
       } catch (error) {

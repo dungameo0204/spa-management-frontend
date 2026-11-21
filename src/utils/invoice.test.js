@@ -13,6 +13,14 @@ describe('Ngày giờ gửi MySQL', () => {
 })
 
 describe('Chiết khấu và thanh toán', () => {
+  it('hydrates the invoice item entitlement instead of aggregate sessions on a merged card', () => {
+    const line = invoiceLineFromApi({
+      id: 2, product_id: 4, quantity: 1, snapshot_price: 1000000,
+      treatment: { total_sessions: 11, purchased_total_sessions: 1 }
+    })
+    expect(line).toMatchObject({ invoice_item_id: 2, quantity: 1, treatmentConfigured: true, treatmentTotalSessions: 1 })
+    expect(lineTotal(line)).toBe(1000000)
+  })
   it('tính đơn giá theo số buổi hữu hạn, cập nhật giảm giá và tiền khách trả', () => {
     let line = { quantity:1, unit_price:2000000, treatmentConfigured:true, treatmentTotalSessions:1, discount_mode:'percent', discount_percent:10 }
     line = updateInvoiceLine(line, 'treatmentTotalSessions', '10')

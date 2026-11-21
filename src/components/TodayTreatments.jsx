@@ -5,9 +5,8 @@ import { useAuth } from '../auth/AuthProvider'
 import { canUndoTreatmentExecution } from '../auth/permissions'
 import { assignTreatmentStaffs, executeTreatment, getResource, listResource, undoTreatmentExecution, updateGroupedTreatmentExecution } from '../api/resources'
 import { dateOnly, formatSpaDate, today } from '../utils/format'
-import RoleStaffPicker from './RoleStaffPicker'
+import InvoiceChildStaffPicker from './InvoiceChildStaffPicker'
 import ConfirmDialog from './ConfirmDialog'
-import MobileSelect from './MobileSelect'
 import { ChevronLeft, ChevronRight, Pencil } from 'lucide-react'
 import RefreshButton from './RefreshButton'
 import { canFollowUpTreatmentHistory } from '../auth/permissions'
@@ -17,15 +16,14 @@ import TreatmentGroupSignature from './TreatmentGroupSignature'
 import Pagination from './Pagination'
 import './TodayTreatments.css'
 import DateInput from './DateInput'
-import { useBranchCatalog, useStaffCatalog } from '../hooks/useProductCatalog'
 
 export default function TodayTreatments() {
   const { branchId } = useBranch(), { user } = useAuth(), qc = useQueryClient()
   const manager = user.system_role === 'MANAGER'
-  const [viewDate, setViewDate] = useState(today), [executionDate, setExecutionDate] = useState(today)
+  const [viewDate, setViewDate] = useState(today)
   const [sessionEditor, setSessionEditor] = useState(null)
-  const [page, setPage] = useState(1), [selected, setSelected] = useState(null), [undo, setUndo] = useState(null)
-  const [staffs, setStaffs] = useState([]), [groupStaffs, setGroupStaffs] = useState({}), [executionBranch, setExecutionBranch] = useState(''), [message, setMessage] = useState(''), [messageType, setMessageType] = useState('success')
+  const [page, setPage] = useState(1), [undo, setUndo] = useState(null)
+  const [message, setMessage] = useState(''), [messageType, setMessageType] = useState('success')
   const todayDate = today(), viewingToday = viewDate === todayDate
   const query = useQuery({ queryKey: ['dashboard-treatments', viewDate, branchId], queryFn: async () => {
     const executionFilters = { executionStartDate: viewDate, executionEndDate: viewDate }
@@ -38,17 +36,6 @@ export default function TodayTreatments() {
   async function refreshTable() {
     await Promise.all([qc.invalidateQueries({ queryKey: ['dashboard-treatments'] }), qc.invalidateQueries({ queryKey: ['treatments'] }), qc.invalidateQueries({ queryKey: ['commissions'] })])
     await Promise.all([query.refetch(), ...cardDetails.map(detail => detail.refetch())])
-  }
-  const staffBranch = manager ? (selected ? executionBranch : branchId) : branchId
-  const staffCatalog = useStaffCatalog({ enabled: !manager || Boolean(staffBranch) })
-  const employees = { ...staffCatalog, data: (staffCatalog.data || []).filter(staff => !staffBranch || Number(staff.branch_id) === Number(staffBranch)) }
-  const branches = useBranchCatalog({ enabled: manager })
-  const roles = useQuery({ queryKey: ['roles', 'staff-picker'], queryFn: () => listResource('roles', {}, 1, 100) })
-  function staffSummary(history) {
-    return (history.staffs || []).map(staff => {
-      const role = staff.role_name || staff.role_type || roles.data?.data?.find(role => Number(role.id) === Number(staff.role_id))?.name || ''
-      return `${role.replace(/^bác sĩ/i, 'BS').replace(/^kỹ thuật viên/i, 'KTV')} ${staff.staff_name || staff.fullname || `#${staff.staff_id}`}`.trim()
-    }).join(' · ')
   }
   const allCards = query.data || []
   // The list endpoint includes child cards but not their execution histories.
@@ -86,15 +73,15 @@ export default function TodayTreatments() {
   function changeViewDate(offset) {
     const date = new Date(`${viewDate}T12:00:00+07:00`)
     date.setUTCDate(date.getUTCDate() + offset)
-    setViewDate(date.toISOString().slice(0, 10)); setPage(1); setSelected(null); setUndo(null); setMessage('')
+    setViewDate(date.toISOString().slice(0, 10)); setPage(1); setUndo(null); setMessage('')
   }
   function selectViewDate(value) {
     if (!value || value > todayDate) return
-    setViewDate(value); setPage(1); setSelected(null); setUndo(null); setMessage('')
+    setViewDate(value); setPage(1); setUndo(null); setMessage('')
   }
   const mutation = useMutation({
-    mutationFn: async ({ card, historyId, assigned, branch, execution_date, parentHistory, history, groupChildren }) => {
-      if (historyId && Array.isArray(parentHistory?.children)) return updateGroupedTreatmentExecution(parentHistory.id, { treatment_id: parentHistory.treatment_id, children: parentHistory.children.map(child => ({ treatment_id: child.treatment_id, staffs: Number(child.id) === Number(history.id) ? assigned : child.staffs || [] })) })
+    mutationFn: async ({ card, historyId, assigned = [], branch, execution_date, parentHistory, history, groupChildren }) => {
+      if (historyId && Array.isArray(parentHistory?.children)) return updateGroupedTreatmentExecution(parentHistory.id, { treatment_id: parentHistory.treatment_id, children: parentHistory.children.map(child => ({ treatment_id: child.treatment_id, staffs: Number(child.id) === Number(history.id) ? assigned : assigned.length ? [] : child.staffs || [] })) })
       if (historyId) return assignTreatmentStaffs(historyId, assigned)
       if (groupChildren && Array.isArray(parentHistory?.children)) {
         const existingChildren = parentHistory.children
@@ -102,15 +89,15 @@ export default function TodayTreatments() {
         groupChildren.forEach(child => childByTreatmentId.set(Number(child.treatment_id), child))
         return updateGroupedTreatmentExecution(parentHistory.id, { treatment_id: parentHistory.treatment_id, children: [...childByTreatmentId.values()] })
       }
-      if (groupChildren) return executeTreatment({ treatment_id: card.id, ...(manager ? { branch_id: Number(branch) } : {}), execution_date, children: groupChildren })
-      const created = await executeTreatment({ treatment_id: card.id, ...(manager ? { branch_id: Number(branch) } : {}), execution_date, staffs: [] })
+      if (groupChildren) return executeTreatment({ treatment_id: card.id, ...(manager ? { branch_id: Number(branch), execution_date } : {}), children: groupChildren })
+      const created = await executeTreatment({ treatment_id: card.id, ...(manager ? { branch_id: Number(branch), execution_date } : {}), staffs: [] })
       if (assigned.length) {
         try { await assignTreatmentStaffs(created.treatmentHistoryId, assigned) }
         catch (error) { throw new Error(`Đã ghi nhận buổi #${created.treatmentHistoryId} nhưng chưa gán được nhân viên: ${error.message}. Mở lại thẻ để gán, không tick lần nữa.`) }
       }
       return created
     },
-    onSuccess: async () => { await refreshTable(); setMessageType('success'); setMessage('Đã ghi nhận buổi và lưu nhân viên thực hiện.'); setSelected(null); setGroupStaffs({}) },
+    onSuccess: async (_data, variables) => { await refreshTable(); setMessageType('success'); setMessage(variables.historyId ? 'Đã cập nhật nhân viên thực hiện.' : 'Đã ghi nhận buổi thực hiện.') },
     onError: async err => { setMessageType('error'); setMessage(err.message); await refreshTable() },
   })
   const undoMutation = useMutation({ mutationFn: target => {
@@ -119,43 +106,12 @@ export default function TodayTreatments() {
     if (!canUndoTreatmentExecution(user, history)) throw new Error('Bạn không có quyền hoàn tác buổi thực hiện này.')
     if (target?.childHistory && target.parentHistory?.children?.length > 1) return updateGroupedTreatmentExecution(target.parentHistory.id, { treatment_id: target.parentHistory.treatment_id, children: target.parentHistory.children.filter(item => Number(item.id) !== Number(target.childHistory.id)).map(item => ({ treatment_id: item.treatment_id, staffs: item.staffs || [] })) })
     return undoTreatmentExecution(id)
-  }, onSuccess: async () => { await refreshTable(); setUndo(null); setSelected(null); setMessageType('success'); setMessage('Đã hoàn tác buổi hôm nay.') }, onError: async err => { await refreshTable(); setUndo(null); setMessageType('error'); setMessage(err.message) } })
-  function pick(card, history, parentHistory) {
-    if (selected?.card.id === card.id && selected.historyId === history?.id) { setSelected(null); setMessage(''); return }
-    setSelected({ card, historyId: history?.id, history, parentHistory })
-    setExecutionDate(manager ? viewDate : todayDate)
-    setExecutionBranch(String(history?.branch_id || branchId || card.branch_id || ''))
-    setStaffs((history?.staffs || []).map(s => ({ staff_id: Number(s.staff_id) })))
-    setMessage('')
-  }
-  function toggleGroupDraft(root, groupKey, child, parentHistory) {
-    setSelected(current => {
-      const sameDraft = current?.groupKey === groupKey && Number(current.card.id) === Number(root.id) && !current.historyId
-      const childIds = sameDraft ? current.childIds : []
-      const exists = childIds.some(id => Number(id) === Number(child.id))
-      const nextChildIds = exists ? childIds.filter(id => Number(id) !== Number(child.id)) : [...childIds, child.id]
-      if (!nextChildIds.length) return null
-      return { card: root, groupKey, parentHistory, childIds: nextChildIds, activeChildId: exists && Number(current.activeChildId) === Number(child.id) ? nextChildIds[0] : child.id }
-    })
-    setGroupStaffs(current => {
-      const next = { ...current }
-      if (Object.hasOwn(next, child.id)) delete next[child.id]
-      else next[child.id] = []
-      return next
-    })
-    setExecutionDate(parentHistory ? dateOnly(parentHistory.execution_date) : (manager ? viewDate : todayDate))
-    setExecutionBranch(String(parentHistory?.branch_id || root.branch_id || branchId || ''))
-    setMessage('')
-  }
-  function save() {
+  }, onSuccess: async () => { await refreshTable(); setUndo(null); setMessageType('success'); setMessage('Đã hoàn tác buổi hôm nay.') }, onError: async err => { await refreshTable(); setUndo(null); setMessageType('error'); setMessage(err.message) } })
+  function record(card, parentHistory, child) {
     if (cardDetails.some(detail => detail.isFetching) || detailError) return setMessage('Chưa tải đầy đủ lịch sử thực hiện. Vui lòng tải lại trước khi xác nhận.')
-    if (!selected.historyId && !selected.groupKey && !canExecuteCard(selected.card)) return setMessage('Thẻ đã hết buổi hoặc đã đóng.')
-    if (manager && !selected.historyId && !Number(executionBranch)) return setMessage('Chọn cơ sở thực hiện ngay tại dòng này trước khi xác nhận.')
-    if (manager && !selected.historyId && !executionDate) return setMessage('Chọn ngày thực hiện.')
-    if (employees.isLoading || (manager && !employees.data)) return setMessage('Đang tải danh sách nhân viên. Vui lòng chờ trước khi xác nhận.')
-    if (employees.isError) return setMessage(`Không tải được danh sách nhân viên: ${employees.error.message}`)
+    if (!canExecuteCard(child || card)) return setMessage('Thẻ đã hết buổi hoặc đã đóng.')
     setMessage('')
-    mutation.mutate({ ...selected, assigned: staffs, branch: executionBranch, execution_date: executionDate, groupChildren: selected.groupKey ? selected.childIds.map(id => ({ treatment_id: id, staffs: groupStaffs[id] || [] })) : null })
+    mutation.mutate({ card, parentHistory, branch: parentHistory?.branch_id || branchId || card.branch_id, execution_date: parentHistory ? dateOnly(parentHistory.execution_date) : viewDate, groupChildren: child ? [{ treatment_id: child.id, staffs: [] }] : null })
   }
   return <section className="section-card today-treatments">
     <div className="surface-heading today-treatments-heading"><div><span className="eyebrow">KHÁCH LÀM DỊCH VỤ</span><h2>{viewingToday ? 'Khách hàng hôm nay' : `Khách hàng ngày ${formatSpaDate(viewDate)}`}</h2></div><div className="today-date-picker" aria-label="Chọn ngày xem khách hàng"><button type="button" className="icon-btn" aria-label="Ngày trước" onClick={() => changeViewDate(-1)}><ChevronLeft size={20} /></button><label className="today-date-input"><span>Ngày xem</span><DateInput aria-label="Ngày xem" max={todayDate} value={viewDate} onChange={selectViewDate} /></label><button type="button" className="btn secondary today-button" disabled={viewingToday} onClick={() => selectViewDate(todayDate)}>Hôm nay</button><button type="button" className="icon-btn" aria-label="Ngày tiếp theo" disabled={viewingToday} onClick={() => changeViewDate(1)}><ChevronRight size={20} /></button></div></div>
@@ -187,13 +143,6 @@ export default function TodayTreatments() {
           {block.childRows.map(row => {
             const { card, history, multiple, child, groupKey, parentHistory } = row
             const groupRoot = block.groupRow?.card
-            const draftingGroup = Boolean(groupRoot && selected?.groupKey === groupKey && Number(selected.card.id) === Number(groupRoot.id) && !selected.historyId)
-            const selectedInDraft = draftingGroup && selected.childIds.some(id => Number(id) === Number(card.id))
-            const active = history
-              ? selected?.card.id === card.id && selected.historyId === history.id
-              : groupRoot
-                ? draftingGroup && Number(selected.activeChildId) === Number(card.id)
-                : selected?.card.id === card.id && !selected.historyId && !selected.groupKey
             const canUndo = canUndoTreatmentExecution(user, parentHistory || history)
             const signed = Boolean(history?.customer_signature_svg || history?.customer_signed_at)
             const allowed = canFollowUpTreatmentHistory(user, history)
@@ -202,20 +151,15 @@ export default function TodayTreatments() {
               <tr className={child ? 'today-treatment-child' : 'today-treatment-standalone'} data-history-id={history?.id}>
                 <td data-label="Khách hàng">{child ? null : card.customer_name}</td>
                 <td data-label="Dịch vụ"><span className={child ? 'today-child-service' : undefined}>{card.product_name}</span></td>
-                <td data-label="Đã làm hôm nay"><input type="checkbox" aria-label={`Đã làm ${card.customer_name} - ${card.product_name}${suffix}`} checked={Boolean(history) || selectedInDraft} disabled={(Boolean(history) && !canUndo) || (!history && (!manager && !viewingToday)) || (!history && !canExecuteCard(card)) || mutation.isPending || undoMutation.isPending} onChange={e => history ? (e.target.checked ? pick(card, history, parentHistory) : canUndo && setUndo(child && parentHistory ? { parentHistory, childHistory: history } : (parentHistory || history).id)) : groupRoot ? toggleGroupDraft(groupRoot, groupKey, card, parentHistory) : pick(card, history, parentHistory)} /></td>
+                <td data-label="Đã làm hôm nay"><input type="checkbox" aria-label={`Đã làm ${card.customer_name} - ${card.product_name}${suffix}`} checked={Boolean(history)} disabled={(Boolean(history) && !canUndo) || (!history && (!manager && !viewingToday)) || (!history && !canExecuteCard(card)) || mutation.isPending || undoMutation.isPending} onChange={event => history ? (!event.target.checked && canUndo && setUndo(child && parentHistory ? { parentHistory, childHistory: history } : (parentHistory || history).id)) : record(groupRoot || card, parentHistory, groupRoot ? card : null)} /></td>
                 <td data-label="Nhân viên thực hiện">
-                  {active ? 'Đang chọn nhân viên bên dưới' : history ? <button type="button" className="text-action" onClick={() => pick(card, history, parentHistory)} aria-label={`Sửa nhân viên ${card.customer_name} - ${card.product_name}${suffix}`}>{staffSummary(history) || 'Chưa gán NV'}</button> : 'Chưa thực hiện'}
+                  {history ? <InvoiceChildStaffPicker name={card.product_name} selected={(history.staffs || []).map(staff => ({ staff_id: Number(staff.staff_id) }))} disabled={Boolean(child && parentHistory?.children?.some(entry => Number(entry.id) !== Number(history.id) && entry.staffs?.length))} onChange={assigned => mutation.mutate({ card, historyId: history.id, assigned, parentHistory, history })} branchId={history.branch_id || parentHistory?.branch_id || branchId || 'required'} className="today-staff-picker" /> : 'Chưa thực hiện'}
                 </td>
                 <td data-label="Ghi chú">{child ? null : <span className="today-session-note">{history?.note || '—'}</span>}</td>
                 <td data-label="Chữ ký khách hàng">
                   {child ? null : history ? <div className="today-session-signatures"><div className="today-signature-preview">{history.customer_signature_svg && <img src={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(history.customer_signature_svg)}`} alt={`Chữ ký buổi #${history.id}`} />}<small>{signed ? 'Đã ký' : 'Chưa ký'}</small></div><button type="button" className="session-followup-button" aria-label={`${allowed ? 'Ghi chú và chữ ký' : 'Xem buổi'} #${history.id} - ${card.customer_name}`} onClick={() => setSessionEditor({ card, history })}><Pencil size={12} aria-hidden="true" />{allowed ? signed ? 'Ghi chú / Xem' : 'Ghi chú / Ký' : 'Xem'}</button></div> : '—'}
                 </td>
               </tr>
-              {active && <tr className="today-staff-row"><td colSpan={6}><div className="treatment-actions today-staff-actions">
-                {manager && !selected.historyId && !selected.parentHistory && <label className="field">Cơ sở thực hiện<MobileSelect aria-label="Cơ sở thực hiện" value={executionBranch} onChange={e => { setExecutionBranch(e.target.value); setStaffs([]); setMessage('') }}><option value="">Chọn cơ sở</option>{branches.data?.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}</MobileSelect></label>}
-                {!selected.historyId && !selected.parentHistory && <label className="field">Ngày thực hiện<DateInput aria-label="Ngày thực hiện" required value={executionDate} onChange={setExecutionDate} /></label>}
-                <RoleStaffPicker selected={selected.groupKey ? groupStaffs[card.id] || [] : staffs} onChange={value => selected.groupKey ? setGroupStaffs(current => ({ ...current, [card.id]: value })) : setStaffs(value)} branchId={staffBranch || 'required'} /><button type="button" className="btn primary" disabled={mutation.isPending || !navigator.onLine} onClick={save}>{mutation.isPending ? 'Đang lưu...' : selected.groupKey ? `Xác nhận ${selected.childIds.length} dịch vụ` : 'Xác nhận'}</button><button type="button" className="btn secondary" onClick={() => { setSelected(null); setGroupStaffs({}); setMessage('') }}>Hủy</button>
-              </div>{branches.isError && manager && !selected.historyId && <p className="form-alert">Không tải được cơ sở: {branches.error.message}</p>}</td></tr>}
             </Fragment>
           })}
         </tbody>

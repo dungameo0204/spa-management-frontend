@@ -7,12 +7,14 @@
 .invoice-drawer .invoice-service-children input[type=checkbox] { flex:none; width:15px; height:15px; min-height:0; margin:0; padding:0; accent-color:var(--sage); }
 .invoice-drawer .invoice-service-children .invoice-child-count { box-sizing:border-box; width:50px; height:32px; min-height:32px; padding:2px 6px; border:1px solid var(--line); border-radius:6px; font-size:12px; line-height:18px; }
 .invoice-child-count-placeholder { text-align:center; color:var(--muted); }
-.invoice-drawer .invoice-child-staff { display:flex; align-items:center; gap:5px; min-width:0; width:100%; height:28px; min-height:28px; padding:3px 7px; border:1px solid var(--line); border-radius:6px; background:var(--white); color:var(--muted); font-size:11px; text-align:left; }
+.invoice-child-staff { display:inline-flex; align-items:center; gap:5px; min-width:0; max-width:100%; height:28px; min-height:28px; padding:3px 7px; border:1px solid var(--line); border-radius:6px; background:var(--white); color:var(--muted); font-size:11px; text-align:left; }
 .invoice-child-staff svg { flex:none; }
 .invoice-drawer .invoice-service-children .invoice-child-staff { box-sizing:border-box; max-width:160px; }
 .invoice-child-staff>span:first-of-type { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.invoice-drawer .invoice-child-staff.has-value { background:var(--sage-light); color:var(--sage); border-color:var(--sage); }
+.invoice-child-staff.has-value { background:var(--sage-light); color:var(--sage); border-color:var(--sage); }
+.invoice-child-staff:disabled { cursor:not-allowed; opacity:.45; background:var(--cream); color:var(--muted); }
 .invoice-staff-count { margin-left:auto; border-radius:10px; padding:0 5px; background:var(--white); font-size:10px; }
+.invoice-staff-overlay { position:fixed; inset:0; z-index:120; display:grid; place-items:center; padding:16px; background:rgba(25,41,49,.48); backdrop-filter:blur(2px); }
 .invoice-staff-dialog { width:min(520px,calc(100vw - 24px)); max-height:85dvh; display:flex; flex-direction:column; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:var(--white); color:var(--ink); box-shadow:0 20px 70px #0003; }
 .invoice-staff-dialog header,.invoice-staff-dialog footer { display:flex; align-items:center; gap:10px; padding:14px 18px; }
 .invoice-staff-dialog header { justify-content:space-between; border-bottom:1px solid var(--line); }

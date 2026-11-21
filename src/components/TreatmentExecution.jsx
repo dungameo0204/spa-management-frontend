@@ -32,6 +32,7 @@ export default function TreatmentExecution({ card, user, branchId, onUpdated, on
   const busy = useRef(false), qc = useQueryClient()
   const branches = useBranchCatalog()
   const chosen = available.filter(item => Object.hasOwn(selected, item.id))
+  const assignedChildId = chosen.find(item => selected[item.id]?.length)?.id
 
   async function submit(unsigned = false) {
     if (busy.current || !navigator.onLine) return
@@ -41,8 +42,8 @@ export default function TreatmentExecution({ card, user, branchId, onUpdated, on
     busy.current = true; setPending(true); setConfirm(false); setMessage('')
     try {
       const payload = grouped
-        ? { treatment_id: card.id, children: chosen.map(item => ({ treatment_id: item.id, staffs: selected[item.id] })), ...(manager ? { branch_id: Number(branch) } : {}), execution_date: date, ...(note.trim() ? { note: note.trim() } : {}), ...(signature ? { customer_signature_svg: signature } : {}) }
-        : { treatment_id: chosen[0].id, staffs: selected[chosen[0].id], ...(manager ? { branch_id: Number(branch) } : {}), execution_date: date, ...(note.trim() ? { note: note.trim() } : {}), ...(signature ? { customer_signature_svg: signature } : {}) }
+        ? { treatment_id: card.id, children: chosen.map(item => ({ treatment_id: item.id, staffs: selected[item.id] })), ...(manager ? { branch_id: Number(branch), execution_date: date } : {}), ...(note.trim() ? { note: note.trim() } : {}), ...(signature ? { customer_signature_svg: signature } : {}) }
+        : { treatment_id: chosen[0].id, staffs: selected[chosen[0].id], ...(manager ? { branch_id: Number(branch), execution_date: date } : {}), ...(note.trim() ? { note: note.trim() } : {}), ...(signature ? { customer_signature_svg: signature } : {}) }
       await executeTreatment(payload)
       await onUpdated?.()
       onCancel?.()
@@ -84,7 +85,7 @@ export default function TreatmentExecution({ card, user, branchId, onUpdated, on
                 <span className="treatment-session-count">{item.closed_at ? 'Đã ký kết thúc' : item.remaining_sessions === null ? 'Không giới hạn' : `${Number(item.total_sessions) - Number(item.remaining_sessions)}/${item.total_sessions} buổi${Number(item.remaining_sessions) === 0 ? ' · Đã hoàn thành' : ''}`}</span>
                 {executable && Object.hasOwn(selected, item.id) ? (
                   <div className="treatment-child-staff-inline">
-                    <InvoiceChildStaffPicker name={item.product_name} selected={selected[item.id]} onChange={staffs => setSelected(current => ({ ...current, [item.id]: staffs }))} branchId={branch || 'required'} />
+                    <InvoiceChildStaffPicker name={item.product_name} selected={selected[item.id]} disabled={assignedChildId != null && Number(assignedChildId) !== Number(item.id)} onChange={staffs => setSelected(current => staffs.length ? Object.fromEntries(Object.keys(current).map(id => [id, Number(id) === Number(item.id) ? staffs : []])) : ({ ...current, [item.id]: staffs }))} branchId={branch || 'required'} />
                   </div>
                 ) : (
                   <span className="treatment-child-staff-placeholder" aria-hidden="true" />
@@ -97,7 +98,7 @@ export default function TreatmentExecution({ card, user, branchId, onUpdated, on
             <div className="treatment-execution-controls-row">
               <div className={`treatment-execution-manager-row${manager ? '' : ' no-branch'}`}>
                 {manager && <label className="field compact-field branch-field"><span>Cơ sở thực hiện</span><MobileSelect aria-label="Cơ sở thực hiện" value={branch} onChange={event => { setBranch(event.target.value); setSelected(current => Object.fromEntries(Object.keys(current).map(id => [id, []]))) }}><option value="">Chọn cơ sở</option>{branches.data?.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</MobileSelect></label>}
-                <label className="field compact-field date-field"><span>Ngày thực hiện</span><DateInput aria-label="Ngày thực hiện" required value={date} onChange={setDate} /></label>
+                {manager && <label className="field compact-field date-field"><span>Ngày thực hiện</span><DateInput aria-label="Ngày thực hiện" required value={date} onChange={setDate} /></label>}
               </div>
               <div className="treatment-session-tools">
                 <button type="button" className={`session-followup-button${note.trim() ? ' has-value' : ''}`} onClick={() => setMetadataOpen(open => !open)}>{metadataOpen ? 'Ẩn ghi chú' : note.trim() ? 'Ghi chú ✓' : 'Ghi chú'}</button>
@@ -113,7 +114,7 @@ export default function TreatmentExecution({ card, user, branchId, onUpdated, on
         <div className="treatment-single-execution-row">
           <div className={`treatment-execution-manager-row is-single-manager${manager ? '' : ' no-branch'}`}>
             {manager && <label className="field compact-field branch-field"><span>Cơ sở thực hiện</span><MobileSelect aria-label="Cơ sở thực hiện" value={branch} onChange={event => { setBranch(event.target.value); setSelected(current => Object.fromEntries(Object.keys(current).map(id => [id, []]))) }}><option value="">Chọn cơ sở</option>{branches.data?.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</MobileSelect></label>}
-            <label className="field compact-field date-field"><span>Ngày thực hiện</span><DateInput aria-label="Ngày thực hiện" required value={date} onChange={setDate} /></label>
+            {manager && <label className="field compact-field date-field"><span>Ngày thực hiện</span><DateInput aria-label="Ngày thực hiện" required value={date} onChange={setDate} /></label>}
           </div>
           {available[0] && Object.hasOwn(selected, available[0].id) && (
             <div className="treatment-single-staff">

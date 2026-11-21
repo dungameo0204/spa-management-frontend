@@ -76,7 +76,7 @@ export async function createReportWorkbook(range, commissionsOnly = false) {
   }
   if (!commissionsOnly) {
     const revenue = await getRevenue(range)
-    addTableSheet(book, { title: 'Doanh thu theo ngày', context, columns: dailyRevenueColumns, rows: revenue.daily || [] })
+    addTableSheet(book, { title: 'Doanh thu theo ngày', context, columns: dailyRevenueColumns(revenue.daily || []), rows: revenue.daily || [] })
   }
   return book
 }

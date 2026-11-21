@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import { formatCurrency, formatSpaDate } from '../utils/format'
 import { dateInputDisplay } from './DateInput'
 import { historyFields, referralSources } from '../utils/customerForm'
-import { cardName, paymentRecordRows, treatmentRecordRows } from '../utils/customerRecord'
+import { cardName, cleanCustomerNote, paymentRecordRows, treatmentRecordRows } from '../utils/customerRecord'
 import './CustomerRecordPrint.css'
 
 const gender = { FEMALE: 'Nữ', MALE: 'Nam', OTHER: 'Khác' }
@@ -55,22 +55,28 @@ function TreatmentServiceLines({ value }) {
   const lines = String(value || '').split(/\r?\n/)
   return <div className="customer-record-treatment-service">{lines.map((line, index) => <div className="customer-record-line" key={index}><b>{index === 0 ? 'Dịch vụ điều trị:' : ''}</b><span>{line}</span></div>)}</div>
 }
-function PaymentHistory({ invoices, debtPayments }) {
+function PaymentHistory({ invoices, debtPayments, showNotes = true }) {
   const rows = paymentRecordRows(invoices, debtPayments)
   if (!rows.length) return null
-  return <section className="customer-record-payments"><h2>LỊCH SỬ THANH TOÁN</h2><table><thead><tr><th>Ngày</th><th>Nội dung</th><th>Số tiền</th></tr></thead><tbody>{rows.map(row => <tr key={row.id}><td>{formatSpaDate(row.date)}</td><td>{row.content}</td><td>{formatCurrency(row.amount)}</td></tr>)}</tbody></table></section>
+  return <section className="customer-record-payments"><h2>LỊCH SỬ THANH TOÁN</h2><table><thead><tr><th>Ngày</th><th>Nội dung</th><th>Số tiền</th></tr></thead><tbody>{rows.map(row => <tr key={row.id}><td>{formatSpaDate(row.date)}</td><td>{row.content}{showNotes && row.note && <div className="customer-record-payment-note"><b>Ghi chú:</b> {row.note}</div>}</td><td>{formatCurrency(row.amount)}</td></tr>)}</tbody></table></section>
 }
 
-function TreatmentSheet({ customer, cards }) {
+function CustomerNote({ note }) {
+  const cleaned = cleanCustomerNote(note)
+  if (!cleaned) return null
+  return <section className="customer-record-customer-note"><h2>GHI CHÚ KHÁCH HÀNG</h2><p>{cleaned}</p></section>
+}
+
+function TreatmentSheet({ customer, cards, isShare = false }) {
   const rowsWithHistory = treatmentRecordRows(cards)
-  const total = Math.max(12, rowsWithHistory.length + 5)
+  const total = isShare ? Math.max(12, rowsWithHistory.length) : Math.max(12, rowsWithHistory.length + 5)
   const rows = [...rowsWithHistory, ...blankRows(Math.max(0, total - rowsWithHistory.length))]
   return <section className="customer-record-page customer-record-treatment-page">
     <h1>PHIẾU THEO DÕI ĐIỀU TRỊ</h1>
     <div className="customer-record-line"><b>Họ và tên chủ thẻ:</b><span>{customer.fullname}</span></div>
     <div className="customer-record-line"><b>SĐT:</b><span>{customer.phone_number}</span></div>
     <TreatmentServiceLines value={customer.consultation_note} />
-    <table className="customer-record-treatment-table"><thead><tr><th>Ngày</th><th>Dịch vụ thực hiện</th><th>Số lần</th><th>Nhân viên thực hiện</th><th>Chữ ký KH</th></tr></thead><tbody>{rows.map((history, index) => <tr key={history.id || `blank-${index}`}><td>{history.execution_date ? formatSpaDate(history.execution_date) : ''}</td><td>{history.services?.join(', ') || ''}{history.notes?.map((note, noteIndex) => <div className="customer-record-treatment-note" key={`${history.id}-note-${noteIndex}`}><b>Ghi chú:</b> {note}</div>)}</td><td>{history.visitNumber || ''}</td><td>{history.staff?.map((staff, staffIndex) => <div key={`${history.id}-staff-${staffIndex}`}>{staff}</div>)}</td><td>{history.signature && <img className="customer-record-signature-image" src={signatureSource(history.signature)} alt="Chữ ký khách hàng" />}</td></tr>)}</tbody></table>
+    <table className="customer-record-treatment-table"><thead><tr><th>Ngày</th><th>Dịch vụ thực hiện</th><th>STT</th>{isShare && <th>Nhân viên</th>}<th>Chữ ký KH</th></tr></thead><tbody>{rows.map((history, index) => <tr key={history.id || `blank-${index}`} data-blank={history.execution_date ? undefined : 'true'}><td>{history.execution_date ? formatSpaDate(history.execution_date) : ''}</td><td>{history.services?.join(', ') || ''}{isShare && history.notes?.map((note, noteIndex) => <div className="customer-record-treatment-note" key={`${history.id}-note-${noteIndex}`}><b>Ghi chú:</b> {note}</div>)}</td><td>{history.visitNumber || ''}</td>{isShare && <td>{history.staff?.join(', ') || ''}</td>}<td>{history.signature && <img className="customer-record-signature-image" src={signatureSource(history.signature)} alt="Chữ ký khách hàng" />}</td></tr>)}</tbody></table>
   </section>
 }
 
@@ -90,8 +96,9 @@ export default function CustomerRecordPrint({ record, onDone, mode = 'print' }) 
   const purchases = purchasedItems(timeline)
   const services = purchases.filter(item => !Number(item.is_product))
   const products = purchases.filter(item => Number(item.is_product))
-  const id = mode === 'share' ? 'customer-record-share' : 'customer-record-print'
-  return createPortal(<div id={id} className={`customer-record-print${mode === 'share' ? ' is-share' : ''}`} aria-label={mode === 'share' ? 'Hồ sơ khách hàng để chia sẻ' : 'Hồ sơ khách hàng in'}>
+  const isShare = mode === 'share'
+  const id = isShare ? 'customer-record-share' : 'customer-record-print'
+  return createPortal(<div id={id} className={`customer-record-print${isShare ? ' is-share' : ''}`} aria-label={isShare ? 'Hồ sơ khách hàng để chia sẻ' : 'Hồ sơ khách hàng in'}>
     <style media="print">{'@page { size: A4 portrait; margin: var(--customer-record-page-margin-top, 12mm) var(--customer-record-page-margin-right, 11mm) var(--customer-record-page-margin-bottom, 15mm) var(--customer-record-page-margin-left, 11mm); }'}</style>
     <section className="customer-record-page customer-record-cover">
       <header><img className="customer-record-mark" src="/icons/icon.svg" alt="ROSA" width="60" height="60" /><div><strong>HỒ SƠ KHÁCH HÀNG</strong><small>THEO DÕI VÀ CHĂM SÓC KHÁCH HÀNG</small></div></header>
@@ -105,8 +112,9 @@ export default function CustomerRecordPrint({ record, onDone, mode = 'print' }) 
     <section className="customer-record-page customer-record-consultation">
       <PurchaseList title="DỊCH VỤ ĐÃ MUA" items={services} />
       <PurchaseList title="SẢN PHẨM ĐÃ MUA" items={products} />
-      <PaymentHistory invoices={invoices} debtPayments={debtPayments} />
+      <PaymentHistory invoices={invoices} debtPayments={debtPayments} showNotes={isShare} />
+      <CustomerNote note={customer.note} />
     </section>
-    <TreatmentSheet customer={customer} cards={cards} />
+    <TreatmentSheet customer={customer} cards={cards} isShare={isShare} />
   </div>, document.body)
 }

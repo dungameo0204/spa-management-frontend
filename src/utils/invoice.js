@@ -3,7 +3,10 @@ export function invoiceLineFromApi(line) {
   const base = Number(line.quantity || 0) * Number(line.snapshot_price || 0)
   const percent = Number(line.discount_percent || 0), amount = Number(line.discount_amount || 0)
   const discount = percent && amount ? { discount_percent: percent, discount_amount: amount, discount_mode: 'combined' } : amount ? pairedDiscount(base, amount, 'amount') : pairedDiscount(base, percent, 'percent')
-  return { invoice_item_id: line.id ?? line.invoice_item_id, product_id: line.product_id, product_name: line.snapshot_name || line.product_name, quantity: line.quantity, unit_price: line.snapshot_price ?? line.unit_price, is_product: line.is_product, performNow: false, treatmentConfigured: Boolean(line.treatment), treatmentTotalSessions: line.treatment?.total_sessions, serviceChildren: (line.treatment?.children || []).map(child => ({ product_id: Number(child.product_id), product_name: child.product_name || child.name, total_sessions: child.total_sessions, performNow: false, existing: true })), ...discount, consultants: (line.consultants || []).map(c => ({ staff_id: c.staff_id, revenue_amount: c.revenue_amount, role_type: c.role_type })) }
+  const treatmentTotalSessions = line.treatment && Object.hasOwn(line.treatment, 'purchased_total_sessions')
+    ? line.treatment.purchased_total_sessions
+    : line.treatment?.total_sessions
+  return { invoice_item_id: line.id ?? line.invoice_item_id, product_id: line.product_id, product_name: line.snapshot_name || line.product_name, quantity: line.quantity, unit_price: line.snapshot_price ?? line.unit_price, is_product: line.is_product, performNow: false, treatmentConfigured: Boolean(line.treatment), treatmentTotalSessions, serviceChildren: (line.treatment?.children || []).map(child => ({ product_id: Number(child.product_id), product_name: child.product_name || child.name, total_sessions: child.total_sessions, performNow: false, existing: true })), ...discount, consultants: (line.consultants || []).map(c => ({ staff_id: c.staff_id, revenue_amount: c.revenue_amount, role_type: c.role_type })) }
 }
 export const roundMoney = amount => Math.round((amount + Number.EPSILON) * 100) / 100
 export function pairedDiscount(base, value, changed) {

@@ -50,6 +50,23 @@ export const directoryExports = {
     title: 'Doanh số tư vấn', filename: 'doanh-so-tu-van',
     columns: [text('staff_name', 'Nhân viên tư vấn'), text('customer_name', 'Khách hàng'), text('product_name', 'Sản phẩm / dịch vụ'), number('revenue_amount', 'Doanh số tư vấn', true), date('invoice_date', 'Ngày bán'), text('branch_name', 'Chi nhánh')],
   },
+  'customer-bookings': {
+    title: 'Khách đặt lịch', filename: 'khach-dat-lich',
+    columns: [
+      { label: 'Loại khách', value: row => row.customer_type === 'EXISTING' ? 'Khách cũ' : 'Khách mới' },
+      { label: 'Khách hàng', value: row => row.customer_name || row.registered_customer_name || '' },
+      { label: 'Số điện thoại', value: row => row.customer_phone || row.registered_customer_phone || '' },
+      date('arrival_date', 'Ngày đến'),
+      { label: 'Giờ đến', value: row => row.arrival_time ? String(row.arrival_time).slice(0, 5) : '' },
+      { label: 'Chi nhánh', value: row => row.branch_name || (row.branch_id ? `Chi nhánh #${row.branch_id}` : '') },
+      text('product_name', 'Dịch vụ quan tâm'),
+      { label: 'Trạng thái đến', value: row => row.has_arrived ? 'Đã đến' : 'Chưa đến' },
+      number('consultation_total', 'Giá trị tư vấn', true),
+      text('promotion_note', 'Nhu cầu / ưu đãi'),
+      text('note', 'Ghi chú cho nhân viên'),
+      date('created_at', 'Ngày tạo'),
+    ],
+  },
 }
 
 // Fetch sequentially to avoid a burst of requests on large customer directories.

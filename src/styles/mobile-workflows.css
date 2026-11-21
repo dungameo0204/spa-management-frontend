@@ -179,7 +179,8 @@
   .treatment-root-panel .treatment-session-count { text-align: right !important; align-self: center; font-size: 12px !important; }
   .treatment-root-panel .treatment-child-staff-inline { grid-column: 1 / -1; min-width: 0; }
   .treatment-root-panel .treatment-child-execution .invoice-child-staff,
-  .treatment-root-panel .treatment-single-staff .invoice-child-staff {
+  .treatment-root-panel .treatment-single-staff .invoice-child-staff,
+  .today-treatments .invoice-child-staff {
     width: auto !important; max-width: 100% !important; min-height: 32px !important; height: auto !important;
     padding: 5px 8px !important; font-size: 12px !important; box-sizing: border-box;
   }
@@ -273,9 +274,11 @@
   .invoice-staff-dialog .invoice-staff-options label,
   .invoice-staff-dialog footer .btn { min-height: 44px; }
   .invoice-drawer .invoice-child-staff > span:first-of-type,
-  .treatment-root-panel .invoice-child-staff > span:first-of-type { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .treatment-root-panel .invoice-child-staff > span:first-of-type,
+  .today-treatments .invoice-child-staff > span:first-of-type { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .invoice-drawer .invoice-child-staff > svg,
   .treatment-root-panel .invoice-child-staff > svg,
+  .today-treatments .invoice-child-staff > svg,
   .invoice-child-staff .invoice-staff-count { flex-shrink: 0; }
 }
 
@@ -300,13 +303,15 @@
   .treatments-page .page-heading-actions { margin-top: 12px; }
   .treatments-page .page-heading-actions .btn { min-width: 0; min-height: 40px; }
   .treatments-page .date-range-filter {
-    flex-direction: row !important; align-items: center !important;
-    gap: 8px !important; margin: 0 0 12px !important;
-    padding: 8px !important; width: 100% !important;
+    display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    align-items: end !important; gap: 8px !important; margin: 0 0 12px !important;
+    padding: 8px !important; width: 100% !important; box-sizing: border-box;
   }
   .treatments-page .date-range-filter .field {
-    flex: 1 1 0; flex-direction: column !important; align-items: stretch !important;
-    gap: 4px !important; min-width: 0; width: auto !important;
+    display: grid !important; gap: 4px !important; min-width: 0 !important; width: 100% !important;
+  }
+  .treatments-page .date-range-filter .date-range-clear {
+    grid-column: 1 / -1 !important; width: 100% !important; margin: 0 !important;
   }
   .treatments-page .date-range-filter .field .date-input {
     flex: none !important; width: 100% !important; min-width: 0 !important;

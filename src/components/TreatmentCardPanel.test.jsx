@@ -9,7 +9,7 @@ vi.mock('../api/resources', () => ({ closeTreatment: vi.fn(), executeTreatment: 
 vi.mock('../auth/AuthProvider', () => ({ useAuth: () => ({ user: { system_role: 'MANAGER' } }) }))
 vi.mock('./SignaturePad', () => ({ default: ({ onChange }) => <button onClick={() => onChange('<svg/>')}>Ký mới</button> }))
 vi.mock('./RoleStaffPicker', () => ({ default: ({ onChange, label }) => <button onClick={() => onChange([{ staff_id: label.includes('Laser') ? 7 : 8 }])}>{label}</button> }))
-vi.mock('./InvoiceChildStaffPicker', () => ({ default: ({ onChange, name }) => <button aria-label={`Nhân viên làm ${name}`} onClick={() => onChange([{ staff_id: name.includes('Laser') ? 7 : 8 }])}>Nhân viên {name}</button> }))
+vi.mock('./InvoiceChildStaffPicker', () => ({ default: ({ onChange, name, disabled }) => <button aria-label={`Nhân viên làm ${name}`} disabled={disabled} onClick={() => onChange([{ staff_id: name.includes('Laser') ? 7 : 8 }])}>Nhân viên {name}</button> }))
 const root = () => ({ id: 1, customer_name: 'Khách A', product_name: 'Gói nám', total_sessions: 10, remaining_sessions: 10, children: [
   { id: 11, product_name: 'Laser', total_sessions: 3, remaining_sessions: 2, histories: [] },
   { id: 12, product_name: 'Massage', total_sessions: null, remaining_sessions: null, histories: [] },
@@ -49,7 +49,7 @@ it('shows child count, finite/lifetime counts and requires a new signature plus 
   expect(closeTreatment).toHaveBeenCalledWith(1, { closure_note: null, closure_signature_svg: '<svg/>' })
   await waitFor(() => expect(screen.queryByRole('button', { name: 'Thực hiện' })).toBeNull())
 })
-it('executes selected children with their own staff and one parent note/signature', async () => {
+it('executes selected children with staff assigned to only one child and one parent note/signature', async () => {
   const actor = open()
   await waitFor(() => expect(screen.getByRole('button', { name: 'Thực hiện' }).disabled).toBe(false))
   await actor.click(screen.getByRole('button', { name: 'Thực hiện' }))
@@ -57,13 +57,13 @@ it('executes selected children with their own staff and one parent note/signatur
   await actor.click(screen.getAllByRole('checkbox', { name: 'Massage' })[0])
   const form = document.querySelector('.treatment-execution-form')
   await actor.click(within(form).getByRole('button', { name: 'Nhân viên làm Laser' }))
-  await actor.click(within(form).getByRole('button', { name: 'Nhân viên làm Massage' }))
+  expect(within(form).getByRole('button', { name: 'Nhân viên làm Massage' })).toBeDisabled()
   await actor.click(within(form).getByRole('button', { name: 'Ghi chú' }))
   await actor.type(within(form).getByPlaceholderText('Lưu ý cho lần thực hiện này…'), 'Ghi chú chung')
   await actor.click(screen.getByText('Ký mới'))
   await actor.click(screen.getByRole('button', { name: 'Xác nhận' }))
   await waitFor(() => expect(executeTreatment).toHaveBeenCalledTimes(1))
-  expect(executeTreatment).toHaveBeenCalledWith({ treatment_id: 1, children: [{ treatment_id: 11, staffs: [{ staff_id: 7 }] }, { treatment_id: 12, staffs: [{ staff_id: 8 }] }], branch_id: 1, execution_date: expect.any(String), customer_signature_svg: '<svg/>', note: 'Ghi chú chung' })
+  expect(executeTreatment).toHaveBeenCalledWith({ treatment_id: 1, children: [{ treatment_id: 11, staffs: [{ staff_id: 7 }] }, { treatment_id: 12, staffs: [] }], branch_id: 1, execution_date: expect.any(String), customer_signature_svg: '<svg/>', note: 'Ghi chú chung' })
 })
 it('stops on ambiguous partial failure and prevents accidental re-execution', async () => {
   executeTreatment.mockRejectedValue(new Error('Mất kết nối'))

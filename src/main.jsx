@@ -10,5 +10,5 @@ import './styles/global.css'
 import './styles/invoice-entry.css'
 import './styles/mobile-workflows.css'
 import './styles/rosa-theme.css'
-const client = new QueryClient({ defaultOptions: { queries: { staleTime: 30_000, retry: 1, refetchOnWindowFocus: true, refetchOnMount: 'always' } } })
+const client = new QueryClient({ defaultOptions: { queries: { staleTime: 30_000, retry: 1, refetchOnWindowFocus: false, refetchOnMount: true } } })
 createRoot(document.getElementById('root')).render(<React.StrictMode><QueryClientProvider client={client}><ThemeProvider><AuthProvider><ErrorAlertFocus /><App /></AuthProvider></ThemeProvider></QueryClientProvider></React.StrictMode>)

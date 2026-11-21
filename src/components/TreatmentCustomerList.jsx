@@ -12,9 +12,9 @@ export default function TreatmentCustomerList({ customers = [], page = 1, total 
   const branches = branchesQuery.data || []
   useEffect(() => setExpanded(null), [customers, page])
 
-  return <div className="list-panel treatment-customers">
+  return <div className={`list-panel treatment-customers ${refreshing && !loading ? 'is-fetching' : ''}`.trim()}>
     <div className="list-toolbar"><div className="search-box"><Search size={18} /><input aria-label="Tìm kiếm" placeholder="Tìm kiếm..." value={search} onChange={event => { onSearch(event.target.value); setExpanded(null) }} /></div><div className="list-toolbar-actions"><span className="list-count">{total} khách hàng</span><RefreshButton label="Tải lại thẻ liệu trình" disabled={refreshing} onClick={onRetry} /></div></div>
-    {error ? <div className="empty-state"><h3>Không tải được dữ liệu</h3><p>{error.message}</p><button className="btn secondary" onClick={onRetry}>Thử lại</button></div> : loading ? <div className="skeleton-list" aria-label="Đang tải">Đang tải dữ liệu...</div> : !customers.length ? <div className="empty-state"><h3>Chưa có thẻ liệu trình</h3><p>Thử từ khóa hoặc khoảng ngày khác.</p></div> : <>
+    {error ? <div className="empty-state"><h3>Không tải được dữ liệu</h3><p>{error.message}</p><button className="btn secondary" onClick={onRetry}>Thử lại</button></div> : loading ? <div className="skeleton-list" aria-label="Đang tải" role="status">{Array.from({ length: 6 }, (_, i) => <div className="skeleton-row" key={i} aria-hidden="true" />)}</div> : !customers.length ? <div className="empty-state"><h3>Chưa có thẻ liệu trình</h3><p>Thử từ khóa hoặc khoảng ngày khác.</p></div> : <>
       <div className="table-scroll"><table><thead><tr><th>Khách hàng</th><th>Số điện thoại</th><th>Tiền nợ</th><th>Dịch vụ</th><th>Đã hoàn thành</th></tr></thead><tbody>{customers.map(customer => {
         const activeCards = customer.active_treatments || customer.treatments || []
         const completedCards = customer.completed_treatments || []
